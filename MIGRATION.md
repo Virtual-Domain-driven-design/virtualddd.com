@@ -206,6 +206,30 @@ possible, redirect the rest deliberately.
 Done when: a spreadsheet or file lists every live URL, the Notion Slug
 property is populated from existing URLs, and the SEO fields exist.
 
+### Status (captured 2026-07-23)
+
+- **SEO/slug columns added** to the live Sessions and Open Spaces Notion
+  databases (`slug`, `SEO Title`, `SEO Metadescription`, matching the
+  Stories naming). Stories and Heuristics already had slug + SEO fields.
+- **Inputs captured** in `migration-source/` (git-ignored): the full
+  WordPress WXR export and the Redirection plugin rules. Per-type slug maps
+  derived to `migration-source/derived/*.csv`.
+- **Counts reconcile — no orphan gap.** WP published vs Notion: sessions
+  108/108, open-space 5, stories (`facilitating-archdes`) 24, heuristics
+  146, videos 536 (out of scope), pages 23. Sessions have **zero** slug or
+  title collisions, so title-matching is unambiguous.
+- **URL bases:** `/sessions/<slug>/`, `/open-space/<slug>/`,
+  `/facilitating-archdes/<slug>/` (stories), `/heuristics/<slug>/`, pages at
+  top level. Astro routes must emit these exact bases.
+- **35 existing redirects to preserve** (mostly old numeric
+  `/sessions/<id>` → slug, plus `/learning-ddd/` → `/`). Carry into
+  `.htaccess` in Phase 6; they are not in the sitemap.
+- **Slug backfill is deferred to the Phase 3 sync** (decided): the script
+  reads the derived map, matches by title, prints a `--dry-run` proposal for
+  review, then `--write-slugs` fills Notion. It also verifies that the
+  existing Stories/Heuristics Notion slugs match their WordPress slugs; any
+  mismatch is a URL change needing a redirect.
+
 ---
 
 ## Phase 2: Content model
@@ -256,6 +280,14 @@ directory.
 ## Phase 3: Notion sync
 
 Goal: `scripts/sync-notion.ts` that turns Notion into markdown.
+
+First job of this phase is the **slug backfill** (deferred here from Phase
+1): read `migration-source/derived/*.csv`, match each Sessions/Open Spaces
+row by normalised title, and — under `--dry-run` — print the proposed
+`title → slug` mapping for review before `--write-slugs` writes it to
+Notion. Per-database publish gates apply (Sessions = `Done`; others =
+`Published`). Needs its own Notion integration token (the MCP is for the
+editor, not the script).
 
 Prompt shape:
 
