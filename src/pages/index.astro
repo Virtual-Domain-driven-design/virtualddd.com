@@ -10,7 +10,9 @@ const allSessions = await getCollection('sessions');
 const upcoming = allSessions
   .filter((s) => s.data.status === 'Published' && +new Date(s.data.datetime) > now)
   .sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime))[0];
-const latest = [...allSessions]
+// Past sessions only (exclude the upcoming / not-yet-held one), newest first.
+const latest = allSessions
+  .filter((s) => !(s.data.status === 'Published' && +new Date(s.data.datetime) > now))
   .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
   .slice(0, 8);
 const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
