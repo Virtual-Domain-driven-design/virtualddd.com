@@ -11,7 +11,7 @@ const stories = (await getCollection('stories')).sort(
 // The three stable hosts of the series (fixed order).
 const organisers = await getCollection('organisers');
 const byId = new Map(organisers.map((o) => [o.id, o]));
-const hosts = ['andrea-magnorsky', 'kenny-baas-schwegler', 'andrew-harmel-law']
+const hosts = ['andrea-magnorsky', 'andrew-harmel-law', 'kenny-baas-schwegler']
   .map((id) => byId.get(id))
   .filter(Boolean) as typeof organisers;
 
@@ -28,10 +28,13 @@ const shortDate = (d: Date) =>
   title="Facilitating Stories — Virtual DDD"
   description="Real-world stories on facilitating software architecture and design — practical experiences from the community."
 >
-  <div class="wrap">
-    <section class="intro">
-      <h1>Stories on Facilitating Software Design and Architecture</h1>
-      <div class="intro-cols">
+  <!-- Hero: intro text -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow eyebrow--pink">Facilitating Stories</p>
+      <h1>Stories on Facilitating Software Design&nbsp;and Architecture</h1>
+      <div class="lead">
         <p>
           We've consistently observed a common pattern: regardless of the architectural approach — from
           traditional enterprise to more hands-on, emergent methods — teams face similar obstacles when
@@ -39,23 +42,32 @@ const shortDate = (d: Date) =>
           and enables a smooth flow of delivery.
         </p>
         <p>
-          To address this, we've started a series, <strong>Stories on Facilitating Software Design and
+          To address this, we started a series, <strong>Stories on Facilitating Software Design and
           Architecture</strong>. In these sessions we focus on real-world experiences from our community,
-          sharing practical stories about the alternative approaches that have delivered results — moving
-          beyond the theoretical and into the practical.
+          sharing practical stories about the approaches that have delivered results — moving beyond the
+          theoretical and into the practical.
         </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="hosts">
-      <h2>Your hosts</h2>
+  <!-- Hosts -->
+  <section class="hosts">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--cyan">Your hosts</p>
       <div class="host-grid">
         {hosts.map((o) => <OrganiserCard organiser={o} />)}
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="archive">
-      <h2>All stories</h2>
+  <!-- Story archive -->
+  <section class="archive">
+    <div class="wrap">
+      <div class="archive-head">
+        <p class="eyebrow eyebrow--cyan">All stories</p>
+        <span class="result-count" id="count"></span>
+      </div>
 
       <div class="filters">
         <input type="search" id="q" placeholder="Search title, author or tag…" aria-label="Search stories" />
@@ -64,7 +76,6 @@ const shortDate = (d: Date) =>
           {tags.map((t) => <option value={t}>{t}</option>)}
         </select>
         <button id="f-reset" type="button">Reset</button>
-        <span class="result-count" id="count"></span>
       </div>
 
       <div class="story-list" id="cards">
@@ -96,56 +107,80 @@ const shortDate = (d: Date) =>
                   <p class="sr-authors">by {d.authors.slice(0, 3).join(', ')}{d.authors.length > 3 ? ' & more' : ''}</p>
                 )}
                 {d.seoMetadescription && <p class="sr-excerpt">{d.seoMetadescription}</p>}
+                <span class="sr-more">Read story →</span>
               </div>
             </a>
           );
         })}
       </div>
       <p class="no-results" id="noresults" hidden>No stories match your filters.</p>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <style>
-    /* Contained cyan intro card — same width as the content below. */
-    .intro { background: var(--color-primary); color: #0d0e12; padding: var(--space-10); margin-bottom: var(--space-12); }
-    .intro h1 { color: #0d0e12; margin-bottom: var(--space-6); }
-    .intro-cols { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
-    @media (min-width: 800px) { .intro-cols { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
-    .intro p { color: rgba(13, 14, 18, 0.85); margin: 0; }
+    /* Shared brand section label */
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
 
-    .hosts { margin-bottom: var(--space-12); }
-    .hosts h2, .archive h2 { margin-bottom: var(--space-6); }
-    .host-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); max-width: 46rem; }
+    /* Hero — dark with a soft neon wash, coherent with the story cards below */
+    .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
+    .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
+      radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
+      radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
+    .hero-inner { position: relative; }
+    .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-8); }
+    .lead { display: grid; grid-template-columns: 1fr; gap: var(--space-6); max-width: 58rem; }
+    .lead p { color: var(--color-text-muted); margin: 0; }
+    .lead strong { color: var(--color-text); font-weight: 600; }
+    @media (min-width: 820px) { .lead { grid-template-columns: 1fr 1fr; gap: var(--space-10); } }
 
-    /* Filters (reused from sessions) */
-    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-4) 0 var(--space-8); }
+    /* Hosts */
+    .hosts { padding-block: var(--space-12); }
+    .host-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); max-width: 58rem; }
+    @media (min-width: 620px) { .host-grid { grid-template-columns: repeat(3, 1fr); } }
+    .host-grid :global(.org-photo) { aspect-ratio: 4 / 5; }
+
+    /* Archive */
+    .archive { padding-bottom: var(--space-16); }
+    .archive-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+    .result-count { color: var(--color-text-muted); font-size: var(--text-sm); }
+
+    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: 0 0 var(--space-8); }
     .filters input, .filters select {
       font-family: var(--font-body); font-size: var(--text-base);
-      padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text);
+      padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text);
     }
-    .filters input { flex: 1 1 18rem; }
-    .filters #f-reset { font-family: var(--font-heading); font-weight: 600; cursor: pointer; padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text); }
-    .result-count { color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
+    .filters input { flex: 1 1 20rem; }
+    .filters input:focus, .filters select:focus { outline: none; border-color: var(--color-primary); }
+    .filters #f-reset { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; padding: var(--space-3) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-muted); }
+    .filters #f-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
 
     /* Single-column story list */
     .story-list { display: flex; flex-direction: column; gap: var(--space-6); }
     .story-row { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
     .story-row:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
+    .story-row:hover .sr-more { color: var(--color-primary); }
     .sr-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
     .sr-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
     .sr-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
-    .sr-ep { position: absolute; top: var(--space-2); left: var(--space-2); }
-    .sr-info { padding: var(--space-6); }
-    .sr-date { font-family: var(--font-heading); font-weight: 600; color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
-    .sr-title { font-size: var(--text-2xl); margin: 0; line-height: 1.2; }
+    .sr-ep { position: absolute; top: var(--space-3); left: var(--space-3); }
+    .sr-info { padding: var(--space-6) var(--space-8); display: flex; flex-direction: column; }
+    .sr-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+    .sr-title { font-size: var(--text-2xl); margin: 0; line-height: 1.15; }
     .sr-authors { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-    .sr-excerpt { color: var(--color-text-muted); margin: var(--space-3) 0 0; }
+    .sr-excerpt { color: var(--color-text-muted); margin: var(--space-4) 0 0; }
+    .sr-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-5); transition: color 0.15s; }
     .no-results { color: var(--color-text-muted); }
 
-    @media (min-width: 720px) {
-      .story-row { grid-template-columns: 300px 1fr; align-items: stretch; }
+    @media (min-width: 760px) {
+      .story-row { grid-template-columns: 320px 1fr; align-items: stretch; }
       .sr-thumb { aspect-ratio: auto; }
+      .sr-info { justify-content: center; }
     }
   </style>
 
