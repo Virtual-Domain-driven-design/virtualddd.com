@@ -1,17 +1,35 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import StoryCard from '../../components/StoryCard.astro';
+import OrganiserCard from '../../components/OrganiserCard.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
-const stories = (await getCollection('stories')).sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0));
+const stories = (await getCollection('stories')).sort(
+  (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
+);
+
+// The three stable hosts of the series (fixed order).
+const organisers = await getCollection('organisers');
+const byId = new Map(organisers.map((o) => [o.id, o]));
+const hosts = ['andrea-magnorsky', 'kenny-baas-schwegler', 'andrew-harmel-law']
+  .map((id) => byId.get(id))
+  .filter(Boolean) as typeof organisers;
+
+// Tag options for the filter (unique across stories).
+const tagSet = new Set<string>();
+for (const s of stories) for (const t of s.data.tags) tagSet.add(t.toLowerCase());
+const tags = [...tagSet].sort();
+
+const shortDate = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
 <BaseLayout
   title="Facilitating Stories — Virtual DDD"
   description="Real-world stories on facilitating software architecture and design — practical experiences from the community."
 >
-  <section class="intro">
-    <div class="wrap">
+  <div class="wrap">
+    <section class="intro">
       <h1>Stories on Facilitating Software Design and Architecture</h1>
       <div class="intro-cols">
         <p>
@@ -27,21 +45,148 @@ const stories = (await getCollection('stories')).sort((a, b) => (b.data.episode 
           beyond the theoretical and into the practical.
         </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div class="wrap">
-    <div class="grid">
-      {stories.map((s) => <StoryCard story={s} />)}
-    </div>
+    <section class="hosts">
+      <h2>Your hosts</h2>
+      <div class="host-grid">
+        {hosts.map((o) => <OrganiserCard organiser={o} />)}
+      </div>
+    </section>
+
+    <section class="archive">
+      <h2>All stories</h2>
+
+      <div class="filters">
+        <input type="search" id="q" placeholder="Search title, author or tag…" aria-label="Search stories" />
+        <select id="f-tag" aria-label="Filter by tag">
+          <option value="">All tags</option>
+          {tags.map((t) => <option value={t}>{t}</option>)}
+        </select>
+        <button id="f-reset" type="button">Reset</button>
+        <span class="result-count" id="count"></span>
+      </div>
+
+      <div class="story-list" id="cards">
+        {stories.map((s) => {
+          const d = s.data;
+          const img = d.featuredImage ?? d.featuredImageSquared;
+          const iso = d.publishedDate ? new Date(d.publishedDate).toISOString() : '';
+          const fallback = d.publishedDate ? shortDate(new Date(d.publishedDate)) : '';
+          return (
+            <a
+              class="story-row"
+              href={`/facilitating-archdes/${s.id}/`}
+              data-title={d.title.toLowerCase()}
+              data-authors={d.authors.join(' ').toLowerCase()}
+              data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
+            >
+              <div class="sr-thumb">
+                {img ? <Image src={img} alt="" width={640} loading="lazy" /> : <div class="sr-ph"></div>}
+                {d.episode != null && <span class="badge badge--type sr-ep">Ep {d.episode}</span>}
+              </div>
+              <div class="sr-info">
+                {iso && (
+                  <p class="sr-date">
+                    <time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{fallback}</time>
+                  </p>
+                )}
+                <h3 class="sr-title">{d.title}</h3>
+                {d.authors.length > 0 && (
+                  <p class="sr-authors">by {d.authors.slice(0, 3).join(', ')}{d.authors.length > 3 ? ' & more' : ''}</p>
+                )}
+                {d.seoMetadescription && <p class="sr-excerpt">{d.seoMetadescription}</p>}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+      <p class="no-results" id="noresults" hidden>No stories match your filters.</p>
+    </section>
   </div>
 
   <style>
-    .intro { background: var(--color-primary); color: #0d0e12; padding-block: var(--space-12); margin-top: calc(-1 * var(--space-12)); }
+    /* Contained cyan intro card — same width as the content below. */
+    .intro { background: var(--color-primary); color: #0d0e12; padding: var(--space-10); margin-bottom: var(--space-12); }
     .intro h1 { color: #0d0e12; margin-bottom: var(--space-6); }
     .intro-cols { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
     @media (min-width: 800px) { .intro-cols { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
     .intro p { color: rgba(13, 14, 18, 0.85); margin: 0; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); margin-block: var(--space-12); }
+
+    .hosts { margin-bottom: var(--space-12); }
+    .hosts h2, .archive h2 { margin-bottom: var(--space-6); }
+    .host-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); max-width: 46rem; }
+
+    /* Filters (reused from sessions) */
+    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-4) 0 var(--space-8); }
+    .filters input, .filters select {
+      font-family: var(--font-body); font-size: var(--text-base);
+      padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text);
+    }
+    .filters input { flex: 1 1 18rem; }
+    .filters #f-reset { font-family: var(--font-heading); font-weight: 600; cursor: pointer; padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text); }
+    .result-count { color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
+
+    /* Single-column story list */
+    .story-list { display: flex; flex-direction: column; gap: var(--space-6); }
+    .story-row { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .story-row:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
+    .sr-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
+    .sr-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sr-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
+    .sr-ep { position: absolute; top: var(--space-2); left: var(--space-2); }
+    .sr-info { padding: var(--space-6); }
+    .sr-date { font-family: var(--font-heading); font-weight: 600; color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+    .sr-title { font-size: var(--text-2xl); margin: 0; line-height: 1.2; }
+    .sr-authors { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+    .sr-excerpt { color: var(--color-text-muted); margin: var(--space-3) 0 0; }
+    .no-results { color: var(--color-text-muted); }
+
+    @media (min-width: 720px) {
+      .story-row { grid-template-columns: 300px 1fr; align-items: stretch; }
+      .sr-thumb { aspect-ratio: auto; }
+    }
   </style>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .story-row'));
+    const q = document.getElementById('q') as HTMLInputElement;
+    const fTag = document.getElementById('f-tag') as HTMLSelectElement;
+    const reset = document.getElementById('f-reset') as HTMLButtonElement;
+    const count = document.getElementById('count') as HTMLElement;
+    const noResults = document.getElementById('noresults') as HTMLElement;
+
+    function matches(c: HTMLElement): boolean {
+      const term = q.value.trim().toLowerCase();
+      const tag = fTag.value.toLowerCase();
+      const d = c.dataset;
+      const okTerm =
+        !term ||
+        (d.title ?? '').includes(term) ||
+        (d.authors ?? '').includes(term) ||
+        (d.tags ?? '').includes(term);
+      const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
+      return okTerm && okTag;
+    }
+
+    function apply() {
+      let matched = 0;
+      cards.forEach((c) => {
+        const ok = matches(c);
+        c.hidden = !ok;
+        if (ok) matched++;
+      });
+      count.textContent = `${matched} stor${matched === 1 ? 'y' : 'ies'}`;
+      noResults.hidden = matched > 0;
+    }
+
+    [q, fTag].forEach((el) => el.addEventListener('input', apply));
+    reset.addEventListener('click', () => {
+      q.value = '';
+      fTag.value = '';
+      apply();
+    });
+    apply();
+  </script>
 </BaseLayout>
