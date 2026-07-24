@@ -22,6 +22,19 @@ const organisers = await getCollection('organisers');
 const orgByName = new Map(organisers.map((o) => [o.data.name.trim().toLowerCase(), o]));
 const host = d.organiser ? orgByName.get(d.organiser.trim().toLowerCase()) : undefined;
 
+// Normalise a YouTube URL (embed / youtu.be / watch / live) to a nocookie embed.
+function youtubeEmbed(url?: string): string | null {
+  if (!url) return null;
+  let m: RegExpMatchArray | null;
+  let id: string | undefined;
+  if ((m = url.match(/youtube\.com\/embed\/([^?/&]+)/))) id = m[1];
+  else if ((m = url.match(/youtu\.be\/([^?/&]+)/))) id = m[1];
+  else if ((m = url.match(/youtube\.com\/live\/([^?/&]+)/))) id = m[1];
+  else if ((m = url.match(/[?&]v=([^&]+)/))) id = m[1];
+  return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+}
+const videoEmbed = youtubeEmbed(d.video) ?? (d.video?.includes('/embed/') ? d.video : null);
+
 // Prev / next by date.
 const ordered = [...sessions].sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime));
 const idx = ordered.findIndex((s) => s.id === session.id);
@@ -34,7 +47,6 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
 
 <BaseLayout title={`${d.seoTitle ?? d.title} — Virtual DDD`} description={d.seoMetadescription}>
   <article class="session wrap">
-    <!-- head: title + hero (spans left column) -->
     <div class="s-head">
       <p class="back"><a href="/sessions/">← All sessions</a></p>
       <div class="badges">
@@ -42,19 +54,39 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
         {d.level?.map((l) => <span class="badge">{l}</span>)}
       </div>
       <h1>{d.title}</h1>
-      {d.featuredImage && <Image class="hero" src={d.featuredImage} alt={d.title} width={920} />}
+
+      {videoEmbed ? (
+        <div class="video">
+          <iframe
+            src={videoEmbed}
+            title={d.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+      ) : d.featuredImage ? (
+        <Image class="hero" src={d.featuredImage} alt={d.title} width={920} />
+      ) : null}
+
+      {d.podcastPlayer && (
+        <iframe class="podcast" src={d.podcastPlayer} title="Podcast player" loading="lazy" width="100%" height="170"></iframe>
+      )}
     </div>
 
-    <!-- sidebar: meta + CTA + tags + heuristics -->
     <aside class="s-side">
       <div class="side-card">
         <p class="side-date">{dateStr}</p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
-        <div class="side-cta">
-          {isUpcoming && (d.humantix || d.meet) && <a class="btn btn--accent" href={d.humantix ?? d.meet}>RSVP to attend</a>}
-          {d.video && <a class="btn" href={d.video}>▶ Watch the recording</a>}
-          {d.podcastPlayer && <a class="btn btn--ghost" href={d.podcastPlayer}>Listen to the podcast</a>}
-        </div>
+        {isUpcoming && (d.humantix || d.meet) && (
+          <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>
+        )}
+        {(d.video || d.miro) && (
+          <p class="side-links">
+            {d.video && <a href={d.video}>Watch on YouTube ↗</a>}
+            {d.miro && <a href={d.miro}>Miro board ↗</a>}
+          </p>
+        )}
       </div>
 
       {d.tags.length > 0 && (
@@ -67,14 +99,11 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
       {discussed.length > 0 && (
         <div class="side-block">
           <h3>Discussed heuristics</h3>
-          <ul class="heur-list">
-            {discussed.map((h) => <li>{h!.data.title}</li>)}
-          </ul>
+          <ul class="heur-list">{discussed.map((h) => <li>{h!.data.title}</li>)}</ul>
         </div>
       )}
     </aside>
 
-    <!-- body: description + organiser + prev/next -->
     <div class="s-body">
       <div class="body"><Content /></div>
 
@@ -82,9 +111,7 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
         <section class="card organiser">
           <h2>About the host</h2>
           <div class="org">
-            {host?.data.photo && (
-              <Image class="org-photo" src={host.data.photo} alt={host.data.name} width={180} />
-            )}
+            {host?.data.photo && <Image class="org-photo" src={host.data.photo} alt={host.data.name} width={180} />}
             <div class="org-info">
               <p class="org-name">{host?.data.name ?? d.organiser}</p>
               {host?.data.role && <p class="org-role">{host.data.role}</p>}
@@ -113,20 +140,21 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
     .back { font-size: var(--text-sm); margin-bottom: var(--space-3); }
     .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
     .s-head h1 { margin-bottom: var(--space-6); }
+
+    .video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: #000; }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     .hero { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .podcast { display: block; width: 100%; border: 0; border-radius: var(--radius-sm); margin-top: var(--space-4); }
 
     /* Sidebar */
     .side-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); }
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .side-org { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
     .side-org strong { color: var(--color-accent-dark); }
-    .side-cta { display: flex; flex-direction: column; gap: var(--space-2); }
-    .side-cta .btn { justify-content: center; }
+    .side-rsvp { display: flex; justify-content: center; margin-bottom: var(--space-4); }
+    .side-links { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; font-size: var(--text-sm); }
     .side-block { margin-top: var(--space-6); }
-    .side-block h3 {
-      font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.06em;
-      color: var(--color-text-muted); margin: 0 0 var(--space-3);
-    }
+    .side-block h3 { font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-muted); margin: 0 0 var(--space-3); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
     .heur-list { margin: 0; padding-left: var(--space-4); font-size: var(--text-sm); }
     .heur-list li { margin-bottom: var(--space-2); }
@@ -142,17 +170,10 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
     .org-role { color: var(--color-accent-dark); margin: 0 0 var(--space-2); }
     .org-links { display: flex; gap: var(--space-4); margin: 0; font-size: var(--text-sm); }
     .org-co { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-4) 0 0; }
-    .prevnext {
-      display: flex; justify-content: space-between; gap: var(--space-4);
-      margin-top: var(--space-12); padding-top: var(--space-6);
-      border-top: 1px solid var(--color-border);
-      font-family: var(--font-heading); font-weight: 600;
-    }
+
+    .prevnext { display: flex; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--color-border); font-family: var(--font-heading); font-weight: 600; }
     .prevnext .pn-next { margin-left: auto; text-align: right; }
 
-    /* Two-column from 900px: head + body stack in the left column,
-       sidebar spans the right column and sticks. DOM order (head, side, body)
-       keeps the CTA directly under the title on mobile. */
     @media (min-width: 900px) {
       .session {
         grid-template-columns: minmax(0, 1fr) 19rem;
