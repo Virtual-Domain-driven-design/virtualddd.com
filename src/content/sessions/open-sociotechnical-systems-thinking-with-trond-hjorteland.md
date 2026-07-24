@@ -1,0 +1,20 @@
+---
+title: "Open Sociotechnical Systems Thinking with Trond Hjorteland"
+slug: "open-sociotechnical-systems-thinking-with-trond-hjorteland"
+status: "Done"
+datetime: 2021-11-22T18:00:00.000+00:00
+wordpressPublishedDate: 2021-11-22
+typeOfSession: "talk"
+level: ["Advanced", "Intermediate", "Beginner"]
+tags: ["strategic design", "software architecture", "sociotechnical systems", "design patterns"]
+video: "https://www.youtube.com/embed/f9ywr8Mo9k4"
+podcastPlayer: "https://player.captivate.fm/episode/cf46640a-95c2-4c60-9971-18abbb843552/"
+organiser: "Kenny Baas-Schwegler"
+coOrganisers: ["Krisztina Hirth"]
+featuredImage: "./_assets/open-sociotechnical-systems-thinking-with-trond-hjorteland-featured.jpg"
+---
+
+The term “sociotechnical” seems to have gotten a bit or renaissance lately, which is a great thing given all the positive impact it has had on many organisations and their workers around the world over the years. It also seems to have gotten some traction outside the academic circles this time after being developed and pushed from there mostly using action research since its humble beginning in the post-war British coal mines. It is an entry into systems thinking for many, with its idea about joint optimisation of both the technical and social aspects of an organisation. A common example is setting up the team topology to match the service architecture in an attempt to cater for negative effects of Conway’s law. This is all well and good, but if we think about it, viewing the modern organisation as a sociotechnical system is a bit of a tautology; all organisations have social and technical elements that people deal with on a daily basis. As with systems thinking, the value of sociotechnical system design is more about perspective and understanding rather than any specific outcome. There is so much more to sociotechnical design than DevOps and team setup that we need in order to cope in our increasingly complex and hazardous “digital coal mines.”
+
+Disclaimer: This talk is a prototype and is loosely based on my lightning talks at DDD Europe 2021 and DDD Europe Open Space, with the addition of new learning of Emery's Open Systems Theory as a foundation for sociotechnical systems design. Hope this will be more of a common exploration of the topics than a pure lecture.
+slides: [https://www.dropbox.com/s/eeylt3cafssuogp/Open%20Sociotechnical%20Systems%20Thinking.pdf](https://www.dropbox.com/s/eeylt3cafssuogp/Open%20Sociotechnical%20Systems%20Thinking.pdf) 

@@ -1,0 +1,20 @@
+---
+title: "Align with key revenue streams"
+slug: "align-with-key-revenue-streams"
+status: "Published"
+question: "How do I design a bounded context?"
+type: ["design-heuristics"]
+authors: ["Nick Tune"]
+tags: ["Strategic design"]
+enables: ["pause-every-ten-minutes-invite-dissent"]
+---
+
+## Short description
+
+Create bounded context for the parts of the system which currently generate the most money
+
+## Examples
+
+## Context
+
+Use these at a strategic level when defining bounded context. When you want to seperate core domains from supporting and generic subdomains

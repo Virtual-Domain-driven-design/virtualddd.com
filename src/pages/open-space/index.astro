@@ -1,0 +1,25 @@
+---
+// PLACEHOLDER open-spaces index.
+import { getCollection } from 'astro:content';
+const items = (await getCollection('openSpaces')).sort(
+  (a, b) => +new Date(b.data.date) - +new Date(a.data.date),
+);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Open spaces — Virtual DDD</title>
+  </head>
+  <body>
+    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
+      <h1>Open spaces ({items.length})</h1>
+      <ul>
+        {items.map((s) => (
+          <li><a href={`/open-space/${s.id}/`}>{s.data.title}</a></li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>

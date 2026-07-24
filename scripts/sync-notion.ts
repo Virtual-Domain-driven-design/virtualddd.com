@@ -17,6 +17,7 @@
 import { readFileSync } from 'node:fs';
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
+import sharp from 'sharp';
 
 dotenv.config({ path: 'local.env' });
 
@@ -264,6 +265,54 @@ function fileUrl(f: any): string {
   return f?.type === 'external' ? f.external?.url : f?.file?.url ?? '';
 }
 
+interface AssetCtx { dir: string; slug: string; count: number }
+
+const EXT_BY_CT: Record<string, string> = {
+  'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif',
+  'image/webp': 'webp', 'image/svg+xml': 'svg', 'image/avif': 'avif',
+};
+function extFromUrl(url: string): string | null {
+  const path = url.split('?')[0];
+  const m = path.match(/\.([a-z0-9]{2,4})$/i);
+  return m ? m[1].toLowerCase() : null;
+}
+
+const IMG_MAX = 1600;
+/** Cap dimensions and recompress so committed source images stay small. */
+async function shrinkImage(raw: Buffer, ext: string): Promise<Buffer> {
+  if (!['png', 'jpg', 'jpeg', 'webp'].includes(ext)) return raw;
+  try {
+    let img = sharp(raw, { failOn: 'none' });
+    const m = await img.metadata();
+    if ((m.width ?? 0) > IMG_MAX || (m.height ?? 0) > IMG_MAX) {
+      img = img.resize({ width: IMG_MAX, height: IMG_MAX, fit: 'inside', withoutEnlargement: true });
+    }
+    img = ext === 'png' ? img.png({ compressionLevel: 9, quality: 80 })
+      : ext === 'webp' ? img.webp({ quality: 82 })
+      : img.jpeg({ quality: 82, mozjpeg: true });
+    const out = await img.toBuffer();
+    return out.length < raw.length ? out : raw;
+  } catch { return raw; }
+}
+
+/** Download an image next to the entry; return the `./` relative path or null. */
+async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise<string | null> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = Buffer.from(await res.arrayBuffer());
+    const ext = extFromUrl(url) ?? EXT_BY_CT[res.headers.get('content-type') ?? ''] ?? 'png';
+    const buf = await shrinkImage(raw, ext);
+    const name = `${ctx.slug}-${label}.${ext}`;
+    mkdirSync(ctx.dir, { recursive: true });
+    writeFileSync(`${ctx.dir}/${name}`, buf);
+    return `./_assets/${name}`;
+  } catch (e: any) {
+    console.warn(`    ! image download failed (${label}): ${e.message}`);
+    return null;
+  }
+}
+
 async function childrenOf(blockId: string): Promise<any[]> {
   const out: any[] = [];
   let cursor: string | undefined;
@@ -278,7 +327,7 @@ async function childrenOf(blockId: string): Promise<any[]> {
 const seenUnhandled = new Set<string>();
 
 /** Render a list of blocks to markdown. `indent` handles nested lists. */
-async function blocksToMd(blocks: any[], indent = ''): Promise<string> {
+async function blocksToMd(blocks: any[], ctx: AssetCtx | null, indent = ''): Promise<string> {
   const out: string[] = [];
   let numIdx = 0;
   for (const b of blocks) {
@@ -286,7 +335,8 @@ async function blocksToMd(blocks: any[], indent = ''): Promise<string> {
     if (t !== 'numbered_list_item') numIdx = 0;
     const data = b[t];
     const kids = b.has_children ? await childrenOf(b.id) : [];
-    const nested = kids.length ? '\n' + (await blocksToMd(kids, indent + '  ')) : '';
+    const nestable = ['paragraph', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'callout', 'toggle'].includes(t);
+    const nested = kids.length && nestable ? '\n' + (await blocksToMd(kids, ctx, indent + '  ')) : '';
 
     switch (t) {
       case 'paragraph':
@@ -307,14 +357,27 @@ async function blocksToMd(blocks: any[], indent = ''): Promise<string> {
       case 'divider': out.push('---'); break;
       case 'image': {
         const url = fileUrl(data); const cap = richText(data.caption);
-        out.push(`![${cap}](${url})`); break; // real sync downloads these locally
+        let rel: string | null = url;
+        if (url && ctx) rel = await downloadImage(url, ctx, `body-${++ctx.count}`);
+        out.push(rel ? `![${cap}](${rel})` : ''); break;
       }
       case 'video': case 'embed': case 'bookmark': case 'link_preview': {
         const url = data.url ?? fileUrl(data);
-        out.push(url ? `{% embed ${url} %}` : ''); break; // embed marker — preserved, rendered later
+        // Preserve the URL as an autolink; a later pass can upgrade YouTube to an iframe component.
+        out.push(url ? `[${url}](${url})` : ''); break;
       }
       case 'toggle':
         out.push(`<details><summary>${richText(data.rich_text)}</summary>\n\n${nested}\n</details>`); break;
+      case 'table': {
+        const rows = kids.filter((k) => k.type === 'table_row');
+        if (!rows.length) break;
+        const toRow = (r: any) => '| ' + r.table_row.cells.map((c: any) => richText(c).replace(/\|/g, '\\|').replace(/\n/g, ' ')).join(' | ') + ' |';
+        const md = [toRow(rows[0])];
+        md.push('| ' + Array(rows[0].table_row.cells.length).fill('---').join(' | ') + ' |');
+        rows.slice(1).forEach((r) => md.push(toRow(r)));
+        out.push(md.join('\n')); break;
+      }
+      case 'table_row': break; // handled by its parent table
       case 'child_page': break; // skip nested pages
       default:
         seenUnhandled.add(t);
@@ -331,62 +394,174 @@ function yamlList(items: string[]): string {
   return '[' + items.map(yamlStr).join(', ') + ']';
 }
 
-async function runContentSessions(limit: number, outDir: string, write: boolean) {
-  console.log('building relation lookups (heuristics, people)...');
+function statusOf(page: any, kind: StatusKind): string {
+  const p = page.properties?.['Status'];
+  return (kind === 'select' ? p?.select?.name : p?.status?.name) ?? '';
+}
+
+interface Helpers {
+  get: (n: string) => any;
+  text: (n: string) => string;
+  multi: (n: string) => string[];
+  url: (n: string) => string | undefined;
+  date: (n: string) => string | undefined;
+  num: (n: string) => number | undefined;
+  select: (n: string) => string | undefined;
+  heur: (n: string) => string[];
+  person: (n: string) => string[];
+  img: (n: string, label: string) => Promise<string | null>;
+}
+
+interface ContentSpec {
+  dataSourceId: string;
+  titleProp: string;
+  slugProp: string;
+  statusKind: StatusKind;
+  liveStatuses: string[];
+  featuredImageProp?: string; // omit to skip featured-image download
+  needsPeople?: boolean;
+  extra: (h: Helpers) => Promise<string[]>;
+}
+
+const CONTENT_SPECS: Record<string, ContentSpec> = {
+  sessions: {
+    dataSourceId: '33e9db0a-1418-4a3e-a053-33fa384e5e93',
+    titleProp: 'Name', slugProp: 'slug', statusKind: 'select',
+    liveStatuses: ['Done', 'Published'], featuredImageProp: 'Featured image', needsPeople: true,
+    extra: async (h) => {
+      const l: string[] = [];
+      if (h.date('Datetime')) l.push(`datetime: ${h.date('Datetime')}`);
+      const wp = h.date('Wordpress Published date'); if (wp) l.push(`wordpressPublishedDate: ${wp.slice(0, 10)}`);
+      if (h.select('Type of session')) l.push(`typeOfSession: ${yamlStr(h.select('Type of session')!)}`);
+      const level = h.multi('Level'); if (level.length) l.push(`level: ${yamlList(level)}`);
+      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      for (const [k, p] of [['video', 'Video'], ['podcastPlayer', 'PodcastPlayer'], ['miro', 'Miro'], ['meet', 'Meet'], ['humantix', 'Humantix']] as const) {
+        const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
+      }
+      const org = h.person('Organiser')[0]; if (org) l.push(`organiser: ${yamlStr(org)}`);
+      const co = h.person('Co-Organisers'); if (co.length) l.push(`coOrganisers: ${yamlList(co)}`);
+      const heur = h.heur('Curated Heuristics'); if (heur.length) l.push(`curatedHeuristics: ${yamlList(heur)}`);
+      const t = h.text('SEO Title'); if (t) l.push(`seoTitle: ${yamlStr(t)}`);
+      const d = h.text('SEO Metadescription'); if (d) l.push(`seoMetadescription: ${yamlStr(d)}`);
+      return l;
+    },
+  },
+  'open-spaces': {
+    dataSourceId: '0cfb73c7-a638-4948-a4df-5fe06dcd2dd1',
+    titleProp: 'Name', slugProp: 'slug', statusKind: 'status',
+    liveStatuses: ['Published', 'Done'], featuredImageProp: 'Featured image',
+    extra: async (h) => {
+      const l: string[] = [];
+      if (h.date('Date')) l.push(`date: ${h.date('Date')}`);
+      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      for (const [k, p] of [['video', 'Video'], ['podcast', 'Podcast'], ['meetup', 'meetup'], ['miro', 'miro'], ['tickets', 'tickets']] as const) {
+        const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
+      }
+      const t = h.text('SEO Title'); if (t) l.push(`seoTitle: ${yamlStr(t)}`);
+      const d = h.text('SEO Metadescription'); if (d) l.push(`seoMetadescription: ${yamlStr(d)}`);
+      return l;
+    },
+  },
+  stories: {
+    dataSourceId: '25aa485a-fafc-8047-94b7-000b3bbb228c',
+    titleProp: 'Title', slugProp: 'slug', statusKind: 'status',
+    liveStatuses: ['Published'], featuredImageProp: 'Featured image',
+    extra: async (h) => {
+      const l: string[] = [];
+      const ep = h.num('Episode'); if (ep != null) l.push(`episode: ${ep}`);
+      const pd = h.date('Published Date'); if (pd) l.push(`publishedDate: ${pd.slice(0, 10)}`);
+      const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
+      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      for (const [k, p] of [['youtube', 'YouTube'], ['podcast', 'Podcast']] as const) {
+        const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
+      }
+      const heur = h.heur('Curated Heuristics'); if (heur.length) l.push(`curatedHeuristics: ${yamlList(heur)}`);
+      const fk = h.text('Focus keyphrase'); if (fk) l.push(`focusKeyphrase: ${yamlStr(fk)}`);
+      const t = h.text('SEO Title'); if (t) l.push(`seoTitle: ${yamlStr(t)}`);
+      const d = h.text('SEO Metadescription'); if (d) l.push(`seoMetadescription: ${yamlStr(d)}`);
+      const sq = await h.img('Featured image squared', 'featured-squared'); if (sq) l.push(`featuredImageSquared: ${yamlStr(sq)}`);
+      return l;
+    },
+  },
+  heuristics: {
+    dataSourceId: HEURISTICS_DS,
+    titleProp: 'Title', slugProp: 'Slug', statusKind: 'status',
+    liveStatuses: ['Published'], // rendered as components for now — no featured image, no route
+    extra: async (h) => {
+      const l: string[] = [];
+      const q = h.text('Question'); if (q) l.push(`question: ${yamlStr(q)}`);
+      const type = h.multi('Type'); if (type.length) l.push(`type: ${yamlList(type)}`);
+      const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
+      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites '], ['specializes', 'Specializes']] as const) {
+        const v = h.heur(p); if (v.length) l.push(`${k}: ${yamlList(v)}`);
+      }
+      const fk = h.text('Focus Keyphrase'); if (fk) l.push(`focusKeyphrase: ${yamlStr(fk)}`);
+      const md = h.text('Meta Description'); if (md) l.push(`metaDescription: ${yamlStr(md)}`);
+      return l;
+    },
+  },
+};
+
+async function runContent(key: string, limit: number, outDir: string, write: boolean) {
+  const spec = CONTENT_SPECS[key];
+  if (!spec) { console.error(`unknown collection: ${key}`); process.exit(1); }
+
+  console.log('building relation lookups...');
   const heurSlug = await buildLookup(HEURISTICS_DS, 'heuristics', (p) =>
     (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim());
-  const personName = await buildLookup(PEOPLE_DS, 'people (organisers)', (p) => {
-    const titleProp: any = Object.values(p.properties ?? {}).find((x: any) => x.type === 'title');
-    return (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
-  });
+  const personName = spec.needsPeople
+    ? await buildLookup(PEOPLE_DS, 'people (organisers)', (p) => {
+        const tp: any = Object.values(p.properties ?? {}).find((x: any) => x.type === 'title');
+        return (tp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
+      })
+    : new Map<string, string>();
 
-  const cfg = COLLECTIONS.sessions;
-  const pages = (await queryAll(cfg.dataSourceId))
-    .filter((p) => cfg.liveStatuses.includes(statusName(p, cfg)));
+  const pages = (await queryAll(spec.dataSourceId)).filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
   const targets = limit ? pages.slice(0, limit) : pages;
+  const assetDir = `${outDir}/_assets`;
   mkdirSync(outDir, { recursive: true });
-  console.log(`sessions to render: ${targets.length}${limit ? ` (limited from ${pages.length})` : ''} -> ${outDir}\n`);
+  console.log(`${key}: ${targets.length}${limit ? ` (of ${pages.length})` : ''} -> ${outDir}\n`);
 
   for (const page of targets) {
     const P = page.properties;
     const get = (n: string) => P[n];
-    const slug = (get('slug')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-    const title = plainTitle(page, 'Name');
+    const slug = (get(spec.slugProp)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+    const title = plainTitle(page, spec.titleProp);
     if (!slug) { console.log(`  ! no slug, skipping "${title}"`); continue; }
-
+    const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
     const rel = (n: string) => (get(n)?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
-    const heur = rel('Curated Heuristics').map((id: string) => heurSlug.get(id)).filter(Boolean);
-    const organiser = rel('Organiser').map((id: string) => personName.get(id)).filter(Boolean)[0];
-    const coOrg = rel('Co-Organisers').map((id: string) => personName.get(id)).filter(Boolean);
+
+    const h: Helpers = {
+      get,
+      text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
+      url: (n) => get(n)?.url ?? undefined,
+      date: (n) => get(n)?.date?.start ?? undefined,
+      num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
+      select: (n) => get(n)?.select?.name ?? undefined,
+      heur: (n) => rel(n).map((id: string) => heurSlug.get(id)).filter(Boolean) as string[],
+      person: (n) => rel(n).map((id: string) => personName.get(id)).filter(Boolean) as string[],
+      img: async (n, label) => {
+        const u = fileUrl((get(n)?.files ?? [])[0]);
+        return u ? await downloadImage(u, ctx, label) : null;
+      },
+    };
 
     const fm: string[] = ['---'];
     fm.push(`title: ${yamlStr(title)}`);
     fm.push(`slug: ${yamlStr(slug)}`);
-    fm.push(`status: ${yamlStr(statusName(page, cfg))}`);
-    if (get('Datetime')?.date?.start) fm.push(`datetime: ${get('Datetime').date.start}`);
-    if (get('Wordpress Published date')?.date?.start) fm.push(`wordpressPublishedDate: ${get('Wordpress Published date').date.start.slice(0, 10)}`);
-    if (get('Type of session')?.select?.name) fm.push(`typeOfSession: ${yamlStr(get('Type of session').select.name)}`);
-    const level = (get('Level')?.multi_select ?? []).map((o: any) => o.name);
-    if (level.length) fm.push(`level: ${yamlList(level)}`);
-    const tags = (get('Tags')?.multi_select ?? []).map((o: any) => o.name);
-    if (tags.length) fm.push(`tags: ${yamlList(tags)}`);
-    for (const [k, prop] of [['video', 'Video'], ['podcastPlayer', 'PodcastPlayer'], ['miro', 'Miro'], ['meet', 'Meet'], ['humantix', 'Humantix']] as const) {
-      if (get(prop)?.url) fm.push(`${k}: ${yamlStr(get(prop).url)}`);
+    fm.push(`status: ${yamlStr(statusOf(page, spec.statusKind))}`);
+    fm.push(...(await spec.extra(h)));
+    if (spec.featuredImageProp) {
+      const featuredRel = await h.img(spec.featuredImageProp, 'featured');
+      if (featuredRel) fm.push(`featuredImage: ${yamlStr(featuredRel)}`);
     }
-    if (organiser) fm.push(`organiser: ${yamlStr(organiser)}`);
-    if (coOrg.length) fm.push(`coOrganisers: ${yamlList(coOrg)}`);
-    if (heur.length) fm.push(`curatedHeuristics: ${yamlList(heur as string[])}`);
-    const seoT = (get('SEO Title')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-    const seoD = (get('SEO Metadescription')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-    if (seoT) fm.push(`seoTitle: ${yamlStr(seoT)}`);
-    if (seoD) fm.push(`seoMetadescription: ${yamlStr(seoD)}`);
-    const featured = fileUrl((get('Featured image')?.files ?? [])[0]);
-    if (featured) fm.push(`featuredImageRemote: ${yamlStr(featured)}  # real sync downloads to src/assets`);
     fm.push('---');
 
-    const body = await blocksToMd(await childrenOf(page.id));
+    const body = await blocksToMd(await childrenOf(page.id), ctx);
     writeFileSync(`${outDir}/${slug}.md`, fm.join('\n') + '\n\n' + body + '\n');
-    console.log(`  ✓ ${slug}.md  (${body.length} chars body, ${heur.length} heuristics, ${coOrg.length} co-org)`);
+    console.log(`  ✓ ${slug}.md (${body.length}c, ${ctx.count} imgs)`);
   }
 
   if (seenUnhandled.size) console.log(`\n  unhandled block types seen: ${[...seenUnhandled].join(', ')}`);
@@ -401,16 +576,15 @@ async function run() {
   const write = args.includes('--write');
   const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
   const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
-  const out = args.find((a) => a.startsWith('--out='))?.split('=')[1]
-    ?? 'migration-source/preview/sessions';
 
   if (cmd === 'slugs') return runSlugs(only, write);
   if (cmd === 'content') {
     const target = only ?? 'sessions';
-    if (target !== 'sessions') { console.error('content sync: only "sessions" implemented so far'); process.exit(1); }
-    return runContentSessions(limit, out, write);
+    const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
+      ?? (write ? `src/content/${target}` : `migration-source/preview/${target}`);
+    return runContent(target, limit, outDir, write);
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=sessions [--limit=N] [--out=DIR]');
+  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write]');
   process.exit(1);
 }
 

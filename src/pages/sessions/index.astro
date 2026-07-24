@@ -1,0 +1,28 @@
+---
+// PLACEHOLDER sessions index — proves the collection lists. Real design later.
+import { getCollection } from 'astro:content';
+const sessions = (await getCollection('sessions')).sort(
+  (a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime),
+);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sessions — Virtual DDD</title>
+  </head>
+  <body>
+    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
+      <h1>Sessions ({sessions.length})</h1>
+      <ul>
+        {sessions.map((s) => (
+          <li>
+            <a href={`/sessions/${s.id}/`}>{s.data.title}</a>
+            {' — '}{new Date(s.data.datetime).getFullYear()}
+          </li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>

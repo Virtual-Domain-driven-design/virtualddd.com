@@ -1,0 +1,25 @@
+---
+// PLACEHOLDER stories index.
+import { getCollection } from 'astro:content';
+const items = (await getCollection('stories')).sort(
+  (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
+);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stories on Facilitating Software Architecture &amp; Design — Virtual DDD</title>
+  </head>
+  <body>
+    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
+      <h1>Stories on Facilitating Software Architecture &amp; Design ({items.length})</h1>
+      <ul>
+        {items.map((s) => (
+          <li><a href={`/facilitating-archdes/${s.id}/`}>{s.data.title}</a></li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>

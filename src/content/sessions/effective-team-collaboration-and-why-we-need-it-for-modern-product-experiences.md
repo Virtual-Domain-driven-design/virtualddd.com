@@ -1,0 +1,18 @@
+---
+title: "Effective team collaboration and why we need it for modern product experiences?"
+slug: "effective-team-collaboration-and-why-we-need-it-for-modern-product-experiences"
+status: "Done"
+datetime: 2022-05-05T17:00:00.000+00:00
+wordpressPublishedDate: 2022-05-05
+typeOfSession: "talk"
+level: ["Advanced", "Intermediate", "Beginner"]
+tags: ["architect decisions", "software design", "long term impact"]
+video: "https://www.youtube.com/embed/WNQ3ZLcW4Mw"
+podcastPlayer: "https://player.captivate.fm/episode/975db4f3-d3f7-4a72-b7fb-ef5907782097/"
+organiser: "Kenny Baas-Schwegler"
+coOrganisers: ["Krisztina Hirth"]
+featuredImage: "./_assets/effective-team-collaboration-and-why-we-need-it-for-modern-product-experiences-featured.jpg"
+---
+
+Today most software products are highly networked and distributed solutions used by 1000s if not -10000s of people spread across the globe. To produce an experience that is intuitive and delivers a quality service worldwide, multi-culturally, and 24/7 across all time zones, you need a multi-disciplinary and diverse set of individuals i.e. a tailored team.
+Join us in this panel with: Dawn Ahukanna, Nivia Henry, Jessica Kerr, Ruth Malan, Rebecca Wirfs-Brock, Mathias Verraes, Trond Hjorteland 
