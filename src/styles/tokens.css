@@ -42,7 +42,8 @@
   /* Layout */
   --content-width: 46rem;
   --wide-width: 72rem;
-  --radius: 10px;
-  --radius-sm: 6px;
+  /* Square corners for the 80's / synthwave look. */
+  --radius: 0px;
+  --radius-sm: 0px;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.4);
 }
