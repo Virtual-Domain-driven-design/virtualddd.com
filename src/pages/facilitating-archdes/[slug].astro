@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SideExtras from '../../components/SideExtras.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -11,6 +12,9 @@ export async function getStaticPaths() {
 const { story, stories } = Astro.props;
 const { Content } = await render(story);
 const d = story.data;
+
+const shortDate = (dt: Date) =>
+  dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 // Discussed heuristics — resolve defensively.
 const heuristics = await getCollection('heuristics');
@@ -35,6 +39,19 @@ const idx = ordered.findIndex((s) => s.id === story.id);
 const prev = ordered[idx - 1];
 const next = ordered[idx + 1];
 
+// Latest stories for the sidebar (most recent episodes, excluding this one).
+const latest = [...stories]
+  .filter((s) => s.id !== story.id)
+  .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
+  .slice(0, 3)
+  .map((s) => ({
+    href: `/facilitating-archdes/${s.id}/`,
+    title: s.data.title,
+    img: s.data.featuredImage ?? s.data.featuredImageSquared,
+    iso: s.data.publishedDate ? new Date(s.data.publishedDate).toISOString() : undefined,
+    fallback: s.data.publishedDate ? shortDate(new Date(s.data.publishedDate)) : undefined,
+  }));
+
 const iso = d.publishedDate ? new Date(d.publishedDate).toISOString() : '';
 const dateStr = d.publishedDate
   ? new Date(d.publishedDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -55,6 +72,10 @@ const dateStr = d.publishedDate
       ) : d.featuredImage ? (
         <Image class="hero" src={d.featuredImage} alt={d.title} width={920} />
       ) : null}
+
+      {d.podcast && (
+        <iframe class="podcast" src={d.podcast} title="Podcast player" loading="lazy" width="100%" height="170"></iframe>
+      )}
     </div>
 
     <aside class="s-side">
@@ -83,6 +104,8 @@ const dateStr = d.publishedDate
           <ul class="heur-list">{discussed.map((h) => <li>{h!.data.title}</li>)}</ul>
         </div>
       )}
+
+      <SideExtras latest={latest} latestLabel="Latest stories" latestAllHref="/facilitating-archdes/" />
     </aside>
 
     <div class="s-body">
@@ -121,6 +144,7 @@ const dateStr = d.publishedDate
     .video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; box-shadow: var(--shadow); background: #000; }
     .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     .hero { width: 100%; box-shadow: var(--shadow); }
+    .podcast { display: block; width: 100%; border: 0; margin-top: var(--space-4); }
 
     .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
     .side-ep { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-dark); margin: 0 0 var(--space-1); font-size: var(--text-sm); }

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SideExtras from '../../components/SideExtras.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -40,6 +41,21 @@ const ordered = [...sessions].sort((a, b) => +new Date(a.data.datetime) - +new D
 const idx = ordered.findIndex((s) => s.id === session.id);
 const prev = ordered[idx - 1];
 const next = ordered[idx + 1];
+
+// Latest sessions for the sidebar (most recent by date, excluding this one).
+const shortDate = (dt: Date) =>
+  dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const latest = [...sessions]
+  .filter((s) => s.id !== session.id)
+  .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
+  .slice(0, 3)
+  .map((s) => ({
+    href: `/sessions/${s.id}/`,
+    title: s.data.title,
+    img: s.data.featuredImage,
+    iso: new Date(s.data.datetime).toISOString(),
+    fallback: shortDate(new Date(s.data.datetime)),
+  }));
 
 const isUpcoming = d.status === 'Published' && new Date(d.datetime) > new Date();
 const iso = new Date(d.datetime).toISOString();
@@ -103,6 +119,8 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { day: 'numeric
           <ul class="heur-list">{discussed.map((h) => <li>{h!.data.title}</li>)}</ul>
         </div>
       )}
+
+      <SideExtras latest={latest} latestLabel="Latest sessions" latestAllHref="/sessions/" />
     </aside>
 
     <div class="s-body">
