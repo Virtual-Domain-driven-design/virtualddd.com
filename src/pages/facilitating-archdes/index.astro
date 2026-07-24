@@ -173,10 +173,10 @@ function excerpt(md: string, fallback = '', max = 190): string {
 
     /* Archive */
     .archive { padding-bottom: var(--space-16); }
-    .archive-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+    .archive-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; max-width: 52rem; margin-inline: auto; }
     .result-count { color: var(--color-text-muted); font-size: var(--text-sm); }
 
-    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: 0 0 var(--space-8); }
+    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: 0 auto var(--space-8); max-width: 52rem; }
     .filters input, .filters select {
       font-family: var(--font-body); font-size: var(--text-base);
       padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border);
@@ -187,9 +187,8 @@ function excerpt(md: string, fallback = '', max = 190): string {
     .filters #f-reset { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; padding: var(--space-3) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-muted); }
     .filters #f-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
 
-    /* Story cards — image on top, title + excerpt beneath */
-    .story-list { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
-    @media (min-width: 720px) { .story-list { grid-template-columns: 1fr 1fr; } }
+    /* Story cards — image on top, title + excerpt beneath (single column) */
+    .story-list { display: flex; flex-direction: column; gap: var(--space-8); max-width: 52rem; margin-inline: auto; }
 
     .story-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
     .story-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
