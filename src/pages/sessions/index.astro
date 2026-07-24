@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SessionCard from '../../components/SessionCard.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 const all = await getCollection('sessions');
 const now = Date.now();
@@ -11,6 +12,19 @@ const upcoming = all
 const past = all
   .filter((s) => !(s.data.status === 'Published' && +new Date(s.data.datetime) > now))
   .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime));
+
+const featured = upcoming[0];
+const f = featured?.data;
+const featuredDate = f
+  ? new Date(f.datetime).toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })
+  : '';
+
+// Tag options for the filter (unique across past sessions).
+const tagSet = new Set<string>();
+for (const s of past) for (const t of s.data.tags) tagSet.add(t.toLowerCase());
+const tags = [...tagSet].sort();
+
+const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'];
 ---
 
 <BaseLayout
@@ -19,28 +33,144 @@ const past = all
 >
   <div class="wrap">
     <h1>Online sessions</h1>
-    <p class="lead">
-      Live online meetups on Domain-Driven Design, software architecture &amp; design —
-      {upcoming.length + past.length} sessions and counting.
-    </p>
 
-    {upcoming.length > 0 && (
-      <section>
-        <h2>Upcoming</h2>
-        <div class="grid">{upcoming.map((s) => <SessionCard session={s} />)}</div>
+    {featured && (
+      <section class="hero" aria-label="Next session">
+        <p class="hero-eyebrow">Next session</p>
+        <div class="hero-card">
+          <div class="hero-img">
+            {f!.featuredImage ? <Image src={f!.featuredImage} alt="" width={720} /> : <div class="hero-ph"></div>}
+          </div>
+          <div class="hero-body">
+            <div class="badges">
+              {f!.typeOfSession && <span class="badge badge--type">{f!.typeOfSession}</span>}
+              {f!.level?.map((l) => <span class="badge">{l}</span>)}
+            </div>
+            <h2><a href={`/sessions/${featured.id}/`}>{f!.title}</a></h2>
+            <p class="hero-date">{featuredDate}</p>
+            {f!.organiser && <p class="hero-host">Hosted by {f!.organiser}</p>}
+            <div class="hero-cta">
+              {(f!.humantix || f!.meet) && <a class="btn btn--accent" href={f!.humantix ?? f!.meet}>RSVP to attend</a>}
+              {f!.meet && <a class="btn btn--ghost" href={f!.meet}>Google Meet</a>}
+              <a class="btn" href={`/sessions/${featured.id}/`}>More info →</a>
+            </div>
+          </div>
+        </div>
+        {upcoming.length > 1 && (
+          <div class="grid more-upcoming">{upcoming.slice(1).map((s) => <SessionCard session={s} />)}</div>
+        )}
       </section>
     )}
 
-    <section>
-      <h2>{upcoming.length ? 'Past sessions' : 'All sessions'}</h2>
-      <div class="grid">{past.map((s) => <SessionCard session={s} />)}</div>
+    <section class="archive">
+      <h2>Past sessions</h2>
+
+      <div class="filters">
+        <input type="search" id="q" placeholder="Search title or tag…" aria-label="Search sessions" />
+        <select id="f-level" aria-label="Filter by level">
+          <option value="">All levels</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+        <select id="f-type" aria-label="Filter by type">
+          <option value="">All types</option>
+          {types.map((t) => <option value={t}>{t}</option>)}
+        </select>
+        <select id="f-tag" aria-label="Filter by tag">
+          <option value="">All tags</option>
+          {tags.map((t) => <option value={t}>{t}</option>)}
+        </select>
+        <button id="f-reset" type="button">Reset</button>
+        <span class="result-count" id="count"></span>
+      </div>
+
+      <div class="grid" id="cards">{past.map((s) => <SessionCard session={s} />)}</div>
+      <p class="no-results" id="noresults" hidden>No sessions match your filters.</p>
+      <div class="load-wrap"><button id="load-more" type="button" class="btn btn--ghost">Load more</button></div>
     </section>
   </div>
 
   <style>
-    .lead { color: var(--color-text-muted); font-size: var(--text-lg); max-width: 42rem; margin-bottom: var(--space-12); }
-    section { margin-bottom: var(--space-16); }
-    section h2 { margin-bottom: var(--space-6); }
+    .archive h2 { margin-top: var(--space-8); }
+
+    /* Upcoming hero */
+    .hero { margin-bottom: var(--space-16); }
+    .hero-eyebrow { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-dark); margin: 0 0 var(--space-3); }
+    .hero-card { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .hero-img { aspect-ratio: 16 / 9; background: var(--color-surface); }
+    .hero-img :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
+    .hero-body { padding: var(--space-8); }
+    .hero-body .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
+    .hero-body h2 { font-size: var(--text-3xl); margin: 0 0 var(--space-3); }
+    .hero-body h2 a { color: var(--color-text); }
+    .hero-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
+    .hero-host { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .more-upcoming { margin-top: var(--space-6); }
+
+    @media (min-width: 800px) {
+      .hero-card { grid-template-columns: 1.1fr 1fr; }
+      .hero-img { aspect-ratio: auto; }
+    }
+
+    /* Filters */
+    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-6) 0 var(--space-8); }
+    .filters input, .filters select {
+      font-family: var(--font-body); font-size: var(--text-base);
+      padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text);
+    }
+    .filters input { flex: 1 1 16rem; }
+    .filters #f-reset { font-family: var(--font-heading); font-weight: 600; cursor: pointer; padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); }
+    .result-count { color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
+
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); }
+    .no-results { color: var(--color-text-muted); }
+    .load-wrap { text-align: center; margin-top: var(--space-8); }
   </style>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .s-card'));
+    const q = document.getElementById('q') as HTMLInputElement;
+    const fLevel = document.getElementById('f-level') as HTMLSelectElement;
+    const fType = document.getElementById('f-type') as HTMLSelectElement;
+    const fTag = document.getElementById('f-tag') as HTMLSelectElement;
+    const reset = document.getElementById('f-reset') as HTMLButtonElement;
+    const count = document.getElementById('count') as HTMLElement;
+    const noResults = document.getElementById('noresults') as HTMLElement;
+    const loadMore = document.getElementById('load-more') as HTMLButtonElement;
+    const STEP = 30;
+    let limit = STEP;
+
+    function matches(c: HTMLElement): boolean {
+      const term = q.value.trim().toLowerCase();
+      const lvl = fLevel.value, typ = fType.value, tag = fTag.value.toLowerCase();
+      const d = c.dataset;
+      const okTerm = !term || (d.title ?? '').includes(term) || (d.tags ?? '').includes(term);
+      const okLvl = !lvl || (d.level ?? '').includes(lvl);
+      const okTyp = !typ || d.type === typ;
+      const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
+      return okTerm && okLvl && okTyp && okTag;
+    }
+
+    function apply(resetLimit = false) {
+      if (resetLimit) limit = STEP;
+      const matched = cards.filter(matches);
+      cards.forEach((c) => (c.hidden = true));
+      matched.slice(0, limit).forEach((c) => (c.hidden = false));
+      count.textContent = `${matched.length} session${matched.length === 1 ? '' : 's'}`;
+      noResults.hidden = matched.length > 0;
+      loadMore.hidden = matched.length <= limit;
+    }
+
+    [q, fLevel, fType, fTag].forEach((el) => el.addEventListener('input', () => apply(true)));
+    reset.addEventListener('click', () => {
+      q.value = ''; fLevel.value = ''; fType.value = ''; fTag.value = '';
+      apply(true);
+    });
+    loadMore.addEventListener('click', () => { limit += STEP; apply(false); });
+    apply(true);
+  </script>
 </BaseLayout>

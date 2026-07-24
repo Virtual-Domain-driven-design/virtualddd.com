@@ -10,7 +10,14 @@ const d = session.data;
 const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 
-<a class="s-card" href={`/sessions/${session.id}/`}>
+<a
+  class="s-card"
+  href={`/sessions/${session.id}/`}
+  data-title={d.title.toLowerCase()}
+  data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
+  data-level={(d.level ?? []).join(' ')}
+  data-type={d.typeOfSession ?? ''}
+>
   <div class="s-thumb">
     {d.featuredImage
       ? <Image src={d.featuredImage} alt="" width={480} loading="lazy" />
