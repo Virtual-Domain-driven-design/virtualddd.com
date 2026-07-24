@@ -32,8 +32,8 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
 </a>
 
 <style>
-  .s-card { display: flex; flex-direction: column; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s; }
-  .s-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+  .s-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+  .s-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
   .s-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
   .s-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .s-thumb-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }

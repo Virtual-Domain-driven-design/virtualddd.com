@@ -12,7 +12,7 @@ const upcoming = allSessions
   .sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime))[0];
 const latest = [...allSessions]
   .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
-  .slice(0, 6);
+  .slice(0, 10);
 const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
 
 const explore = [
@@ -22,6 +22,33 @@ const explore = [
   { href: '/heuristics/', title: 'Heuristics', text: 'Curated rules of thumb for designing better software and systems.' },
 ];
 const DISCORD = 'https://discord.gg/tRJkcsFDKN';
+const BSKY_HANDLE = 'virtualddd.com';
+
+// Bluesky feed, fetched at build time from the public API (no auth, no client JS).
+interface Post { text: string; date: string; url: string }
+let posts: Post[] = [];
+try {
+  const res = await fetch(
+    `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${BSKY_HANDLE}&limit=8&filter=posts_no_replies`,
+  );
+  if (res.ok) {
+    const data = await res.json();
+    posts = (data.feed ?? [])
+      .map((f: any) => {
+        const p = f.post;
+        const rkey = p?.uri?.split('/').pop();
+        return {
+          text: p?.record?.text ?? '',
+          date: p?.record?.createdAt ?? '',
+          url: `https://bsky.app/profile/${p?.author?.handle}/post/${rkey}`,
+        };
+      })
+      .filter((p: Post) => p.text)
+      .slice(0, 4);
+  }
+} catch {
+  posts = [];
+}
 ---
 
 <BaseLayout
@@ -51,7 +78,13 @@ const DISCORD = 'https://discord.gg/tRJkcsFDKN';
         <h2>Latest sessions</h2>
         <a href="/sessions/">All sessions →</a>
       </div>
-      <div class="grid">{latest.map((s) => <SessionCard session={s} />)}</div>
+      <div class="carousel-wrap">
+        <button class="car-btn car-prev" type="button" aria-label="Previous sessions">‹</button>
+        <div class="carousel" id="carousel">
+          {latest.map((s) => <div class="car-item"><SessionCard session={s} /></div>)}
+        </div>
+        <button class="car-btn car-next" type="button" aria-label="More sessions">›</button>
+      </div>
     </section>
 
     <section class="home-section">
@@ -65,6 +98,25 @@ const DISCORD = 'https://discord.gg/tRJkcsFDKN';
           </a>
         ))}
       </div>
+    </section>
+
+    <section class="home-section follow">
+      <div class="section-head">
+        <h2>Follow us on Bluesky</h2>
+        <a href={`https://bsky.app/profile/${BSKY_HANDLE}`}>@{BSKY_HANDLE} →</a>
+      </div>
+      {posts.length > 0 ? (
+        <div class="feed-grid">
+          {posts.map((p) => (
+            <a class="post" href={p.url}>
+              <p class="post-text">{p.text}</p>
+              <p class="post-date">{new Date(p.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p><a class="btn btn--accent" href={`https://bsky.app/profile/${BSKY_HANDLE}`}>Follow @{BSKY_HANDLE}</a></p>
+      )}
     </section>
 
     {team.length > 0 && (
@@ -106,14 +158,31 @@ const DISCORD = 'https://discord.gg/tRJkcsFDKN';
     .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
     .section-head h2 { margin: 0; }
     .section-head a { font-family: var(--font-heading); font-weight: 600; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); }
+
+    /* Carousel */
+    .carousel-wrap { position: relative; }
+    .carousel { position: relative; display: flex; gap: var(--space-6); overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding-bottom: var(--space-2); }
+    .carousel::-webkit-scrollbar { display: none; }
+    .car-item { flex: 0 0 clamp(260px, 80%, 320px); scroll-snap-align: start; }
+    .car-btn { position: absolute; top: 32%; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--color-border); background: color-mix(in srgb, var(--color-surface) 85%, transparent); color: var(--color-text); font-size: var(--text-2xl); line-height: 1; cursor: pointer; display: none; }
+    .car-btn:hover { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+    .car-prev { left: calc(-1 * var(--space-4)); }
+    .car-next { right: calc(-1 * var(--space-4)); }
+    @media (min-width: 800px) { .car-btn { display: block; } }
 
     .explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
-    .explore { position: relative; display: block; background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s; }
-    .explore:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+    .explore { position: relative; display: block; background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); color: var(--color-text); border: 1px solid transparent; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .explore:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); text-decoration: none; }
     .explore h3 { margin: 0 0 var(--space-2); }
     .explore p { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
     .explore-arrow { color: var(--color-primary); font-family: var(--font-heading); font-weight: 700; position: absolute; top: var(--space-4); right: var(--space-6); }
+
+    /* Bluesky feed */
+    .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); }
+    .post { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); color: var(--color-text); transition: border-color 0.15s, transform 0.15s; }
+    .post:hover { border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); transform: translateY(-3px); text-decoration: none; }
+    .post-text { margin: 0 0 var(--space-3); font-size: var(--text-sm); line-height: 1.5; white-space: pre-wrap; }
+    .post-date { margin: auto 0 0; font-family: var(--font-heading); color: var(--color-text-muted); font-size: var(--text-sm); }
 
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-6); }
     .team-card { text-align: center; }
@@ -128,4 +197,31 @@ const DISCORD = 'https://discord.gg/tRJkcsFDKN';
     .discord-btn { background: #fff; color: #c53d84; border-color: #fff; }
     .discord-btn:hover { background: rgba(255, 255, 255, 0.9); border-color: rgba(255, 255, 255, 0.9); color: #b83b7f; }
   </style>
+
+  <script>
+    const car = document.getElementById('carousel');
+    if (car) {
+      const items = Array.from(car.children) as HTMLElement[];
+      const prev = document.querySelector('.car-prev') as HTMLButtonElement;
+      const next = document.querySelector('.car-next') as HTMLButtonElement;
+      let idx = 0;
+      let timer: ReturnType<typeof setInterval>;
+
+      const perView = () => Math.max(1, Math.round(car.clientWidth / (items[0].offsetWidth + 24)));
+      const go = (i: number) => {
+        const max = Math.max(0, items.length - perView());
+        idx = i < 0 ? max : i > max ? 0 : i;
+        car.scrollTo({ left: items[idx].offsetLeft, behavior: 'smooth' });
+      };
+      const start = () => { timer = setInterval(() => go(idx + 1), 10000); };
+      const stop = () => clearInterval(timer);
+
+      next?.addEventListener('click', () => { stop(); go(idx + 1); start(); });
+      prev?.addEventListener('click', () => { stop(); go(idx - 1); start(); });
+      car.addEventListener('mouseenter', stop);
+      car.addEventListener('mouseleave', start);
+      car.addEventListener('focusin', stop);
+      start();
+    }
+  </script>
 </BaseLayout>
