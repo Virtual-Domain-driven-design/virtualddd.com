@@ -1,17 +1,131 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FeaturedSession from '../components/FeaturedSession.astro';
+import SessionCard from '../components/SessionCard.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
+const now = Date.now();
+const allSessions = await getCollection('sessions');
+const upcoming = allSessions
+  .filter((s) => s.data.status === 'Published' && +new Date(s.data.datetime) > now)
+  .sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime))[0];
+const latest = [...allSessions]
+  .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
+  .slice(0, 6);
+const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
+
+const explore = [
+  { href: '/sessions/', title: 'Online sessions', text: 'Live meetups — talks, debates, fireside chats and hands-on modelling.' },
+  { href: '/open-space/', title: 'Open Space', text: 'Participant-led gatherings where the agenda emerges from the room.' },
+  { href: '/facilitating-archdes/', title: 'Facilitating Stories', text: 'Real stories on facilitating software architecture & design.' },
+  { href: '/heuristics/', title: 'Heuristics', text: 'Curated rules of thumb for designing better software and systems.' },
+];
+const DISCORD = 'https://discord.gg/tRJkcsFDKN';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Virtual DDD — a community for Domain-Driven Design"
+  description="A community-driven platform for deeper knowledge of Domain-Driven Design, software architecture and resilient systems design."
+>
+  <section class="home-hero">
+    <div class="wrap">
+      <h1>Learn software &amp; systems design, together.</h1>
+      <p class="home-lead">
+        Virtual DDD is a community-driven platform for people who want deeper knowledge of
+        Domain-Driven Design, software architecture, and resilient systems — through live online
+        sessions, open spaces, and shared heuristics.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn--accent" href={DISCORD}>Join our Discord</a>
+        <a class="btn" href="/sessions/">Explore sessions</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    {upcoming && <FeaturedSession session={upcoming} eyebrow="Next session" />}
+
+    <section class="home-section">
+      <div class="section-head">
+        <h2>Latest sessions</h2>
+        <a href="/sessions/">All sessions →</a>
+      </div>
+      <div class="grid">{latest.map((s) => <SessionCard session={s} />)}</div>
+    </section>
+
+    <section class="home-section">
+      <h2>Explore</h2>
+      <div class="explore-grid">
+        {explore.map((e) => (
+          <a class="explore" href={e.href}>
+            <h3>{e.title}</h3>
+            <p>{e.text}</p>
+            <span class="explore-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {team.length > 0 && (
+      <section class="home-section">
+        <h2>The organisers</h2>
+        <div class="team-grid">
+          {team.map((o) => (
+            <div class="team-card">
+              {o.data.photo && <Image class="team-photo" src={o.data.photo} alt={o.data.name} width={160} />}
+              <p class="team-name">{o.data.name}</p>
+              {o.data.role && <p class="team-role">{o.data.role}</p>}
+              <p class="team-links">
+                {o.data.website && <a href={o.data.website}>Web</a>}
+                {o.data.linkedin && <a href={o.data.linkedin}>LinkedIn</a>}
+                {o.data.twitter && <a href={o.data.twitter}>Twitter</a>}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <section class="discord-band">
+    <div class="wrap">
+      <h2>Join the conversation</h2>
+      <p>The community lives on Discord — talks, questions and connections all week long.</p>
+      <a class="btn discord-btn" href={DISCORD}>Join our Discord</a>
+    </div>
+  </section>
+
+  <style>
+    .home-hero { background: linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 12%, #fff), var(--color-bg)); padding-block: var(--space-16); margin-top: calc(-1 * var(--space-12)); }
+    .home-hero h1 { font-size: clamp(2.4rem, 6vw, var(--text-4xl)); max-width: 18ch; }
+    .home-lead { font-size: var(--text-lg); color: var(--color-text-muted); max-width: 46rem; margin-block: var(--space-4) var(--space-6); }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+    .home-section { margin-block: var(--space-16); }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
+    .section-head h2 { margin: 0; }
+    .section-head a { font-family: var(--font-heading); font-weight: 600; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); }
+
+    .explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
+    .explore { position: relative; display: block; background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s; }
+    .explore:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+    .explore h3 { margin: 0 0 var(--space-2); }
+    .explore p { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+    .explore-arrow { color: var(--color-primary); font-family: var(--font-heading); font-weight: 700; position: absolute; top: var(--space-4); right: var(--space-6); }
+
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-6); }
+    .team-card { text-align: center; }
+    .team-photo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin: 0 auto var(--space-3); box-shadow: var(--shadow); }
+    .team-name { font-family: var(--font-heading); font-weight: 600; margin: 0; }
+    .team-role { color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+    .team-links { display: flex; justify-content: center; gap: var(--space-3); font-size: var(--text-sm); margin: 0; }
+
+    .discord-band { background: var(--color-primary); color: #fff; text-align: center; padding-block: var(--space-16); margin-top: var(--space-16); }
+    .discord-band h2 { color: #fff; margin: 0 0 var(--space-2); }
+    .discord-band p { margin: 0 0 var(--space-6); opacity: 0.95; }
+    .discord-btn { background: #fff; color: var(--color-primary-dark); border-color: #fff; }
+    .discord-btn:hover { background: var(--color-surface); border-color: var(--color-surface); }
+  </style>
+</BaseLayout>
