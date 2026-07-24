@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import FeaturedSession from '../components/FeaturedSession.astro';
 import SessionCard from '../components/SessionCard.astro';
 import StoryCard from '../components/StoryCard.astro';
+import OrganiserCard from '../components/OrganiserCard.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import heurDesign from '../assets/heur-design.jpg';
@@ -34,7 +35,7 @@ const DISCORD = 'https://discord.gg/tRJkcsFDKN';
 const BSKY_HANDLE = 'virtualddd.com';
 
 // Bluesky feed, fetched at build time from the public API (no auth, no client JS).
-interface Post { text: string; date: string; url: string }
+interface Post { text: string; date: string; url: string; media?: string; isVideo?: boolean }
 let posts: Post[] = [];
 try {
   const res = await fetch(
@@ -46,10 +47,23 @@ try {
       .map((f: any) => {
         const p = f.post;
         const rkey = p?.uri?.split('/').pop();
+        // Pull a thumbnail from the post's embed (image / video / link card).
+        let media: string | undefined;
+        let isVideo = false;
+        const pick = (e: any) => {
+          const t = e?.['$type'];
+          if (t === 'app.bsky.embed.video#view') { media = e.thumbnail; isVideo = true; }
+          else if (t === 'app.bsky.embed.images#view') { media = e.images?.[0]?.thumb; }
+          else if (t === 'app.bsky.embed.external#view') { media = e.external?.thumb; }
+          else if (t === 'app.bsky.embed.recordWithMedia#view') { pick(e.media); }
+        };
+        pick(p?.embed);
         return {
           text: p?.record?.text ?? '',
           date: p?.record?.createdAt ?? '',
           url: `https://bsky.app/profile/${p?.author?.handle}/post/${rkey}`,
+          media,
+          isVideo,
         };
       })
       .filter((p: Post) => p.text)
@@ -119,6 +133,11 @@ try {
           <div class="bfeed">
             {posts.map((p) => (
               <a class="bpost" href={p.url}>
+                {p.media && (
+                  <div class:list={['bpost-media', { 'is-video': p.isVideo }]}>
+                    <img src={p.media} alt="" loading="lazy" />
+                  </div>
+                )}
                 <p class="bpost-text">{p.text}</p>
                 <p class="bpost-date">{new Date(p.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
               </a>
@@ -159,20 +178,13 @@ try {
 
     {team.length > 0 && (
       <section class="home-section">
-        <h2>The organisers</h2>
-        <div class="team-grid">
-          {team.map((o) => (
-            <div class="team-card">
-              {o.data.photo && <Image class="team-photo" src={o.data.photo} alt={o.data.name} width={160} />}
-              <p class="team-name">{o.data.name}</p>
-              {o.data.role && <p class="team-role">{o.data.role}</p>}
-              <p class="team-links">
-                {o.data.website && <a href={o.data.website}>Web</a>}
-                {o.data.linkedin && <a href={o.data.linkedin}>LinkedIn</a>}
-                {o.data.twitter && <a href={o.data.twitter}>Twitter</a>}
-              </p>
-            </div>
-          ))}
+        <div class="section-head"><h2>Organisers</h2></div>
+        <div class="org-carousel-wrap">
+          <button class="org-arrow org-prev" type="button" aria-label="Previous organisers">‹</button>
+          <div class="org-carousel">
+            {team.map((o) => <OrganiserCard organiser={o} />)}
+          </div>
+          <button class="org-arrow org-next" type="button" aria-label="More organisers">›</button>
         </div>
       </section>
     )}
@@ -213,6 +225,9 @@ try {
     .bfeed { display: flex; flex-direction: column; gap: var(--space-3); max-height: 30rem; overflow-y: auto; padding-right: var(--space-2); }
     .bpost { display: block; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); color: var(--color-text); transition: border-color 0.15s; }
     .bpost:hover { border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); text-decoration: none; }
+    .bpost-media { position: relative; margin-bottom: var(--space-3); overflow: hidden; }
+    .bpost-media img { width: 100%; max-height: 190px; object-fit: cover; display: block; }
+    .bpost-media.is-video::after { content: '▶'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: #fff; background: rgba(0, 0, 0, 0.3); }
     .bpost-text { margin: 0 0 var(--space-2); font-size: var(--text-sm); line-height: 1.5; white-space: pre-wrap; }
     .bpost-date { margin: 0; font-family: var(--font-heading); color: var(--color-text-muted); font-size: var(--text-sm); }
 
@@ -228,12 +243,16 @@ try {
     .heur-card h3 { color: #fff; margin: 0 0 var(--space-1); font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
     .heur-card p { color: rgba(255, 255, 255, 0.92); margin: 0; font-size: var(--text-sm); }
 
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-6); }
-    .team-card { text-align: center; }
-    .team-photo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin: 0 auto var(--space-3); box-shadow: var(--shadow); }
-    .team-name { font-family: var(--font-heading); font-weight: 600; margin: 0; }
-    .team-role { color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
-    .team-links { display: flex; justify-content: center; gap: var(--space-3); font-size: var(--text-sm); margin: 0; }
+    /* Organisers carousel */
+    .org-carousel-wrap { position: relative; }
+    .org-carousel { display: flex; gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding-bottom: var(--space-2); }
+    .org-carousel::-webkit-scrollbar { display: none; }
+    .org-carousel :global(.org-card) { flex: 0 0 clamp(200px, 42%, 250px); scroll-snap-align: start; }
+    .org-arrow { position: absolute; top: 38%; z-index: 2; width: 44px; height: 44px; border: 1px solid var(--color-border); background: color-mix(in srgb, var(--color-surface) 88%, transparent); color: var(--color-text); font-size: var(--text-2xl); line-height: 1; cursor: pointer; display: none; }
+    .org-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+    .org-prev { left: calc(-1 * var(--space-4)); }
+    .org-next { right: calc(-1 * var(--space-4)); }
+    @media (min-width: 800px) { .org-arrow { display: block; } }
 
     .discord-card { display: flex; align-items: center; gap: var(--space-6); background: var(--color-accent); color: #fff; border-radius: var(--radius); padding: var(--space-6) var(--space-8); margin-block: var(--space-16); }
     .dc-icon { flex: none; display: inline-flex; }
@@ -267,5 +286,26 @@ try {
       set(0);
       start();
     });
+
+    // Organisers carousel — horizontal scroll with arrows + auto-advance.
+    const oc = document.querySelector<HTMLElement>('.org-carousel');
+    if (oc) {
+      const step = () => {
+        const card = oc.querySelector<HTMLElement>('.org-card');
+        return card ? card.getBoundingClientRect().width + 16 : 240;
+      };
+      const next = () => {
+        if (oc.scrollLeft + oc.clientWidth >= oc.scrollWidth - 6) oc.scrollTo({ left: 0, behavior: 'smooth' });
+        else oc.scrollBy({ left: step(), behavior: 'smooth' });
+      };
+      let timer: ReturnType<typeof setInterval>;
+      const start = () => { timer = setInterval(next, 4000); };
+      const stop = () => clearInterval(timer);
+      document.querySelector('.org-next')?.addEventListener('click', () => { stop(); next(); start(); });
+      document.querySelector('.org-prev')?.addEventListener('click', () => { stop(); oc.scrollBy({ left: -step(), behavior: 'smooth' }); start(); });
+      oc.addEventListener('mouseenter', stop);
+      oc.addEventListener('mouseleave', start);
+      start();
+    }
   </script>
 </BaseLayout>
