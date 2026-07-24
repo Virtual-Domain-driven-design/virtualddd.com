@@ -568,6 +568,48 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   if (!write) console.log(`\n  (preview only — files in ${outDir}, nothing under src/content/)`);
 }
 
+// --- organisers command: Notion -> JSON data collection ---------------------
+
+function kebab(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+async function runOrganisers(outDir: string, write: boolean) {
+  const pages = await queryAll(PEOPLE_DS); // the "Virtual DDD Organisers" data source
+  const assetDir = `${outDir}/_assets`;
+  mkdirSync(outDir, { recursive: true });
+  console.log(`organisers: ${pages.length} -> ${outDir}\n`);
+
+  for (const page of pages) {
+    const P = page.properties;
+    const get = (n: string) => P[n];
+    const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
+    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
+    if (!name) continue;
+    const slug = kebab(name);
+    const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
+    const photoUrl = fileUrl((get('Photo')?.files ?? [])[0]);
+    const photo = photoUrl ? await downloadImage(photoUrl, ctx, 'photo') : null;
+
+    const data: Record<string, unknown> = {
+      name,
+      slug,
+      role: (get('Role')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim() || undefined,
+      website: get('URL')?.url ?? undefined,
+      linkedin: get('LinkedIn')?.url ?? undefined,
+      twitter: get('Twitter')?.url ?? undefined,
+      area: get('Area')?.select?.name ?? undefined,
+      organises: (get('Organises')?.multi_select ?? []).map((o: any) => o.name),
+      showOnTeam: get('Show on team')?.checkbox ?? false,
+      photo: photo ?? undefined,
+    };
+    Object.keys(data).forEach((k) => data[k] === undefined && delete data[k]);
+    writeFileSync(`${outDir}/${slug}.json`, JSON.stringify(data, null, 2) + '\n');
+    console.log(`  ✓ ${slug}.json${photo ? ' (photo)' : ''}${data.showOnTeam ? ' [team]' : ''}`);
+  }
+  if (!write) console.log(`\n  (preview only — files in ${outDir})`);
+}
+
 // --- dispatch ---------------------------------------------------------------
 
 async function run() {
@@ -578,6 +620,11 @@ async function run() {
   const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
 
   if (cmd === 'slugs') return runSlugs(only, write);
+  if (cmd === 'organisers') {
+    const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
+      ?? (write ? 'src/content/organisers' : 'migration-source/preview/organisers');
+    return runOrganisers(outDir, write);
+  }
   if (cmd === 'content') {
     const target = only ?? 'sessions';
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]

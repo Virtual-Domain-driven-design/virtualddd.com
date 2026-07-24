@@ -1,0 +1,14 @@
+{
+  "name": "Andrea Magnorsky",
+  "slug": "andrea-magnorsky",
+  "role": "Systems and Functional Programming",
+  "website": "https://www.roundcrisis.com/",
+  "linkedin": "https://www.linkedin.com/in/magnorsky/",
+  "area": "Oceania",
+  "organises": [
+    "Discord",
+    "Meetups"
+  ],
+  "showOnTeam": true,
+  "photo": "./_assets/andrea-magnorsky-photo.jpg"
+}

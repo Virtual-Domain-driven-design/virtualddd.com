@@ -109,4 +109,23 @@ const heuristics = defineCollection({
     }),
 });
 
-export const collections = { sessions, openSpaces, stories, heuristics };
+// Organisers: structured data (no body), generated from the Virtual DDD
+// Organisers Notion DB. Public team info was migrated out of WordPress.
+const organisers = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/organisers' }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      slug: z.string(),
+      role: z.string().optional(),
+      website: z.string().url().optional(),
+      linkedin: z.string().url().optional(),
+      twitter: z.string().url().optional(),
+      area: z.string().optional(),
+      organises: z.array(z.string()).default([]),
+      showOnTeam: z.boolean().default(false),
+      photo: image().optional(),
+    }),
+});
+
+export const collections = { sessions, openSpaces, stories, heuristics, organisers };

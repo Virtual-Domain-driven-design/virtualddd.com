@@ -17,6 +17,11 @@ const heuristics = await getCollection('heuristics');
 const heurById = new Map(heuristics.map((h) => [h.id, h]));
 const discussed = d.curatedHeuristics.map((r) => heurById.get(r.id)).filter(Boolean);
 
+// Host — match the organiser name to the organisers collection for the rich card.
+const organisers = await getCollection('organisers');
+const orgByName = new Map(organisers.map((o) => [o.data.name.trim().toLowerCase(), o]));
+const host = d.organiser ? orgByName.get(d.organiser.trim().toLowerCase()) : undefined;
+
 // Prev / next by date.
 const ordered = [...sessions].sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime));
 const idx = ordered.findIndex((s) => s.id === session.id);
@@ -73,10 +78,26 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
     <div class="s-body">
       <div class="body"><Content /></div>
 
-      {d.organiser && (
+      {(host || d.organiser) && (
         <section class="card organiser">
-          <h2>About {d.organiser}</h2>
-          <p>Hosted by {d.organiser}.</p>
+          <h2>About the host</h2>
+          <div class="org">
+            {host?.data.photo && (
+              <Image class="org-photo" src={host.data.photo} alt={host.data.name} width={180} />
+            )}
+            <div class="org-info">
+              <p class="org-name">{host?.data.name ?? d.organiser}</p>
+              {host?.data.role && <p class="org-role">{host.data.role}</p>}
+              {host && (host.data.website || host.data.linkedin || host.data.twitter) && (
+                <p class="org-links">
+                  {host.data.website && <a href={host.data.website}>Website</a>}
+                  {host.data.linkedin && <a href={host.data.linkedin}>LinkedIn</a>}
+                  {host.data.twitter && <a href={host.data.twitter}>Twitter</a>}
+                </p>
+              )}
+            </div>
+          </div>
+          {d.coOrganisers.length > 0 && <p class="org-co">With {d.coOrganisers.join(', ')}</p>}
         </section>
       )}
 
@@ -115,6 +136,12 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
     .body :global(img) { border-radius: var(--radius-sm); margin: var(--space-4) 0; }
     .card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
     .card h2 { margin-top: 0; }
+    .org { display: flex; gap: var(--space-4); align-items: center; }
+    .org-photo { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow); }
+    .org-name { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0; }
+    .org-role { color: var(--color-accent-dark); margin: 0 0 var(--space-2); }
+    .org-links { display: flex; gap: var(--space-4); margin: 0; font-size: var(--text-sm); }
+    .org-co { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-4) 0 0; }
     .prevnext {
       display: flex; justify-content: space-between; gap: var(--space-4);
       margin-top: var(--space-12); padding-top: var(--space-6);

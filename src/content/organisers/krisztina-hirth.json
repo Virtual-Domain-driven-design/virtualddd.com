@@ -1,0 +1,14 @@
+{
+  "name": "Krisztina Hirth",
+  "slug": "krisztina-hirth",
+  "role": "Coding Architect",
+  "website": "https://yellow-brick-code.org/",
+  "linkedin": "https://www.linkedin.com/in/christina-hirth-yellowbrickcode/?locale=en_US",
+  "area": "Europe",
+  "organises": [
+    "Meetups",
+    "Discord"
+  ],
+  "showOnTeam": true,
+  "photo": "./_assets/krisztina-hirth-photo.jpg"
+}
