@@ -28,36 +28,37 @@ const shortDate = (d: Date) =>
   title="Facilitating Stories — Virtual DDD"
   description="Real-world stories on facilitating software architecture and design — practical experiences from the community."
 >
-  <!-- Hero: intro text -->
-  <section class="hero">
-    <div class="hero-glow" aria-hidden="true"></div>
-    <div class="wrap hero-inner">
-      <p class="eyebrow eyebrow--pink">Facilitating Stories</p>
-      <h1>Stories on Facilitating Software Design&nbsp;and Architecture</h1>
-      <div class="lead">
-        <p>
-          We've consistently observed a common pattern: regardless of the architectural approach — from
-          traditional enterprise to more hands-on, emergent methods — teams face similar obstacles when
-          building effective systems. The core challenge remains how to build software that truly works
-          and enables a smooth flow of delivery.
-        </p>
-        <p>
-          To address this, we started a series, <strong>Stories on Facilitating Software Design and
-          Architecture</strong>. In these sessions we focus on real-world experiences from our community,
-          sharing practical stories about the approaches that have delivered results — moving beyond the
-          theoretical and into the practical.
-        </p>
+  <!-- Intro: hosts (rotating) + explanation card, two columns like the home page -->
+  <section class="wrap">
+    <div class="stories-intro">
+      <div class="si-hosts">
+        <p class="eyebrow eyebrow--cyan">Your hosts</p>
+        <div class="solo-carousel">
+          <div class="solo">
+            <div class="solo-track">
+              {hosts.map((o) => <div class="solo-slide"><OrganiserCard organiser={o} /></div>)}
+            </div>
+          </div>
+          <div class="solo-dots">
+            {hosts.map((_, i) => <button type="button" data-i={i} aria-label={`Host ${i + 1}`}></button>)}
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Hosts -->
-  <section class="hosts">
-    <div class="wrap">
-      <p class="eyebrow eyebrow--cyan">Your hosts</p>
-      <div class="host-grid">
-        {hosts.map((o) => <OrganiserCard organiser={o} />)}
-      </div>
+      <aside class="si-about">
+        <p class="eyebrow eyebrow--dark">Facilitating Stories</p>
+        <h1>Stories on Facilitating Software Design &amp; Architecture</h1>
+        <p>
+          Regardless of the architectural approach — from traditional enterprise to more hands-on,
+          emergent methods — teams face similar obstacles when building effective systems. The core
+          challenge remains how to build software that truly works and enables a smooth flow of delivery.
+        </p>
+        <p>
+          So we started this series: real-world experiences from our community, sharing practical stories
+          about the approaches that have delivered results — moving beyond the theoretical and into the
+          practical.
+        </p>
+      </aside>
     </div>
   </section>
 
@@ -121,28 +122,33 @@ const shortDate = (d: Date) =>
     /* Shared brand section label */
     .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
     .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
-    .eyebrow--pink { color: var(--color-accent-dark); }
-    .eyebrow--pink::before { background: var(--color-accent); }
     .eyebrow--cyan { color: var(--color-primary); }
     .eyebrow--cyan::before { background: var(--color-primary); }
+    .eyebrow--dark { color: rgba(13, 14, 18, 0.7); }
+    .eyebrow--dark::before { background: rgba(13, 14, 18, 0.7); }
 
-    /* Hero — dark with a soft neon wash, coherent with the story cards below */
-    .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
-    .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
-      radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
-      radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
-    .hero-inner { position: relative; }
-    .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-8); }
-    .lead { display: grid; grid-template-columns: 1fr; gap: var(--space-6); max-width: 58rem; }
-    .lead p { color: var(--color-text-muted); margin: 0; }
-    .lead strong { color: var(--color-text); font-weight: 600; }
-    @media (min-width: 820px) { .lead { grid-template-columns: 1fr 1fr; gap: var(--space-10); } }
+    /* Two-column intro: rotating hosts (left) + cyan explanation card (right) */
+    .stories-intro { display: grid; grid-template-columns: 1fr; gap: var(--space-8); align-items: stretch; margin-bottom: var(--space-16); }
+    .stories-intro > * { min-width: 0; }
+    @media (min-width: 900px) { .stories-intro { grid-template-columns: 5fr 6fr; gap: var(--space-12); } }
 
-    /* Hosts */
-    .hosts { padding-block: var(--space-12); }
-    .host-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); max-width: 58rem; }
-    @media (min-width: 620px) { .host-grid { grid-template-columns: repeat(3, 1fr); } }
-    .host-grid :global(.org-photo) { aspect-ratio: 4 / 5; }
+    .si-hosts { display: flex; flex-direction: column; }
+    .si-hosts .solo-carousel { flex: 1; display: flex; flex-direction: column; }
+    .si-hosts :global(.org-photo) { aspect-ratio: 4 / 5; }
+
+    /* Cyan explanation card (mirrors home .ns-about) */
+    .si-about { background: var(--color-primary); color: #0d0e12; border-radius: var(--radius); padding: var(--space-8); display: flex; flex-direction: column; justify-content: center; }
+    .si-about h1 { margin: 0 0 var(--space-4); font-size: var(--text-3xl); color: #0d0e12; }
+    .si-about p { color: rgba(13, 14, 18, 0.82); margin: 0 0 var(--space-4); }
+    .si-about p:last-child { margin-bottom: 0; }
+
+    /* Solo carousel (reused from home page) */
+    .solo { overflow: hidden; border-radius: var(--radius); }
+    .solo-track { display: flex; transition: transform 0.5s ease; height: 100%; }
+    .solo-slide { flex: 0 0 100%; min-width: 0; }
+    .solo-dots { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
+    .solo-dots button { width: 9px; height: 9px; border-radius: 0; border: 0; background: var(--color-border); cursor: pointer; padding: 0; transition: width 0.2s, background 0.2s; }
+    .solo-dots button.on { background: var(--color-primary); width: 24px; }
 
     /* Archive */
     .archive { padding-bottom: var(--space-16); }
@@ -185,6 +191,36 @@ const shortDate = (d: Date) =>
   </style>
 
   <script>
+    // Rotating host carousel — shuffle order each load, then auto-advance.
+    document.querySelectorAll<HTMLElement>('.solo-carousel').forEach((car) => {
+      const track = car.querySelector<HTMLElement>('.solo-track');
+      const dots = Array.from(car.querySelectorAll<HTMLButtonElement>('.solo-dots button'));
+      if (!track) return;
+      // Fisher–Yates shuffle of the slides.
+      const slides = Array.from(track.children);
+      for (let k = slides.length - 1; k > 0; k--) {
+        const j = Math.floor(Math.random() * (k + 1));
+        [slides[k], slides[j]] = [slides[j], slides[k]];
+      }
+      slides.forEach((s) => track.appendChild(s));
+      const n = track.children.length;
+      if (!n) return;
+      let i = 0;
+      let timer: ReturnType<typeof setInterval>;
+      const set = (k: number) => {
+        i = (k + n) % n;
+        track.style.transform = `translateX(-${i * 100}%)`;
+        dots.forEach((d, j) => d.classList.toggle('on', j === i));
+      };
+      const start = () => { timer = setInterval(() => set(i + 1), 6000); };
+      const stop = () => clearInterval(timer);
+      dots.forEach((d) => d.addEventListener('click', () => { stop(); set(Number(d.dataset.i)); start(); }));
+      car.addEventListener('mouseenter', stop);
+      car.addEventListener('mouseleave', start);
+      set(0);
+      start();
+    });
+
     const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .story-row'));
     const q = document.getElementById('q') as HTMLInputElement;
     const fTag = document.getElementById('f-tag') as HTMLSelectElement;

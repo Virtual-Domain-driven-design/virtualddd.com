@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Notion__notion-search",
+      "mcp__claude_ai_Notion__notion-fetch",
+      "Bash(python3 -c ' *)",
+      "Bash(npm -v)",
+      "Bash(echo \"npm: $\\(npm -v 2>/dev/null || echo MISSING\\)\")",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "WebFetch(domain:virtualddd.com)",
+      "Bash(npm run *)",
+      "Bash(cd *)",
+      "mcp__claude_ai_Notion__notion-query-data-sources",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(node -p \"require\\('@notionhq/client/package.json'\\).version\")",
+      "Bash(echo \"installed @notionhq/client version: $\\(node -p \"require\\('@notionhq/client/package.json'\\).version\"\\)\")",
+      "Bash(npx tsx *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(npx astro *)",
+      "Bash(curl -sSL --max-time 30 \"https://virtualddd.com/wp-content/uploads/2024/01/kandinsky_500x270.jpg\" -o src/assets/heur-design.jpg -w \"design: HTTP %{http_code}, %{size_download}b\\\\n\")",
+      "Bash(curl -sSL --max-time 30 \"https://virtualddd.com/wp-content/uploads/2024/02/session_84.jpg\" -o src/assets/heur-guiding.jpg -w \"guiding: HTTP %{http_code}, %{size_download}b\\\\n\")",
+      "Bash(curl -sSL --max-time 30 \"https://virtualddd.com/wp-content/uploads/2024/02/session_22.jpg\" -o src/assets/heur-value.jpg -w \"value: HTTP %{http_code}, %{size_download}b\\\\n\")",
+      "Bash(node -e ' *)",
+      "Bash(export SS=/tmp/claude-1000/-home-baasie-gitrepos-virtual-domain-driven-design-virtualddd-com/a082d309-32e9-4aeb-b671-8741c347ea3d/scratchpad)",
+      "mcp__claude_ai_Notion__notion-update-data-source",
+      "Bash(curl -sSL --max-time 30 __TRACKED_VAR__/cropped-favicon_virtualddd-32x32.png -o public/favicon-32.png -w '32: %{http_code} %{size_download}b\\\\n')",
+      "Bash(curl -sSL --max-time 30 __TRACKED_VAR__/cropped-favicon_virtualddd-192x192.png -o public/favicon-192.png -w '192: %{http_code} %{size_download}b\\\\n')",
+      "Bash(curl -sSL --max-time 30 __TRACKED_VAR__/cropped-favicon_virtualddd-180x180.png -o public/apple-touch-icon.png -w '180: %{http_code} %{size_download}b\\\\n')",
+      "Bash(curl -sSL --max-time 30 __TRACKED_VAR__/cropped-favicon_virtualddd-512x512.png -o public/favicon-512.png -w '512: %{http_code} %{size_download}b\\\\n')",
+      "Bash(node -p \"require\\('sharp'\\)\\('public/favicon-192.png'\\).metadata\\(\\).then\\(m=>console.log\\('192 meta:',m.width+'x'+m.height,m.format,'hasAlpha='+m.hasAlpha\\)\\).catch\\(e=>e.message\\)\")",
+      "Bash(git commit -q -m 'Add Facilitating Stories index and detail pages *)",
+      "Bash(git commit -q -m 'Rework stories index: contained intro, stable hosts, single-column list with search+filter *)",
+      "Bash(pkill -9 -f \"astro preview\")",
+      "Bash(git commit -q -m 'Redesign stories index: neon hero, brand eyebrows, refined hosts + story rows *)",
+      "Bash(pkill -9 -f \"astro dev\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:4321/)",
+      "Bash(git commit -q -m 'Stories intro: two-column rotating hosts + cyan explanation card \\(home-style\\) *)"
+    ]
+  }
+}
