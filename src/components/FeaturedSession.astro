@@ -51,15 +51,18 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
   .feat-overlay {
     position: relative; z-index: 1; width: 100%;
     display: flex; flex-direction: column; justify-content: flex-end;
-    padding: var(--space-6);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.8) 38%, rgba(0, 0, 0, 0.35) 68%, rgba(0, 0, 0, 0.15) 100%);
+    padding: var(--space-8) var(--space-6) var(--space-6);
+    background:
+      linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.2) 100%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.15) 100%);
   }
-  .feat-label { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 2; background: var(--color-accent); color: #fff; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-sm); padding: 0.3em 0.8em; }
+  .feat-label { position: absolute; top: var(--space-4); left: var(--space-4); z-index: 2; background: var(--color-accent); color: #fff; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-sm); padding: 0.3em 0.8em; }
 
+  .feat-content { max-width: 40ch; }
   .feat-content .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
-  .feat-content h2 { font-size: var(--text-2xl); margin: 0 0 var(--space-3); }
+  .feat-content h2 { font-size: var(--text-3xl); line-height: 1.1; margin: 0 0 var(--space-3); text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6); }
   .feat-content h2 a { color: #fff; }
-  .feat-when { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); color: #fff; }
+  .feat-when { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); color: var(--color-accent-dark); }
   .feat-countdown { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-1); letter-spacing: 0.03em; }
   .feat-countdown:empty { display: none; }
   .feat-host { color: rgba(255, 255, 255, 0.75); margin: 0 0 var(--space-6); }
