@@ -11,10 +11,10 @@
   /* Neutrals (dark theme) */
   --color-text: #eef1f4;
   --color-text-muted: #a3a9b5;
-  --color-bg: #0d0e12;
-  --color-surface: #191b22;
-  --color-surface-2: #21242d;
-  --color-border: #2b2e39;
+  --color-bg: #000000;
+  --color-surface: #14161c;
+  --color-surface-2: #1c1f27;
+  --color-border: #262932;
 
   /* Typography */
   --font-heading: 'Rajdhani', system-ui, -apple-system, sans-serif;
