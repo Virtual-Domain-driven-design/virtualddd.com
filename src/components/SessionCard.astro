@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  session: CollectionEntry<'sessions'>;
+}
+const { session } = Astro.props;
+const d = session.data;
+const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+
+<a class="s-card" href={`/sessions/${session.id}/`}>
+  <div class="s-thumb">
+    {d.featuredImage
+      ? <Image src={d.featuredImage} alt="" width={480} loading="lazy" />
+      : <div class="s-thumb-ph"></div>}
+    {d.typeOfSession && <span class="badge badge--type s-type">{d.typeOfSession}</span>}
+  </div>
+  <div class="s-info">
+    <p class="s-date">{dateStr}</p>
+    <h3 class="s-title">{d.title}</h3>
+    {d.organiser && <p class="s-host">Hosted by {d.organiser}</p>}
+  </div>
+</a>
+
+<style>
+  .s-card { display: flex; flex-direction: column; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s; }
+  .s-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+  .s-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
+  .s-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .s-thumb-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
+  .s-type { position: absolute; top: var(--space-2); left: var(--space-2); }
+  .s-info { padding: var(--space-4); }
+  .s-date { font-family: var(--font-heading); font-weight: 600; color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-1); }
+  .s-title { font-size: var(--text-lg); margin: 0; line-height: 1.2; }
+  .s-host { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+</style>
