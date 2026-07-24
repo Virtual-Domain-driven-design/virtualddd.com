@@ -5,6 +5,9 @@ import SessionCard from '../components/SessionCard.astro';
 import StoryCard from '../components/StoryCard.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import heurDesign from '../assets/heur-design.jpg';
+import heurGuiding from '../assets/heur-guiding.jpg';
+import heurValue from '../assets/heur-value.jpg';
 
 const now = Date.now();
 const allSessions = await getCollection('sessions');
@@ -23,9 +26,9 @@ const stories = (await getCollection('stories'))
   .slice(0, 8);
 
 const heurTypes = [
-  { href: '/heuristics/design-heuristics/', cls: 'heur-design', title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.' },
-  { href: '/heuristics/guiding-heuristics/', cls: 'heur-guiding', title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.' },
-  { href: '/heuristics/value-based-heuristics/', cls: 'heur-value', title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design, the world and the way we work.' },
+  { href: '/heuristics/design-heuristics/', bg: heurDesign.src, title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.' },
+  { href: '/heuristics/guiding-heuristics/', bg: heurGuiding.src, title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.' },
+  { href: '/heuristics/value-based-heuristics/', bg: heurValue.src, title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design, the world and the way we work.' },
 ];
 const DISCORD = 'https://discord.gg/tRJkcsFDKN';
 const BSKY_HANDLE = 'virtualddd.com';
@@ -132,7 +135,7 @@ try {
         <div class="section-head"><h2>Heuristics</h2><a href="/heuristics/">All →</a></div>
         <div class="heur-links">
           {heurTypes.map((h) => (
-            <a class:list={['heur-card', h.cls]} href={h.href}>
+            <a class="heur-card" href={h.href} style={`background-image: url(${h.bg})`}>
               <h3>{h.title} ››</h3>
               <p>{h.text}</p>
             </a>
@@ -214,18 +217,15 @@ try {
     .bpost-date { margin: 0; font-family: var(--font-heading); color: var(--color-text-muted); font-size: var(--text-sm); }
 
     /* Heuristics column + latest stories */
-    .heur-stories { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-16); align-items: start; }
-    .hs-col { min-width: 0; }
+    .heur-stories { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-16); align-items: stretch; }
+    .hs-col { min-width: 0; display: flex; flex-direction: column; }
     @media (min-width: 900px) { .heur-stories { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
-    .heur-links { display: flex; flex-direction: column; gap: var(--space-4); }
-    .heur-card { position: relative; display: block; padding: var(--space-6); min-height: 6.5rem; color: #fff; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; }
-    .heur-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1)); }
+    .heur-links { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
+    .heur-card { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; padding: var(--space-6); min-height: 5rem; color: #fff; overflow: hidden; background-size: cover; background-position: center; transition: transform 0.15s, box-shadow 0.15s; }
+    .heur-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 55%, rgba(0, 0, 0, 0.25) 100%); }
     .heur-card > * { position: relative; z-index: 1; }
     .heur-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
-    .heur-design { background: linear-gradient(135deg, #0e7490, #1e3a8a); }
-    .heur-guiding { background: linear-gradient(135deg, #6d28d9, #db2777); }
-    .heur-value { background: linear-gradient(135deg, #c2410c, #7e22ce); }
-    .heur-card h3 { color: #fff; margin: 0 0 var(--space-1); font-size: var(--text-xl); }
+    .heur-card h3 { color: #fff; margin: 0 0 var(--space-1); font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
     .heur-card p { color: rgba(255, 255, 255, 0.92); margin: 0; font-size: var(--text-sm); }
 
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-6); }
