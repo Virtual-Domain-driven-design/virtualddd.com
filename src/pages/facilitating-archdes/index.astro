@@ -1,25 +1,47 @@
 ---
-// PLACEHOLDER stories index.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import StoryCard from '../../components/StoryCard.astro';
 import { getCollection } from 'astro:content';
-const items = (await getCollection('stories')).sort(
-  (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
-);
+
+const stories = (await getCollection('stories')).sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0));
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Stories on Facilitating Software Architecture &amp; Design — Virtual DDD</title>
-  </head>
-  <body>
-    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
-      <h1>Stories on Facilitating Software Architecture &amp; Design ({items.length})</h1>
-      <ul>
-        {items.map((s) => (
-          <li><a href={`/facilitating-archdes/${s.id}/`}>{s.data.title}</a></li>
-        ))}
-      </ul>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title="Facilitating Stories — Virtual DDD"
+  description="Real-world stories on facilitating software architecture and design — practical experiences from the community."
+>
+  <section class="intro">
+    <div class="wrap">
+      <h1>Stories on Facilitating Software Design and Architecture</h1>
+      <div class="intro-cols">
+        <p>
+          We've consistently observed a common pattern: regardless of the architectural approach — from
+          traditional enterprise to more hands-on, emergent methods — teams face similar obstacles when
+          building effective systems. The core challenge remains how to build software that truly works
+          and enables a smooth flow of delivery.
+        </p>
+        <p>
+          To address this, we've started a series, <strong>Stories on Facilitating Software Design and
+          Architecture</strong>. In these sessions we focus on real-world experiences from our community,
+          sharing practical stories about the alternative approaches that have delivered results — moving
+          beyond the theoretical and into the practical.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="grid">
+      {stories.map((s) => <StoryCard story={s} />)}
+    </div>
+  </div>
+
+  <style>
+    .intro { background: var(--color-primary); color: #0d0e12; padding-block: var(--space-12); margin-top: calc(-1 * var(--space-12)); }
+    .intro h1 { color: #0d0e12; margin-bottom: var(--space-6); }
+    .intro-cols { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 800px) { .intro-cols { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
+    .intro p { color: rgba(13, 14, 18, 0.85); margin: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); margin-block: var(--space-12); }
+  </style>
+</BaseLayout>
