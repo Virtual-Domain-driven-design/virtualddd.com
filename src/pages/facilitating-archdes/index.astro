@@ -58,6 +58,7 @@ const shortDate = (d: Date) =>
           about the approaches that have delivered results — moving beyond the theoretical and into the
           practical.
         </p>
+        <a class="btn si-btn" href="/ai-usage-on-this-site/">Read more on our AI usage →</a>
       </aside>
     </div>
   </section>
@@ -134,13 +135,18 @@ const shortDate = (d: Date) =>
 
     .si-hosts { display: flex; flex-direction: column; }
     .si-hosts .solo-carousel { flex: 1; display: flex; flex-direction: column; }
-    .si-hosts :global(.org-photo) { aspect-ratio: 4 / 5; }
+    .si-hosts .solo { flex: 1; min-height: 0; }
+    /* Let the host photo fill the height set by the cyan card on its right. */
+    .si-hosts :global(.org-card) { height: 100%; }
+    .si-hosts :global(.org-photo) { aspect-ratio: auto; flex: 1; min-height: 12rem; }
 
     /* Cyan explanation card (mirrors home .ns-about) */
     .si-about { background: var(--color-primary); color: #0d0e12; border-radius: var(--radius); padding: var(--space-8); display: flex; flex-direction: column; justify-content: center; }
     .si-about h1 { margin: 0 0 var(--space-4); font-size: var(--text-3xl); color: #0d0e12; }
     .si-about p { color: rgba(13, 14, 18, 0.82); margin: 0 0 var(--space-4); }
     .si-about p:last-child { margin-bottom: 0; }
+    .si-btn { background: #0d0e12; color: #fff; border-color: #0d0e12; align-self: flex-start; margin-top: var(--space-6); }
+    .si-btn:hover { background: #000; border-color: #000; color: #fff; text-decoration: none; }
 
     /* Solo carousel (reused from home page) */
     .solo { overflow: hidden; border-radius: var(--radius); }
