@@ -290,6 +290,14 @@ try {
     // Organisers carousel — horizontal scroll with arrows + auto-advance.
     const oc = document.querySelector<HTMLElement>('.org-carousel');
     if (oc) {
+      // Randomise organiser order on every load.
+      const cards = Array.from(oc.children);
+      for (let k = cards.length - 1; k > 0; k--) {
+        const j = Math.floor(Math.random() * (k + 1));
+        [cards[k], cards[j]] = [cards[j], cards[k]];
+      }
+      cards.forEach((c) => oc.appendChild(c));
+
       const step = () => {
         const card = oc.querySelector<HTMLElement>('.org-card');
         return card ? card.getBoundingClientRect().width + 16 : 240;

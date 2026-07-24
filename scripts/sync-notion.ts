@@ -597,7 +597,6 @@ async function runOrganisers(outDir: string, write: boolean) {
       role: (get('Role')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim() || undefined,
       website: get('URL')?.url ?? undefined,
       linkedin: get('LinkedIn')?.url ?? undefined,
-      twitter: get('Twitter')?.url ?? undefined,
       area: get('Area')?.select?.name ?? undefined,
       organises: (get('Organises')?.multi_select ?? []).map((o: any) => o.name),
       showOnTeam: get('Show on team')?.checkbox ?? false,

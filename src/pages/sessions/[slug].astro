@@ -116,11 +116,10 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { day: 'numeric
             <div class="org-info">
               <p class="org-name">{host?.data.name ?? d.organiser}</p>
               {host?.data.role && <p class="org-role">{host.data.role}</p>}
-              {host && (host.data.website || host.data.linkedin || host.data.twitter) && (
+              {host && (host.data.website || host.data.linkedin) && (
                 <p class="org-links">
                   {host.data.website && <a href={host.data.website}>Website</a>}
                   {host.data.linkedin && <a href={host.data.linkedin}>LinkedIn</a>}
-                  {host.data.twitter && <a href={host.data.twitter}>Twitter</a>}
                 </p>
               )}
             </div>

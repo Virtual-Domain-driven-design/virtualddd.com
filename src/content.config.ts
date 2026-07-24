@@ -120,7 +120,6 @@ const organisers = defineCollection({
       role: z.string().optional(),
       website: z.string().url().optional(),
       linkedin: z.string().url().optional(),
-      twitter: z.string().url().optional(),
       area: z.string().optional(),
       organises: z.array(z.string()).default([]),
       showOnTeam: z.boolean().default(false),
