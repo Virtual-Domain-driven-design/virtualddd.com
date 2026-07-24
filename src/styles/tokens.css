@@ -1,18 +1,20 @@
-/* Design tokens — extracted from the live virtualddd.com brand and confirmed.
-   Brand: cyan primary + pink accent, Rajdhani headings over Poppins body. */
+/* Design tokens — matched to the live virtualddd.com brand (dark, neon).
+   Near-black background, white text, cyan primary + pink accent,
+   Rajdhani headings over Poppins body. */
 :root {
-  /* Brand colours */
-  --color-primary: #00b6e7;
-  --color-primary-dark: #0091ba;
-  --color-accent: #e559a0;
-  --color-accent-dark: #c53d84;
+  /* Brand colours (bright variants read as emphasis on the dark ground) */
+  --color-primary: #16bde8;
+  --color-primary-dark: #6fd6f2; /* lighter cyan — hover / emphasis on dark */
+  --color-accent: #ec5fa6;
+  --color-accent-dark: #f59ac9; /* lighter pink — text / emphasis on dark */
 
-  /* Neutrals */
-  --color-text: #212121;
-  --color-text-muted: #5c5c5c;
-  --color-bg: #ffffff;
-  --color-surface: #f4f4f4;
-  --color-border: #e4e4e4;
+  /* Neutrals (dark theme) */
+  --color-text: #eef1f4;
+  --color-text-muted: #a3a9b5;
+  --color-bg: #0d0e12;
+  --color-surface: #191b22;
+  --color-surface-2: #21242d;
+  --color-border: #2b2e39;
 
   /* Typography */
   --font-heading: 'Rajdhani', system-ui, -apple-system, sans-serif;
@@ -42,5 +44,5 @@
   --wide-width: 72rem;
   --radius: 10px;
   --radius-sm: 6px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.06);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.4);
 }

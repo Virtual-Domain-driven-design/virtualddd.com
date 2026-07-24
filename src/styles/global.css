@@ -1,6 +1,6 @@
 /* Base reset + typography + reusable components. Uses tokens.css. */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; color-scheme: dark; }
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -23,8 +23,8 @@ h2 { font-size: var(--text-2xl); margin-top: var(--space-12); }
 h3 { font-size: var(--text-xl); margin-top: var(--space-8); }
 
 p { margin: 0 0 var(--space-4); }
-a { color: var(--color-primary-dark); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { color: var(--color-primary-dark); text-decoration: underline; }
 img { max-width: 100%; height: auto; display: block; }
 
 blockquote {
