@@ -42,7 +42,8 @@ const prev = ordered[idx - 1];
 const next = ordered[idx + 1];
 
 const isUpcoming = d.status === 'Published' && new Date(d.datetime) > new Date();
-const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+const iso = new Date(d.datetime).toISOString();
+const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
 <BaseLayout title={`${d.seoTitle ?? d.title} — Virtual DDD`} description={d.seoMetadescription}>
@@ -76,7 +77,7 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
 
     <aside class="s-side">
       <div class="side-card">
-        <p class="side-date">{dateStr}</p>
+        <p class="side-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
         {isUpcoming && (d.humantix || d.meet) && (
           <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>

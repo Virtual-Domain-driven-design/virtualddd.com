@@ -15,6 +15,7 @@ const past = all
 
 const featured = upcoming[0];
 const f = featured?.data;
+const featuredIso = f ? new Date(f.datetime).toISOString() : '';
 const featuredDate = f
   ? new Date(f.datetime).toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })
   : '';
@@ -47,7 +48,7 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
               {f!.level?.map((l) => <span class="badge">{l}</span>)}
             </div>
             <h2><a href={`/sessions/${featured.id}/`}>{f!.title}</a></h2>
-            <p class="hero-date">{featuredDate}</p>
+            <p class="hero-date"><time class="js-local" data-format="datetime" datetime={featuredIso} data-iso={featuredIso}>{featuredDate}</time></p>
             {f!.organiser && <p class="hero-host">Hosted by {f!.organiser}</p>}
             <div class="hero-cta">
               {(f!.humantix || f!.meet) && <a class="btn btn--accent" href={f!.humantix ?? f!.meet}>RSVP to attend</a>}

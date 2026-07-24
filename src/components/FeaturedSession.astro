@@ -23,14 +23,9 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
     <div class="feat-overlay">
       {eyebrow && <span class="feat-label">{eyebrow}</span>}
       <div class="feat-content">
-        <div class="badges">
-          {d.typeOfSession && <span class="badge badge--type">{d.typeOfSession}</span>}
-          {d.level?.map((l) => <span class="badge">{l}</span>)}
-        </div>
         <h2><a href={`/sessions/${session.id}/`}>{d.title}</a></h2>
-        <p class="feat-when"><time class="js-localtime" datetime={iso} data-iso={iso}>{fallback}</time></p>
+        <p class="feat-when"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{fallback}</time></p>
         <p class="feat-countdown js-countdown" data-iso={iso}></p>
-        {d.organiser && <p class="feat-host">Hosted by {d.organiser}</p>}
         <div class="feat-cta">
           {d.humantix && <a class="btn btn--accent" href={d.humantix}>RSVP</a>}
           {d.meet && <a class="btn" href={d.meet}>Join Google Meet</a>}
@@ -58,39 +53,11 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
   }
   .feat-label { position: absolute; top: var(--space-4); left: var(--space-4); z-index: 2; background: var(--color-accent); color: #fff; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-sm); padding: 0.3em 0.8em; }
 
-  .feat-content { max-width: 40ch; }
-  .feat-content .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
-  .feat-content h2 { font-size: var(--text-3xl); line-height: 1.1; margin: 0 0 var(--space-3); text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6); }
+  .feat-content { max-width: 42ch; }
+  .feat-content h2 { font-size: var(--text-3xl); line-height: 1.1; margin: 0 0 var(--space-4); text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6); }
   .feat-content h2 a { color: #fff; }
   .feat-when { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); color: var(--color-accent-dark); }
-  .feat-countdown { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-1); letter-spacing: 0.03em; }
+  .feat-countdown { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-6); letter-spacing: 0.03em; }
   .feat-countdown:empty { display: none; }
-  .feat-host { color: rgba(255, 255, 255, 0.75); margin: 0 0 var(--space-6); }
   .feat-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 </style>
-
-<script>
-  const fmt: Intl.DateTimeFormatOptions = {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
-  };
-  document.querySelectorAll<HTMLElement>('.js-localtime').forEach((el) => {
-    const iso = el.dataset.iso;
-    if (iso) el.textContent = new Date(iso).toLocaleString(undefined, fmt);
-  });
-  document.querySelectorAll<HTMLElement>('.js-countdown').forEach((el) => {
-    const iso = el.dataset.iso;
-    if (!iso) return;
-    const target = new Date(iso).getTime();
-    const tick = () => {
-      const diff = target - Date.now();
-      if (diff <= 0) { el.textContent = 'Happening now'; return; }
-      const d = Math.floor(diff / 86400000);
-      const h = Math.floor((diff % 86400000) / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      el.textContent = `Starts in ${d}d ${h}h ${m}m ${s}s`;
-    };
-    tick();
-    setInterval(tick, 1000);
-  });
-</script>

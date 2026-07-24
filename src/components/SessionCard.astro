@@ -7,7 +7,8 @@ interface Props {
 }
 const { session } = Astro.props;
 const d = session.data;
-const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+const iso = new Date(d.datetime).toISOString();
+const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
 <a
@@ -25,7 +26,7 @@ const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeri
     {d.typeOfSession && <span class="badge badge--type s-type">{d.typeOfSession}</span>}
   </div>
   <div class="s-info">
-    <p class="s-date">{dateStr}</p>
+    <p class="s-date"><time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{dateStr}</time></p>
     <h3 class="s-title">{d.title}</h3>
     {d.organiser && <p class="s-host">Hosted by {d.organiser}</p>}
   </div>
