@@ -22,6 +22,21 @@ const tags = [...tagSet].sort();
 
 const shortDate = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+// A short plain-text preview drawn from the story body (falls back to the SEO summary).
+function excerpt(md: string, fallback = '', max = 190): string {
+  let text = (md ?? '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^\s*#{1,6}\s+.*$/gm, ' ')
+    .replace(/[#>*_`~]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!text) text = fallback;
+  if (text.length <= max) return text;
+  return text.slice(0, max).replace(/\s+\S*$/, '') + '…';
+}
 ---
 
 <BaseLayout
@@ -86,30 +101,31 @@ const shortDate = (d: Date) =>
           const img = d.featuredImage ?? d.featuredImageSquared;
           const iso = d.publishedDate ? new Date(d.publishedDate).toISOString() : '';
           const fallback = d.publishedDate ? shortDate(new Date(d.publishedDate)) : '';
+          const preview = excerpt(s.body ?? '', d.seoMetadescription ?? '');
           return (
             <a
-              class="story-row"
+              class="story-card"
               href={`/facilitating-archdes/${s.id}/`}
               data-title={d.title.toLowerCase()}
               data-authors={d.authors.join(' ').toLowerCase()}
               data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
             >
-              <div class="sr-thumb">
-                {img ? <Image src={img} alt="" width={640} loading="lazy" /> : <div class="sr-ph"></div>}
-                {d.episode != null && <span class="badge badge--type sr-ep">Ep {d.episode}</span>}
+              <div class="sc-thumb">
+                {img ? <Image src={img} alt="" width={720} loading="lazy" /> : <div class="sc-ph"></div>}
+                {d.episode != null && <span class="badge badge--type sc-ep">Ep {d.episode}</span>}
               </div>
-              <div class="sr-info">
+              <div class="sc-body">
                 {iso && (
-                  <p class="sr-date">
+                  <p class="sc-date">
                     <time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{fallback}</time>
                   </p>
                 )}
-                <h3 class="sr-title">{d.title}</h3>
+                <h3 class="sc-title">{d.title}</h3>
                 {d.authors.length > 0 && (
-                  <p class="sr-authors">by {d.authors.slice(0, 3).join(', ')}{d.authors.length > 3 ? ' & more' : ''}</p>
+                  <p class="sc-authors">by {d.authors.slice(0, 3).join(', ')}{d.authors.length > 3 ? ' & more' : ''}</p>
                 )}
-                {d.seoMetadescription && <p class="sr-excerpt">{d.seoMetadescription}</p>}
-                <span class="sr-more">Read story →</span>
+                {preview && <p class="sc-excerpt">{preview}</p>}
+                <span class="sc-more">Read more →</span>
               </div>
             </a>
           );
@@ -171,28 +187,24 @@ const shortDate = (d: Date) =>
     .filters #f-reset { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; padding: var(--space-3) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-muted); }
     .filters #f-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
 
-    /* Single-column story list */
-    .story-list { display: flex; flex-direction: column; gap: var(--space-6); }
-    .story-row { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-    .story-row:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
-    .story-row:hover .sr-more { color: var(--color-primary); }
-    .sr-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
-    .sr-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .sr-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
-    .sr-ep { position: absolute; top: var(--space-3); left: var(--space-3); }
-    .sr-info { padding: var(--space-6) var(--space-8); display: flex; flex-direction: column; }
-    .sr-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
-    .sr-title { font-size: var(--text-2xl); margin: 0; line-height: 1.15; }
-    .sr-authors { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-    .sr-excerpt { color: var(--color-text-muted); margin: var(--space-4) 0 0; }
-    .sr-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-5); transition: color 0.15s; }
-    .no-results { color: var(--color-text-muted); }
+    /* Story cards — image on top, title + excerpt beneath */
+    .story-list { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+    @media (min-width: 720px) { .story-list { grid-template-columns: 1fr 1fr; } }
 
-    @media (min-width: 760px) {
-      .story-row { grid-template-columns: 320px 1fr; align-items: stretch; }
-      .sr-thumb { aspect-ratio: auto; }
-      .sr-info { justify-content: center; }
-    }
+    .story-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .story-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
+    .story-card:hover .sc-more { color: var(--color-primary); }
+    .sc-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
+    .sc-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sc-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
+    .sc-ep { position: absolute; top: var(--space-3); left: var(--space-3); }
+    .sc-body { padding: var(--space-6) var(--space-6) var(--space-8); display: flex; flex-direction: column; flex: 1; }
+    .sc-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+    .sc-title { font-size: var(--text-xl); margin: 0; line-height: 1.2; }
+    .sc-authors { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+    .sc-excerpt { color: var(--color-text-muted); margin: var(--space-3) 0 0; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .sc-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-4); transition: color 0.15s; }
+    .no-results { color: var(--color-text-muted); }
   </style>
 
   <script>
@@ -226,7 +238,7 @@ const shortDate = (d: Date) =>
       start();
     });
 
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .story-row'));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .story-card'));
     const q = document.getElementById('q') as HTMLInputElement;
     const fTag = document.getElementById('f-tag') as HTMLSelectElement;
     const reset = document.getElementById('f-reset') as HTMLButtonElement;
