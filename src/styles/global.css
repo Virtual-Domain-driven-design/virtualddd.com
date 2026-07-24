@@ -77,3 +77,6 @@ th { background: var(--color-surface); font-family: var(--font-heading); font-we
   display: inline-block; font-size: var(--text-sm); color: var(--color-text-muted);
   padding: 0.15em 0.6em; border: 1px solid var(--color-border); border-radius: 999px;
 }
+
+/* Ensure the hidden attribute always wins over component display rules. */
+[hidden] { display: none !important; }
