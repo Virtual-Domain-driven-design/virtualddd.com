@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 # local migration inputs (WP export, redirects) — never commit
 migration-source/
+local.env
+*.env
