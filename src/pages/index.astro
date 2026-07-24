@@ -68,7 +68,7 @@ try {
           explore a wider range of topics for designing and building resilient systems — sharing
           knowledge in a decentralised way, so every member can contribute and learn.
         </p>
-        <a class="btn btn--ghost" href="/about-us/">More about us →</a>
+        <a class="btn ns-btn" href="/about-us/">More about us →</a>
       </aside>
     </section>
 
@@ -157,12 +157,15 @@ try {
     .home-section { margin-block: var(--space-16); }
 
     /* Next session (3/5) + intro (2/5) */
-    .next-section { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-8) 0; align-items: center; }
+    .next-section { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-8) 0; align-items: stretch; }
     .next-section > * { min-width: 0; }
     @media (min-width: 900px) { .next-section { grid-template-columns: 3fr 2fr; gap: var(--space-12); } }
     .ns-session :global(.feat) { margin-bottom: 0; }
-    .ns-about h1 { margin-top: 0; font-size: var(--text-3xl); }
-    .ns-about p { color: var(--color-text-muted); margin-bottom: var(--space-6); }
+    .ns-about { background: var(--color-primary); color: #0d0e12; border-radius: var(--radius); padding: var(--space-8); display: flex; flex-direction: column; justify-content: center; }
+    .ns-about h1 { margin-top: 0; font-size: var(--text-3xl); color: #0d0e12; }
+    .ns-about p { color: rgba(13, 14, 18, 0.82); margin-bottom: var(--space-6); }
+    .ns-btn { background: #0d0e12; color: #fff; border-color: #0d0e12; align-self: flex-start; }
+    .ns-btn:hover { background: #000; border-color: #000; color: #fff; }
 
     .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
     .section-head h2 { margin: 0; }
