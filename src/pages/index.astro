@@ -55,26 +55,13 @@ try {
   title="Virtual DDD — a community for Domain-Driven Design"
   description="A community-driven platform for deeper knowledge of Domain-Driven Design, software architecture and resilient systems design."
 >
-  <section class="home-hero">
-    <div class="wrap">
-      <h1>Learn software &amp; systems design, together.</h1>
-      <p class="home-lead">
-        The community for Domain-Driven Design, software architecture &amp; systems design.
-      </p>
-      <div class="hero-cta">
-        <a class="btn btn--accent" href={DISCORD}>Join our Discord</a>
-        <a class="btn" href="/sessions/">Explore sessions</a>
-      </div>
-    </div>
-  </section>
-
   <div class="wrap">
     <section class="next-section">
       {upcoming && (
         <div class="ns-session"><FeaturedSession session={upcoming} eyebrow="Next session" /></div>
       )}
       <aside class="ns-about">
-        <h2>Who we are</h2>
+        <h1>Learn software &amp; systems design, together.</h1>
         <p>
           A community-driven platform for people who want deeper knowledge of systems and software
           design for solving complex business problems. We began with Domain-Driven Design and now
@@ -84,17 +71,18 @@ try {
         <a class="btn btn--ghost" href="/about-us/">More about us →</a>
       </aside>
     </section>
-  </div>
 
-  <section class="discord-band">
-    <div class="wrap">
-      <h2>Join our Discord community</h2>
-      <p>The community lives on Discord — talks, questions and connections all week long.</p>
+    <div class="discord-card">
+      <span class="dc-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="40" height="40"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+      </span>
+      <div class="dc-text">
+        <h2>Join our Discord community</h2>
+        <p>The community lives on Discord — talks, questions and connections all week long.</p>
+      </div>
       <a class="btn discord-btn" href={DISCORD}>Join</a>
     </div>
-  </section>
 
-  <div class="wrap">
     <section class="latest-social">
       <div class="ls-col">
         <div class="section-head">
@@ -166,19 +154,14 @@ try {
   </div>
 
   <style>
-    .home-hero { background: radial-gradient(120% 140% at 15% 0%, color-mix(in srgb, var(--color-primary) 22%, var(--color-bg)), var(--color-bg) 60%); padding-block: var(--space-16); margin-top: calc(-1 * var(--space-12)); }
-    .home-hero h1 { font-size: clamp(2.4rem, 6vw, var(--text-4xl)); max-width: 18ch; }
-    .home-lead { font-size: var(--text-lg); color: var(--color-text-muted); max-width: 46rem; margin-block: var(--space-4) var(--space-6); }
-    .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
-
     .home-section { margin-block: var(--space-16); }
 
-    /* Next session (3/5) + who-we-are (2/5) */
-    .next-section { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-12) 0; align-items: center; }
+    /* Next session (3/5) + intro (2/5) */
+    .next-section { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-8) 0; align-items: center; }
     .next-section > * { min-width: 0; }
     @media (min-width: 900px) { .next-section { grid-template-columns: 3fr 2fr; gap: var(--space-12); } }
     .ns-session :global(.feat) { margin-bottom: 0; }
-    .ns-about h2 { margin-top: 0; }
+    .ns-about h1 { margin-top: 0; font-size: var(--text-3xl); }
     .ns-about p { color: var(--color-text-muted); margin-bottom: var(--space-6); }
 
     .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
@@ -217,11 +200,14 @@ try {
     .team-role { color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
     .team-links { display: flex; justify-content: center; gap: var(--space-3); font-size: var(--text-sm); margin: 0; }
 
-    .discord-band { background: var(--color-accent); color: #fff; text-align: center; padding-block: var(--space-16); margin-top: var(--space-16); }
-    .discord-band h2 { color: #fff; margin: 0 0 var(--space-2); }
-    .discord-band p { margin: 0 0 var(--space-6); opacity: 0.95; }
-    .discord-btn { background: #fff; color: #c53d84; border-color: #fff; }
+    .discord-card { display: flex; align-items: center; gap: var(--space-6); background: var(--color-accent); color: #fff; border-radius: var(--radius); padding: var(--space-6) var(--space-8); margin-block: var(--space-16); }
+    .dc-icon { flex: none; display: inline-flex; }
+    .dc-text { flex: 1 1 auto; }
+    .dc-text h2 { color: #fff; margin: 0 0 var(--space-1); }
+    .dc-text p { margin: 0; opacity: 0.95; }
+    .discord-btn { flex: none; background: #fff; color: #c53d84; border-color: #fff; }
     .discord-btn:hover { background: rgba(255, 255, 255, 0.9); border-color: rgba(255, 255, 255, 0.9); color: #b83b7f; }
+    @media (max-width: 640px) { .discord-card { flex-wrap: wrap; text-align: center; justify-content: center; } .dc-text { flex-basis: 100%; } }
   </style>
 
   <script>
