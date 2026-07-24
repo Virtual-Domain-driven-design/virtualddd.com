@@ -179,19 +179,9 @@ async function matchSlugs(name: string, cfg: CollectionCfg): Promise<Match[]> {
   return matches;
 }
 
-// --- main -------------------------------------------------------------------
+// --- slugs command ----------------------------------------------------------
 
-async function run() {
-  const args = process.argv.slice(2);
-  const cmd = args[0];
-  const write = args.includes('--write');
-  const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
-
-  if (cmd !== 'slugs') {
-    console.error('usage: tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]');
-    process.exit(1);
-  }
-
+async function runSlugs(only: string | undefined, write: boolean) {
   const targets = only ? [only] : Object.keys(COLLECTIONS);
   for (const key of targets) {
     const cfg = COLLECTIONS[key];
@@ -229,6 +219,199 @@ async function run() {
       console.log('\n  (dry-run — nothing written. Re-run with --write to apply.)');
     }
   }
+}
+
+// --- content command: Notion pages -> markdown ------------------------------
+//
+// Hand-rolled block -> markdown converter (v5 data-source API compatible).
+// Preserves embeds/callouts, which the plan calls out as easy to lose.
+// First slice: sessions. Writes to a preview dir under --dry-run so fidelity
+// can be inspected before anything lands in src/content/.
+
+import { mkdirSync, writeFileSync } from 'node:fs';
+
+const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
+const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
+
+/** id -> value maps for relation resolution (page IDs are stored dashless-agnostic). */
+async function buildLookup(dataSourceId: string, label: string, valueOf: (page: any) => string) {
+  const map = new Map<string, string>();
+  try {
+    for (const page of await queryAll(dataSourceId)) {
+      map.set((page.id as string).replace(/-/g, ''), valueOf(page));
+    }
+  } catch (e: any) {
+    console.warn(`  ! ${label} not readable (${e.code ?? e.message}); relation left unresolved. Share that database with the integration to fix.`);
+  }
+  return map;
+}
+
+function richText(rts: any[] = []): string {
+  return rts.map((rt) => {
+    let t = rt.plain_text ?? '';
+    const a = rt.annotations ?? {};
+    if (a.code) t = '`' + t + '`';
+    if (a.bold) t = `**${t}**`;
+    if (a.italic) t = `*${t}*`;
+    if (a.strikethrough) t = `~~${t}~~`;
+    const href = rt.href ?? rt.text?.link?.url;
+    if (href) t = `[${t}](${href})`;
+    return t;
+  }).join('');
+}
+
+function fileUrl(f: any): string {
+  return f?.type === 'external' ? f.external?.url : f?.file?.url ?? '';
+}
+
+async function childrenOf(blockId: string): Promise<any[]> {
+  const out: any[] = [];
+  let cursor: string | undefined;
+  do {
+    const res = await notion.blocks.children.list({ block_id: blockId, page_size: 100, start_cursor: cursor });
+    out.push(...res.results);
+    cursor = res.has_more ? (res.next_cursor as string) : undefined;
+  } while (cursor);
+  return out;
+}
+
+const seenUnhandled = new Set<string>();
+
+/** Render a list of blocks to markdown. `indent` handles nested lists. */
+async function blocksToMd(blocks: any[], indent = ''): Promise<string> {
+  const out: string[] = [];
+  let numIdx = 0;
+  for (const b of blocks) {
+    const t = b.type;
+    if (t !== 'numbered_list_item') numIdx = 0;
+    const data = b[t];
+    const kids = b.has_children ? await childrenOf(b.id) : [];
+    const nested = kids.length ? '\n' + (await blocksToMd(kids, indent + '  ')) : '';
+
+    switch (t) {
+      case 'paragraph':
+        out.push(indent + richText(data.rich_text) + nested); break;
+      case 'heading_1': out.push(`# ${richText(data.rich_text)}`); break;
+      case 'heading_2': out.push(`## ${richText(data.rich_text)}`); break;
+      case 'heading_3': out.push(`### ${richText(data.rich_text)}`); break;
+      case 'bulleted_list_item': out.push(`${indent}- ${richText(data.rich_text)}${nested}`); break;
+      case 'numbered_list_item': out.push(`${indent}${++numIdx}. ${richText(data.rich_text)}${nested}`); break;
+      case 'to_do': out.push(`${indent}- [${data.checked ? 'x' : ' '}] ${richText(data.rich_text)}${nested}`); break;
+      case 'quote': out.push(`> ${richText(data.rich_text)}`); break;
+      case 'callout': {
+        const icon = data.icon?.emoji ? data.icon.emoji + ' ' : '';
+        out.push(`> ${icon}${richText(data.rich_text)}${nested ? '\n' + nested : ''}`); break;
+      }
+      case 'code':
+        out.push('```' + (data.language ?? '') + '\n' + richText(data.rich_text) + '\n```'); break;
+      case 'divider': out.push('---'); break;
+      case 'image': {
+        const url = fileUrl(data); const cap = richText(data.caption);
+        out.push(`![${cap}](${url})`); break; // real sync downloads these locally
+      }
+      case 'video': case 'embed': case 'bookmark': case 'link_preview': {
+        const url = data.url ?? fileUrl(data);
+        out.push(url ? `{% embed ${url} %}` : ''); break; // embed marker — preserved, rendered later
+      }
+      case 'toggle':
+        out.push(`<details><summary>${richText(data.rich_text)}</summary>\n\n${nested}\n</details>`); break;
+      case 'child_page': break; // skip nested pages
+      default:
+        seenUnhandled.add(t);
+        out.push(`<!-- TODO block: ${t} -->`);
+    }
+  }
+  return out.filter((s) => s !== undefined).join('\n\n');
+}
+
+function yamlStr(s: string): string {
+  return '"' + (s ?? '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+}
+function yamlList(items: string[]): string {
+  return '[' + items.map(yamlStr).join(', ') + ']';
+}
+
+async function runContentSessions(limit: number, outDir: string, write: boolean) {
+  console.log('building relation lookups (heuristics, people)...');
+  const heurSlug = await buildLookup(HEURISTICS_DS, 'heuristics', (p) =>
+    (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim());
+  const personName = await buildLookup(PEOPLE_DS, 'people (organisers)', (p) => {
+    const titleProp: any = Object.values(p.properties ?? {}).find((x: any) => x.type === 'title');
+    return (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
+  });
+
+  const cfg = COLLECTIONS.sessions;
+  const pages = (await queryAll(cfg.dataSourceId))
+    .filter((p) => cfg.liveStatuses.includes(statusName(p, cfg)));
+  const targets = limit ? pages.slice(0, limit) : pages;
+  mkdirSync(outDir, { recursive: true });
+  console.log(`sessions to render: ${targets.length}${limit ? ` (limited from ${pages.length})` : ''} -> ${outDir}\n`);
+
+  for (const page of targets) {
+    const P = page.properties;
+    const get = (n: string) => P[n];
+    const slug = (get('slug')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+    const title = plainTitle(page, 'Name');
+    if (!slug) { console.log(`  ! no slug, skipping "${title}"`); continue; }
+
+    const rel = (n: string) => (get(n)?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
+    const heur = rel('Curated Heuristics').map((id: string) => heurSlug.get(id)).filter(Boolean);
+    const organiser = rel('Organiser').map((id: string) => personName.get(id)).filter(Boolean)[0];
+    const coOrg = rel('Co-Organisers').map((id: string) => personName.get(id)).filter(Boolean);
+
+    const fm: string[] = ['---'];
+    fm.push(`title: ${yamlStr(title)}`);
+    fm.push(`slug: ${yamlStr(slug)}`);
+    fm.push(`status: ${yamlStr(statusName(page, cfg))}`);
+    if (get('Datetime')?.date?.start) fm.push(`datetime: ${get('Datetime').date.start}`);
+    if (get('Wordpress Published date')?.date?.start) fm.push(`wordpressPublishedDate: ${get('Wordpress Published date').date.start.slice(0, 10)}`);
+    if (get('Type of session')?.select?.name) fm.push(`typeOfSession: ${yamlStr(get('Type of session').select.name)}`);
+    const level = (get('Level')?.multi_select ?? []).map((o: any) => o.name);
+    if (level.length) fm.push(`level: ${yamlList(level)}`);
+    const tags = (get('Tags')?.multi_select ?? []).map((o: any) => o.name);
+    if (tags.length) fm.push(`tags: ${yamlList(tags)}`);
+    for (const [k, prop] of [['video', 'Video'], ['podcastPlayer', 'PodcastPlayer'], ['miro', 'Miro'], ['meet', 'Meet'], ['humantix', 'Humantix']] as const) {
+      if (get(prop)?.url) fm.push(`${k}: ${yamlStr(get(prop).url)}`);
+    }
+    if (organiser) fm.push(`organiser: ${yamlStr(organiser)}`);
+    if (coOrg.length) fm.push(`coOrganisers: ${yamlList(coOrg)}`);
+    if (heur.length) fm.push(`curatedHeuristics: ${yamlList(heur as string[])}`);
+    const seoT = (get('SEO Title')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+    const seoD = (get('SEO Metadescription')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+    if (seoT) fm.push(`seoTitle: ${yamlStr(seoT)}`);
+    if (seoD) fm.push(`seoMetadescription: ${yamlStr(seoD)}`);
+    const featured = fileUrl((get('Featured image')?.files ?? [])[0]);
+    if (featured) fm.push(`featuredImageRemote: ${yamlStr(featured)}  # real sync downloads to src/assets`);
+    fm.push('---');
+
+    const body = await blocksToMd(await childrenOf(page.id));
+    writeFileSync(`${outDir}/${slug}.md`, fm.join('\n') + '\n\n' + body + '\n');
+    console.log(`  ✓ ${slug}.md  (${body.length} chars body, ${heur.length} heuristics, ${coOrg.length} co-org)`);
+  }
+
+  if (seenUnhandled.size) console.log(`\n  unhandled block types seen: ${[...seenUnhandled].join(', ')}`);
+  if (!write) console.log(`\n  (preview only — files in ${outDir}, nothing under src/content/)`);
+}
+
+// --- dispatch ---------------------------------------------------------------
+
+async function run() {
+  const args = process.argv.slice(2);
+  const cmd = args[0];
+  const write = args.includes('--write');
+  const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
+  const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
+  const out = args.find((a) => a.startsWith('--out='))?.split('=')[1]
+    ?? 'migration-source/preview/sessions';
+
+  if (cmd === 'slugs') return runSlugs(only, write);
+  if (cmd === 'content') {
+    const target = only ?? 'sessions';
+    if (target !== 'sessions') { console.error('content sync: only "sessions" implemented so far'); process.exit(1); }
+    return runContentSessions(limit, out, write);
+  }
+  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=sessions [--limit=N] [--out=DIR]');
+  process.exit(1);
 }
 
 run().catch((e) => { console.error(e); process.exit(1); });
