@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
+import DiscussedHeuristics from '../../components/DiscussedHeuristics.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -98,18 +99,14 @@ const dateStr = d.publishedDate
         </div>
       )}
 
-      {discussed.length > 0 && (
-        <div class="side-block">
-          <p class="eyebrow eyebrow--cyan">Discussed heuristics</p>
-          <ul class="heur-list">{discussed.map((h) => <li>{h!.data.title}</li>)}</ul>
-        </div>
-      )}
-
       <SideExtras latest={latest} latestLabel="Latest stories" latestAllHref="/facilitating-archdes/" />
     </aside>
 
     <div class="s-body">
       <div class="body"><Content /></div>
+
+      <DiscussedHeuristics heuristics={discussed as any} />
+
       <nav class="prevnext">
         {prev ? (
           <a class="pn" href={`/facilitating-archdes/${prev.id}/`}>
