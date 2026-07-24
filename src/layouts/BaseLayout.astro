@@ -9,7 +9,9 @@ import '@fontsource/poppins/700.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import logo from '../assets/logo-virtualddd.png';
+import Socials from '../components/Socials.astro';
 
 interface Props {
   title: string;
@@ -23,9 +25,16 @@ const nav = [
   { href: '/open-space/', label: 'Open Space' },
   { href: '/heuristics/', label: 'Heuristics' },
   { href: '/ddd-crew/', label: 'ddd crew' },
-  { href: '/about/', label: 'About us' },
+  { href: '/about-us/', label: 'About us' },
 ];
 const path = Astro.url.pathname;
+
+// Latest sessions for the footer.
+const latest = (await getCollection('sessions'))
+  .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
+  .slice(0, 3);
+
+const year = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -45,6 +54,7 @@ const path = Astro.url.pathname;
             <a href={n.href} class:list={[{ current: path.startsWith(n.href) }]}>{n.label}</a>
           ))}
         </nav>
+        <div class="header-social"><Socials /></div>
       </div>
     </header>
 
@@ -53,8 +63,41 @@ const path = Astro.url.pathname;
     </main>
 
     <footer class="site-footer">
-      <div class="wrap footer-inner">
-        <p><strong>Virtual DDD</strong> — a community exploring Domain-Driven Design, software architecture &amp; design.</p>
+      <div class="wrap footer-grid">
+        <div class="footer-latest">
+          <h3>Latest sessions</h3>
+          <ul>
+            {latest.map((s) => (
+              <li>
+                <a href={`/sessions/${s.id}/`}>
+                  {s.data.featuredImage && <Image src={s.data.featuredImage} alt="" width={96} height={54} />}
+                  <span>{s.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="footer-explore">
+          <h3>Explore</h3>
+          <ul>
+            <li><a href="/sessions/">Online sessions</a></li>
+            <li><a href="/open-space/">Open Space</a></li>
+            <li><a href="/facilitating-archdes/">Facilitating Stories</a></li>
+            <li><a href="/heuristics/">Heuristics</a></li>
+            <li><a href="/ddd-crew/">ddd crew</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-about">
+          <Image src={logo} alt="Virtual DDD" width={140} />
+          <p>A community exploring Domain-Driven Design, software architecture &amp; design — together, online.</p>
+          <Socials />
+        </div>
+      </div>
+
+      <div class="wrap footer-bottom">
+        <p>© {year} Virtual DDD</p>
         <p class="footer-links">
           <a href="/code-of-conduct/">Code of Conduct</a>
           <a href="/privacy-policy/">Privacy</a>
@@ -63,49 +106,39 @@ const path = Astro.url.pathname;
     </footer>
 
     <style>
-      .site-header {
-        border-bottom: 1px solid var(--color-border);
-        background: var(--color-bg);
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
-      .header-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--space-6);
-        padding-block: var(--space-3);
-        flex-wrap: wrap;
-      }
+      .site-header { border-bottom: 1px solid var(--color-border); background: var(--color-bg); position: sticky; top: 0; z-index: 10; }
+      .header-inner { display: flex; align-items: center; gap: var(--space-6); padding-block: var(--space-3); flex-wrap: wrap; }
       .brand :global(img) { height: 44px; width: auto; }
-      .site-nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-4);
-        font-family: var(--font-heading);
-        font-weight: 600;
-        font-size: var(--text-base);
-      }
-      .site-nav a {
-        color: var(--color-text);
-        padding-bottom: 2px;
-        border-bottom: 2px solid transparent;
-      }
+      .site-nav { display: flex; flex-wrap: wrap; gap: var(--space-4); font-family: var(--font-heading); font-weight: 600; margin-right: auto; }
+      .site-nav a { color: var(--color-text); padding-bottom: 2px; border-bottom: 2px solid transparent; }
       .site-nav a:hover { color: var(--color-primary-dark); text-decoration: none; }
       .site-nav a.current { border-bottom-color: var(--color-accent); color: var(--color-primary-dark); }
+      .header-social { flex: none; }
 
       main { min-height: 60vh; padding-block: var(--space-12); }
 
-      .site-footer {
-        margin-top: var(--space-16);
-        border-top: 1px solid var(--color-border);
-        background: var(--color-surface);
-        padding-block: var(--space-8);
-        font-size: var(--text-sm);
-        color: var(--color-text-muted);
+      .site-footer { margin-top: var(--space-16); border-top: 1px solid var(--color-border); background: var(--color-surface); }
+      .footer-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-8); padding-block: var(--space-12) var(--space-8); }
+      .footer-grid h3 { font-size: var(--text-lg); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-4); }
+      .footer-latest ul, .footer-explore ul { list-style: none; margin: 0; padding: 0; }
+      .footer-latest li { margin-bottom: var(--space-3); }
+      .footer-latest a { display: flex; gap: var(--space-3); align-items: center; color: var(--color-text); }
+      .footer-latest :global(img) { width: 96px; height: 54px; object-fit: cover; border-radius: var(--radius-sm); flex: none; }
+      .footer-latest span { font-size: var(--text-sm); line-height: 1.3; }
+      .footer-explore li { margin-bottom: var(--space-2); }
+      .footer-about :global(img) { height: 40px; width: auto; margin-bottom: var(--space-3); }
+      .footer-about p { color: var(--color-text-muted); font-size: var(--text-sm); max-width: 26rem; }
+
+      .footer-bottom {
+        display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);
+        padding-block: var(--space-6); border-top: 1px solid var(--color-border);
+        font-size: var(--text-sm); color: var(--color-text-muted);
       }
       .footer-links { display: flex; gap: var(--space-4); }
+
+      @media (min-width: 800px) {
+        .footer-grid { grid-template-columns: 1.2fr 0.8fr 1.3fr; gap: var(--space-12); }
+      }
     </style>
   </body>
 </html>
