@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy — Virtual DDD"
+  description="How the Virtual DDD website handles your data, in plain terms."
+>
+  <div class="wrap page">
+    <p class="eyebrow">Legal</p>
+    <h1>Privacy Policy</h1>
+
+    <div class="prose">
+      <p>
+        Virtual DDD is a small, volunteer-run community. We try to keep things simple and to collect as
+        little as possible. This page explains, in plain terms, how the website handles data.
+      </p>
+
+      <h2>The website</h2>
+      <p>
+        This website is a static site. It does not ask you to create an account or submit personal
+        information to us directly, and it has no comment forms or logins.
+      </p>
+
+      <h2>Third-party content and services</h2>
+      <p>
+        Some pages embed or link to third-party services, each of which has its own privacy policy and may
+        set its own cookies or collect data when you interact with them:
+      </p>
+      <ul>
+        <li><strong>YouTube</strong> — for session and story recordings (we use the privacy-enhanced player).</li>
+        <li><strong>Captivate</strong> — for the embedded podcast players.</li>
+        <li><strong>Humanitix</strong> — for event registration and RSVPs.</li>
+        <li><strong>Discord</strong> — for our community chat.</li>
+        <li><strong>Bluesky, LinkedIn &amp; Mastodon</strong> — for our social channels.</li>
+      </ul>
+      <p>
+        When you follow those links or interact with embedded content, your data is handled under the
+        respective service's privacy policy.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        If you have any questions about privacy, or a request regarding your data, email us at
+        <a href="mailto:organisers@virtualddd.com">organisers@virtualddd.com</a> or reach out on
+        <a href="https://discord.gg/tRJkcsFDKN">Discord</a>.
+      </p>
+    </div>
+  </div>
+
+  <style>
+    .page { max-width: 48rem; padding-block: var(--space-8) var(--space-16); }
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-accent-dark); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-accent); }
+    .page h1 { margin: 0 0 var(--space-8); }
+    .prose h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+    .prose p { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); }
+    .prose ul { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); padding-left: var(--space-6); }
+    .prose li { margin-bottom: var(--space-2); }
+    .prose strong { color: var(--color-text); }
+  </style>
+</BaseLayout>

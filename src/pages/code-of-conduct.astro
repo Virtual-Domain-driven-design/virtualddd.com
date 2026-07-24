@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Code of Conduct — Virtual DDD"
+  description="Our community and events are dedicated to a harassment-free experience for everyone. Read the Virtual DDD code of conduct."
+>
+  <div class="wrap page">
+    <p class="eyebrow">Community</p>
+    <h1>Code of Conduct</h1>
+
+    <div class="prose">
+      <p>
+        All attendees, speakers, sponsors and volunteers at our events are required to agree with the
+        following code of conduct. Organisers will enforce this code throughout the event. We expect
+        cooperation from all participants to help ensure a safe environment for everybody.
+      </p>
+
+      <h2>Need help?</h2>
+      <p>You have our contact details in the emails we've sent, and you can always reach us on <a href="https://discord.gg/tRJkcsFDKN">Discord</a> or at <a href="mailto:organisers@virtualddd.com">organisers@virtualddd.com</a>.</p>
+
+      <h2>The quick version</h2>
+      <p>
+        Our community is dedicated to providing a harassment-free experience for everyone, regardless of
+        gender, gender identity and expression, age, sexual orientation, disability, physical appearance,
+        body size, race, ethnicity, religion (or lack thereof), or technology choices. We do not tolerate
+        harassment of participants in any form. Sexual language and imagery is not appropriate for any
+        venue, including talks, workshops, parties, social media and other online media. Participants
+        violating these rules may be sanctioned or expelled from the event without a refund at the
+        discretion of the organisers.
+      </p>
+
+      <h2>The less quick version</h2>
+      <p>
+        Harassment includes offensive verbal comments related to gender, gender identity and expression,
+        age, sexual orientation, disability, physical appearance, body size, race, ethnicity, religion,
+        technology choices, sexual images in public spaces, deliberate intimidation, stalking, following,
+        harassing photography or recording, sustained disruption of talks or other events, inappropriate
+        physical contact, and unwelcome sexual attention.
+      </p>
+      <p>Participants asked to stop any harassing behavior are expected to comply immediately.</p>
+      <p>
+        Sponsors are also subject to the anti-harassment policy. In particular, sponsors should not use
+        sexualised images, activities, or other material. Booth staff (including volunteers) should not use
+        sexualised clothing/uniforms/costumes, or otherwise create a sexualised environment.
+      </p>
+      <p>
+        If a participant engages in harassing behavior, the organisers may take any action they deem
+        appropriate, including warning the offender or expulsion from the event with no refund. If you are
+        being harassed, notice that someone else is being harassed, or have any other concerns, please
+        contact a member of the organising team immediately.
+      </p>
+      <p>
+        The organising team will be happy to help participants contact venue security or local law
+        enforcement, provide escorts, or otherwise assist those experiencing harassment to feel safe for
+        the duration of the event. We value your attendance.
+      </p>
+      <p>
+        We expect participants to follow these rules at all event and workshop venues, in our online
+        spaces, and at event-related social events.
+      </p>
+    </div>
+  </div>
+
+  <style>
+    .page { max-width: 48rem; padding-block: var(--space-8) var(--space-16); }
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-accent-dark); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-accent); }
+    .page h1 { margin: 0 0 var(--space-8); }
+    .prose h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+    .prose p { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); }
+    .prose strong { color: var(--color-text); }
+  </style>
+</BaseLayout>

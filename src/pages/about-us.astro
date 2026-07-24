@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrganiserCard from '../components/OrganiserCard.astro';
+import { getCollection } from 'astro:content';
+
+const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
+---
+
+<BaseLayout
+  title="About us — Virtual DDD"
+  description="Virtual DDD is a community-driven platform for deeper knowledge of systems and software design — how we started and where we're headed."
+>
+  <div class="wrap page">
+    <p class="eyebrow eyebrow--pink">Who we are</p>
+    <h1>About us</h1>
+
+    <div class="prose">
+      <h2>Goal</h2>
+      <p>
+        We are a community-driven platform for people who want to get more in-depth knowledge of systems
+        and software design for solving complex business problems. While we began with Domain-Driven
+        Design, we now explore a wider range of topics that are relevant to designing and building
+        resilient systems. We aim to share knowledge in a decentralised way so that every member can
+        contribute and learn from others.
+      </p>
+
+      <h2>How it all started</h2>
+      <p>
+        It all started back in 2019 at Domain-Driven Design conferences. A few of us — Julie, Zsofia,
+        Kenny, and Marco — found ourselves spending more time in the "hallway track" than in the official
+        talks. We realized the best conversations were happening spontaneously, just by bumping into each
+        other and chatting. That's when we asked ourselves, "Why do we have to wait for a conference to
+        have these conversations?" We decided to create a space where we could keep them going whenever we
+        wanted. That's how our first virtualDDD sessions began, as simple Sunday meetups to talk about the
+        stuff that really mattered to us in the community.
+      </p>
+
+      <h2>Building a community without boundaries</h2>
+      <p>
+        When the pandemic hit, we were already set up for a different way of connecting. We quickly started
+        adding more sessions and even hosted a full-day online conference. This was also the time Krisztina
+        and Maxime, who were already active joiners of the sessions, joined us as organisers so we could
+        have a session every 2 weeks! When the world started to open up again, we noticed something had
+        shifted. We realised we weren't just about recreating the "hallway track" any more; we were a home
+        for anyone who couldn't — or didn't want to — meet in person. Our goal expanded, and we introduced
+        new formats like hands-on workshops and online discussions, making sure everyone had a way to
+        contribute and learn, no matter where they were.
+      </p>
+
+      <h2>Decentralising knowledge and expanding our focus</h2>
+      <p>
+        Over the years after the pandemic, we started to experiment with new ways to recreate the
+        atmosphere we loved at in-person conferences. This led us to host online Open Spaces and even a
+        global DDD day, which mixed online sessions with live streams from in-person events. While our core
+        group of organisers was based in Europe, we noticed people from all over the world were joining in
+        at times that weren't ideal for them. It so happened that one of our active community members,
+        Andrea, moved from Europe to New Zealand, which inspired us to think differently. We started
+        experimenting with a more decentralised approach. Our goal was to build a platform that made it
+        easier for anyone to organise their own session, no matter where they were. To facilitate this and
+        keep conversations going between sessions, we also started an async community in Discord.
+      </p>
+      <p>
+        At the same time, our conversations were naturally expanding. While Domain-Driven Design has always
+        been an <strong>unbounded</strong> topic in the domain of software design — touching on everything
+        from technology to social science — we saw more discussions happening around the wider world of
+        systems and software design. This led to a new vision for our community. We've rebranded virtualDDD
+        and redesigned our platform to better support a wider global community.
+      </p>
+      <p>
+        Our focus is now on decentralising how knowledge is shared and making it easier to have more
+        sessions on a broader range of topics, while still centred on systems and software design for
+        solving complex business problems. We are always happy if active community members join us and help
+        us organise in any way. Feel free to <a href="https://discord.gg/tRJkcsFDKN">contact us in Discord</a>,
+        and see you online in our community and events!
+      </p>
+    </div>
+
+    {team.length > 0 && (
+      <section class="team">
+        <p class="eyebrow eyebrow--cyan">The team</p>
+        <div class="team-grid">
+          {team.map((o) => <OrganiserCard organiser={o} />)}
+        </div>
+      </section>
+    )}
+
+    <p class="ai-note">
+      Curious how we use AI? Read our <a href="/ai-usage-on-this-site/">AI usage on this site</a>.
+    </p>
+  </div>
+
+  <style>
+    .page { padding-block: var(--space-8) var(--space-16); }
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+
+    .page h1 { margin: 0 0 var(--space-8); }
+    .prose { max-width: 46rem; }
+    .prose h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+    .prose p { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); }
+    .prose strong { color: var(--color-text); }
+
+    .team { margin-top: var(--space-16); }
+    .team .eyebrow { margin-bottom: var(--space-6); }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-6); }
+    .team-grid :global(.org-photo) { aspect-ratio: 4 / 5; }
+
+    .ai-note { margin-top: var(--space-12); color: var(--color-text-muted); font-size: var(--text-sm); }
+  </style>
+</BaseLayout>
