@@ -45,8 +45,9 @@ const dateStr = d.publishedDate
   <article class="story wrap">
     <div class="s-head">
       <p class="back"><a href="/facilitating-archdes/">← All stories</a></p>
-      <span class="badge badge--type">Facilitating Stories</span>
+      <p class="eyebrow eyebrow--pink">Facilitating Stories</p>
       <h1>{d.title}</h1>
+      {d.authors.length > 0 && <p class="byline">by {d.authors.join(', ')}</p>}
       {videoEmbed ? (
         <div class="video">
           <iframe src={videoEmbed} title={d.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -62,23 +63,23 @@ const dateStr = d.publishedDate
         {iso && <p class="side-date"><time class="js-local" data-format="date" datetime={iso} data-iso={iso}>{dateStr}</time></p>}
         {d.authors.length > 0 && <p class="side-authors">{d.authors.join(', ')}</p>}
         {(d.youtube || d.podcast) && (
-          <p class="side-links">
-            {d.youtube && <a href={d.youtube}>Watch on YouTube ↗</a>}
-            {d.podcast && <a href={d.podcast}>Listen to the podcast ↗</a>}
-          </p>
+          <div class="side-links">
+            {d.youtube && <a class="btn btn--accent side-btn" href={d.youtube}>Watch on YouTube ↗</a>}
+            {d.podcast && <a class="btn btn--ghost side-btn" href={d.podcast}>Listen to the podcast ↗</a>}
+          </div>
         )}
       </div>
 
       {d.tags.length > 0 && (
         <div class="side-block">
-          <h3>Tags</h3>
+          <p class="eyebrow eyebrow--cyan">Tags</p>
           <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
         </div>
       )}
 
       {discussed.length > 0 && (
         <div class="side-block">
-          <h3>Discussed heuristics</h3>
+          <p class="eyebrow eyebrow--cyan">Discussed heuristics</p>
           <ul class="heur-list">{discussed.map((h) => <li>{h!.data.title}</li>)}</ul>
         </div>
       )}
@@ -87,36 +88,70 @@ const dateStr = d.publishedDate
     <div class="s-body">
       <div class="body"><Content /></div>
       <nav class="prevnext">
-        {prev ? <a href={`/facilitating-archdes/${prev.id}/`}>← {prev.data.title}</a> : <span />}
-        {next && <a class="pn-next" href={`/facilitating-archdes/${next.id}/`}>{next.data.title} →</a>}
+        {prev ? (
+          <a class="pn" href={`/facilitating-archdes/${prev.id}/`}>
+            <span class="pn-label">← Previous story</span>
+            <span class="pn-title">{prev.data.title}</span>
+          </a>
+        ) : <span />}
+        {next && (
+          <a class="pn pn-next" href={`/facilitating-archdes/${next.id}/`}>
+            <span class="pn-label">Next story →</span>
+            <span class="pn-title">{next.data.title}</span>
+          </a>
+        )}
       </nav>
     </div>
   </article>
 
   <style>
+    /* Brand eyebrow (shared with the index) */
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); margin-bottom: var(--space-3); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+
     .story { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
-    .back { font-size: var(--text-sm); margin-bottom: var(--space-3); }
-    .s-head h1 { margin: var(--space-3) 0 var(--space-6); }
+    .back { font-size: var(--text-sm); margin-bottom: var(--space-5); }
+    .s-head h1 { margin: 0 0 var(--space-3); }
+    .byline { color: var(--color-text-muted); margin: 0 0 var(--space-8); }
 
     .video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; box-shadow: var(--shadow); background: #000; }
     .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     .hero { width: 100%; box-shadow: var(--shadow); }
 
-    .side-card { background: var(--color-surface); padding: var(--space-6); }
-    .side-ep { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-accent-dark); margin: 0 0 var(--space-1); font-size: var(--text-sm); }
+    .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+    .side-ep { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-dark); margin: 0 0 var(--space-1); font-size: var(--text-sm); }
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
-    .side-authors { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
-    .side-links { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; font-size: var(--text-sm); }
-    .side-block { margin-top: var(--space-6); }
-    .side-block h3 { font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-muted); margin: 0 0 var(--space-3); }
+    .side-authors { color: var(--color-text-muted); margin: 0 0 var(--space-5); font-size: var(--text-sm); }
+    .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
+    .side-btn { width: 100%; justify-content: center; font-size: var(--text-sm); padding: var(--space-2) var(--space-4); }
+
+    .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-    .heur-list { margin: 0; padding-left: var(--space-4); font-size: var(--text-sm); }
+    .heur-list { margin: 0; padding-left: var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted); }
     .heur-list li { margin-bottom: var(--space-2); }
 
-    .body :global(h2) { margin-top: var(--space-8); }
-    .body :global(img) { margin: var(--space-4) 0; }
-    .prevnext { display: flex; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--color-border); font-family: var(--font-heading); font-weight: 600; }
-    .prevnext .pn-next { margin-left: auto; text-align: right; }
+    /* Article body — comfortable reading measure */
+    .body { max-width: 42rem; font-size: 1.05rem; }
+    .body :global(p) { line-height: 1.75; margin: 0 0 var(--space-5); }
+    .body :global(h2) { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+    .body :global(h3) { margin: var(--space-8) 0 var(--space-3); font-size: var(--text-xl); }
+    .body :global(ul), .body :global(ol) { margin: 0 0 var(--space-5); padding-left: var(--space-6); }
+    .body :global(li) { margin-bottom: var(--space-2); line-height: 1.7; }
+    .body :global(blockquote) { margin: var(--space-6) 0; padding: var(--space-2) 0 var(--space-2) var(--space-6); border-left: 3px solid var(--color-accent); color: var(--color-text-muted); font-style: italic; }
+    .body :global(strong) { color: var(--color-text); }
+    .body :global(img) { margin: var(--space-6) 0; width: 100%; }
+
+    .prevnext { display: flex; justify-content: space-between; gap: var(--space-8); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--color-border); }
+    .pn { display: flex; flex-direction: column; gap: var(--space-1); max-width: 20rem; color: var(--color-text); }
+    .pn:hover { text-decoration: none; }
+    .pn:hover .pn-title { color: var(--color-primary); }
+    .pn-label { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); }
+    .pn-title { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; transition: color 0.15s; }
+    .pn-next { margin-left: auto; text-align: right; }
 
     @media (min-width: 900px) {
       .story {
@@ -124,7 +159,7 @@ const dateStr = d.publishedDate
         grid-template-areas: "head side" "body side";
         grid-template-rows: auto 1fr;
         column-gap: var(--space-12);
-        row-gap: var(--space-6);
+        row-gap: var(--space-8);
         align-items: start;
       }
       .s-head { grid-area: head; }
