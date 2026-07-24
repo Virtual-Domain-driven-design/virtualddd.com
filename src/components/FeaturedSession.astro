@@ -8,51 +8,86 @@ interface Props {
 }
 const { session, eyebrow } = Astro.props;
 const d = session.data;
-const dateStr = new Date(d.datetime).toLocaleString('en-GB', {
-  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
+const iso = new Date(d.datetime).toISOString();
+// Server fallback (replaced client-side with the visitor's local time).
+const fallback = new Date(d.datetime).toLocaleString('en-GB', {
+  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
 });
 ---
 
 <section class="feat">
   <div class="feat-card">
-    <div class="feat-img">
-      {eyebrow && <span class="feat-label">{eyebrow}</span>}
-      {d.featuredImage ? <Image src={d.featuredImage} alt="" width={720} /> : <div class="feat-ph"></div>}
+    <div class="feat-media">
+      {d.featuredImage ? <Image src={d.featuredImage} alt="" width={900} /> : <div class="feat-ph"></div>}
     </div>
-    <div class="feat-body">
-      <div class="badges">
-        {d.typeOfSession && <span class="badge badge--type">{d.typeOfSession}</span>}
-        {d.level?.map((l) => <span class="badge">{l}</span>)}
-      </div>
-      <h2><a href={`/sessions/${session.id}/`}>{d.title}</a></h2>
-      <p class="feat-date">{dateStr}</p>
-      {d.organiser && <p class="feat-host">Hosted by {d.organiser}</p>}
-      <div class="feat-cta">
-        {(d.humantix || d.meet) && <a class="btn btn--accent" href={d.humantix ?? d.meet}>RSVP to attend</a>}
-        {d.meet && <a class="btn btn--ghost" href={d.meet}>Google Meet</a>}
-        <a class="btn" href={`/sessions/${session.id}/`}>More info →</a>
+    <div class="feat-overlay">
+      {eyebrow && <span class="feat-label">{eyebrow}</span>}
+      <div class="feat-content">
+        <div class="badges">
+          {d.typeOfSession && <span class="badge badge--type">{d.typeOfSession}</span>}
+          {d.level?.map((l) => <span class="badge">{l}</span>)}
+        </div>
+        <h2><a href={`/sessions/${session.id}/`}>{d.title}</a></h2>
+        <p class="feat-when"><time class="js-localtime" datetime={iso} data-iso={iso}>{fallback}</time></p>
+        <p class="feat-countdown js-countdown" data-iso={iso}></p>
+        {d.organiser && <p class="feat-host">Hosted by {d.organiser}</p>}
+        <div class="feat-cta">
+          {d.humantix && <a class="btn btn--accent" href={d.humantix}>RSVP</a>}
+          {d.meet && <a class="btn" href={d.meet}>Join Google Meet</a>}
+          {d.video && <a class="btn btn--ghost" href={d.video}>Watch livestream</a>}
+          <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .feat { margin-bottom: var(--space-16); container-type: inline-size; }
-  .feat-card { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-  .feat-img { position: relative; aspect-ratio: 16 / 9; }
-  .feat-label { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 1; background: var(--color-accent); color: #fff; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-sm); padding: 0.3em 0.8em; }
-  .feat-img :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .feat { margin-bottom: var(--space-16); }
+  .feat-card { position: relative; overflow: hidden; min-height: 30rem; display: flex; box-shadow: var(--shadow); background: var(--color-surface); }
+  .feat-media { position: absolute; inset: 0; }
+  .feat-media :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .feat-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
-  .feat-body { padding: var(--space-8); }
-  .feat-body .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
-  .feat-body h2 { font-size: var(--text-3xl); margin: 0 0 var(--space-3); }
-  .feat-body h2 a { color: var(--color-text); }
-  .feat-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
-  .feat-host { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
-  .feat-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
-
-  @container (min-width: 46rem) {
-    .feat-card { grid-template-columns: 1.1fr 1fr; }
-    .feat-img { aspect-ratio: auto; }
+  .feat-overlay {
+    position: relative; z-index: 1; width: 100%;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: var(--space-6);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.8) 38%, rgba(0, 0, 0, 0.35) 68%, rgba(0, 0, 0, 0.15) 100%);
   }
+  .feat-label { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 2; background: var(--color-accent); color: #fff; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: var(--text-sm); padding: 0.3em 0.8em; }
+
+  .feat-content .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
+  .feat-content h2 { font-size: var(--text-2xl); margin: 0 0 var(--space-3); }
+  .feat-content h2 a { color: #fff; }
+  .feat-when { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); color: #fff; }
+  .feat-countdown { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-1); letter-spacing: 0.03em; }
+  .feat-countdown:empty { display: none; }
+  .feat-host { color: rgba(255, 255, 255, 0.75); margin: 0 0 var(--space-6); }
+  .feat-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 </style>
+
+<script>
+  const fmt: Intl.DateTimeFormatOptions = {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
+  };
+  document.querySelectorAll<HTMLElement>('.js-localtime').forEach((el) => {
+    const iso = el.dataset.iso;
+    if (iso) el.textContent = new Date(iso).toLocaleString(undefined, fmt);
+  });
+  document.querySelectorAll<HTMLElement>('.js-countdown').forEach((el) => {
+    const iso = el.dataset.iso;
+    if (!iso) return;
+    const target = new Date(iso).getTime();
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) { el.textContent = 'Happening now'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.textContent = `Starts in ${d}d ${h}h ${m}m ${s}s`;
+    };
+    tick();
+    setInterval(tick, 1000);
+  });
+</script>
