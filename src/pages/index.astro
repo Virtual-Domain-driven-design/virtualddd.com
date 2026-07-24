@@ -59,9 +59,7 @@ try {
     <div class="wrap">
       <h1>Learn software &amp; systems design, together.</h1>
       <p class="home-lead">
-        Virtual DDD is a community-driven platform for people who want deeper knowledge of
-        Domain-Driven Design, software architecture, and resilient systems — through live online
-        sessions, open spaces, and shared heuristics.
+        The community for Domain-Driven Design, software architecture &amp; systems design.
       </p>
       <div class="hero-cta">
         <a class="btn btn--accent" href={DISCORD}>Join our Discord</a>
@@ -71,8 +69,32 @@ try {
   </section>
 
   <div class="wrap">
-    {upcoming && <FeaturedSession session={upcoming} eyebrow="Next session" />}
+    <section class="next-section">
+      {upcoming && (
+        <div class="ns-session"><FeaturedSession session={upcoming} eyebrow="Next session" /></div>
+      )}
+      <aside class="ns-about">
+        <h2>Who we are</h2>
+        <p>
+          A community-driven platform for people who want deeper knowledge of systems and software
+          design for solving complex business problems. We began with Domain-Driven Design and now
+          explore a wider range of topics for designing and building resilient systems — sharing
+          knowledge in a decentralised way, so every member can contribute and learn.
+        </p>
+        <a class="btn btn--ghost" href="/about-us/">More about us →</a>
+      </aside>
+    </section>
+  </div>
 
+  <section class="discord-band">
+    <div class="wrap">
+      <h2>Join our Discord community</h2>
+      <p>The community lives on Discord — talks, questions and connections all week long.</p>
+      <a class="btn discord-btn" href={DISCORD}>Join</a>
+    </div>
+  </section>
+
+  <div class="wrap">
     <section class="latest-social">
       <div class="ls-col">
         <div class="section-head">
@@ -143,14 +165,6 @@ try {
     )}
   </div>
 
-  <section class="discord-band">
-    <div class="wrap">
-      <h2>Join the conversation</h2>
-      <p>The community lives on Discord — talks, questions and connections all week long.</p>
-      <a class="btn discord-btn" href={DISCORD}>Join our Discord</a>
-    </div>
-  </section>
-
   <style>
     .home-hero { background: radial-gradient(120% 140% at 15% 0%, color-mix(in srgb, var(--color-primary) 22%, var(--color-bg)), var(--color-bg) 60%); padding-block: var(--space-16); margin-top: calc(-1 * var(--space-12)); }
     .home-hero h1 { font-size: clamp(2.4rem, 6vw, var(--text-4xl)); max-width: 18ch; }
@@ -158,6 +172,15 @@ try {
     .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
 
     .home-section { margin-block: var(--space-16); }
+
+    /* Next session (3/5) + who-we-are (2/5) */
+    .next-section { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-12) 0; align-items: center; }
+    .next-section > * { min-width: 0; }
+    @media (min-width: 900px) { .next-section { grid-template-columns: 3fr 2fr; gap: var(--space-12); } }
+    .ns-session :global(.feat) { margin-bottom: 0; }
+    .ns-about h2 { margin-top: 0; }
+    .ns-about p { color: var(--color-text-muted); margin-bottom: var(--space-6); }
+
     .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
     .section-head h2 { margin: 0; }
     .section-head a { font-family: var(--font-heading); font-weight: 600; }
