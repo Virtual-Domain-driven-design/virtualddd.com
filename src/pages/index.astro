@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FeaturedSession from '../components/FeaturedSession.astro';
 import SessionCard from '../components/SessionCard.astro';
+import StoryCard from '../components/StoryCard.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 
@@ -17,11 +18,14 @@ const latest = allSessions
   .slice(0, 8);
 const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
 
-const explore = [
-  { href: '/sessions/', title: 'Online sessions', text: 'Live meetups — talks, debates, fireside chats and hands-on modelling.' },
-  { href: '/open-space/', title: 'Open Space', text: 'Participant-led gatherings where the agenda emerges from the room.' },
-  { href: '/facilitating-archdes/', title: 'Facilitating Stories', text: 'Real stories on facilitating software architecture & design.' },
-  { href: '/heuristics/', title: 'Heuristics', text: 'Curated rules of thumb for designing better software and systems.' },
+const stories = (await getCollection('stories'))
+  .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
+  .slice(0, 8);
+
+const heurTypes = [
+  { href: '/heuristics/design-heuristics/', cls: 'heur-design', title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.' },
+  { href: '/heuristics/guiding-heuristics/', cls: 'heur-guiding', title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.' },
+  { href: '/heuristics/value-based-heuristics/', cls: 'heur-value', title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design, the world and the way we work.' },
 ];
 const DISCORD = 'https://discord.gg/tRJkcsFDKN';
 const BSKY_HANDLE = 'virtualddd.com';
@@ -91,13 +95,15 @@ try {
           <h2>Latest sessions</h2>
           <a href="/sessions/">All →</a>
         </div>
-        <div class="solo" id="solo">
-          <div class="solo-track">
-            {latest.map((s) => <div class="solo-slide"><SessionCard session={s} /></div>)}
+        <div class="solo-carousel">
+          <div class="solo">
+            <div class="solo-track">
+              {latest.map((s) => <div class="solo-slide"><SessionCard session={s} /></div>)}
+            </div>
           </div>
-        </div>
-        <div class="solo-dots" id="solo-dots">
-          {latest.map((_, i) => <button type="button" data-i={i} aria-label={`Session ${i + 1}`}></button>)}
+          <div class="solo-dots">
+            {latest.map((_, i) => <button type="button" data-i={i} aria-label={`Session ${i + 1}`}></button>)}
+          </div>
         </div>
       </div>
 
@@ -121,16 +127,30 @@ try {
       </div>
     </section>
 
-    <section class="home-section">
-      <h2>Explore</h2>
-      <div class="explore-grid">
-        {explore.map((e) => (
-          <a class="explore" href={e.href}>
-            <h3>{e.title}</h3>
-            <p>{e.text}</p>
-            <span class="explore-arrow">→</span>
-          </a>
-        ))}
+    <section class="heur-stories">
+      <div class="hs-col">
+        <div class="section-head"><h2>Heuristics</h2><a href="/heuristics/">All →</a></div>
+        <div class="heur-links">
+          {heurTypes.map((h) => (
+            <a class:list={['heur-card', h.cls]} href={h.href}>
+              <h3>{h.title} ››</h3>
+              <p>{h.text}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="hs-col">
+        <div class="section-head"><h2>Latest stories</h2><a href="/facilitating-archdes/">All →</a></div>
+        <div class="solo-carousel">
+          <div class="solo">
+            <div class="solo-track">
+              {stories.map((s) => <div class="solo-slide"><StoryCard story={s} /></div>)}
+            </div>
+          </div>
+          <div class="solo-dots">
+            {stories.map((_, i) => <button type="button" data-i={i} aria-label={`Story ${i + 1}`}></button>)}
+          </div>
+        </div>
       </div>
     </section>
 
@@ -193,12 +213,20 @@ try {
     .bpost-text { margin: 0 0 var(--space-2); font-size: var(--text-sm); line-height: 1.5; white-space: pre-wrap; }
     .bpost-date { margin: 0; font-family: var(--font-heading); color: var(--color-text-muted); font-size: var(--text-sm); }
 
-    .explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
-    .explore { position: relative; display: block; background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); color: var(--color-text); border: 1px solid transparent; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-    .explore:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); text-decoration: none; }
-    .explore h3 { margin: 0 0 var(--space-2); }
-    .explore p { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
-    .explore-arrow { color: var(--color-primary); font-family: var(--font-heading); font-weight: 700; position: absolute; top: var(--space-4); right: var(--space-6); }
+    /* Heuristics column + latest stories */
+    .heur-stories { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-16); align-items: start; }
+    .hs-col { min-width: 0; }
+    @media (min-width: 900px) { .heur-stories { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
+    .heur-links { display: flex; flex-direction: column; gap: var(--space-4); }
+    .heur-card { position: relative; display: block; padding: var(--space-6); min-height: 6.5rem; color: #fff; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; }
+    .heur-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1)); }
+    .heur-card > * { position: relative; z-index: 1; }
+    .heur-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+    .heur-design { background: linear-gradient(135deg, #0e7490, #1e3a8a); }
+    .heur-guiding { background: linear-gradient(135deg, #6d28d9, #db2777); }
+    .heur-value { background: linear-gradient(135deg, #c2410c, #7e22ce); }
+    .heur-card h3 { color: #fff; margin: 0 0 var(--space-1); font-size: var(--text-xl); }
+    .heur-card p { color: rgba(255, 255, 255, 0.92); margin: 0; font-size: var(--text-sm); }
 
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-6); }
     .team-card { text-align: center; }
@@ -218,11 +246,12 @@ try {
   </style>
 
   <script>
-    const solo = document.getElementById('solo');
-    const track = solo?.querySelector('.solo-track') as HTMLElement | null;
-    const dots = Array.from(document.querySelectorAll('#solo-dots button')) as HTMLButtonElement[];
-    if (solo && track) {
+    document.querySelectorAll<HTMLElement>('.solo-carousel').forEach((car) => {
+      const track = car.querySelector<HTMLElement>('.solo-track');
+      const dots = Array.from(car.querySelectorAll<HTMLButtonElement>('.solo-dots button'));
+      if (!track) return;
       const n = track.children.length;
+      if (!n) return;
       let i = 0;
       let timer: ReturnType<typeof setInterval>;
       const set = (k: number) => {
@@ -233,10 +262,10 @@ try {
       const start = () => { timer = setInterval(() => set(i + 1), 10000); };
       const stop = () => clearInterval(timer);
       dots.forEach((d) => d.addEventListener('click', () => { stop(); set(Number(d.dataset.i)); start(); }));
-      solo.addEventListener('mouseenter', stop);
-      solo.addEventListener('mouseleave', start);
+      car.addEventListener('mouseenter', stop);
+      car.addEventListener('mouseleave', start);
       set(0);
       start();
-    }
+    });
   </script>
 </BaseLayout>
