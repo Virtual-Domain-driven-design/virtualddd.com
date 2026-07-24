@@ -1,0 +1,46 @@
+/* Design tokens — extracted from the live virtualddd.com brand and confirmed.
+   Brand: cyan primary + pink accent, Rajdhani headings over Poppins body. */
+:root {
+  /* Brand colours */
+  --color-primary: #00b6e7;
+  --color-primary-dark: #0091ba;
+  --color-accent: #e559a0;
+  --color-accent-dark: #c53d84;
+
+  /* Neutrals */
+  --color-text: #212121;
+  --color-text-muted: #5c5c5c;
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f4;
+  --color-border: #e4e4e4;
+
+  /* Typography */
+  --font-heading: 'Rajdhani', system-ui, -apple-system, sans-serif;
+  --font-body: 'Poppins', system-ui, -apple-system, sans-serif;
+
+  /* Type scale (~1.25 major third) */
+  --text-sm: 0.8rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.95rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3.2rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Layout */
+  --content-width: 46rem;
+  --wide-width: 72rem;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.06);
+}

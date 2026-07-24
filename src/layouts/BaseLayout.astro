@@ -1,0 +1,111 @@
+---
+import '@fontsource/rajdhani/500.css';
+import '@fontsource/rajdhani/600.css';
+import '@fontsource/rajdhani/700.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-virtualddd.png';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+
+const nav = [
+  { href: '/sessions/', label: 'Online sessions' },
+  { href: '/facilitating-archdes/', label: 'Facilitating Stories' },
+  { href: '/open-space/', label: 'Open Space' },
+  { href: '/heuristics/', label: 'Heuristics' },
+  { href: '/ddd-crew/', label: 'ddd crew' },
+  { href: '/about/', label: 'About us' },
+];
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a href="/" class="brand"><Image src={logo} alt="Virtual DDD" width={140} /></a>
+        <nav class="site-nav">
+          {nav.map((n) => (
+            <a href={n.href} class:list={[{ current: path.startsWith(n.href) }]}>{n.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-inner">
+        <p><strong>Virtual DDD</strong> — a community exploring Domain-Driven Design, software architecture &amp; design.</p>
+        <p class="footer-links">
+          <a href="/code-of-conduct/">Code of Conduct</a>
+          <a href="/privacy-policy/">Privacy</a>
+        </p>
+      </div>
+    </footer>
+
+    <style>
+      .site-header {
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-bg);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-6);
+        padding-block: var(--space-3);
+        flex-wrap: wrap;
+      }
+      .brand :global(img) { height: 44px; width: auto; }
+      .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-4);
+        font-family: var(--font-heading);
+        font-weight: 600;
+        font-size: var(--text-base);
+      }
+      .site-nav a {
+        color: var(--color-text);
+        padding-bottom: 2px;
+        border-bottom: 2px solid transparent;
+      }
+      .site-nav a:hover { color: var(--color-primary-dark); text-decoration: none; }
+      .site-nav a.current { border-bottom-color: var(--color-accent); color: var(--color-primary-dark); }
+
+      main { min-height: 60vh; padding-block: var(--space-12); }
+
+      .site-footer {
+        margin-top: var(--space-16);
+        border-top: 1px solid var(--color-border);
+        background: var(--color-surface);
+        padding-block: var(--space-8);
+        font-size: var(--text-sm);
+        color: var(--color-text-muted);
+      }
+      .footer-links { display: flex; gap: var(--space-4); }
+    </style>
+  </body>
+</html>

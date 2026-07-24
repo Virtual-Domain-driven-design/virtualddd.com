@@ -1,34 +1,143 @@
 ---
-// PLACEHOLDER route — proves session content renders. Real design is the
-// Phase 5 section-by-section loop; do not treat this markup as the design.
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
   const sessions = await getCollection('sessions');
-  return sessions.map((session) => ({ params: { slug: session.id }, props: { session } }));
+  return sessions.map((session) => ({ params: { slug: session.id }, props: { session, sessions } }));
 }
 
-const { session } = Astro.props;
+const { session, sessions } = Astro.props;
 const { Content } = await render(session);
 const d = session.data;
+
+// Discussed heuristics — resolve defensively (skip any not synced/published).
+const heuristics = await getCollection('heuristics');
+const heurById = new Map(heuristics.map((h) => [h.id, h]));
+const discussed = d.curatedHeuristics.map((r) => heurById.get(r.id)).filter(Boolean);
+
+// Prev / next by date.
+const ordered = [...sessions].sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime));
+const idx = ordered.findIndex((s) => s.id === session.id);
+const prev = ordered[idx - 1];
+const next = ordered[idx + 1];
+
+const isUpcoming = d.status === 'Published' && new Date(d.datetime) > new Date();
+const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{d.seoTitle ?? d.title} — Virtual DDD</title>
-    {d.seoMetadescription && <meta name="description" content={d.seoMetadescription} />}
-  </head>
-  <body>
-    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
-      <p><a href="/sessions/">← All sessions</a></p>
+<BaseLayout title={`${d.seoTitle ?? d.title} — Virtual DDD`} description={d.seoMetadescription}>
+  <article class="session wrap">
+    <!-- head: title + hero (spans left column) -->
+    <div class="s-head">
+      <p class="back"><a href="/sessions/">← All sessions</a></p>
+      <div class="badges">
+        {d.typeOfSession && <span class="badge badge--type">{d.typeOfSession}</span>}
+        {d.level?.map((l) => <span class="badge">{l}</span>)}
+      </div>
       <h1>{d.title}</h1>
-      <p>{new Date(d.datetime).toLocaleDateString()} · {d.typeOfSession}{d.organiser ? ` · ${d.organiser}` : ''}</p>
-      {d.featuredImage && <Image src={d.featuredImage} alt={d.title} width={800} style="max-width:100%;height:auto;" />}
-      {d.video && <p><a href={d.video}>▶ Watch the recording</a></p>}
-      <article><Content /></article>
-    </main>
-  </body>
-</html>
+      {d.featuredImage && <Image class="hero" src={d.featuredImage} alt={d.title} width={920} />}
+    </div>
+
+    <!-- sidebar: meta + CTA + tags + heuristics -->
+    <aside class="s-side">
+      <div class="side-card">
+        <p class="side-date">{dateStr}</p>
+        {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
+        <div class="side-cta">
+          {isUpcoming && (d.humantix || d.meet) && <a class="btn btn--accent" href={d.humantix ?? d.meet}>RSVP to attend</a>}
+          {d.video && <a class="btn" href={d.video}>▶ Watch the recording</a>}
+          {d.podcastPlayer && <a class="btn btn--ghost" href={d.podcastPlayer}>Listen to the podcast</a>}
+        </div>
+      </div>
+
+      {d.tags.length > 0 && (
+        <div class="side-block">
+          <h3>Tags</h3>
+          <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+        </div>
+      )}
+
+      {discussed.length > 0 && (
+        <div class="side-block">
+          <h3>Discussed heuristics</h3>
+          <ul class="heur-list">
+            {discussed.map((h) => <li>{h!.data.title}</li>)}
+          </ul>
+        </div>
+      )}
+    </aside>
+
+    <!-- body: description + organiser + prev/next -->
+    <div class="s-body">
+      <div class="body"><Content /></div>
+
+      {d.organiser && (
+        <section class="card organiser">
+          <h2>About {d.organiser}</h2>
+          <p>Hosted by {d.organiser}.</p>
+        </section>
+      )}
+
+      <nav class="prevnext">
+        {prev ? <a href={`/sessions/${prev.id}/`}>← {prev.data.title}</a> : <span />}
+        {next && <a class="pn-next" href={`/sessions/${next.id}/`}>{next.data.title} →</a>}
+      </nav>
+    </div>
+  </article>
+
+  <style>
+    .session { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+    .back { font-size: var(--text-sm); margin-bottom: var(--space-3); }
+    .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
+    .s-head h1 { margin-bottom: var(--space-6); }
+    .hero { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+    /* Sidebar */
+    .side-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); }
+    .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
+    .side-org { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
+    .side-org strong { color: var(--color-accent-dark); }
+    .side-cta { display: flex; flex-direction: column; gap: var(--space-2); }
+    .side-cta .btn { justify-content: center; }
+    .side-block { margin-top: var(--space-6); }
+    .side-block h3 {
+      font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--color-text-muted); margin: 0 0 var(--space-3);
+    }
+    .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .heur-list { margin: 0; padding-left: var(--space-4); font-size: var(--text-sm); }
+    .heur-list li { margin-bottom: var(--space-2); }
+
+    /* Body */
+    .body :global(h2) { margin-top: var(--space-8); }
+    .body :global(img) { border-radius: var(--radius-sm); margin: var(--space-4) 0; }
+    .card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
+    .card h2 { margin-top: 0; }
+    .prevnext {
+      display: flex; justify-content: space-between; gap: var(--space-4);
+      margin-top: var(--space-12); padding-top: var(--space-6);
+      border-top: 1px solid var(--color-border);
+      font-family: var(--font-heading); font-weight: 600;
+    }
+    .prevnext .pn-next { margin-left: auto; text-align: right; }
+
+    /* Two-column from 900px: head + body stack in the left column,
+       sidebar spans the right column and sticks. DOM order (head, side, body)
+       keeps the CTA directly under the title on mobile. */
+    @media (min-width: 900px) {
+      .session {
+        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-areas: "head side" "body side";
+        grid-template-rows: auto 1fr;
+        column-gap: var(--space-12);
+        row-gap: var(--space-6);
+        align-items: start;
+      }
+      .s-head { grid-area: head; }
+      .s-body { grid-area: body; }
+      .s-side { grid-area: side; position: sticky; top: 5.5rem; align-self: start; }
+    }
+  </style>
+</BaseLayout>
