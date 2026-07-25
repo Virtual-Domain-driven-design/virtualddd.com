@@ -1,25 +1,140 @@
 ---
-// PLACEHOLDER open-spaces index.
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-const items = (await getCollection('openSpaces')).sort(
+import { Image } from 'astro:assets';
+
+const all = (await getCollection('openSpaces')).sort(
   (a, b) => +new Date(b.data.date) - +new Date(a.data.date),
 );
+const now = Date.now();
+const upcoming = all
+  .filter((s) => s.data.status === 'Published' && +new Date(s.data.date) > now)
+  .sort((a, b) => +new Date(a.data.date) - +new Date(b.data.date));
+const past = all.filter((s) => !(s.data.status === 'Published' && +new Date(s.data.date) > now));
+
+const shortDate = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+function excerpt(md: string, fallback = '', max = 190): string {
+  let text = (md ?? '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^\s*#{1,6}\s+.*$/gm, ' ')
+    .replace(/[#>*_`~]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!text) text = fallback;
+  if (text.length <= max) return text;
+  return text.slice(0, max).replace(/\s+\S*$/, '') + '…';
+}
+
+const cards = past.map((s) => ({
+  entry: s,
+  iso: new Date(s.data.date).toISOString(),
+  fallback: shortDate(new Date(s.data.date)),
+  preview: excerpt(s.body ?? '', s.data.seoMetadescription ?? ''),
+}));
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Open spaces — Virtual DDD</title>
-  </head>
-  <body>
-    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
-      <h1>Open spaces ({items.length})</h1>
-      <ul>
-        {items.map((s) => (
-          <li><a href={`/open-space/${s.id}/`}>{s.data.title}</a></li>
-        ))}
-      </ul>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  title="Open Space — Virtual DDD"
+  description="Online Open Spaces from Virtual DDD — participant-led unconferences where the community sets the agenda and explores software design together."
+>
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow eyebrow--pink">Open Space</p>
+      <h1>Where the community sets the agenda</h1>
+      <p class="lead">
+        Our Open Spaces are participant-led online unconferences. There are no fixed talks — everyone who
+        joins can propose a topic, and together the room decides what to explore. It's the "hallway track"
+        of a conference turned into the whole event: conversations go wherever the attendees take them.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    {upcoming.length > 0 && (
+      <section class="up">
+        <p class="eyebrow eyebrow--cyan">Upcoming</p>
+        <div class="grid">
+          {upcoming.map((s) => {
+            const d = s.data;
+            const iso = new Date(d.date).toISOString();
+            return (
+              <a class="os-card is-up" href={`/open-space/${s.id}/`}>
+                <div class="os-thumb">
+                  {d.featuredImage ? <Image src={d.featuredImage} alt="" width={640} /> : <div class="os-ph"></div>}
+                </div>
+                <div class="os-body">
+                  <p class="os-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{shortDate(new Date(d.date))}</time></p>
+                  <h3 class="os-title">{d.title}</h3>
+                  <span class="os-more">RSVP &amp; details →</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <section class="archive">
+      <p class="eyebrow eyebrow--cyan">Past open spaces</p>
+      <div class="grid">
+        {cards.map(({ entry, iso, fallback, preview }) => {
+          const d = entry.data;
+          return (
+            <a class="os-card" href={`/open-space/${entry.id}/`}>
+              <div class="os-thumb">
+                {d.featuredImage ? <Image src={d.featuredImage} alt="" width={640} loading="lazy" /> : <div class="os-ph"></div>}
+              </div>
+              <div class="os-body">
+                <p class="os-date"><time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{fallback}</time></p>
+                <h3 class="os-title">{d.title}</h3>
+                {preview && <p class="os-excerpt">{preview}</p>}
+                <span class="os-more">Read more →</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+
+    .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
+    .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
+      radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
+      radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
+    .hero-inner { position: relative; }
+    .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-6); }
+    .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0; }
+
+    .up { margin-top: var(--space-16); }
+    .archive { margin-block: var(--space-16); }
+    .grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 620px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .os-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .os-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
+    .os-card:hover .os-more { color: var(--color-primary); }
+    .os-card.is-up { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border)); }
+    .os-thumb { aspect-ratio: 16 / 9; background: var(--color-surface); }
+    .os-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .os-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
+    .os-body { padding: var(--space-5) var(--space-6) var(--space-6); display: flex; flex-direction: column; flex: 1; }
+    .os-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+    .os-title { font-size: var(--text-xl); margin: 0; line-height: 1.2; }
+    .os-excerpt { color: var(--color-text-muted); margin: var(--space-3) 0 0; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .os-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-4); transition: color 0.15s; }
+  </style>
+</BaseLayout>

@@ -1,33 +1,177 @@
 ---
-// PLACEHOLDER route — real design is the Phase 5 loop. URL: /open-space/<slug>/
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SideExtras from '../../components/SideExtras.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
   const items = await getCollection('openSpaces');
-  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry, items } }));
 }
 
-const { entry } = Astro.props;
+const { entry, items } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
+
+function youtubeEmbed(url?: string): string | null {
+  if (!url) return null;
+  let m: RegExpMatchArray | null;
+  let id: string | undefined;
+  if ((m = url.match(/youtube\.com\/embed\/([^?/&]+)/))) id = m[1];
+  else if ((m = url.match(/youtu\.be\/([^?/&]+)/))) id = m[1];
+  else if ((m = url.match(/youtube\.com\/live\/([^?/&]+)/))) id = m[1];
+  else if ((m = url.match(/[?&]v=([^&]+)/))) id = m[1];
+  return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+}
+const videoEmbed = youtubeEmbed(d.video) ?? (d.video?.includes('/embed/') ? d.video : null);
+// Only embed podcast players we know render as an iframe (captivate). Libsyn oembed
+// endpoints in the legacy data aren't real players, so skip them.
+const podcastEmbed = d.podcast?.includes('player.captivate.fm') ? d.podcast : null;
+
+const isUpcoming = d.status === 'Published' && new Date(d.date) > new Date();
+const iso = new Date(d.date).toISOString();
+const dateStr = new Date(d.date).toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+
+// Prev / next by date.
+const ordered = [...items].sort((a, b) => +new Date(a.data.date) - +new Date(b.data.date));
+const idx = ordered.findIndex((s) => s.id === entry.id);
+const prev = ordered[idx - 1];
+const next = ordered[idx + 1];
+
+// Latest open spaces for the sidebar (most recent, excluding this one).
+const short = (dt: Date) => dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const latest = [...items]
+  .filter((s) => s.id !== entry.id)
+  .sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date))
+  .slice(0, 3)
+  .map((s) => ({
+    href: `/open-space/${s.id}/`,
+    title: s.data.title,
+    img: s.data.featuredImage,
+    iso: new Date(s.data.date).toISOString(),
+    fallback: short(new Date(s.data.date)),
+  }));
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{d.seoTitle ?? d.title} — Virtual DDD</title>
-    {d.seoMetadescription && <meta name="description" content={d.seoMetadescription} />}
-  </head>
-  <body>
-    <main style="max-width: 42rem; margin: 2rem auto; padding: 0 1rem;">
-      <p><a href="/open-space/">← All open spaces</a></p>
+<BaseLayout title={`${d.seoTitle ?? d.title} — Virtual DDD`} description={d.seoMetadescription}>
+  <article class="os wrap">
+    <div class="s-head">
+      <p class="back"><a href="/open-space/">← All open spaces</a></p>
+      <p class="eyebrow eyebrow--pink">Open Space</p>
       <h1>{d.title}</h1>
-      <p>{new Date(d.date).toLocaleDateString()}</p>
-      {d.featuredImage && <Image src={d.featuredImage} alt={d.title} width={800} style="max-width:100%;height:auto;" />}
-      {d.video && <p><a href={d.video}>▶ Watch the recording</a></p>}
-      <article><Content /></article>
-    </main>
-  </body>
-</html>
+      <p class="os-when"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
+
+      {isUpcoming && (d.tickets || d.meetup) && (
+        <div class="cta">
+          {d.tickets && <a class="btn btn--accent" href={d.tickets}>Get tickets</a>}
+          {d.meetup && <a class="btn btn--ghost" href={d.meetup}>Join on Meetup</a>}
+        </div>
+      )}
+
+      {videoEmbed ? (
+        <div class="video">
+          <iframe src={videoEmbed} title={d.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      ) : d.featuredImage ? (
+        <Image class="hero" src={d.featuredImage} alt={d.title} width={920} />
+      ) : null}
+
+      {podcastEmbed && (
+        <iframe class="podcast" src={podcastEmbed} title="Podcast player" loading="lazy" width="100%" height="170"></iframe>
+      )}
+    </div>
+
+    <aside class="s-side">
+      {(d.miro || d.meetup || d.tickets) && (
+        <div class="side-card">
+          <p class="side-links">
+            {d.tickets && <a href={d.tickets}>Tickets ↗</a>}
+            {d.meetup && <a href={d.meetup}>Meetup event ↗</a>}
+            {d.miro && <a href={d.miro}>Miro board ↗</a>}
+          </p>
+        </div>
+      )}
+
+      {d.tags.length > 0 && (
+        <div class="side-block">
+          <p class="eyebrow eyebrow--cyan">Tags</p>
+          <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+        </div>
+      )}
+
+      <SideExtras latest={latest} latestLabel="More open spaces" latestAllHref="/open-space/" />
+    </aside>
+
+    <div class="s-body">
+      <div class="body"><Content /></div>
+      <nav class="prevnext">
+        {prev ? (
+          <a class="pn" href={`/open-space/${prev.id}/`}>
+            <span class="pn-label">← Previous</span>
+            <span class="pn-title">{prev.data.title}</span>
+          </a>
+        ) : <span />}
+        {next && (
+          <a class="pn pn-next" href={`/open-space/${next.id}/`}>
+            <span class="pn-label">Next →</span>
+            <span class="pn-title">{next.data.title}</span>
+          </a>
+        )}
+      </nav>
+    </div>
+  </article>
+
+  <style>
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); margin-bottom: var(--space-3); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+
+    .os { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+    .back { font-size: var(--text-sm); margin-bottom: var(--space-4); }
+    .s-head h1 { margin: 0 0 var(--space-3); }
+    .os-when { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); color: var(--color-text); margin: 0 0 var(--space-6); }
+    .cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); }
+
+    .video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; box-shadow: var(--shadow); background: #000; }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .hero { width: 100%; box-shadow: var(--shadow); }
+    .podcast { display: block; width: 100%; border: 0; margin-top: var(--space-4); }
+
+    .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+    .side-card .side-links { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
+    .side-block { margin-top: var(--space-8); }
+    .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+    .body { max-width: 42rem; font-size: 1.05rem; }
+    .body :global(p) { line-height: 1.75; margin: 0 0 var(--space-5); }
+    .body :global(h2) { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+    .body :global(ul), .body :global(ol) { margin: 0 0 var(--space-5); padding-left: var(--space-6); }
+    .body :global(a) { word-break: break-word; }
+    .body :global(img) { margin: var(--space-6) 0; width: 100%; }
+
+    .prevnext { display: flex; justify-content: space-between; gap: var(--space-8); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--color-border); }
+    .pn { display: flex; flex-direction: column; gap: var(--space-1); max-width: 20rem; color: var(--color-text); }
+    .pn:hover { text-decoration: none; }
+    .pn:hover .pn-title { color: var(--color-primary); }
+    .pn-label { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); }
+    .pn-title { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; transition: color 0.15s; }
+    .pn-next { margin-left: auto; text-align: right; }
+
+    @media (min-width: 900px) {
+      .os {
+        grid-template-columns: minmax(0, 1fr) 19rem;
+        grid-template-areas: "head side" "body side";
+        grid-template-rows: auto 1fr;
+        column-gap: var(--space-12);
+        row-gap: var(--space-8);
+        align-items: start;
+      }
+      .s-head { grid-area: head; }
+      .s-body { grid-area: body; }
+      .s-side { grid-area: side; position: sticky; top: 5.5rem; align-self: start; }
+    }
+  </style>
+</BaseLayout>
