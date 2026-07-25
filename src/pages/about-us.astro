@@ -66,43 +66,43 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
       </div>
     </section>
 
-    <!-- Decentralising knowledge: heading + two columns -->
-    <section class="about-decentral">
-      <h2>Decentralising knowledge and expanding our focus</h2>
-      <div class="ad-grid">
-        <div class="ad-col">
-          <div class="ad-img"><Image src={decentral1} alt="A Virtual DDD online Open Space gather.town space" width={560} /></div>
-          <p>
-            Over the years after the pandemic, we started to experiment with new ways to recreate the
-            atmosphere we loved at in-person conferences. This led us to host online Open Spaces and even a
-            global DDD day, which mixed online sessions with live streams from in-person events. While our
-            core group of organisers was based in Europe, we noticed people from all over the world were
-            joining in at times that weren't ideal for them. It so happened that one of our active community
-            members, Andrea, moved from Europe to New Zealand, which inspired us to think differently. We
-            started experimenting with a more decentralised approach. Our goal was to build a platform that
-            made it easier for anyone to organise their own session, no matter where they were. To
-            facilitate this and keep conversations going between sessions, we also started an async
-            community in Discord.
-          </p>
-        </div>
-        <div class="ad-col">
-          <div class="ad-img"><Image src={decentral2} alt="A Virtual DDD Global DDD Day virtual venue map" width={560} /></div>
-          <p>
-            At the same time, our conversations were naturally expanding. While Domain-Driven Design has
-            always been an <strong>unbounded</strong> topic in the domain of software design — touching on
-            everything from technology to social science — we saw more discussions happening around the
-            wider world of systems and software design. This led to a new vision for our community. We've
-            rebranded virtualDDD and redesigned our platform to better support a wider global community.
-          </p>
-          <p>
-            Our focus is now on decentralising how knowledge is shared and making it easier to have more
-            sessions on a broader range of topics, while still centred on systems and software design for
-            solving complex business problems. We are always happy if active community members join us and
-            help us organise in any way. Feel free to
-            <a href="https://discord.gg/tRJkcsFDKN">contact us in Discord</a>, and see you online in our
-            community and events!
-          </p>
-        </div>
+    <!-- Decentralising knowledge: two alternating rows, consistent with the sections above -->
+    <section class="about-row">
+      <div class="ar-text">
+        <h2>Decentralising knowledge and expanding our focus</h2>
+        <p>
+          Over the years after the pandemic, we started to experiment with new ways to recreate the
+          atmosphere we loved at in-person conferences. This led us to host online Open Spaces and even a
+          global DDD day, which mixed online sessions with live streams from in-person events. While our
+          core group of organisers was based in Europe, we noticed people from all over the world were
+          joining in at times that weren't ideal for them. It so happened that one of our active community
+          members, Andrea, moved from Europe to New Zealand, which inspired us to think differently. We
+          started experimenting with a more decentralised approach — building a platform that made it easier
+          for anyone to organise their own session, wherever they were, with an async community in Discord
+          to keep conversations going between sessions.
+        </p>
+      </div>
+      <div class="ar-img"><Image src={decentral1} alt="A Virtual DDD online Open Space in a gather.town space" width={720} /></div>
+    </section>
+
+    <section class="about-row reverse">
+      <div class="ar-img"><Image src={decentral2} alt="The Global DDD Day virtual venue with multiple stages" width={720} /></div>
+      <div class="ar-text">
+        <p>
+          At the same time, our conversations were naturally expanding. While Domain-Driven Design has
+          always been an <strong>unbounded</strong> topic in the domain of software design — touching on
+          everything from technology to social science — we saw more discussions happening around the
+          wider world of systems and software design. This led to a new vision for our community. We've
+          rebranded virtualDDD and redesigned our platform to better support a wider global community.
+        </p>
+        <p>
+          Our focus is now on decentralising how knowledge is shared and making it easier to have more
+          sessions on a broader range of topics, while still centred on systems and software design for
+          solving complex business problems. We are always happy if active community members join us and
+          help us organise in any way. Feel free to
+          <a href="https://discord.gg/tRJkcsFDKN">contact us in Discord</a>, and see you online in our
+          community and events!
+        </p>
       </div>
     </section>
 
@@ -144,13 +144,6 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
       .about-row.reverse .ar-img { order: -1; }
     }
     .ar-img { aspect-ratio: 16 / 10; }
-
-    /* Decentralising two-column */
-    .about-decentral { margin-bottom: var(--space-16); }
-    .about-decentral > h2 { max-width: 22ch; }
-    .ad-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-top: var(--space-8); }
-    @media (min-width: 860px) { .ad-grid { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
-    .ad-img { aspect-ratio: 16 / 10; margin-bottom: var(--space-5); }
 
     /* AI usage banner (pink) */
     .ai-banner { display: flex; align-items: center; gap: var(--space-6); background: var(--color-accent); color: #fff; padding: var(--space-6) var(--space-8); }
