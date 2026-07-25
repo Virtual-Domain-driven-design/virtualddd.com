@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we discover more edge cases during an EventStorming session?"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Cognitive Bias"]
 ---
 

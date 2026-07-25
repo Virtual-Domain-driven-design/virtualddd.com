@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we create a collaborative advising culture instead of criticism?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Conflict Management", "Sociotechnical Systems", "Psychological Safety"]
 ---
 

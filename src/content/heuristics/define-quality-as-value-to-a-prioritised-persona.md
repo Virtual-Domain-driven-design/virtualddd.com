@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we define and measure quality when it is inherently subjective and context-dependent?"
 type: ["value-based-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Quality", "Software Design", "Sociotechnical Systems"]
 ---
 

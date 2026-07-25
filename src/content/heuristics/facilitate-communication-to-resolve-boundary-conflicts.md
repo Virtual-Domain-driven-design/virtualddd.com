@@ -5,6 +5,7 @@ status: "Published"
 question: "How should you handle architectural decisions that impact multiple team boundaries?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["Conflict Management", "Facilitating Software Design and Architecture", "Bounded Context", "Sociotechnical Systems"]
 ---
 

@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we foster collaboration during design?"
 type: ["guiding-heuristics"]
 authors: ["Cédric Pontet"]
+submitter: "Cédric Pontet"
 tags: ["EventStorming", "Sociotechnical Systems", "Psychological Safety", "Cognitive Bias", "Collaborative Software Design", "Collaborative modelling"]
 ---
 

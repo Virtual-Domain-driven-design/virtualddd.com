@@ -5,6 +5,7 @@ status: "Published"
 question: "What should a facilitator do when a team member is too uncomfortable or fearful to make a required decision?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Kenny Schwegler"
 tags: ["Software Architecture", "Conflict Management", "Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Decision-Making Process", "Sociotechnical Systems"]
 ---
 

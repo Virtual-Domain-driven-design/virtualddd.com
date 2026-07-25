@@ -5,6 +5,7 @@ status: "Published"
 question: "How should you approach defining team boundaries when migrating a legacy monolith?"
 type: ["design-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["Bounded Context", "Legacy", "Facilitating Software Design and Architecture", "Decision-Making Process", "Bounded Context Design", "Coupling"]
 ---
 

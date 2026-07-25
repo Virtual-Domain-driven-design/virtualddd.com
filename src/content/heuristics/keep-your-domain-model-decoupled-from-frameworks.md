@@ -5,6 +5,7 @@ status: "Published"
 question: "How can I let my domain model be decoupled from technical complexity?"
 type: ["design-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Strategic design"]
 ---
 

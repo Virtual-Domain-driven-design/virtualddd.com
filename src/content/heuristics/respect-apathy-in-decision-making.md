@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we handle team members who consistently remain silent or disengaged during decision-making processes?"
 type: ["value-based-heuristics"]
 authors: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "Conflict Management", "Facilitating Software Design and Architecture", "Decision-Making Process"]
 competesWith: ["watch-approval-seeking-safety-signal", "consider-downstream-teams-architectural-patterns"]
 complements: ["evaluate-architectural-options-against-team-pain-points", "surface-value-preferences-before-technical-solutions"]

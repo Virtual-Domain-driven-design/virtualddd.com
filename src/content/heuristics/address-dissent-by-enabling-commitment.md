@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you move forward when team members disagree with a decision but must commit to it?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Decision-Making Process", "Deep Democracy", "ADR", "Conflict Management", "Facilitating Software Design and Architecture"]
 ---
 

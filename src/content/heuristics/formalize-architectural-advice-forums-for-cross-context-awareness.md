@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we break down knowledge silos between autonomous teams?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-Making", "ADR", "Sociotechnical Systems"]
 ---
 

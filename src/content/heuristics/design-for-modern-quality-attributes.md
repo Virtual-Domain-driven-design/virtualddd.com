@@ -5,6 +5,7 @@ status: "Published"
 question: "What non-functional attributes are critical for maintaining quality in complex, modern systems?"
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Quality", "Software Architecture", "Software Design"]
 ---
 

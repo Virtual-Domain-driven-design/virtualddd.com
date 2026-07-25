@@ -5,6 +5,7 @@ status: "Published"
 question: "Where should a team focus its initial energy when tackling a new design problem?"
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Paul Rayner"
 tags: ["Facilitating Software Design and Architecture", "Sociotechnical Systems", "Collaborative modelling", "Software Architecture"]
 ---
 

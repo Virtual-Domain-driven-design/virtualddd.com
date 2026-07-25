@@ -5,6 +5,7 @@ status: "Published"
 question: "How can a senior team member critique code publicly without causing shame or demotivation?"
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Paul Rayner"
 tags: ["Conflict Management", "Ranking", "Sociotechnical Systems", "Facilitating Software Design and Architecture", "Technical Leadership"]
 complements: ["watch-approval-seeking-safety-signal"]
 ---

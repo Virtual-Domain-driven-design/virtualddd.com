@@ -5,6 +5,7 @@ status: "Published"
 question: "How should architects justify and prioritize time spent on stakeholder communication and understanding?"
 type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Sociotechnical Systems", "Collaborative modelling", "Facilitating Software Design and Architecture", "Software Architecture", "Investment"]
 ---
 

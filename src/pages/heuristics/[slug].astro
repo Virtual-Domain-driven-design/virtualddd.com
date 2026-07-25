@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeuristicBrowser from '../../components/HeuristicBrowser.astro';
 import SideExtras from '../../components/SideExtras.astro';
+import DiscussedIn from '../../components/DiscussedIn.astro';
 import { getCollection, render } from 'astro:content';
 import heurDesign from '../../assets/heur-design.jpg';
 import heurGuiding from '../../assets/heur-guiding.jpg';
@@ -41,7 +42,7 @@ const typeItems = props.kind === 'type' ? all.filter((h) => h.data.type[0] === p
 let Content: any = null;
 let d: any = null;
 let related: { label: string; items: any[] }[] = [];
-let discussedIn: { href: string; title: string; kind: string }[] = [];
+let discussedIn: { href: string; title: string; kind: string; img?: ImageMetadata; iso?: string; fallback?: string }[] = [];
 let prev: any = null;
 let next: any = null;
 let latestHeur: { href: string; title: string; img?: ImageMetadata }[] = [];
@@ -63,15 +64,16 @@ if (props.kind === 'detail') {
     items: ((d[field] ?? []) as { id: string }[]).map((r) => byId.get(r.id)).filter(Boolean),
   })).filter((g) => g.items.length);
 
+  const short = (dt: Date) => dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const sessions = await getCollection('sessions');
   const stories = await getCollection('stories');
   discussedIn = [
     ...sessions
       .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === h.id))
-      .map((s) => ({ href: `/sessions/${s.id}/`, title: s.data.title, kind: 'Session' })),
+      .map((s) => ({ href: `/sessions/${s.id}/`, title: s.data.title, kind: 'Session', img: s.data.featuredImage, iso: new Date(s.data.datetime).toISOString(), fallback: short(new Date(s.data.datetime)) })),
     ...stories
       .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === h.id))
-      .map((s) => ({ href: `/facilitating-archdes/${s.id}/`, title: s.data.title, kind: 'Story' })),
+      .map((s) => ({ href: `/facilitating-archdes/${s.id}/`, title: s.data.title, kind: 'Story', img: s.data.featuredImage ?? s.data.featuredImageSquared, iso: s.data.publishedDate ? new Date(s.data.publishedDate).toISOString() : undefined, fallback: s.data.publishedDate ? short(new Date(s.data.publishedDate)) : undefined })),
   ];
 
   const idx = all.findIndex((x) => x.id === h.id);
@@ -137,6 +139,8 @@ const pageDesc = props.kind === 'type' ? meta!.text : d.question ?? d.title;
           </section>
         )}
 
+        <DiscussedIn items={discussedIn} />
+
         <nav class="prevnext">
           {prev ? (
             <a class="pn" href={`/heuristics/${prev.id}/`}>
@@ -156,24 +160,18 @@ const pageDesc = props.kind === 'type' ? meta!.text : d.question ?? d.title;
       <aside class="hd-side">
         <div class="side-card">
           {d.type[0] && <p class="side-type">{TYPE_META[d.type[0]]?.title ?? 'Heuristic'}</p>}
-          {d.authors.length > 0 && <p class="side-authors">Curated by {d.authors.join(', ')}</p>}
+          {d.authors.length > 0 && (
+            <p class="side-meta"><span class="side-label">Authors</span>{d.authors.join(', ')}</p>
+          )}
+          {d.submitter && (
+            <p class="side-meta"><span class="side-label">Submitter</span>{d.submitter}</p>
+          )}
         </div>
 
         {d.tags.length > 0 && (
           <div class="side-block">
             <p class="eyebrow eyebrow--cyan">Tags</p>
             <div class="tags">{d.tags.map((t: string) => <span class="tag">{t}</span>)}</div>
-          </div>
-        )}
-
-        {discussedIn.length > 0 && (
-          <div class="side-block">
-            <p class="eyebrow eyebrow--cyan">Discussed in</p>
-            <ul class="disc-list">
-              {discussedIn.map((x) => (
-                <li><a href={x.href}><span class="disc-kind">{x.kind}</span>{x.title}</a></li>
-              ))}
-            </ul>
           </div>
         )}
 
@@ -230,14 +228,12 @@ const pageDesc = props.kind === 'type' ? meta!.text : d.question ?? d.title;
 
     /* Sidebar */
     .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
-    .side-type { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
-    .side-authors { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0; }
+    .side-type { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .side-meta { color: var(--color-text); font-size: var(--text-sm); line-height: 1.4; margin: 0 0 var(--space-3); }
+    .side-meta:last-child { margin-bottom: 0; }
+    .side-label { display: block; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 2px; }
     .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-    .disc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
-    .disc-list a { color: var(--color-text); font-size: var(--text-sm); line-height: 1.3; }
-    .disc-list a:hover { color: var(--color-primary); }
-    .disc-kind { display: block; font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--color-primary); }
 
     @media (min-width: 900px) {
       .hd { grid-template-columns: minmax(0, 1fr) 19rem; column-gap: var(--space-12); align-items: start; }

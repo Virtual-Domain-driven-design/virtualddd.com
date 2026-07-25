@@ -5,6 +5,7 @@ status: "Published"
 question: "What should an architect do when they disagree with a team's decision?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["Sociotechnical Systems", "Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Software Architecture", "Psychological Safety", "Team Agency"]
 ---
 

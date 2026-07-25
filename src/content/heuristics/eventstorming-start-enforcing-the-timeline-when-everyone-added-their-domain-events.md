@@ -5,6 +5,7 @@ status: "Published"
 question: "When do we start to structure the EventStorming by enforcing the timeline"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
 ---
 

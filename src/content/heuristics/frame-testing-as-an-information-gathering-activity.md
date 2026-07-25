@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we evaluate the purpose and effectiveness of our testing efforts?"
 type: ["guiding-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Testing", "Quality", "Sociotechnical Systems", "Ranking"]
 ---
 

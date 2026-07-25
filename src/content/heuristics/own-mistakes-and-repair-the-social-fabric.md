@@ -5,6 +5,7 @@ status: "Published"
 question: "When a design or leadership decision inadvertently harms a team member, what is the correct response?"
 type: ["value-based-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Paul Rayner"
 tags: ["Sociotechnical Systems", "Technical Leadership", "Facilitating Software Design and Architecture", "Conflict Management"]
 ---
 

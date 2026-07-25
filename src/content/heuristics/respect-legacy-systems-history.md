@@ -5,6 +5,7 @@ status: "Published"
 question: "How should one approach existing legacy systems during modernization efforts?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Architectural Modernisation", "Legacy", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
 ---
 

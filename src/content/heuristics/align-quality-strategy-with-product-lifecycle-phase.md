@@ -5,6 +5,7 @@ status: "Published"
 question: "How should our approach to quality evolve as a product or feature matures?"
 type: ["guiding-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Quality", "Strategic design", "Product Design"]
 ---
 

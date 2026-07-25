@@ -5,6 +5,7 @@ status: "Published"
 question: "What is the role of an architect in a decentralized decision-making model?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Sociotechnical Systems", "Software Architecture", "Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Decision-Making Process"]
 ---
 

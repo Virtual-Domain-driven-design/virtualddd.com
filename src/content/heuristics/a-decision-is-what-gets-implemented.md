@@ -5,6 +5,7 @@ status: "Published"
 question: "When is an architectural decision considered final and effective?"
 type: ["guiding-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Decision-Making Process", "Deep Democracy", "Facilitating Software Design and Architecture"]
 ---
 

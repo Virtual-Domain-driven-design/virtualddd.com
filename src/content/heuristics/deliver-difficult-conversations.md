@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you deliver challenging feedback or uncomfortable truths to stakeholders without alienating them?"
 type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["difficult conversations", "Stakeholder Communication", "challenging feedback", "professional communication", "leadership skills"]
 focusKeyphrase: "difficult conversations"
 metaDescription: "Learn to deliver challenging feedback & uncomfortable truths to stakeholders without alienating them. Frame difficult conversations with mutual goals & company success."

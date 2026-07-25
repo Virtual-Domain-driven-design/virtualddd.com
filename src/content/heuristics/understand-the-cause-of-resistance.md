@@ -5,6 +5,7 @@ status: "Published"
 question: "How should one address strong resistance from key stakeholders during significant change initiatives?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Resistance behaviour", "Sociotechnical Systems", "Facilitating Software Design and Architecture", "Deep Democracy", "Conflict Management", "Software Architecture"]
 specializes: ["address-destructive-behavior-privately", "start-small-leadership-resists"]
 ---

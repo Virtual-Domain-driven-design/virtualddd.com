@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we allocate our limited quality and testing budget across a large, complex system?"
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Quality", "Strategic design", "Investment"]
 ---
 

@@ -5,6 +5,7 @@ status: "Published"
 question: "When should I use EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design"]
 ---
 

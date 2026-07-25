@@ -5,6 +5,7 @@ status: "Published"
 question: "What do you do when you detect a fundamental disagreement on the workshop's goal during the session?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["workshop facilitation", "Goal alignment", "Meeting management", "Facilitator tips"]
 focusKeyphrase: "realign workshop goals"
 metaDescription: "Detecting workshop goal disagreement during a session? Learn how to effectively pause, check in, and realign the workshop's purpose with all key participants."

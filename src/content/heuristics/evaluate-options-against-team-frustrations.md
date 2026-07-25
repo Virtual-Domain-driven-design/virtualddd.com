@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you know if a technical modernization will actually improve the team's situation?"
 type: ["design-heuristics"]
 authors: ["Gien Verschatse", "Andrea Magnorsky", "Kenny Schwegler", "Evelyn van Kelle"]
+submitter: "Gien Verschatse"
 tags: ["legacy-modernization", "technical-debt", "team-experience", "architectural-decisions"]
 complements: ["a-bounded-context-should-keep-its-internal-details-private", "align-with-evolutionary-stage-the-simon-wardley-heuristic", "write-down-decisions-early-and-often"]
 specializes: ["make-decisions-transparant"]

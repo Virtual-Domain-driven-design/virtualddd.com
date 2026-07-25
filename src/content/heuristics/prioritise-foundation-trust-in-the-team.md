@@ -5,6 +5,7 @@ status: "Published"
 question: "When faced with a conflict between hierarchical directives and the team's judgment, where should loyalty lie?"
 type: ["value-based-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "Psychological Safety", "Facilitating Software Design and Architecture", "Decision-Making Process"]
 complements: ["build-safety-through-small-failures", "executives-provide-resources-not-pressure"]
 enables: ["evaluate-architectural-options-against-team-pain-points", "surface-value-preferences-before-technical-solutions", "consider-downstream-teams-architectural-patterns"]

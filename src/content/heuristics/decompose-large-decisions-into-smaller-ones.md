@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we prevent a single disagreement from blocking a large, complex decision?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
+submitter: "Andrew Harmel-Law"
 tags: ["ADR", "Decision-Making Process", "Conflict Management", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

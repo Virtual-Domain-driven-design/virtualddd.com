@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you help people understand complex system changes when explanations and models aren't landing?"
 type: ["guiding-heuristics"]
 authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Diana Montalion"
 tags: ["Facilitation", "learning", "change-management", "experiential-learning"]
 complements: ["pause-every-ten-minutes-invite-dissent", "make-the-implicit-mental-models-explicit-for-objective-collaboration"]
 prerequisites: ["build-connection-before-content"]

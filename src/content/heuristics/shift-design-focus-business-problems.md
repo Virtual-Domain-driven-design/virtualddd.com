@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you shift focus from existing technical constraints to core business problems in a design discussion?"
 type: ["design-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["Design Thinking", "Facilitation", "Business Problems", "Technical Constraints", "Product Strategy"]
 focusKeyphrase: "Focus business problems"
 metaDescription: "Learn how to effectively shift design discussions from technical constraints and legacy systems to core business problems, fostering a solution-agnostic approach."

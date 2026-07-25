@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we visualise competing ideas during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "EventStorming", "Deep Democracy", "Collaborative modelling", "Psychological Safety", "Conflict Management", "Collaborative Software Design"]
 ---
 

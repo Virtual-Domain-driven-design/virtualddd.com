@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we evaluate a design solution that seems deceptively simple or easy?"
 type: ["guiding-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Krisztina Hirth"
 tags: ["Sociotechnical Systems", "Decision-Making Process", "Facilitating Software Design and Architecture", "Cognitive Bias"]
 ---
 

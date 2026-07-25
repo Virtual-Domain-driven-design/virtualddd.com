@@ -5,6 +5,7 @@ status: "Published"
 question: "How can I distil bounded context after an EventStorming session?"
 type: ["design-heuristics"]
 authors: ["Alberto brandolini"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Bounded Context"]
 enables: ["challenge-workshop-premise-before-diving-in", "build-connection-before-content"]
 specializes: ["drop-methodology-when-barrier"]

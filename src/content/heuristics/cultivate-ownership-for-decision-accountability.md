@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we ensure that recorded decisions are actually implemented?"
 type: ["value-based-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Team Agency", "Sociotechnical Systems"]
 complements: ["design-as-living-conversation"]
 ---

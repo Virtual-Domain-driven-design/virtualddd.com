@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we manage the evolution of a decision over time, especially when it is reversed?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Andrew Harmel-Law"
 tags: ["Facilitating Software Design and Architecture", "Decision-Making Process", "ADR", "Software Architecture"]
 ---
 

@@ -96,6 +96,7 @@ const heuristics = defineCollection({
       question: z.string().optional(),
       type: z.array(z.enum(['Not sure', 'value-based-heuristics', 'guiding-heuristics', 'design-heuristics'])).default([]),
       authors: z.array(z.string()).default([]),
+      submitter: z.string().optional(),
       tags: z.array(z.string()).default([]),
       featuredImage: image().optional(),
       // The heuristics graph: five self-relations plus links to sessions/stories.

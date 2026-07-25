@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you guide people toward different architectural approaches without simply imposing your solution?"
 type: ["guiding-heuristics"]
 authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Diana Montalion"
 tags: ["Facilitation", "systems-thinking", "cognitive-patterns", "architectural-guidance"]
 complements: ["pause-every-ten-minutes-invite-dissent", "notice-working-too-hard-facilitator"]
 focusKeyphrase: "pattern interruption facilitation"

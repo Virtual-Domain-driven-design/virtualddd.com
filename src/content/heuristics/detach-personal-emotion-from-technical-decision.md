@@ -5,6 +5,7 @@ status: "Published"
 question: "How should you handle decisions that replace your own previous work?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["Sociotechnical Systems", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

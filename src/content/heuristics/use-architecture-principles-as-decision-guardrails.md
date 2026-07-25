@@ -5,6 +5,7 @@ status: "Published"
 question: "How can you guide autonomous teams to make sound decisions without direct command?"
 type: ["design-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Software Architecture", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

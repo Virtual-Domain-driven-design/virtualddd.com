@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we introduce new ideas that conflict with a team member's deeply held beliefs?"
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Andrea Magnorsky"
 tags: ["Conflict Management", "Facilitating Software Design and Architecture", "Technical Leadership", "Sociotechnical Systems"]
 ---
 

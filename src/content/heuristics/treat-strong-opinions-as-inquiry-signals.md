@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we handle strong, potentially biased opinions in an advisory forum?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Sociotechnical Systems", "ADR", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Conflict Management"]
 ---
 

@@ -5,6 +5,7 @@ status: "Published"
 question: "As a leader, how can I support a team's decision without taking ownership of it?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "Ranking", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

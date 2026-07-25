@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you introduce collaborative modeling when leadership sees it as wasted time?"
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
+submitter: "Evelyn van Kelle"
 tags: ["event-storming", "organizational-change", "leadership", "collaborative-modeling"]
 complements: ["workshop-stakeholder-alignment"]
 specializes: ["understand-the-cause-of-resistance"]

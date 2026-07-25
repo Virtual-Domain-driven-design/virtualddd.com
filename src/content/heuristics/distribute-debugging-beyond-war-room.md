@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you structure incident response when no single team has all the answers?"
 type: ["guiding-heuristics"]
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Liz Fong-Jones"
 tags: ["incident-response", "distributed-systems", "coordination", "autonomy"]
 complements: ["prioritise-recoverability-over-flawless-deployment"]
 enables: ["build-safety-through-small-failures", "default-rollback-over-fix-forward", "executives-provide-resources-not-pressure"]

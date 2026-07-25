@@ -5,6 +5,7 @@ status: "Published"
 question: "Where should an organization begin its journey toward systems change and more effective decision-making?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 complements: ["evaluate-architectural-options-against-team-pain-points", "surface-value-preferences-before-technical-solutions", "consider-downstream-teams-architectural-patterns"]
 specializes: ["evaluate-options-against-team-frustrations"]

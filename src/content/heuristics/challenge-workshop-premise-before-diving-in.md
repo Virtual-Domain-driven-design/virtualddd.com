@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you know if participants actually agree with the workshop's purpose before you start?"
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["workshop-facilitation", "stakeholder-alignment", "psychological-safety", "enabling-architecture"]
 complements: ["pause-every-ten-minutes-invite-dissent", "build-connection-before-content"]
 enables: ["design-bounded-contexts-around-eventstorming-policies", "align-bounded-context-with-the-value-stream", "build-connection-before-content", "notice-anxiety-signal-missing-something"]

@@ -5,6 +5,7 @@ status: "Published"
 question: "How should you handle varying levels of adoption for decision recording across teams?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["ADR", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Team Agency"]
 ---
 

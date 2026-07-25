@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we start structuring a Big Picture Eventstorming after a chaotic exploration?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Remote EventStorming", "Remote Facilitation"]
 ---
 

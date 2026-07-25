@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we align teams who have different, unstated assumptions about what quality means?"
 type: ["guiding-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Quality", "Sociotechnical Systems", "Cognitive Bias", "Psychological Safety", "Conflict Management"]
 ---
 

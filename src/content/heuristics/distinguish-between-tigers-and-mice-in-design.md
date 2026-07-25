@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we prioritize which design battles to fight and which to concede?"
 type: ["value-based-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Krisztina Hirth"
 tags: ["Sociotechnical Systems", "Decision-Making Process", "Collaborative Software Design", "Facilitating Software Design and Architecture"]
 ---
 

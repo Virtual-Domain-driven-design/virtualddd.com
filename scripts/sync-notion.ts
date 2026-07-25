@@ -492,6 +492,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       const q = h.text('Question'); if (q) l.push(`question: ${yamlStr(q)}`);
       const type = h.multi('Type'); if (type.length) l.push(`type: ${yamlList(type)}`);
       const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
+      const submitter = h.select('Submitter'); if (submitter) l.push(`submitter: ${yamlStr(submitter)}`);
       const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
       for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites '], ['specializes', 'Specializes']] as const) {
         const v = h.heur(p); if (v.length) l.push(`${k}: ${yamlList(v)}`);

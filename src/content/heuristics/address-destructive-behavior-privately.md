@@ -5,6 +5,7 @@ status: "Published"
 question: "How should you handle someone whose behavior is disrupting a session without making things worse?"
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
+submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "conflict-resolution", "one-on-one", "behavioral-patterns"]
 specializes: ["understand-the-cause-of-resistance"]
 focusKeyphrase: "addressing disruptive behavior"

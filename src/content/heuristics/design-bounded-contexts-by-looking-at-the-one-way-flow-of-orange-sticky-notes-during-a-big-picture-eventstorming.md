@@ -5,6 +5,7 @@ status: "Published"
 question: "How can I distil bounded context after an EventStorming session?"
 type: ["design-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Bounded Context"]
 ---
 

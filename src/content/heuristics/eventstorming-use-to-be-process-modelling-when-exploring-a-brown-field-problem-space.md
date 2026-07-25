@@ -5,6 +5,7 @@ status: "Published"
 question: "When shall I use process modelling eventstorming for to-be discovery of my problem space?"
 type: ["guiding-heuristics"]
 authors: ["Marco Heimeshoff", "Paul Rayner", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design", "Strategic design"]
 ---
 

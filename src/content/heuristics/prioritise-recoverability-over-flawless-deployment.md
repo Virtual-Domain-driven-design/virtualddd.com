@@ -5,6 +5,7 @@ status: "Published"
 question: "In modern distributed systems, where should we focus our efforts: defect prevention or incident recovery?"
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Resilient Engineering", "Recoverability", "Software Design", "Quality"]
 complements: ["global-metadata-creates-global-risk", "distribute-debugging-beyond-war-room", "default-rollback-over-fix-forward"]
 ---

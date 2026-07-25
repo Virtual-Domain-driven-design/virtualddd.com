@@ -5,6 +5,7 @@ status: "Published"
 question: "When and how should teams document their architectural decisions?"
 type: ["design-heuristics"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["ADR", "Decision-Making Process", "Facilitating Software Design and Architecture"]
 complements: ["surface-value-preferences-before-technical-solutions", "evaluate-options-against-team-frustrations", "consider-downstream-teams-architectural-patterns"]
 ---

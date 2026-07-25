@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we keep the interaction going in a remote EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming"]
 ---
 

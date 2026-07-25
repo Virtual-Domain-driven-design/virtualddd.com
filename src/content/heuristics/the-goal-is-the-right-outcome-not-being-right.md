@@ -5,6 +5,7 @@ status: "Published"
 question: "What should be the primary goal when facilitating a design discussion, especially during a disagreement?"
 type: ["value-based-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Krisztina Hirth"
 tags: ["Sociotechnical Systems", "Facilitating Software Design and Architecture", "Decision-Making Process", "Psychological Safety", "Ranking"]
 ---
 

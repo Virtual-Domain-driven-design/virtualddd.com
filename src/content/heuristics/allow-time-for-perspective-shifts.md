@@ -5,6 +5,7 @@ status: "Published"
 question: "How should one manage expectations regarding the speed at which individuals adopt new perspectives or accept change?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "Facilitating Software Design and Architecture", "Psychological Safety"]
 ---
 

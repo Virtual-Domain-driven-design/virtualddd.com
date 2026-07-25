@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you prevent architectural decisions from becoming unmaintainable haunted graveyards?"
 type: ["value-based-heuristics"]
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Liz Fong-Jones"
 tags: ["architecture", "documentation", "knowledge-management", "team-ownership"]
 complements: ["cultivate-ownership-for-decision-accountability"]
 enables: ["build-safety-through-small-failures"]

@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you know if something you find problematic is actually blocking the group's progress?"
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
+submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "sense-making", "neutrality", "self-awareness"]
 focusKeyphrase: "facilitator neutrality"
 metaDescription: "Before acting on something that bothers you as a facilitator, check whether it's hindering the group or just you."

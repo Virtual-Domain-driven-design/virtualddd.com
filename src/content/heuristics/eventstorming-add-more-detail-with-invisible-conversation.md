@@ -5,6 +5,7 @@ status: "Published"
 question: "When do we have enough details in an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative Software Design", "Psychological Safety", "Collaborative modelling"]
 ---
 

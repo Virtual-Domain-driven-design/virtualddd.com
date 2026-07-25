@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we prevent design discussions from becoming a personal conflict between two competing ideas?"
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky", "Eric Evans"]
+submitter: "Paul Rayner"
 tags: ["Sociotechnical Systems", "Collaborative modelling", "Software Architecture", "Facilitating Software Design and Architecture", "Decision-Making Process", "Conflict Management"]
 ---
 

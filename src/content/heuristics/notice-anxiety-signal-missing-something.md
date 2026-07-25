@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you recognize when your own anxiety is preventing you from addressing what the group needs?"
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Xin Yao"
 tags: ["self-awareness", "Facilitation", "psychological-safety", "enabling-architecture"]
 complements: ["pause-every-ten-minutes-invite-dissent", "build-connection-before-content", "align-bounded-context-with-the-value-stream", "drop-methodology-when-barrier"]
 enables: ["drop-methodology-when-barrier", "challenge-workshop-premise-before-diving-in"]

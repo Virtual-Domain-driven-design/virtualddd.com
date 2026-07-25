@@ -5,6 +5,7 @@ status: "Published"
 question: "When can it be appropriate to use ORM mapping in my domain model?"
 type: ["design-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Strategic design"]
 ---
 

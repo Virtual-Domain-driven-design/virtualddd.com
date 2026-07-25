@@ -5,6 +5,7 @@ status: "Published"
 question: "When should I formalise with the Gherkin script?"
 type: ["guiding-heuristics"]
 authors: ["Matt Wynne"]
+submitter: "Kenny Schwegler"
 tags: ["Behaviour-Driven Development"]
 ---
 

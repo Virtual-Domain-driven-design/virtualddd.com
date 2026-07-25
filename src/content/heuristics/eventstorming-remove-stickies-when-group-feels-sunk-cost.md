@@ -5,6 +5,7 @@ status: "Published"
 question: "Who removes stickies during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "Cognitive Bias", "Collaborative Software Design"]
 ---
 

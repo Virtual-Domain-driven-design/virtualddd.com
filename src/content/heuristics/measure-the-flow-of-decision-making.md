@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we detect if our decision-making process has become dysfunctional or is being weaponised?"
 type: ["design-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Andrew Harmel-Law"
 tags: ["Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
 ---
 

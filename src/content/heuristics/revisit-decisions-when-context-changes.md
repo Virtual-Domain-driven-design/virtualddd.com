@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we know if a long-standing architectural constraint is still valid?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
+submitter: "Andrew Harmel-Law"
 tags: ["ADR", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

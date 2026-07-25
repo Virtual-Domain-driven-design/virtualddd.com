@@ -5,6 +5,7 @@ status: "Published"
 question: "What is the most effective stance for an architect when driving significant architectural change?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Software Design", "Ranking", "Sociotechnical Systems"]
 ---
 

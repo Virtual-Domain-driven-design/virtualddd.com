@@ -5,6 +5,7 @@ status: "Published"
 question: "How can you tell if hierarchy is preventing honest collaboration in a modeling session?"
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
+submitter: "Evelyn van Kelle"
 tags: ["psychological-safety", "hierarchy", "collaborative-modeling", "organizational-dynamics"]
 competesWith: ["respect-apathy-in-decision-making"]
 complements: ["acknowledge-power-dynamics-in-public-code-critique"]

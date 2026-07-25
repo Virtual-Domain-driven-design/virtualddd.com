@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you prevent technical preferences from dominating architectural decisions?"
 type: ["value-based-heuristics"]
 authors: ["Gien Verschatse", "Andrea Magnorsky", "Kenny Schwegler", "Evelyn van Kelle"]
+submitter: "Gien Verschatse"
 tags: ["decision-making", "team-dynamics", "architectural-decisions", "Facilitation"]
 complements: ["make-decisions-transparant", "write-down-decisions-early-and-often", "respect-apathy-in-decision-making"]
 enables: ["prioritise-foundation-trust-in-the-team"]

@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we enable a team to make an informed decision when they lack direct experience with the options?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Andrea Magnorsky"
 tags: ["Decision-Making Process", "Facilitating Software Design and Architecture", "ADR"]
 ---
 

@@ -5,6 +5,7 @@ status: "Published"
 question: "How can a participant constructively help an unprepared or misdirected facilitator without overstepping boundaries?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["constructive feedback", "meeting facilitation", "communication skills", "team collaboration", "professional development"]
 focusKeyphrase: "Help unprepared facilitator"
 metaDescription: "Participants: Learn to constructively guide an unprepared facilitator. Ask empathetic questions to realign goals without overstepping boundaries. Improve meeting effectiveness."

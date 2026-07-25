@@ -5,6 +5,7 @@ status: "Published"
 question: "How should a newly autonomous team approach its first major decisions?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Team Agency", "Sociotechnical Systems", "Software Architecture", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

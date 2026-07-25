@@ -5,6 +5,7 @@ status: "Published"
 question: "When running EventStorming workshops, duplication is not evil."
 type: ["guiding-heuristics"]
 authors: ["Cédric Pontet"]
+submitter: "Cédric Pontet"
 tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Sociotechnical Systems"]
 ---
 

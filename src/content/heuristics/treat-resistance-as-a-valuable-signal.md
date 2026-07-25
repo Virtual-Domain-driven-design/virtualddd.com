@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we react when team members push back against a proposed design or practice change?"
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Paul Rayner"
 tags: ["Conflict Management", "Psychological Safety", "Sociotechnical Systems", "Facilitating Software Design and Architecture"]
 complements: ["focus-valued-organizational-outcomes"]
 ---

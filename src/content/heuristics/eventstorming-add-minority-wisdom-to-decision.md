@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we wrap up a dot voting at a big picture EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative Software Design", "Psychological Safety", "Collaborative modelling"]
 ---
 

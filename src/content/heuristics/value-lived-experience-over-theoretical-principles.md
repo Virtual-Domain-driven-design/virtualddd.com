@@ -5,6 +5,7 @@ status: "Published"
 question: "Why do teams sometimes resist adopting established architectural principles or patterns?"
 type: ["value-based-heuristics"]
 authors: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Andrew Harmel-Law"
 tags: ["Sociotechnical Systems", "Decision-Making Process", "Facilitating Software Design and Architecture", "Software Architecture"]
 ---
 

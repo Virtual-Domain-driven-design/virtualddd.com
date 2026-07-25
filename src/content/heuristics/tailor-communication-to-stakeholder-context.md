@@ -5,6 +5,7 @@ status: "Published"
 question: "How should architects effectively communicate complex design and architectural concepts to diverse stakeholder groups?"
 type: ["design-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Sociotechnical Systems", "Collaborative modelling", "Strategic design", "Software Design", "Facilitating Software Design and Architecture"]
 ---
 

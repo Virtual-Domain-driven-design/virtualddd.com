@@ -5,6 +5,7 @@ status: "Published"
 question: "What should you do when you do not agree with a team’s decision?"
 type: ["guiding-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Krisztina Hirth"
 tags: ["Psychological Safety", "Sociotechnical Systems", "Facilitating Software Design and Architecture", "Collaborative Software Design"]
 complements: ["build-safety-through-small-failures"]
 ---

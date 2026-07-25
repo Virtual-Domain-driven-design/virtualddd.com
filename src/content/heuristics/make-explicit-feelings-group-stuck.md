@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you help a group move forward when everyone seems frozen or unable to participate?"
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
+submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "psychological-safety", "sense-making", "vulnerability"]
 focusKeyphrase: "making feelings explicit"
 metaDescription: "When a group is stuck, share your own feelings first and invite others to share if they recognize similar reactions."

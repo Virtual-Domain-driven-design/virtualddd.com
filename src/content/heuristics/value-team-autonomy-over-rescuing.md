@@ -5,6 +5,7 @@ status: "Published"
 question: "What is the role of leadership when a team is struggling with a decision?"
 type: ["value-based-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
 ---
 

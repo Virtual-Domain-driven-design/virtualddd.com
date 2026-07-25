@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you facilitate decisions when conflicting priorities or user needs emerge?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["Decision Making", "Facilitation", "Conflict Resolution", "Prioritization", "Trade-offs"]
 focusKeyphrase: "Facilitate conflicting decisions"
 metaDescription: "Learn to facilitate decisions effectively when priorities clash. Make trade-offs explicit, clarify benefits & drawbacks to guide your team to conscious choices."

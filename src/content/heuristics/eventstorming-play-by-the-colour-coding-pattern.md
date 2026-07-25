@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we introduce new colours during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design", "Psychological Safety"]
 ---
 

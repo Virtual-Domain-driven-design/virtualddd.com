@@ -5,6 +5,7 @@ status: "Published"
 question: "When to remove stickies?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "Collaborative Software Design", "Ranking", "Psychological Safety"]
 ---
 

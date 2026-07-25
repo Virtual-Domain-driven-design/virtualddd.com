@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you know when something beneath the surface is blocking a session?"
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
+submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "group-dynamics", "session-flow", "awareness"]
 complements: ["evaluate-architectural-options-against-team-pain-points", "interrupt-patterns-stay-with-flock"]
 prerequisites: ["consider-downstream-teams-architectural-patterns"]

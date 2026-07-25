@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we make our decision records more holistic and context-rich?"
 type: ["design-heuristics"]
 authors: ["Rebecca Wirfs-Brock", "Ken Power"]
+submitter: "Andrew Harmel-Law"
 tags: ["Conflict Management", "Facilitating Software Design and Architecture", "Decision-Making Process", "ADR", "Sociotechnical Systems"]
 ---
 

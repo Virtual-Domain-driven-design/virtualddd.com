@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you avoid creating problems for teams that deploy and test your software?"
 type: ["guiding-heuristics"]
 authors: ["Gien Verschatse", "Andrea Magnorsky", "Kenny Schwegler", "Evelyn van Kelle"]
+submitter: "Gien Verschatse"
 tags: ["architectural-decisions", "team-topology", "deployment", "qa", "consequences"]
 competesWith: ["respect-apathy-in-decision-making"]
 complements: ["align-with-evolutionary-stage-the-simon-wardley-heuristic", "write-down-decisions-early-and-often", "make-decisions-transparant"]

@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you ensure a decision is successfully adopted by the team after it has been made?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Kenny Schwegler"
 tags: ["Deep Democracy", "Facilitating Software Design and Architecture", "Conflict Management", "Decision-Making Process"]
 ---
 

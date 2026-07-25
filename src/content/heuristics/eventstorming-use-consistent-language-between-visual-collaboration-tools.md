@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we refine and create an ubiquitous language?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative modelling", "Example Mapping", "Sociotechnical Systems", "Collaborative Software Design"]
 ---
 

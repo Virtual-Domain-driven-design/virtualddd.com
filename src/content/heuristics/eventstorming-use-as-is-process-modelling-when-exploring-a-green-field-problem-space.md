@@ -5,6 +5,7 @@ status: "Published"
 question: "When shall I use process modelling eventstorming for as-is discovery of my problem space?"
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Alberto brandolini"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
 ---
 

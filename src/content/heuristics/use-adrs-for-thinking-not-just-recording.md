@@ -5,6 +5,7 @@ status: "Published"
 question: "When is the right time to write an Architecture Decision Record?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Elena Stojmilova"
 tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-Making", "ADR", "Software Architecture"]
 ---
 

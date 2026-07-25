@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we determine if an event is a valuable Domain Event or just technical noise?"
 type: ["design-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
+submitter: "Krisztina Hirth"
 tags: ["Event-driven architecture", "Bounded Context Design", "Coupling", "Distributed systems", "Facilitating Software Design and Architecture"]
 ---
 

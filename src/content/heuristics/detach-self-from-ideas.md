@@ -5,6 +5,7 @@ status: "Published"
 question: "How can one foster objective discussion and collaboration without personalizing design or change initiatives?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["Sociotechnical Systems", "Cognitive Bias", "Facilitating Software Design and Architecture", "Software Architecture", "Collaborative Software Design"]
 ---
 

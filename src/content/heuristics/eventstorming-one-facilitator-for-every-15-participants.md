@@ -5,6 +5,7 @@ status: "Published"
 question: "How many conversations can a single facilitator keep track of?"
 type: ["guiding-heuristics"]
 authors: ["Tobias Goeschel"]
+submitter: "Tobias Goeschel"
 tags: ["Collaborative modelling", "EventStorming", "Sociotechnical Systems", "Collaborative Software Design", "Psychological Safety"]
 ---
 

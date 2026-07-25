@@ -5,6 +5,7 @@ status: "Published"
 question: "How should senior architects support newly empowered teams?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["Ranking", "Facilitating Software Design and Architecture", "Conflict Management", "Decentralised Decision-Making", "Decision-Making Process", "Sociotechnical Systems"]
 ---
 

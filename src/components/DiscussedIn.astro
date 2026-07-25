@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+
+interface Item {
+  href: string;
+  title: string;
+  kind: string;
+  img?: ImageMetadata;
+  iso?: string;
+  fallback?: string;
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="di">
+    <p class="eyebrow eyebrow--cyan">Discussed in</p>
+    <div class="di-wrap">
+      <button class="di-arrow di-prev" type="button" aria-label="Previous">‹</button>
+      <div class="di-carousel">
+        {items.map((i) => (
+          <a class="di-card" href={i.href}>
+            <div class="di-thumb">
+              {i.img ? <Image src={i.img} alt="" width={480} loading="lazy" /> : <div class="di-ph"></div>}
+              <span class="badge badge--type di-kind">{i.kind}</span>
+            </div>
+            <div class="di-body">
+              {i.iso && (
+                <p class="di-date"><time class="js-local" data-format="shortdate" datetime={i.iso} data-iso={i.iso}>{i.fallback}</time></p>
+              )}
+              <h3 class="di-title">{i.title}</h3>
+            </div>
+          </a>
+        ))}
+      </div>
+      <button class="di-arrow di-next" type="button" aria-label="Next">›</button>
+    </div>
+  </section>
+)}
+
+<style>
+  .di { margin-top: var(--space-16); }
+  .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-primary); margin: 0 0 var(--space-6); }
+  .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-primary); }
+
+  .di-wrap { position: relative; }
+  .di-carousel { display: flex; gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding-bottom: var(--space-2); }
+  .di-carousel::-webkit-scrollbar { display: none; }
+
+  .di-card { flex: 0 0 clamp(240px, 46%, 320px); scroll-snap-align: start; display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+  .di-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
+  .di-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
+  .di-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .di-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
+  .di-kind { position: absolute; top: var(--space-2); left: var(--space-2); }
+  .di-body { padding: var(--space-4) var(--space-5) var(--space-5); }
+  .di-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-1); }
+  .di-title { font-size: var(--text-lg); line-height: 1.2; margin: 0; }
+
+  .di-arrow { position: absolute; top: 40%; transform: translateY(-50%); z-index: 2; width: 44px; height: 44px; border: 1px solid var(--color-border); background: color-mix(in srgb, var(--color-surface) 90%, transparent); color: var(--color-text); font-size: var(--text-2xl); line-height: 1; cursor: pointer; display: none; }
+  .di-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+  .di-prev { left: calc(-1 * var(--space-5)); }
+  .di-next { right: calc(-1 * var(--space-5)); }
+  @media (min-width: 800px) { .di-arrow { display: block; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.di-wrap').forEach((wrap) => {
+    const car = wrap.querySelector<HTMLElement>('.di-carousel');
+    if (!car) return;
+    const step = () => {
+      const card = car.querySelector<HTMLElement>('.di-card');
+      return card ? card.getBoundingClientRect().width + 16 : 260;
+    };
+    const next = () => {
+      if (car.scrollLeft + car.clientWidth >= car.scrollWidth - 6) car.scrollTo({ left: 0, behavior: 'smooth' });
+      else car.scrollBy({ left: step(), behavior: 'smooth' });
+    };
+    const prev = () => car.scrollBy({ left: -step(), behavior: 'smooth' });
+    wrap.querySelector('.di-next')?.addEventListener('click', next);
+    wrap.querySelector('.di-prev')?.addEventListener('click', prev);
+  });
+</script>

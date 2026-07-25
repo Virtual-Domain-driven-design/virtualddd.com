@@ -5,6 +5,7 @@ status: "Published"
 question: "How do I design a bounded context?"
 type: ["design-heuristics"]
 authors: ["Nick Tune"]
+submitter: "Nick Tune"
 tags: ["Strategic design"]
 complements: ["evaluate-options-against-team-frustrations", "consider-downstream-teams-architectural-patterns"]
 enables: ["pause-every-ten-minutes-invite-dissent"]

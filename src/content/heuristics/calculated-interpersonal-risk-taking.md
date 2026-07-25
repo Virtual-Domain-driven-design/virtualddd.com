@@ -5,6 +5,7 @@ status: "Published"
 question: "How should one approach potentially confrontational or emotionally charged conversations with key stakeholders?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Michael Plöd"
 tags: ["Deep Democracy", "Stoicism", "Facilitating Software Design and Architecture", "Psychological Safety", "Sociotechnical Systems", "Resistance behaviour"]
 ---
 

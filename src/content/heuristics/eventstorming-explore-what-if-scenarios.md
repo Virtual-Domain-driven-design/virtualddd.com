@@ -5,6 +5,7 @@ status: "Published"
 question: "Explore all the edge cases and what happens when things go wrong."
 type: ["guiding-heuristics"]
 authors: ["Cédric Pontet"]
+submitter: "Cédric Pontet"
 tags: ["EventStorming", "Sociotechnical Systems", "Cognitive Bias", "Collaborative modelling", "Collaborative Software Design"]
 ---
 

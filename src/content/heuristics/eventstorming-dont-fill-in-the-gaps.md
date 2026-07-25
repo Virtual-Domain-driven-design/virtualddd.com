@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we get new insight during an EventStorming session?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Cognitive Bias"]
 ---
 

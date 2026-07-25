@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you steer a workshop back on track when discussions diverge from the intended outcome?"
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["workshop facilitation", "Meeting management", "Discussion control", "Goal alignment"]
 focusKeyphrase: "workshop on track"
 metaDescription: "Learn how to steer your workshop back on track when discussions diverge. Use clear goals to refocus participants & achieve intended outcomes efficiently."

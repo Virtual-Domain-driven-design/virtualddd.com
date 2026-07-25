@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you get teams to buy into and maintain strategic models like a context map?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
+submitter: "Peter Hunter"
 tags: ["Bounded Context", "Facilitating Software Design and Architecture", "Team Agency", "Resistance behaviour"]
 ---
 

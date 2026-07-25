@@ -5,6 +5,7 @@ status: "Published"
 question: "How should we document decisions influenced by interpersonal or inter-team conflict?"
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
+submitter: "Andrea Magnorsky"
 tags: ["ADR", "Decision-Making Process", "Conflict Management", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
 ---
 

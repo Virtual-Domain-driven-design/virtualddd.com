@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we resolve conflicts between a team's desire for local implementation convenience and broader architectural principles?"
 type: ["design-heuristics"]
 authors: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
+submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "Software Architecture", "Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Strategic design", "Distributed systems"]
 ---
 

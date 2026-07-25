@@ -5,6 +5,7 @@ status: "Published"
 question: "How can we build quality in, rather than inspecting for it at the end of the process?"
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
+submitter: "Anne-Marie Charrett"
 tags: ["Software Architecture", "Software Design", "Quality"]
 ---
 

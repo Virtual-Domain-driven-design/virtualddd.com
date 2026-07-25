@@ -5,6 +5,7 @@ status: "Published"
 question: "How do you know when your facilitation technique is preventing rather than enabling collaboration?"
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
+submitter: "Xin Yao"
 tags: ["Facilitation", "methodology", "pragmatism", "collaborative-modeling"]
 complements: ["notice-anxiety-signal-missing-something"]
 enables: ["notice-anxiety-signal-missing-something"]

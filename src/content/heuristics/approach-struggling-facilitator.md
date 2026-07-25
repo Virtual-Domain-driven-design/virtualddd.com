@@ -5,6 +5,7 @@ status: "Published"
 question: "How should participants approach a facilitator who appears to be struggling or has made a mistake?"
 type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
+submitter: "Beija Nigl"
 tags: ["Facilitation", "Participant Feedback", "Constructive Communication", "Team Dynamics"]
 focusKeyphrase: "Approach struggling facilitator"
 metaDescription: "Learn how to constructively approach a struggling facilitator. Offer support, not challenge, by assuming positive intent and providing gentle prompts."

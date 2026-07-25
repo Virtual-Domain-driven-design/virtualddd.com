@@ -5,6 +5,7 @@ status: "Published"
 question: "How do we make people comfortable with iterative modelling?"
 type: ["guiding-heuristics"]
 authors: ["Tobias Goeschel"]
+submitter: "Tobias Goeschel"
 tags: ["Sociotechnical Systems", "EventStorming", "Psychological Safety", "Ranking", "Collaborative Software Design", "Collaborative modelling"]
 ---
 

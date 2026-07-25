@@ -5,6 +5,7 @@ status: "Published"
 question: "When do we switch to example mapping from EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
+submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Example Mapping", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design"]
 ---
 
