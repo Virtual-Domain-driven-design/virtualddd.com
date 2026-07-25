@@ -9,10 +9,10 @@ import heurValue from '../../assets/heur-value.jpg';
 const all = (await getCollection('heuristics')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 const count = (key: string) => all.filter((h) => h.data.type[0] === key).length;
-const types = [
-  { href: '/heuristics/design-heuristics/', bg: heurDesign.src, title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.', n: count('design-heuristics') },
-  { href: '/heuristics/guiding-heuristics/', bg: heurGuiding.src, title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.', n: count('guiding-heuristics') },
-  { href: '/heuristics/value-based-heuristics/', bg: heurValue.src, title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design and the way we work.', n: count('value-based-heuristics') },
+const banners = [
+  { key: 'design-heuristics', bg: heurDesign.src, title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.', count: count('design-heuristics') },
+  { key: 'guiding-heuristics', bg: heurGuiding.src, title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.', count: count('guiding-heuristics') },
+  { key: 'value-based-heuristics', bg: heurValue.src, title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design and the way we work.', count: count('value-based-heuristics') },
 ];
 ---
 
@@ -33,23 +33,9 @@ const types = [
     </div>
   </section>
 
-  <div class="wrap">
-    <div class="type-cards">
-      {types.map((t) => (
-        <a class="type-card" href={t.href} style={`background-image: url(${t.bg})`}>
-          <div class="tc-body">
-            <h2>{t.title}</h2>
-            <p>{t.text}</p>
-            <span class="tc-count">{t.n} heuristics ››</span>
-          </div>
-        </a>
-      ))}
-    </div>
-
-    <section class="all">
-      <p class="eyebrow eyebrow--cyan">All heuristics</p>
-      <HeuristicBrowser items={all} showTypeFilter />
-    </section>
+  <div class="wrap all">
+    <p class="eyebrow eyebrow--cyan">Browse the collection</p>
+    <HeuristicBrowser items={all} banners={banners} />
   </div>
 
   <style>
@@ -68,17 +54,6 @@ const types = [
     .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-6); }
     .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0; }
 
-    /* Type cards (mirror the home page) */
-    .type-cards { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin: var(--space-16) 0; }
-    @media (min-width: 800px) { .type-cards { grid-template-columns: repeat(3, 1fr); } }
-    .type-card { position: relative; display: flex; min-height: 12rem; padding: var(--space-6); color: #fff; overflow: hidden; background-size: cover; background-position: center; transition: transform 0.15s, box-shadow 0.15s; }
-    .type-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.78) 100%); }
-    .type-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); text-decoration: none; }
-    .tc-body { position: relative; z-index: 1; margin-top: auto; }
-    .tc-body h2 { color: #fff; margin: 0 0 var(--space-2); font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
-    .tc-body p { color: rgba(255, 255, 255, 0.92); margin: 0 0 var(--space-3); font-size: var(--text-sm); }
-    .tc-count { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-primary-dark); }
-
-    .all { margin-bottom: var(--space-16); }
+    .all { margin-block: var(--space-12) var(--space-16); }
   </style>
 </BaseLayout>

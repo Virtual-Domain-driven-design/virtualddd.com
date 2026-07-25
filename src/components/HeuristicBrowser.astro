@@ -2,11 +2,18 @@
 import HeuristicCard from './HeuristicCard.astro';
 import type { CollectionEntry } from 'astro:content';
 
+interface Banner {
+  key: string;
+  title: string;
+  text: string;
+  bg: string;
+  count: number;
+}
 interface Props {
   items: CollectionEntry<'heuristics'>[];
-  showTypeFilter?: boolean;
+  banners?: Banner[];
 }
-const { items, showTypeFilter = false } = Astro.props;
+const { items, banners = [] } = Astro.props;
 
 // Tag options (unique across the given items).
 const tagSet = new Set<string>();
@@ -15,16 +22,22 @@ const tags = [...tagSet].sort();
 ---
 
 <div class="hb">
+  {banners.length > 0 && (
+    <div class="hb-banners" id="hb-banners" role="group" aria-label="Filter by heuristic type">
+      {banners.map((t) => (
+        <button type="button" class="hb-banner" data-type={t.key} style={`background-image: url(${t.bg})`}>
+          <span class="hbn-body">
+            <span class="hbn-title">{t.title}</span>
+            <span class="hbn-text">{t.text}</span>
+            <span class="hbn-count">{t.count} heuristics</span>
+          </span>
+        </button>
+      ))}
+    </div>
+  )}
+
   <div class="hb-filters">
     <input type="search" id="hq" placeholder="Search heuristics…" aria-label="Search heuristics" />
-    {showTypeFilter && (
-      <select id="hf-type" aria-label="Filter by type">
-        <option value="">All types</option>
-        <option value="design-heuristics">Design</option>
-        <option value="guiding-heuristics">Guiding</option>
-        <option value="value-based-heuristics">Value-based</option>
-      </select>
-    )}
     <select id="hf-tag" aria-label="Filter by tag">
       <option value="">All tags</option>
       {tags.map((t) => <option value={t}>{t}</option>)}
@@ -41,6 +54,20 @@ const tags = [...tagSet].sort();
 </div>
 
 <style>
+  /* Type banners double as the type filter */
+  .hb-banners { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
+  @media (min-width: 800px) { .hb-banners { grid-template-columns: repeat(3, 1fr); } }
+  .hb-banner { position: relative; display: flex; min-height: 12rem; padding: var(--space-6); text-align: left; color: #fff; overflow: hidden; background-size: cover; background-position: center; border: 0; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s; }
+  .hb-banner::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.8) 100%); transition: background 0.15s; }
+  .hb-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .hbn-body { position: relative; z-index: 1; margin-top: auto; }
+  .hbn-title { display: block; font-family: var(--font-heading); font-weight: 700; font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+  .hbn-text { display: block; color: rgba(255,255,255,0.92); margin: var(--space-2) 0 var(--space-3); font-size: var(--text-sm); }
+  .hbn-count { display: block; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-primary-dark); }
+  .hb-banner.active { outline: 3px solid var(--color-primary); outline-offset: -3px; }
+  .hb-banner.active::before { background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%); }
+  .hb-banners.has-active .hb-banner:not(.active) { opacity: 0.5; }
+
   .hb-filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-bottom: var(--space-8); }
   .hb-filters input, .hb-filters select {
     font-family: var(--font-body); font-size: var(--text-base);
@@ -61,22 +88,23 @@ const tags = [...tagSet].sort();
 <script>
   const cards = Array.from(document.querySelectorAll<HTMLElement>('#h-cards .h-card'));
   const q = document.getElementById('hq') as HTMLInputElement;
-  const fType = document.getElementById('hf-type') as HTMLSelectElement | null;
   const fTag = document.getElementById('hf-tag') as HTMLSelectElement;
   const reset = document.getElementById('hf-reset') as HTMLButtonElement;
   const count = document.getElementById('hb-count') as HTMLElement;
   const none = document.getElementById('hb-none') as HTMLElement;
   const more = document.getElementById('hb-more') as HTMLButtonElement;
+  const bannersWrap = document.getElementById('hb-banners');
+  const banners = Array.from(document.querySelectorAll<HTMLElement>('.hb-banner'));
   const STEP = 24;
   let limit = STEP;
+  let activeType = '';
 
   function matches(c: HTMLElement): boolean {
     const term = q.value.trim().toLowerCase();
-    const typ = fType?.value ?? '';
     const tag = fTag.value.toLowerCase();
     const d = c.dataset;
     const okTerm = !term || (d.title ?? '').includes(term) || (d.question ?? '').includes(term) || (d.tags ?? '').includes(term);
-    const okTyp = !typ || d.type === typ;
+    const okTyp = !activeType || d.type === activeType;
     const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
     return okTerm && okTyp && okTag;
   }
@@ -91,9 +119,18 @@ const tags = [...tagSet].sort();
     more.hidden = matched.length <= limit;
   }
 
-  [q, fType, fTag].forEach((el) => el?.addEventListener('input', () => apply(true)));
+  banners.forEach((bn) => bn.addEventListener('click', () => {
+    const t = bn.dataset.type ?? '';
+    activeType = activeType === t ? '' : t;
+    banners.forEach((x) => x.classList.toggle('active', x.dataset.type === activeType));
+    bannersWrap?.classList.toggle('has-active', activeType !== '');
+    apply(true);
+  }));
+  [q, fTag].forEach((el) => el.addEventListener('input', () => apply(true)));
   reset.addEventListener('click', () => {
-    q.value = ''; if (fType) fType.value = ''; fTag.value = '';
+    q.value = ''; fTag.value = ''; activeType = '';
+    banners.forEach((x) => x.classList.remove('active'));
+    bannersWrap?.classList.remove('has-active');
     apply(true);
   });
   more.addEventListener('click', () => { limit += STEP; apply(false); });
