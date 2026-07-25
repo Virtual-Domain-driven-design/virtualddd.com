@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const items = await getCollection('dddCrew');
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry, items } }));
+}
+
+const { entry, items } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const contribShown = d.contributors.slice(0, 16);
+const contribMore = d.contributors.length - contribShown.length;
+
+// Sibling tools in the same category, for a small "explore more" footer.
+const siblings = items
+  .filter((i) => i.id !== entry.id)
+  .sort((a, b) => (b.data.stars ?? 0) - (a.data.stars ?? 0))
+  .slice(0, 4);
+---
+
+<BaseLayout title={`${d.title} — ddd-crew — Virtual DDD`} description={d.description} canonical={d.canonical}>
+  <article class="dc wrap">
+    <p class="back"><a href="/ddd-crew/">← All ddd-crew tools</a></p>
+    <p class="eyebrow eyebrow--pink">ddd-crew · {d.category}</p>
+    <h1>{d.title}</h1>
+    {d.description && <p class="lead">{d.description}</p>}
+
+    <div class="attribution">
+      <p class="attr-line">
+        Republished from the <a href={d.repo}>ddd-crew/{entry.id}</a> repository, licensed
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The canonical version
+        lives at <a href={d.canonical}>ddd-crew.github.io</a>.
+      </p>
+      {contribShown.length > 0 && (
+        <p class="attr-contrib">
+          <span class="attr-label">With thanks to</span>
+          {contribShown.map((c, i) => (
+            <>{i > 0 ? ', ' : ''}<a href={c.url}>{c.name}</a></>
+          ))}
+          {contribMore > 0 && <span> &amp; {contribMore} more</span>}.
+        </p>
+      )}
+      <a class="btn btn--ghost attr-btn" href={d.repo}>View &amp; contribute on GitHub ↗</a>
+    </div>
+
+    <div class="body">
+      <Content />
+    </div>
+
+    {siblings.length > 0 && (
+      <section class="more">
+        <p class="eyebrow eyebrow--cyan">More ddd-crew tools</p>
+        <div class="more-grid">
+          {siblings.map((s) => (
+            <a class="more-card" href={`/ddd-crew/${s.id}/`}>
+              <span class="more-cat">{s.data.category}</span>
+              <span class="more-title">{s.data.title}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+
+  <style>
+    .dc { padding-block: var(--space-8) var(--space-16); }
+    .back { font-size: var(--text-sm); margin-bottom: var(--space-4); }
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+    .dc h1 { margin: 0 0 var(--space-3); }
+    .lead { color: var(--color-text-muted); font-size: var(--text-lg); max-width: 46rem; margin: 0 0 var(--space-8); }
+
+    /* Mandatory attribution — layout element, generated from frontmatter */
+    .attribution { background: var(--color-surface); border: 1px solid var(--color-border); border-left: 3px solid var(--color-accent); padding: var(--space-5) var(--space-6); margin-bottom: var(--space-12); }
+    .attr-line { margin: 0 0 var(--space-3); color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.6; }
+    .attr-contrib { margin: 0 0 var(--space-4); color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.7; }
+    .attr-label { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text); margin-right: var(--space-2); }
+    .attr-btn { font-size: var(--text-sm); }
+
+    /* Faithful README render */
+    .body { max-width: 52rem; }
+    .body :global(h2) { font-size: var(--text-2xl); margin: var(--space-12) 0 var(--space-4); padding-top: var(--space-2); }
+    .body :global(h3) { font-size: var(--text-xl); margin: var(--space-8) 0 var(--space-3); }
+    .body :global(h4) { font-size: var(--text-lg); margin: var(--space-6) 0 var(--space-2); }
+    .body :global(p) { line-height: 1.75; margin: 0 0 var(--space-5); }
+    .body :global(ul), .body :global(ol) { margin: 0 0 var(--space-5); padding-left: var(--space-6); }
+    .body :global(li) { margin-bottom: var(--space-2); line-height: 1.7; }
+    .body :global(a) { color: var(--color-primary); word-break: break-word; }
+    .body :global(strong) { color: var(--color-text); }
+    .body :global(blockquote) { margin: var(--space-6) 0; padding: var(--space-2) 0 var(--space-2) var(--space-6); border-left: 3px solid var(--color-primary); color: var(--color-text-muted); }
+    .body :global(code) { background: var(--color-surface-2); padding: 0.1em 0.4em; font-size: 0.9em; }
+    .body :global(pre) { background: var(--color-surface-2); padding: var(--space-4); overflow-x: auto; margin: 0 0 var(--space-5); }
+    .body :global(hr) { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-10) 0; }
+    /* Diagrams: most are white-canvas images; a light mat keeps transparent ones legible. */
+    .body :global(img) { display: block; max-width: 100%; height: auto; margin: var(--space-6) 0; background: #fff; padding: var(--space-2); border: 1px solid var(--color-border); }
+    .body :global(table) { width: 100%; border-collapse: collapse; margin: 0 0 var(--space-6); font-size: var(--text-sm); display: block; overflow-x: auto; }
+    .body :global(th), .body :global(td) { border: 1px solid var(--color-border); padding: var(--space-2) var(--space-3); text-align: left; vertical-align: top; }
+    .body :global(th) { background: var(--color-surface); font-family: var(--font-heading); }
+
+    .more { margin-top: var(--space-16); }
+    .more .eyebrow { margin-bottom: var(--space-6); }
+    .more-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+    @media (min-width: 640px) { .more-grid { grid-template-columns: repeat(2, 1fr); } }
+    .more-card { display: flex; flex-direction: column; gap: var(--space-1); background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-4) var(--space-5); color: var(--color-text); transition: border-color 0.15s, transform 0.15s; }
+    .more-card:hover { border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); transform: translateY(-2px); text-decoration: none; }
+    .more-cat { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--color-primary); }
+    .more-title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: 1.2; }
+  </style>
+</BaseLayout>

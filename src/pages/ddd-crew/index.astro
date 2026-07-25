@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+const all = await getCollection('dddCrew');
+const CATEGORIES = ['Getting started', 'Strategic design', 'Modelling canvases', 'EventStorming & remote'];
+const grouped = CATEGORIES.map((cat) => ({
+  cat,
+  items: all.filter((i) => i.data.category === cat).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)),
+})).filter((g) => g.items.length);
+
+// Unlicensed ddd-crew repos we can't republish — link out instead.
+const linkOuts = [
+  { title: 'Free DDD learning resources', repo: 'https://github.com/ddd-crew/free-ddd-learning-resources', text: 'A curated collection of free resources for learning DDD.' },
+  { title: 'Context Mapping quiz', repo: 'https://github.com/ddd-crew/context-mapping-quiz', text: 'Learn context mapping by trying this interactive quiz.' },
+  { title: 'AI DDD prompts & rules', repo: 'https://github.com/ddd-crew/ai-ddd-prompts-and-rules', text: 'DDD prompts and rules for your favourite coding assistant.' },
+  { title: 'Debiasing decisions toolkit', repo: 'https://github.com/ddd-crew/debiasing-decisions-toolkit', text: 'Structured behavioural interventions for better decisions.' },
+];
+---
+
+<BaseLayout
+  title="ddd-crew — Virtual DDD"
+  description="Community Domain-Driven Design tools, canvases and guides from the ddd-crew — republished with attribution under CC BY-SA 4.0."
+>
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow eyebrow--pink">ddd crew</p>
+      <h1>Community tools for Domain-Driven Design</h1>
+      <p class="lead">
+        The <a href="https://github.com/ddd-crew">ddd-crew</a> is an open, community-run collection of
+        practical DDD tools — canvases, modelling processes and reference guides. We republish them here so
+        they're easy to browse, always crediting the original authors.
+      </p>
+      <p class="licence">
+        All content in this section is by the ddd-crew and its contributors, licensed
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Each tool links back to
+        its source repository and canonical version.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    {grouped.map((g) => (
+      <section class="cat">
+        <p class="eyebrow eyebrow--cyan">{g.cat}</p>
+        <div class="grid">
+          {g.items.map((i) => (
+            <a class="tool" href={`/ddd-crew/${i.id}/`}>
+              <div class="tool-thumb">
+                {i.data.heroImage ? <Image src={i.data.heroImage} alt="" width={560} /> : <div class="tool-ph"></div>}
+              </div>
+              <div class="tool-body">
+                <h3>{i.data.title}</h3>
+                {i.data.description && <p class="tool-desc">{i.data.description}</p>}
+                <span class="tool-more">Open →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <section class="linkouts">
+      <p class="eyebrow eyebrow--cyan">More from the ddd-crew</p>
+      <p class="lo-note">These live on GitHub — head over to explore or contribute.</p>
+      <div class="lo-grid">
+        {linkOuts.map((l) => (
+          <a class="lo-card" href={l.repo}>
+            <span class="lo-title">{l.title} ↗</span>
+            <span class="lo-text">{l.text}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+
+    .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
+    .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
+      radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
+      radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
+    .hero-inner { position: relative; }
+    .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-6); }
+    .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0 0 var(--space-4); }
+    .licence { color: var(--color-text-muted); max-width: 52rem; font-size: var(--text-sm); line-height: 1.7; margin: 0; }
+
+    .cat { margin-top: var(--space-16); }
+    .grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 620px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .tool { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .tool:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
+    .tool:hover .tool-more { color: var(--color-primary); }
+    .tool-thumb { aspect-ratio: 16 / 10; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: var(--space-3); }
+    .tool-thumb :global(img) { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
+    .tool-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
+    .tool-body { padding: var(--space-5) var(--space-6) var(--space-6); display: flex; flex-direction: column; flex: 1; }
+    .tool-body h3 { font-size: var(--text-xl); margin: 0 0 var(--space-2); line-height: 1.2; }
+    .tool-desc { color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.6; margin: 0; }
+    .tool-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-4); transition: color 0.15s; }
+
+    .linkouts { margin-block: var(--space-16); }
+    .lo-note { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-6); }
+    .lo-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+    @media (min-width: 640px) { .lo-grid { grid-template-columns: repeat(2, 1fr); } }
+    .lo-card { display: flex; flex-direction: column; gap: var(--space-1); background: var(--color-surface); border: 1px dashed var(--color-border); padding: var(--space-4) var(--space-5); color: var(--color-text); transition: border-color 0.15s; }
+    .lo-card:hover { border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); text-decoration: none; }
+    .lo-title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); }
+    .lo-text { color: var(--color-text-muted); font-size: var(--text-sm); }
+  </style>
+</BaseLayout>

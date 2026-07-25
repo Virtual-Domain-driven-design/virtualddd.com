@@ -16,8 +16,9 @@ import Socials from '../components/Socials.astro';
 interface Props {
   title: string;
   description?: string;
+  canonical?: string;
 }
-const { title, description } = Astro.props;
+const { title, description, canonical } = Astro.props;
 
 const nav = [
   { href: '/', label: 'Home' },
@@ -49,6 +50,7 @@ const year = new Date().getFullYear();
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {canonical && <link rel="canonical" href={canonical} />}
   </head>
   <body>
     <header class="site-header" id="site-header">
