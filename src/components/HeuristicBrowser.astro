@@ -134,5 +134,14 @@ const tags = [...tagSet].sort();
     apply(true);
   });
   more.addEventListener('click', () => { limit += STEP; apply(false); });
+
+  // Activate a type filter from ?type=… (e.g. linked from the info page) and scroll to results.
+  const initialType = new URLSearchParams(location.search).get('type') ?? '';
+  if (initialType && banners.some((b) => b.dataset.type === initialType)) {
+    activeType = initialType;
+    banners.forEach((x) => x.classList.toggle('active', x.dataset.type === activeType));
+    bannersWrap?.classList.add('has-active');
+    requestAnimationFrame(() => document.getElementById('hb-banners')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
   apply(true);
 </script>

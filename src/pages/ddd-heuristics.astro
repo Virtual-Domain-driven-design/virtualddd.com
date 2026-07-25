@@ -1,73 +1,40 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import art1 from '../assets/heur-articles/article_what_do_typical_design_heuristics_look_like.jpg';
 import art2 from '../assets/heur-articles/article_architecture_cleus_heuristics_part_I.jpg';
 import art3 from '../assets/heur-articles/article_architecture_cleus_heuristics_part_II.jpg';
+import heurDesign from '../assets/heur-design.jpg';
+import heurGuiding from '../assets/heur-guiding.jpg';
+import heurValue from '../assets/heur-value.jpg';
 
-const types = [
-  { href: '/heuristics/design-heuristics/', title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.' },
-  { href: '/heuristics/guiding-heuristics/', title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.' },
-  { href: '/heuristics/value-based-heuristics/', title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design, or the world and the way we work.' },
-];
+const all = await getCollection('heuristics');
+const n = (key: string) => all.filter((h) => h.data.type[0] === key).length;
 
 const articles = [
   { title: 'What do typical design heuristics look like?', by: 'Rebecca Wirfs-Brock', href: 'https://wirfs-brock.com/blog/2019/04/04/what-do-typical-design-heuristics-look/', img: art1 },
   { title: 'Architecture Clues: Heuristics, Part i — SCARS', by: 'Ruth Malan', href: 'https://www.linkedin.com/pulse/architecture-clues-heuristics-part-i-scars-ruth-malan/', img: art2 },
   { title: 'Architecture Clues: Heuristics, Part ii — Decisions and Change', by: 'Ruth Malan', href: 'https://www.linkedin.com/pulse/architecture-clues-heuristics-part-ii-decisions-change-ruth-malan/', img: art3 },
 ];
+
+const banners = [
+  { href: '/heuristics/?type=design-heuristics', bg: heurDesign.src, title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.', count: n('design-heuristics') },
+  { href: '/heuristics/?type=guiding-heuristics', bg: heurGuiding.src, title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.', count: n('guiding-heuristics') },
+  { href: '/heuristics/?type=value-based-heuristics', bg: heurValue.src, title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design, or the world and the way we work.', count: n('value-based-heuristics') },
+];
+
+const videos = ['TP3xTZi_Qn8', '9ZgSz6xAfL8'];
 ---
 
 <BaseLayout
   title="About our heuristics — Virtual DDD"
-  description="What heuristics are, the three kinds we collect, how the collection is licensed, and how to contribute your own."
+  description="Further reading on heuristics, how to contribute your own, the collection's licence, the three kinds we collect, and talks on design heuristics."
 >
   <div class="wrap page">
     <p class="back"><a href="/heuristics/">← Back to heuristics</a></p>
     <p class="eyebrow eyebrow--pink">About the collection</p>
-    <h1>Heuristics</h1>
-
-    <div class="prose">
-      <p>
-        We all use heuristics (even if we haven't articulated them to others) to discover, understand,
-        explore, create, modify, or extend complex software systems. Billy Vaughn Koen, in{' '}
-        <em>Discussion of the Method: Conducting the Engineer's Approach to Problem Solving</em>, defines a
-        heuristic as "anything that provides a plausible aid or direction in the solution of a problem but
-        is in the final analysis unjustified, incapable of justification, and potentially fallible."
-      </p>
-      <p class="cite">— Rebecca Wirfs-Brock</p>
-    </div>
-
-    <section class="types">
-      {types.map((t) => (
-        <a class="type-row" href={t.href}>
-          <div>
-            <h2>{t.title} <span aria-hidden="true">››</span></h2>
-            <p>{t.text}</p>
-          </div>
-        </a>
-      ))}
-    </section>
-
-    <section class="block">
-      <h2>Using the information</h2>
-      <p>
-        All the information about heuristics on this site is{' '}
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike</a>.
-        Please remix, adapt, and build upon the work here — even for commercial purposes — as long as you
-        credit the authors and submitter and license your new creations under the identical terms.
-      </p>
-    </section>
-
-    <section class="block">
-      <h2>Submit your own heuristic</h2>
-      <p>
-        Got a rule of thumb that helps you design better systems? We'd love to add it. Share it with us in{' '}
-        <a href="https://discord.gg/tRJkcsFDKN">our Discord community</a> or email{' '}
-        <a href="mailto:info@virtualddd.com">info@virtualddd.com</a>, and we'll help curate it into the
-        collection.
-      </p>
-    </section>
+    <h1>About the heuristics</h1>
 
     <section class="block">
       <h2>Further reading</h2>
@@ -83,31 +50,79 @@ const articles = [
         ))}
       </div>
     </section>
+
+    <div class="two-up">
+      <section class="block narrow">
+        <h2>Submit your own heuristic</h2>
+        <p>
+          Got a rule of thumb that helps you design better systems? We'd love to add it. Share it with us
+          in <a href="https://discord.gg/tRJkcsFDKN">our Discord community</a> or email
+          <a href="mailto:info@virtualddd.com">info@virtualddd.com</a>, and we'll help curate it into the
+          collection.
+        </p>
+      </section>
+
+      <section class="block narrow">
+        <h2>Using the information</h2>
+        <p>
+          All the information about heuristics on this site is
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike</a>.
+          Please remix, adapt, and build upon the work here — even for commercial purposes — as long as you
+          credit the authors and submitter and license your new creations under the identical terms.
+        </p>
+      </section>
+    </div>
+
+    <section class="block">
+      <h2>Browse by type</h2>
+      <div class="type-banners">
+        {banners.map((t) => (
+          <a class="type-banner" href={t.href} style={`background-image: url(${t.bg})`}>
+            <span class="tb-body">
+              <span class="tb-title">{t.title}</span>
+              <span class="tb-text">{t.text}</span>
+              <span class="tb-count">{t.count} heuristics ››</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Talks on design heuristics</h2>
+      <div class="videos">
+        {videos.map((id) => (
+          <div class="video">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${id}`}
+              title="Talk on design heuristics"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        ))}
+      </div>
+    </section>
   </div>
 
   <style>
-    .page { max-width: 52rem; padding-block: var(--space-8) var(--space-16); }
+    .page { padding-block: var(--space-8) var(--space-16); }
     .back { font-size: var(--text-sm); margin-bottom: var(--space-4); }
     .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-accent-dark); margin: 0 0 var(--space-4); }
     .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-accent); }
-    .page h1 { margin: 0 0 var(--space-8); }
+    .page h1 { margin: 0 0 var(--space-12); }
 
-    .prose { border-left: 3px solid var(--color-accent); padding-left: var(--space-6); margin-bottom: var(--space-12); }
-    .prose p { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-3); }
-    .prose em { color: var(--color-text); font-style: italic; }
-    .prose .cite { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0; }
-
-    .types { display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-12); }
-    .type-row { display: block; background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-5) var(--space-6); color: var(--color-text); transition: border-color 0.15s, transform 0.15s; }
-    .type-row:hover { border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); transform: translateY(-2px); text-decoration: none; }
-    .type-row h2 { margin: 0 0 var(--space-1); font-size: var(--text-xl); }
-    .type-row h2 span { color: var(--color-primary); }
-    .type-row p { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
-
-    .block { margin-bottom: var(--space-12); }
-    .block h2 { font-size: var(--text-2xl); margin: 0 0 var(--space-3); }
+    .block { margin-bottom: var(--space-16); }
+    .block h2 { font-size: var(--text-2xl); margin: 0 0 var(--space-5); }
     .block p { color: var(--color-text-muted); line-height: 1.75; margin: 0; }
+    .block.narrow p { max-width: 34rem; }
 
+    /* Submit + Creative Commons side by side */
+    .two-up { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-bottom: var(--space-16); }
+    @media (min-width: 800px) { .two-up { grid-template-columns: 1fr 1fr; gap: var(--space-12); } .two-up .block { margin-bottom: 0; } }
+
+    /* Further reading */
     .articles { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
     @media (min-width: 720px) { .articles { grid-template-columns: repeat(3, 1fr); } }
     .article { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: border-color 0.15s, transform 0.15s; }
@@ -117,5 +132,22 @@ const articles = [
     .article-body { padding: var(--space-4) var(--space-5) var(--space-5); }
     .article-body h3 { font-size: var(--text-base); margin: 0 0 var(--space-2); line-height: 1.3; }
     .article-by { margin: 0; font-size: var(--text-sm); color: var(--color-text-muted); }
+
+    /* Type banners → main page with filter applied */
+    .type-banners { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 800px) { .type-banners { grid-template-columns: repeat(3, 1fr); } }
+    .type-banner { position: relative; display: flex; min-height: 12rem; padding: var(--space-6); color: #fff; overflow: hidden; background-size: cover; background-position: center; transition: transform 0.15s, box-shadow 0.15s; }
+    .type-banner::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.8) 100%); }
+    .type-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow); text-decoration: none; }
+    .tb-body { position: relative; z-index: 1; margin-top: auto; }
+    .tb-title { display: block; font-family: var(--font-heading); font-weight: 700; font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+    .tb-text { display: block; color: rgba(255,255,255,0.92); margin: var(--space-2) 0 var(--space-3); font-size: var(--text-sm); }
+    .tb-count { display: block; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-primary-dark); }
+
+    /* Videos */
+    .videos { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 800px) { .videos { grid-template-columns: 1fr 1fr; } }
+    .video { position: relative; aspect-ratio: 16 / 9; background: #000; box-shadow: var(--shadow); }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   </style>
 </BaseLayout>
