@@ -24,12 +24,17 @@ const banners = [
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <p class="eyebrow eyebrow--pink">Heuristics</p>
-      <h1>Rules of thumb for systems &amp; software design</h1>
-      <p class="lead">
-        A heuristic is a rule of thumb — a piece of hard-won experience that helps you decide what to do
-        next when there's no single right answer. This is our curated, growing collection, gathered from
-        our community's sessions and stories.
-      </p>
+      <blockquote class="hero-quote">
+        <p>
+          We all use heuristics — even if we haven't articulated them to others — to discover, understand,
+          explore, create, modify, or extend complex software systems. Billy Vaughn Koen, in{' '}
+          <em>Discussion of the Method</em>, defines a heuristic as "anything that provides a plausible aid
+          or direction in the solution of a problem but is in the final analysis unjustified, incapable of
+          justification, and potentially fallible."
+        </p>
+        <cite>— Rebecca Wirfs-Brock</cite>
+      </blockquote>
+      <a class="btn btn--accent hero-btn" href="/ddd-heuristics/">More info →</a>
     </div>
   </section>
 
@@ -51,8 +56,11 @@ const banners = [
       radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
       radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
     .hero-inner { position: relative; }
-    .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-6); }
-    .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0; }
+    .hero-quote { margin: 0; max-width: 56rem; position: relative; padding-left: var(--space-6); border-left: 3px solid var(--color-accent); }
+    .hero-quote p { font-family: var(--font-heading); font-weight: 600; font-size: clamp(1.35rem, 1.4vw + 1rem, var(--text-2xl)); line-height: 1.4; color: var(--color-text); margin: 0 0 var(--space-4); }
+    .hero-quote em { font-style: italic; color: var(--color-text); }
+    .hero-quote cite { font-style: normal; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-dark); font-size: var(--text-sm); }
+    .hero-btn { margin-top: var(--space-8); }
 
     .all { margin-block: var(--space-12) var(--space-16); }
   </style>
