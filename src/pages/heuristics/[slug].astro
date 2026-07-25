@@ -1,0 +1,247 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeuristicBrowser from '../../components/HeuristicBrowser.astro';
+import SideExtras from '../../components/SideExtras.astro';
+import { getCollection, render } from 'astro:content';
+import heurDesign from '../../assets/heur-design.jpg';
+import heurGuiding from '../../assets/heur-guiding.jpg';
+import heurValue from '../../assets/heur-value.jpg';
+
+const TYPE_META: Record<string, { title: string; text: string; bg: ImageMetadata }> = {
+  'design-heuristics': { title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.', bg: heurDesign },
+  'guiding-heuristics': { title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.', bg: heurGuiding },
+  'value-based-heuristics': { title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design and the way we work.', bg: heurValue },
+};
+const imgForType = (key?: string) =>
+  key === 'design-heuristics' ? heurDesign : key === 'value-based-heuristics' ? heurValue : heurGuiding;
+
+export async function getStaticPaths() {
+  const all = (await getCollection('heuristics')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+  const typeKeys = ['design-heuristics', 'guiding-heuristics', 'value-based-heuristics'];
+  const typePaths = typeKeys.map((key) => ({
+    params: { slug: key },
+    props: { kind: 'type' as const, typeKey: key, all },
+  }));
+  const detailPaths = all.map((heuristic) => ({
+    params: { slug: heuristic.id },
+    props: { kind: 'detail' as const, heuristic, all },
+  }));
+  return [...typePaths, ...detailPaths];
+}
+
+const props = Astro.props;
+const all = props.all;
+const byId = new Map(all.map((h) => [h.id, h]));
+
+// ---- Type-page data ----
+const meta = props.kind === 'type' ? TYPE_META[props.typeKey] : null;
+const typeItems = props.kind === 'type' ? all.filter((h) => h.data.type[0] === props.typeKey) : [];
+
+// ---- Detail-page data ----
+let Content: any = null;
+let d: any = null;
+let related: { label: string; items: any[] }[] = [];
+let discussedIn: { href: string; title: string; kind: string }[] = [];
+let prev: any = null;
+let next: any = null;
+let latestHeur: { href: string; title: string; img?: ImageMetadata }[] = [];
+
+if (props.kind === 'detail') {
+  const h = props.heuristic;
+  d = h.data;
+  ({ Content } = await render(h));
+
+  const RELS: [string, string][] = [
+    ['complements', 'Complements'],
+    ['enables', 'Enables'],
+    ['prerequisites', 'Builds on'],
+    ['competesWith', 'Competes with'],
+    ['specializes', 'Specialises'],
+  ];
+  related = RELS.map(([field, label]) => ({
+    label,
+    items: ((d[field] ?? []) as { id: string }[]).map((r) => byId.get(r.id)).filter(Boolean),
+  })).filter((g) => g.items.length);
+
+  const sessions = await getCollection('sessions');
+  const stories = await getCollection('stories');
+  discussedIn = [
+    ...sessions
+      .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === h.id))
+      .map((s) => ({ href: `/sessions/${s.id}/`, title: s.data.title, kind: 'Session' })),
+    ...stories
+      .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === h.id))
+      .map((s) => ({ href: `/facilitating-archdes/${s.id}/`, title: s.data.title, kind: 'Story' })),
+  ];
+
+  const idx = all.findIndex((x) => x.id === h.id);
+  prev = all[idx - 1];
+  next = all[idx + 1];
+
+  latestHeur = all
+    .filter((x) => x.id !== h.id && x.data.type[0] === d.type[0])
+    .slice(0, 3)
+    .map((x) => ({ href: `/heuristics/${x.id}/`, title: x.data.title, img: imgForType(x.data.type[0]) }));
+}
+
+const pageTitle =
+  props.kind === 'type' ? `${meta!.title} — Virtual DDD` : `${d.title} — Virtual DDD`;
+const pageDesc = props.kind === 'type' ? meta!.text : d.question ?? d.title;
+---
+
+<BaseLayout title={pageTitle} description={pageDesc}>
+  {props.kind === 'type' && (
+    <>
+      <section class="t-hero" style={`background-image: url(${meta!.bg.src})`}>
+        <div class="t-hero-scrim"></div>
+        <div class="wrap t-hero-inner">
+          <p class="back"><a href="/heuristics/">← All heuristics</a></p>
+          <h1>{meta!.title}</h1>
+          <p>{meta!.text}</p>
+        </div>
+      </section>
+      <div class="wrap type-list">
+        <HeuristicBrowser items={typeItems} />
+      </div>
+    </>
+  )}
+
+  {props.kind === 'detail' && (
+    <article class="hd wrap">
+      <div class="hd-main">
+        <p class="back"><a href="/heuristics/">← All heuristics</a></p>
+        <p class="eyebrow eyebrow--pink">Heuristics</p>
+        <h1>{d.title}</h1>
+        {d.authors.length > 0 && <p class="byline">by {d.authors.join(', ')}</p>}
+
+        {d.question && (
+          <blockquote class="hd-question">
+            <span class="hq-icon" aria-hidden="true">?</span>
+            <span>{d.question}</span>
+          </blockquote>
+        )}
+
+        <div class="body"><Content /></div>
+
+        {related.length > 0 && (
+          <section class="hd-related">
+            <p class="eyebrow eyebrow--cyan">Related heuristics</p>
+            {related.map((g) => (
+              <div class="rel-group">
+                <h3>{g.label}</h3>
+                <ul>
+                  {g.items.map((r) => <li><a href={`/heuristics/${r.id}/`}>{r.data.title}</a></li>)}
+                </ul>
+              </div>
+            ))}
+          </section>
+        )}
+
+        <nav class="prevnext">
+          {prev ? (
+            <a class="pn" href={`/heuristics/${prev.id}/`}>
+              <span class="pn-label">← Previous</span>
+              <span class="pn-title">{prev.data.title}</span>
+            </a>
+          ) : <span />}
+          {next && (
+            <a class="pn pn-next" href={`/heuristics/${next.id}/`}>
+              <span class="pn-label">Next →</span>
+              <span class="pn-title">{next.data.title}</span>
+            </a>
+          )}
+        </nav>
+      </div>
+
+      <aside class="hd-side">
+        <div class="side-card">
+          {d.type[0] && <p class="side-type">{TYPE_META[d.type[0]]?.title ?? 'Heuristic'}</p>}
+          {d.authors.length > 0 && <p class="side-authors">Curated by {d.authors.join(', ')}</p>}
+        </div>
+
+        {d.tags.length > 0 && (
+          <div class="side-block">
+            <p class="eyebrow eyebrow--cyan">Tags</p>
+            <div class="tags">{d.tags.map((t: string) => <span class="tag">{t}</span>)}</div>
+          </div>
+        )}
+
+        {discussedIn.length > 0 && (
+          <div class="side-block">
+            <p class="eyebrow eyebrow--cyan">Discussed in</p>
+            <ul class="disc-list">
+              {discussedIn.map((x) => (
+                <li><a href={x.href}><span class="disc-kind">{x.kind}</span>{x.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <SideExtras latest={latestHeur} latestLabel="More heuristics" latestAllHref="/heuristics/" />
+      </aside>
+    </article>
+  )}
+
+  <style>
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); margin-bottom: var(--space-3); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+    .back { font-size: var(--text-sm); margin-bottom: var(--space-4); }
+
+    /* Type hero */
+    .t-hero { position: relative; background-size: cover; background-position: center; margin-top: calc(-1 * var(--space-12)); }
+    .t-hero-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.86)); }
+    .t-hero-inner { position: relative; padding-block: var(--space-16) var(--space-12); }
+    .t-hero h1 { margin: 0 0 var(--space-3); }
+    .t-hero p { color: rgba(255, 255, 255, 0.9); max-width: 46rem; margin: 0; }
+    .type-list { padding-block: var(--space-12) var(--space-16); }
+
+    /* Detail */
+    .hd { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+    .hd-main h1 { margin: 0 0 var(--space-3); }
+    .byline { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
+
+    .hd-question { display: flex; gap: var(--space-4); align-items: flex-start; background: var(--color-surface); border-left: 3px solid var(--color-primary); padding: var(--space-5) var(--space-6); margin: 0 0 var(--space-8); }
+    .hq-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; background: var(--color-primary); color: #04222b; font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg); }
+    .hd-question span:last-child { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); line-height: 1.3; color: var(--color-primary-dark); }
+
+    .body { max-width: 42rem; font-size: 1.05rem; }
+    .body :global(p) { line-height: 1.75; margin: 0 0 var(--space-5); }
+    .body :global(h2) { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+    .body :global(ul), .body :global(ol) { margin: 0 0 var(--space-5); padding-left: var(--space-6); }
+    .body :global(strong) { color: var(--color-text); }
+
+    .hd-related { margin-top: var(--space-12); }
+    .rel-group { margin-bottom: var(--space-5); }
+    .rel-group h3 { font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin: 0 0 var(--space-2); }
+    .rel-group ul { margin: 0; padding-left: var(--space-5); }
+    .rel-group li { margin-bottom: var(--space-1); }
+
+    .prevnext { display: flex; justify-content: space-between; gap: var(--space-8); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--color-border); }
+    .pn { display: flex; flex-direction: column; gap: var(--space-1); max-width: 20rem; color: var(--color-text); }
+    .pn:hover { text-decoration: none; }
+    .pn:hover .pn-title { color: var(--color-primary); }
+    .pn-label { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); }
+    .pn-title { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; transition: color 0.15s; }
+    .pn-next { margin-left: auto; text-align: right; }
+
+    /* Sidebar */
+    .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+    .side-type { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+    .side-authors { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0; }
+    .side-block { margin-top: var(--space-8); }
+    .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .disc-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+    .disc-list a { color: var(--color-text); font-size: var(--text-sm); line-height: 1.3; }
+    .disc-list a:hover { color: var(--color-primary); }
+    .disc-kind { display: block; font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--color-primary); }
+
+    @media (min-width: 900px) {
+      .hd { grid-template-columns: minmax(0, 1fr) 19rem; column-gap: var(--space-12); align-items: start; }
+      .hd-side { position: sticky; top: 5.5rem; align-self: start; }
+    }
+  </style>
+</BaseLayout>

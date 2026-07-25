@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  heuristic: CollectionEntry<'heuristics'>;
+}
+const { heuristic } = Astro.props;
+const d = heuristic.data;
+const type = d.type[0] ?? '';
+const typeLabel: Record<string, string> = {
+  'design-heuristics': 'Design',
+  'guiding-heuristics': 'Guiding',
+  'value-based-heuristics': 'Value-based',
+};
+---
+
+<a
+  class="h-card"
+  href={`/heuristics/${heuristic.id}/`}
+  data-type={type}
+  data-title={d.title.toLowerCase()}
+  data-question={(d.question ?? '').toLowerCase()}
+  data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
+>
+  {type && <span class:list={['h-type', type]}>{typeLabel[type] ?? 'Heuristic'}</span>}
+  {d.question && <p class="h-q">{d.question}</p>}
+  <h3 class="h-title">{d.title}</h3>
+  <span class="h-more">More info →</span>
+</a>
+
+<style>
+  .h-card { display: flex; flex-direction: column; background: #fff; color: #0d0e12; padding: var(--space-6); min-height: 12rem; transition: transform 0.15s, box-shadow 0.15s; }
+  .h-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
+  .h-type { align-self: flex-start; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.7rem; padding: 2px 8px; margin-bottom: var(--space-3); color: #fff; }
+  .h-type.design-heuristics { background: #16bde8; }
+  .h-type.guiding-heuristics { background: #ec5fa6; }
+  .h-type.value-based-heuristics { background: #7b61ff; }
+  .h-q { color: #0b7f9e; font-size: var(--text-sm); line-height: 1.4; margin: 0 0 var(--space-2); }
+  .h-title { color: #0d0e12; font-size: var(--text-lg); line-height: 1.2; margin: 0; }
+  .h-more { margin-top: auto; padding-top: var(--space-4); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: #0b7f9e; }
+</style>

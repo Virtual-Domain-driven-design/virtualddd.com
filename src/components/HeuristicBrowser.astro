@@ -1,0 +1,101 @@
+---
+import HeuristicCard from './HeuristicCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  items: CollectionEntry<'heuristics'>[];
+  showTypeFilter?: boolean;
+}
+const { items, showTypeFilter = false } = Astro.props;
+
+// Tag options (unique across the given items).
+const tagSet = new Set<string>();
+for (const h of items) for (const t of h.data.tags) tagSet.add(t.toLowerCase());
+const tags = [...tagSet].sort();
+---
+
+<div class="hb">
+  <div class="hb-filters">
+    <input type="search" id="hq" placeholder="Search heuristics…" aria-label="Search heuristics" />
+    {showTypeFilter && (
+      <select id="hf-type" aria-label="Filter by type">
+        <option value="">All types</option>
+        <option value="design-heuristics">Design</option>
+        <option value="guiding-heuristics">Guiding</option>
+        <option value="value-based-heuristics">Value-based</option>
+      </select>
+    )}
+    <select id="hf-tag" aria-label="Filter by tag">
+      <option value="">All tags</option>
+      {tags.map((t) => <option value={t}>{t}</option>)}
+    </select>
+    <button id="hf-reset" type="button">Reset</button>
+    <span class="hb-count" id="hb-count"></span>
+  </div>
+
+  <div class="hb-grid" id="h-cards">
+    {items.map((h) => <HeuristicCard heuristic={h} />)}
+  </div>
+  <p class="hb-none" id="hb-none" hidden>No heuristics match your filters.</p>
+  <div class="hb-load"><button id="hb-more" type="button" class="btn btn--ghost">Load more</button></div>
+</div>
+
+<style>
+  .hb-filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-bottom: var(--space-8); }
+  .hb-filters input, .hb-filters select {
+    font-family: var(--font-body); font-size: var(--text-base);
+    padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text);
+  }
+  .hb-filters input { flex: 1 1 18rem; }
+  .hb-filters input:focus, .hb-filters select:focus { outline: none; border-color: var(--color-primary); }
+  .hb-filters #hf-reset { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; padding: var(--space-3) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-muted); }
+  .hb-filters #hf-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
+  .hb-count { color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
+
+  .hb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); }
+  .hb-none { color: var(--color-text-muted); }
+  .hb-load { text-align: center; margin-top: var(--space-8); }
+</style>
+
+<script>
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('#h-cards .h-card'));
+  const q = document.getElementById('hq') as HTMLInputElement;
+  const fType = document.getElementById('hf-type') as HTMLSelectElement | null;
+  const fTag = document.getElementById('hf-tag') as HTMLSelectElement;
+  const reset = document.getElementById('hf-reset') as HTMLButtonElement;
+  const count = document.getElementById('hb-count') as HTMLElement;
+  const none = document.getElementById('hb-none') as HTMLElement;
+  const more = document.getElementById('hb-more') as HTMLButtonElement;
+  const STEP = 24;
+  let limit = STEP;
+
+  function matches(c: HTMLElement): boolean {
+    const term = q.value.trim().toLowerCase();
+    const typ = fType?.value ?? '';
+    const tag = fTag.value.toLowerCase();
+    const d = c.dataset;
+    const okTerm = !term || (d.title ?? '').includes(term) || (d.question ?? '').includes(term) || (d.tags ?? '').includes(term);
+    const okTyp = !typ || d.type === typ;
+    const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
+    return okTerm && okTyp && okTag;
+  }
+
+  function apply(resetLimit = false) {
+    if (resetLimit) limit = STEP;
+    const matched = cards.filter(matches);
+    cards.forEach((c) => (c.hidden = true));
+    matched.slice(0, limit).forEach((c) => (c.hidden = false));
+    count.textContent = `${matched.length} heuristic${matched.length === 1 ? '' : 's'}`;
+    none.hidden = matched.length > 0;
+    more.hidden = matched.length <= limit;
+  }
+
+  [q, fType, fTag].forEach((el) => el?.addEventListener('input', () => apply(true)));
+  reset.addEventListener('click', () => {
+    q.value = ''; if (fType) fType.value = ''; fTag.value = '';
+    apply(true);
+  });
+  more.addEventListener('click', () => { limit += STEP; apply(false); });
+  apply(true);
+</script>

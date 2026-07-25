@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeuristicBrowser from '../../components/HeuristicBrowser.astro';
+import { getCollection } from 'astro:content';
+import heurDesign from '../../assets/heur-design.jpg';
+import heurGuiding from '../../assets/heur-guiding.jpg';
+import heurValue from '../../assets/heur-value.jpg';
+
+const all = (await getCollection('heuristics')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const count = (key: string) => all.filter((h) => h.data.type[0] === key).length;
+const types = [
+  { href: '/heuristics/design-heuristics/', bg: heurDesign.src, title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.', n: count('design-heuristics') },
+  { href: '/heuristics/guiding-heuristics/', bg: heurGuiding.src, title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.', n: count('guiding-heuristics') },
+  { href: '/heuristics/value-based-heuristics/', bg: heurValue.src, title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design and the way we work.', n: count('value-based-heuristics') },
+];
+---
+
+<BaseLayout
+  title="Heuristics — Virtual DDD"
+  description="A curated, growing collection of heuristics for systems and software design — rules of thumb that help you decide what to do next."
+>
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow eyebrow--pink">Heuristics</p>
+      <h1>Rules of thumb for systems &amp; software design</h1>
+      <p class="lead">
+        A heuristic is a rule of thumb — a piece of hard-won experience that helps you decide what to do
+        next when there's no single right answer. This is our curated, growing collection, gathered from
+        our community's sessions and stories.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="type-cards">
+      {types.map((t) => (
+        <a class="type-card" href={t.href} style={`background-image: url(${t.bg})`}>
+          <div class="tc-body">
+            <h2>{t.title}</h2>
+            <p>{t.text}</p>
+            <span class="tc-count">{t.n} heuristics ››</span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <section class="all">
+      <p class="eyebrow eyebrow--cyan">All heuristics</p>
+      <HeuristicBrowser items={all} showTypeFilter />
+    </section>
+  </div>
+
+  <style>
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
+    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
+    .eyebrow--pink { color: var(--color-accent-dark); }
+    .eyebrow--pink::before { background: var(--color-accent); }
+    .eyebrow--cyan { color: var(--color-primary); }
+    .eyebrow--cyan::before { background: var(--color-primary); }
+
+    .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
+    .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
+      radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
+      radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
+    .hero-inner { position: relative; }
+    .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-6); }
+    .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0; }
+
+    /* Type cards (mirror the home page) */
+    .type-cards { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin: var(--space-16) 0; }
+    @media (min-width: 800px) { .type-cards { grid-template-columns: repeat(3, 1fr); } }
+    .type-card { position: relative; display: flex; min-height: 12rem; padding: var(--space-6); color: #fff; overflow: hidden; background-size: cover; background-position: center; transition: transform 0.15s, box-shadow 0.15s; }
+    .type-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.78) 100%); }
+    .type-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); text-decoration: none; }
+    .tc-body { position: relative; z-index: 1; margin-top: auto; }
+    .tc-body h2 { color: #fff; margin: 0 0 var(--space-2); font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+    .tc-body p { color: rgba(255, 255, 255, 0.92); margin: 0 0 var(--space-3); font-size: var(--text-sm); }
+    .tc-count { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-primary-dark); }
+
+    .all { margin-bottom: var(--space-16); }
+  </style>
+</BaseLayout>
