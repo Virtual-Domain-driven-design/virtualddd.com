@@ -1,5 +1,6 @@
 ---
 title: "Context Mapping"
+description: "Context Maps describe the contact between bounded contexts and teams with a collection of patterns. There are nine context map patterns and three…"
 repo: "https://github.com/ddd-crew/context-mapping"
 canonical: "https://ddd-crew.github.io/context-mapping/"
 license: "CC-BY-SA-4.0"

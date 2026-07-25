@@ -10,7 +10,7 @@
  *
  * Without --write it reports what it would do (dry run).
  */
-import { writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
@@ -22,6 +22,7 @@ const write = process.argv.includes('--write');
 const REPOS: { name: string; category: string; order: number }[] = [
   { name: 'welcome-to-ddd', category: 'Getting started', order: 1 },
   { name: 'ddd-starter-modelling-process', category: 'Getting started', order: 2 },
+  { name: 'ddd-familiarity-assessment', category: 'Getting started', order: 3 },
   { name: 'context-mapping', category: 'Strategic design', order: 1 },
   { name: 'core-domain-charts', category: 'Strategic design', order: 2 },
   { name: 'domain-message-flow-modelling', category: 'Strategic design', order: 3 },
@@ -92,12 +93,30 @@ async function processRepo(spec: (typeof REPOS)[number]) {
   const title = (h1?.[1] ?? name).replace(/[#*`]/g, '').trim();
   if (h1) md = md.replace(h1[0], '').replace(/^\s+/, '');
 
+  // Description: repo description, else the first real paragraph of the README.
+  // Ignore "WIP…" placeholder descriptions in favour of the README.
+  let description: string = (meta.description ?? '').trim();
+  if (!description || /^wip\b/i.test(description)) {
+    description = '';
+    const para = md
+      .split(/\n\s*\n/)
+      .map((s) => s.trim())
+      .find((s) => s && !/^[#>!<\-*|]/.test(s));
+    if (para) {
+      const t = para.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[#*`_]/g, '').replace(/\s+/g, ' ').trim();
+      description = t.length > 150 ? t.slice(0, 150).replace(/\s+\S*$/, '') + '…' : t;
+    }
+  }
+
   const contribs = (await api(`repos/${OWNER}/${name}/contributors?per_page=30`))
     .filter((c: any) => c.type === 'User' && !/\[bot\]$/i.test(c.login))
     .slice(0, 24)
     .map((c: any) => ({ name: c.login as string, url: c.html_url as string }));
 
   const assetsDir = join(OUT, '_assets', name);
+  // Fresh per-repo asset dir (never wipe the whole collection — a failed repo
+  // mid-run must not delete other repos' committed content).
+  if (write) rmSync(assetsDir, { recursive: true, force: true });
   const images = new Map<string, string>(); // repoPath -> local filename
   let heroImage: string | undefined;
 
@@ -150,7 +169,7 @@ async function processRepo(spec: (typeof REPOS)[number]) {
   const fm = [
     '---',
     `title: ${yamlStr(title)}`,
-    meta.description ? `description: ${yamlStr(meta.description)}` : null,
+    description ? `description: ${yamlStr(description)}` : null,
     `repo: ${yamlStr(meta.html_url)}`,
     `canonical: ${yamlStr(`https://${OWNER}.github.io/${name}/`)}`,
     `license: "CC-BY-SA-4.0"`,
@@ -171,18 +190,30 @@ async function processRepo(spec: (typeof REPOS)[number]) {
 
 async function main() {
   console.log(`ddd-crew sync ${write ? '(writing)' : '(dry run — pass --write)'}\n`);
-  if (write) {
-    rmSync(OUT, { recursive: true, force: true });
-    mkdirSync(OUT, { recursive: true });
-  }
+  if (write) mkdirSync(OUT, { recursive: true });
+  let ok = 0;
+  const failed: string[] = [];
   for (const spec of REPOS) {
     try {
       await processRepo(spec);
+      ok++;
     } catch (e) {
+      failed.push(spec.name);
       console.error(`  ✗ ${spec.name}: ${(e as Error).message}`);
     }
   }
-  console.log(write ? `\nWrote to ${OUT}` : '\nDry run complete.');
+  // Prune orphaned markdown for repos no longer in the list — but only when the
+  // whole run succeeded, so a partial (rate-limited) run never deletes content.
+  if (write && failed.length === 0) {
+    const keep = new Set(REPOS.map((r) => `${r.name}.md`));
+    for (const f of readdirSync(OUT)) {
+      if (f.endsWith('.md') && !keep.has(f)) {
+        rmSync(join(OUT, f));
+        console.log(`  – pruned ${f}`);
+      }
+    }
+  }
+  console.log(write ? `\nWrote ${ok}/${REPOS.length} to ${OUT}${failed.length ? ` (failed: ${failed.join(', ')})` : ''}` : '\nDry run complete.');
 }
 
 main();
