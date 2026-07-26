@@ -19,13 +19,13 @@ const { prev, next, noun } = Astro.props;
 {(prev || next) && (
   <nav class="prevnext" aria-label={`Previous and next ${noun}`}>
     {prev ? (
-      <a class="pn" href={prev.href}>
+      <a class="pn" data-test="prev" href={prev.href}>
         <span class="pn-label">← Previous {noun}</span>
         <span class="pn-title">{prev.title}</span>
       </a>
     ) : <span />}
     {next && (
-      <a class="pn pn-next" href={next.href}>
+      <a class="pn pn-next" data-test="next" href={next.href}>
         <span class="pn-label">Next {noun} →</span>
         <span class="pn-title">{next.title}</span>
       </a>

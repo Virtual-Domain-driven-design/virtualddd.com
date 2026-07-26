@@ -78,8 +78,8 @@ const description = d.role
         {d.photo && <Image class="portrait" src={d.photo} alt={d.name} width={480} />}
         {(d.website || d.linkedin) && (
           <div class="side-links">
-            {d.website && <a class="btn btn--ghost side-btn" href={d.website}>Website ↗</a>}
-            {d.linkedin && <a class="btn btn--ghost side-btn" href={d.linkedin}>LinkedIn ↗</a>}
+            {d.website && <a class="btn btn--ghost btn--sm btn--block" href={d.website}>Website ↗</a>}
+            {d.linkedin && <a class="btn btn--ghost btn--sm btn--block" href={d.linkedin}>LinkedIn ↗</a>}
           </div>
         )}
         {d.organises.length > 0 && (
@@ -183,7 +183,6 @@ const description = d.role
   .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
   .portrait { width: 100%; height: auto; margin-bottom: var(--space-5); }
   .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
-  .side-btn { width: 100%; justify-content: center; font-size: var(--text-sm); }
   .side-block { margin-top: var(--space-6); }
   .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 

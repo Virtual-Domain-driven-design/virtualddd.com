@@ -79,8 +79,8 @@ const past = all.filter((s) => !(s.data.status === 'Published' && +new Date(s.da
   <style>
     .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
     .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
-      radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
-      radial-gradient(90% 80% at 100% 15%, rgba(236, 95, 166, 0.12), transparent 60%); }
+      radial-gradient(120% 90% at 0% 0%, var(--tint-primary), transparent 55%),
+      radial-gradient(90% 80% at 100% 15%, var(--tint-accent), transparent 60%); }
     .hero-inner { position: relative; }
     .hero h1 { font-size: clamp(2rem, 3.4vw + 1rem, var(--text-4xl)); line-height: 1.06; max-width: 20ch; margin: 0 0 var(--space-6); }
     .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0; }
@@ -89,7 +89,7 @@ const past = all.filter((s) => !(s.data.status === 'Published' && +new Date(s.da
     .archive { margin-block: var(--space-16); }
     /* Cards come from patterns.css; the grid is 1 / 2 / 3 columns. */
     .grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
-    @media (min-width: 620px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
   </style>
 </BaseLayout>

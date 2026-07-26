@@ -21,13 +21,13 @@ const banners = showBanners
 
 <div class="hb">
   {banners.length > 0 && (
-    <div class="hb-banners" id="hb-banners" role="group" aria-label="Filter by heuristic type">
+    <div class="hb-banners tbanner-grid" id="hb-banners" role="group" aria-label="Filter by heuristic type">
       {banners.map((t) => (
-        <button type="button" class="hb-banner scrim" data-test="type-filter" data-type={t.key} style={`background-image: url(${t.bg.src})`}>
-          <span class="hbn-body">
-            <span class="hbn-title">{t.title}</span>
-            <span class="hbn-text">{t.text}</span>
-            <span class="hbn-count">{t.count} heuristics</span>
+        <button type="button" class="hb-banner tbanner scrim" data-test="type-filter" data-type={t.key} style={`background-image: url(${t.bg.src})`}>
+          <span class="tbanner-body">
+            <span class="tbanner-title">{t.title}</span>
+            <span class="tbanner-text">{t.text}</span>
+            <span class="tbanner-count">{t.count} heuristics</span>
           </span>
         </button>
       ))}
@@ -52,21 +52,8 @@ const banners = showBanners
 </div>
 
 <style>
-  /* Type banners double as the type filter */
-  .hb-banners { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
-  @media (min-width: 800px) { .hb-banners { grid-template-columns: repeat(3, 1fr); } }
-  /* .scrim (patterns.css) supplies the overlay; these read top-down, and match
-     the same tiles on /ddd-heuristics/ and the home page. */
-  .hb-banner { display: flex; min-height: 12rem; padding: var(--space-6); text-align: left; color: #fff; border: 0; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s; }
-  .hb-banner::before { background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.8) 100%); transition: background 0.15s; }
-  .hb-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-  .hbn-body { position: relative; z-index: 1; margin-top: auto; }
-  .hbn-title { display: block; font-family: var(--font-heading); font-weight: 700; font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
-  .hbn-text { display: block; color: rgba(255,255,255,0.92); margin: var(--space-2) 0 var(--space-3); font-size: var(--text-sm); }
-  .hbn-count { display: block; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-primary-dark); }
-  .hb-banner.active { outline: 3px solid var(--color-primary); outline-offset: -3px; }
-  .hb-banner.active::before { background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%); }
-  .hb-banners.has-active .hb-banner:not(.active) { opacity: 0.5; }
+  /* Banners come from patterns.css (.tbanner); this is the only local bit. */
+  .hb-banners { margin-bottom: var(--space-8); }
 
   /* Filters, the card grid and the result count come from patterns.css. */
   .hb-filters { margin: 0 0 var(--space-8); }

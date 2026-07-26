@@ -186,6 +186,123 @@ describe('the upcoming/past split', () => {
   });
 });
 
+describe('sessions in their two states', () => {
+  // One template renders both. Getting this wrong means either advertising an
+  // event that has been, or hiding the joining details for one that has not.
+  const sessionPages = () => all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
+  const startOf = (p) => +new Date(attr(p.html, /<time[^>]*data-iso="([^"]+)"/));
+
+  test('a past session offers no RSVP, no join link and no calendar file', () => {
+    const bad = [];
+    for (const p of sessionPages()) {
+      if (startOf(p) > Date.now()) continue;
+      if (p.html.includes('data-test="add-to-calendar"')) bad.push(`${p.path}: offers a calendar file`);
+      if (/class="[^"]*\bjs-live\b/.test(p.html)) bad.push(`${p.path}: still shows joining links`);
+      if (/>RSVP/.test(p.html)) bad.push(`${p.path}: still asks for an RSVP`);
+    }
+    assert.deepEqual(bad, [], bad.join('\n'));
+  });
+
+  test('an upcoming session offers a way in', () => {
+    const upcoming = sessionPages().filter((p) => startOf(p) > Date.now());
+    for (const p of upcoming) {
+      assert.ok(
+        p.html.includes('data-test="add-to-calendar"') || /RSVP/.test(p.html),
+        `${p.path} is upcoming but offers no RSVP and no calendar file`,
+      );
+    }
+  });
+
+  test('the calendar file states the session\'s real start time', () => {
+    // A timezone slip here is invisible on the site and puts the event in
+    // someone's calendar at the wrong hour.
+    const offering = all.filter((p) => p.html.includes('data-test="add-to-calendar"'));
+    assert.ok(offering.length > 0, 'no session offers a calendar file');
+    for (const p of offering) {
+      const ics = readFileSync(`${DIST}${p.path}event.ics`, 'utf8');
+      const stamp = ics.match(/DTSTART:(\d{8}T\d{6})Z/)[1];
+      const asUtc = `${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}T${stamp.slice(9, 11)}:${stamp.slice(11, 13)}:${stamp.slice(13, 15)}Z`;
+      assert.equal(+new Date(asUtc), startOf(p),
+        `${p.path}: calendar says ${asUtc}, the page says ${new Date(startOf(p)).toISOString()}`);
+    }
+  });
+});
+
+describe('prev/next navigation', () => {
+  test('round-trips: the next of a page\'s previous is that page', () => {
+    const byPath = new Map(all.map((p) => [p.path, p]));
+    const link = (p, which) => attr(p.html, new RegExp(`data-test="${which}" href="([^"]+)"`));
+    const checked = [];
+    for (const p of all) {
+      const prev = link(p, 'prev');
+      if (!prev) continue;
+      const back = byPath.get(prev);
+      assert.ok(back, `${p.path} links to a previous page that does not exist: ${prev}`);
+      assert.equal(link(back, 'next'), p.path,
+        `${prev} does not point back to ${p.path} as its next`);
+      checked.push(p.path);
+    }
+    assert.ok(checked.length > 50, `only ${checked.length} pages have prev/next`);
+  });
+});
+
+describe('heuristic type pages', () => {
+  test('each lists only its own type, and the counts agree', () => {
+    const types = ['design-heuristics', 'guiding-heuristics', 'value-based-heuristics'];
+    let total = 0;
+    for (const type of types) {
+      const page = all.find((p) => p.path === `/heuristics/${type}/`);
+      assert.ok(page, `/heuristics/${type}/ was not built`);
+      const shown = [...page.html.matchAll(/data-test="card"[^>]*data-type="([^"]+)"/g)].map((m) => m[1]);
+      assert.ok(shown.length > 0, `/heuristics/${type}/ lists nothing`);
+      assert.deepEqual([...new Set(shown)], [type], `/heuristics/${type}/ lists other types`);
+      total += shown.length;
+    }
+    const index = all.find((p) => p.path === '/heuristics/');
+    const onIndex = (index.html.match(/data-test="card"/g) ?? []).length;
+    assert.equal(total, onIndex, `the three type pages hold ${total}, the index holds ${onIndex}`);
+  });
+});
+
+describe('the sitemap', () => {
+  test('offers only pages that are indexable and served directly', () => {
+    const xml = readFileSync(`${DIST}/sitemap-0.xml`, 'utf8');
+    const paths = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
+    assert.ok(paths.length > 250, `sitemap holds only ${paths.length} URLs`);
+
+    const noindex = new Set(all.filter((p) => /content="noindex/.test(p.html)).map((p) => p.path));
+    const listed = paths.filter((p) => noindex.has(p));
+    assert.deepEqual(listed, [], `noindex pages are in the sitemap: ${listed.join(', ')}`);
+
+    // The three type indexes are duplicate views of /heuristics/ and are
+    // deliberately excluded; a config change must not quietly restore them.
+    for (const t of ['design-heuristics', 'guiding-heuristics', 'value-based-heuristics']) {
+      assert.ok(!paths.includes(`/heuristics/${t}/`), `/heuristics/${t}/ should not be in the sitemap`);
+    }
+
+    const built = new Set(all.map((p) => p.path));
+    const ghosts = paths.filter((p) => !built.has(p));
+    assert.deepEqual(ghosts, [], `sitemap lists URLs with no page: ${ghosts.join(', ')}`);
+  });
+});
+
+describe('error pages', () => {
+  test('404 and 410 are built and kept out of the index', () => {
+    for (const f of ['404.html', '410/index.html']) {
+      assert.ok(existsSync(`${DIST}/${f}`), `${f} missing — the host would serve its own`);
+      const html = readFileSync(`${DIST}/${f}`, 'utf8');
+      assert.match(html, /content="noindex/, `${f} should be noindex`);
+      assert.match(html, /href="\/sessions\//, `${f} should offer a way back into the site`);
+    }
+  });
+
+  test('.htaccess points at them', () => {
+    const ht = readFileSync(`${DIST}/.htaccess`, 'utf8');
+    assert.match(ht, /^ErrorDocument 404 \/404\.html$/m);
+    assert.match(ht, /^ErrorDocument 410 \/410\/$/m);
+  });
+});
+
 describe('feeds and machine-readable files', () => {
   test('sitemap, RSS, robots.txt and llms.txt exist', () => {
     for (const f of ['sitemap-index.xml', 'rss.xml', 'robots.txt', 'llms.txt', '.htaccess']) {

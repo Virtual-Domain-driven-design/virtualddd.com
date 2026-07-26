@@ -11,9 +11,11 @@ export default defineConfig({
   integrations: [
     sitemap({
       // The three heuristic type indexes are filtered views of /heuristics/;
-      // listing them invites duplicate-content warnings.
+      // listing them invites duplicate-content warnings. /410/ is the body of
+      // an error response, not a page anyone should be sent to from search.
       filter: (page) =>
-        !/\/heuristics\/(design|guiding|value-based)-heuristics\/$/.test(page),
+        !/\/heuristics\/(design|guiding|value-based)-heuristics\/$/.test(page) &&
+        !/\/410\/$/.test(page),
       serialize(item) {
         // Sessions and stories are the pages worth recrawling often.
         if (/\/(sessions|facilitating-archdes)\/[^/]+\/$/.test(item.url)) {

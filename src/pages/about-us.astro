@@ -115,7 +115,7 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
         <span class="aib-title">AI usage on this site</span>
         <span class="aib-sub">How we do — and don't — use AI.</span>
       </span>
-      <span class="btn aib-btn">Read more →</span>
+      <span class="btn btn--inverse aib-btn">Read more →</span>
     </a>
   </div>
 
@@ -129,7 +129,7 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
 
     /* Hero */
     .about-hero { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin-bottom: var(--space-16); align-items: stretch; }
-    @media (min-width: 860px) { .about-hero { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
+    @media (min-width: 900px) { .about-hero { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
     .ah-img { position: relative; min-height: 16rem; }
     .ah-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.1) 55%); }
     /* The painting is bright in places, so the title sits on its own plate
@@ -145,7 +145,7 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
 
     /* Alternating rows */
     .about-row { display: grid; grid-template-columns: 1fr; gap: var(--space-6); align-items: center; margin-bottom: var(--space-16); }
-    @media (min-width: 860px) {
+    @media (min-width: 900px) {
       .about-row { grid-template-columns: 1fr 1fr; gap: var(--space-12); }
       .about-row.reverse .ar-img { order: -1; }
     }
@@ -157,9 +157,8 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
     .aib-icon { flex: none; display: inline-flex; }
     .aib-text { flex: 1 1 auto; display: flex; flex-direction: column; }
     .aib-title { font-family: var(--font-heading); font-weight: 700; font-size: var(--text-xl); }
-    .aib-sub { color: rgba(255, 255, 255, 0.9); font-size: var(--text-sm); }
-    .aib-btn { flex: none; background: #fff; color: #c53d84; border-color: #fff; }
-    .ai-banner:hover .aib-btn { background: rgba(255, 255, 255, 0.9); border-color: rgba(255, 255, 255, 0.9); }
-    @media (max-width: 640px) { .ai-banner { flex-wrap: wrap; text-align: center; justify-content: center; } .aib-text { flex-basis: 100%; } }
+    .aib-sub { color: var(--overlay-white-strong); font-size: var(--text-sm); }
+    .aib-btn { flex: none; }
+    @media (max-width: 639.98px) { .ai-banner { flex-wrap: wrap; text-align: center; justify-content: center; } .aib-text { flex-basis: 100%; } }
   </style>
 </BaseLayout>

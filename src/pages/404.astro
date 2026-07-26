@@ -1,0 +1,63 @@
+---
+/** Not found.
+ *
+ * Reached two ways: a mistyped URL, and any WordPress URL nobody thought of
+ * when the redirect map was built. The second is the one that matters, so this
+ * page's job is to put every section one click away rather than apologise.
+ *
+ * Served by Apache/LiteSpeed via `ErrorDocument 404`, emitted into
+ * `public/.htaccess` by scripts/build-redirects.mjs.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const DESTINATIONS = [
+  { href: '/sessions/', label: 'Online sessions', note: 'Every meetup we have held, with its recording.' },
+  { href: '/heuristics/', label: 'Heuristics', note: 'The curated collection — search it by type or tag.' },
+  { href: '/facilitating-archdes/', label: 'Facilitating Stories', note: 'Writing on facilitating software architecture & design.' },
+  { href: '/open-space/', label: 'Open Space', note: 'Our open space events.' },
+  { href: '/ddd-crew/', label: 'ddd crew', note: 'Community tools and canvases, republished.' },
+  { href: '/podcasts/', label: 'Podcasts', note: 'Every session as an episode.' },
+];
+---
+
+<BaseLayout
+  title="Page not found — Virtual DDD"
+  description="That page is not here. Every section of Virtual DDD is one click away."
+  noindex
+>
+  <div class="wrap page">
+    <p class="eyebrow eyebrow--pink">404</p>
+    <h1>That page is not here</h1>
+    <p class="lead">
+      The link may be old, or we may have moved something. Nothing is lost —
+      here is everything the site holds.
+    </p>
+
+    <ul class="dests">
+      {DESTINATIONS.map((d) => (
+        <li>
+          <a href={d.href}>{d.label}</a>
+          <span>{d.note}</span>
+        </li>
+      ))}
+    </ul>
+
+    <p class="ask">
+      Still cannot find it? Ask in <a href="https://discord.gg/tRJkcsFDKN">our Discord</a> —
+      someone will know where it went.
+    </p>
+  </div>
+
+  <style>
+    .page { max-width: var(--content-width); padding-block: var(--space-12); }
+    .lead { font-size: var(--text-lg); color: var(--color-text-muted); max-width: 46rem; }
+    .dests { list-style: none; margin: var(--space-10) 0 0; padding: 0; display: grid; gap: var(--space-4); }
+    .dests li { display: flex; flex-direction: column; gap: var(--space-1); border-left: 2px solid var(--color-border); padding-left: var(--space-4); }
+    .dests a { font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg); }
+    .dests span { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .ask { margin-top: var(--space-10); color: var(--color-text-muted); }
+    @media (min-width: 800px) {
+      .dests { grid-template-columns: 1fr 1fr; gap: var(--space-6) var(--space-8); }
+    }
+  </style>
+</BaseLayout>

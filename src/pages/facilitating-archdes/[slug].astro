@@ -85,8 +85,8 @@ const jsonLd = storyJsonLd(Astro.site, story, {
         {d.authors.length > 0 && <p class="side-authors">{d.authors.join(', ')}</p>}
         {(d.youtube || d.podcast) && (
           <div class="side-links">
-            {d.youtube && <a class="btn btn--accent side-btn" href={d.youtube}>Watch on YouTube ↗</a>}
-            {d.podcast && <a class="btn btn--ghost side-btn" href={d.podcast}>Listen to the podcast ↗</a>}
+            {d.youtube && <a class="btn btn--accent btn--sm btn--block" href={d.youtube}>Watch on YouTube ↗</a>}
+            {d.podcast && <a class="btn btn--ghost btn--sm btn--block" href={d.podcast}>Listen to the podcast ↗</a>}
           </div>
         )}
       </div>
@@ -124,7 +124,6 @@ const jsonLd = storyJsonLd(Astro.site, story, {
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .side-authors { color: var(--color-text-muted); margin: 0 0 var(--space-5); font-size: var(--text-sm); }
     .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
-    .side-btn { width: 100%; justify-content: center; font-size: var(--text-sm); padding: var(--space-2) var(--space-4); }
 
     .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }

@@ -114,7 +114,7 @@ try {
         <h2>Join our Discord community</h2>
         <p>The community lives on Discord — talks, questions and connections all week long.</p>
       </div>
-      <a class="btn discord-btn" href={DISCORD}>Join</a>
+      <a class="btn btn--inverse discord-btn" href={DISCORD}>Join</a>
     </div>
 
     <section class="latest-social">
@@ -165,9 +165,11 @@ try {
         <div class="section-head"><h2>Heuristics</h2><a href="/heuristics/">All →</a></div>
         <div class="heur-links">
           {HEURISTIC_TYPES.map((t) => (
-            <a class="heur-card scrim" href={`/heuristics/${t.key}/`} style={`background-image: url(${t.bg.src})`}>
-              <h3>{t.title} ››</h3>
-              <p>{t.text}</p>
+            <a class="tbanner tbanner--compact scrim" href={`/heuristics/${t.key}/`} style={`background-image: url(${t.bg.src})`}>
+              <span class="tbanner-body">
+                <h3 class="tbanner-title">{t.title} ››</h3>
+                <span class="tbanner-text">{t.text}</span>
+              </span>
             </a>
           ))}
         </div>
@@ -230,11 +232,7 @@ try {
     .hs-col { min-width: 0; display: flex; flex-direction: column; }
     @media (min-width: 900px) { .heur-stories { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
     .heur-links { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
-    /* .scrim in patterns.css supplies the legibility overlay. */
-    .heur-card { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: var(--space-6); min-height: 5rem; color: #fff; transition: transform 0.15s, box-shadow 0.15s; }
-    .heur-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
-    .heur-card h3 { color: #fff; margin: 0 0 var(--space-1); font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
-    .heur-card p { color: rgba(255, 255, 255, 0.92); margin: 0; font-size: var(--text-sm); }
+    /* The type tiles come from patterns.css (.tbanner--compact). */
 
     /* Organiser cards sit a little narrower than the carousel default. */
     .org-carousel :global(.carousel > *) { flex: 0 0 clamp(200px, 42%, 250px); }
@@ -244,9 +242,8 @@ try {
     .dc-text { flex: 1 1 auto; }
     .dc-text h2 { color: #fff; margin: 0 0 var(--space-1); }
     .dc-text p { margin: 0; opacity: 0.95; }
-    .discord-btn { flex: none; background: #fff; color: var(--color-accent-ink); border-color: #fff; }
-    .discord-btn:hover { background: rgba(255, 255, 255, 0.9); border-color: rgba(255, 255, 255, 0.9); color: #b83b7f; }
-    @media (max-width: 640px) { .discord-card { flex-wrap: wrap; text-align: center; justify-content: center; } .dc-text { flex-basis: 100%; } }
+    .discord-btn { flex: none; }
+    @media (max-width: 639.98px) { .discord-card { flex-wrap: wrap; text-align: center; justify-content: center; } .dc-text { flex-basis: 100%; } }
   </style>
 
   <script>

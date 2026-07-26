@@ -102,6 +102,14 @@ Existing visual identity is preserved; the CSS is rebuilt against tokens
 extracted from the live site (`src/styles/tokens.css`). Divi markup is not
 portable — do not port it, rebuild against tokens.
 
+`tokens.css` also holds the **overlays** (`--scrim*`, `--overlay-white-*`,
+`--on-colour*`, `--tint-*`) and documents the **three breakpoints** —
+640 / 800 / 900 px, with `639.98` / `799.98` max-width companions. Only
+reusable surfaces are tokens: the stops inside a component's own scrim gradient
+are not, and naming each of them would produce tokens nobody could reuse. There
+were eleven breakpoints once; 860, 960 and 980 made the site change shape at
+widths nobody chose.
+
 ## Design rules
 
 Three rules that were previously implicit and had drifted. Anything not covered
@@ -127,11 +135,22 @@ shared layer, never copied into a second page — that copying is what made
 "restyle the cards" a sixteen-file edit before.
 
 - **`src/styles/patterns.css`** — the shared UI vocabulary, loaded once by
-  `BaseLayout`: `.card` (+ `--feature`, `--upcoming`, `--heuristic`),
-  `.grid-cards`, `.eyebrow`, `.section-head`, `.detail` / `-head` / `-body` /
-  `-side`, `.prose-body`, `.prose-muted`, `.prevnext`, `.filters`,
-  `.carousel`, `.solo`, `.panel-cyan`, `.scrim`. Add variants **here**, not in
-  a page's `<style>`.
+  `BaseLayout`: `.btn`, `.card` (+ `--feature`, `--upcoming`, `--heuristic`),
+  `.grid-cards`, `.tbanner` (+ `--compact`), `.eyebrow`, `.section-head`,
+  `.detail` / `-head` / `-body` / `-side`, `.prose-body`, `.prose-muted`,
+  `.prevnext`, `.filters`, `.carousel`, `.solo`, `.panel-cyan`, `.scrim`.
+  Add variants **here**, not in a page's `<style>`.
+
+  **Buttons are a closed set** on two axes — intent (default, `--accent`,
+  `--ghost`, `--ink`, `--inverse`) and shape (default, `--sm`, `--block`) —
+  and they compose. A page may still position a button (a margin, an
+  `align-self`); it may not restyle one. Three pages had grown their own
+  "full-width small sidebar button" and two their own "white button on a pink
+  panel", each with a different hardcoded pink.
+
+  Same for the three heuristic type tiles: one `.tbanner`, used as links on
+  `/ddd-heuristics/`, as filter buttons on `/heuristics/` and compact on the
+  home page. They had been written out three times.
   **Astro does not extend a page's style scope into a child component**, so a
   `.card` override written in a page's scoped `<style>` silently never
   matches. Variants must be global.
@@ -209,8 +228,8 @@ visible copy. A restyle then cannot break a behaviour test, which is what makes
 the design work in Phase 5 cheap to keep doing.
 
 Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
-`filter-reset`, `type-filter`, `next-session`, `add-to-calendar`, `nav`,
-`nav-toggle`. Add to that list rather than reaching for a class.
+`filter-reset`, `type-filter`, `next-session`, `add-to-calendar`, `prev`,
+`next`, `nav`, `nav-toggle`. Add to that list rather than reaching for a class.
 
 ### Blocking vs reporting
 
@@ -240,8 +259,12 @@ break the invariant above. Two suites:
 2. **Types and build** — `astro check` (must stay 0/0/0) and `npm run build`.
 3. **`tests/build.test.mjs`** — assertions over `dist/`, about a second.
    Canonicals, OG/Twitter, one `<h1>`, internal links resolve and end in a
-   slash, JSON-LD types, feeds and `.ics`, the archive ordered newest first,
-   every upcoming session shipped, and a size ceiling on the deploy.
+   slash, JSON-LD types, feeds, the archive ordered newest first, every
+   upcoming session shipped, past sessions offering no RSVP while upcoming ones
+   do, each `.ics` stating the session's real start time, prev/next
+   round-tripping, the type pages listing only their own type, the sitemap
+   holding only indexable pages that exist, the error pages, and a size ceiling
+   on the deploy.
 4. **`tests/urls.test.mjs`** — replays `public/.htaccess` against the 967-URL
    Phase 1 inventory: everything is served, redirected to a page that exists, or
    Gone, with no chains.
@@ -277,6 +300,12 @@ Current disposition: 294 served, 412 redirected, 261 Gone. The reasoning behind
 each group is in `REVIEW-2026-07-25.md` (step 3). Two rules are deliberately
 commented out — `/papers/` and `/books/` become 301s to `/reading-list/` the
 day that page ships.
+
+`ErrorDocument` points at two branded pages: `/404.html` (Astro special-cases
+`404.astro`) and `/410/` (every other page is a directory, so the 410 keeps its
+trailing slash, and is filtered out of the sitemap). Without them the host
+serves its own — an unbranded 404 with no way back, and a bare "Gone" for the
+261 URLs retired on purpose.
 
 When an editorial change in Notion retires a URL — a merged duplicate, a
 renamed slug — the page stops existing on the next sync and `npm run

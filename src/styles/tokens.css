@@ -56,4 +56,30 @@
   --radius: 0px;
   --radius-sm: 0px;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.4);
+
+  /* Overlays — translucent layers over a photograph or a saturated panel.
+   * Only the *reusable surfaces* are tokens. The stops inside a component's
+   * own scrim gradient are not, and should not be: a gradient is a shape, and
+   * naming each of its stops would produce tokens nobody could ever reuse. */
+  --overlay-white-strong: rgba(255, 255, 255, 0.9);  /* hover on an inverse button */
+  --overlay-white-soft: rgba(255, 255, 255, 0.25);   /* hover on the cyan topbar */
+  --on-colour: #fff;                                 /* text on primary/accent */
+  --on-colour-muted: rgba(255, 255, 255, 0.9);       /* its quieter companion */
+  --scrim-weak: rgba(0, 0, 0, 0.35);                 /* top of an image overlay */
+  --scrim: rgba(0, 0, 0, 0.6);                       /* text shadow over a photo */
+  --scrim-strong: rgba(0, 0, 0, 0.8);                /* bottom of an image overlay */
+  --tint-primary: rgba(22, 189, 232, 0.16);          /* cyan wash behind a page */
+  --tint-accent: rgba(236, 95, 166, 0.12);           /* pink wash behind a page */
+
+  /* Breakpoints — three, and only three.
+   *
+   *   640px  stop stacking; two columns
+   *   800px  the main layout switch (sidebars, three-up banners, arrows)
+   *   900px  wide two-column layouts
+   *
+   * CSS cannot use a custom property inside a media query, so these are
+   * recorded here and written literally in the stylesheets. max-width
+   * companions are 639.98px and 799.98px, so a range never overlaps its
+   * partner. There were eleven of these once and eight after the first pass —
+   * 860, 960 and 980 made the site change shape at widths nobody chose. */
 }

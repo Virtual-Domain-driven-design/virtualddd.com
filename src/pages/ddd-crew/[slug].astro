@@ -49,7 +49,7 @@ const siblings = items
           {contribMore > 0 && <span> &amp; {contribMore} more</span>}.
         </p>
       )}
-      <a class="btn btn--ghost attr-btn" href={d.repo}>View &amp; contribute on GitHub ↗</a>
+      <a class="btn btn--ghost btn--sm" href={d.repo}>View &amp; contribute on GitHub ↗</a>
     </div>
 
     <div class="body">
@@ -81,7 +81,6 @@ const siblings = items
     .attr-line { margin: 0 0 var(--space-3); color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.6; }
     .attr-contrib { margin: 0 0 var(--space-4); color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.7; }
     .attr-label { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text); margin-right: var(--space-2); }
-    .attr-btn { font-size: var(--text-sm); }
 
     /* Faithful README render */
     .body { max-width: 52rem; }

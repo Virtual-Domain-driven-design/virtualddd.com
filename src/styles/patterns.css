@@ -9,6 +9,49 @@
  * Loaded once by BaseLayout, after global.css.
  */
 
+/* ------------------------------------------------------------------ buttons */
+/* Two axes, and that is the whole set:
+ *
+ *   intent — (default = primary) · --accent · --ghost · --ink · --inverse
+ *   shape  — (default)           · --sm     · --block
+ *
+ * They compose: `btn btn--ghost btn--sm btn--block` is a small full-width
+ * outline button. If a page needs something none of these express, add a
+ * variant *here* — three pages had already grown their own private copy of
+ * "full-width small sidebar button", and two had grown their own copy of
+ * "white button on a pink panel" with different hardcoded pinks.
+ *
+ * Genuinely local adjustments — a margin, an `align-self` — stay in the page.
+ * Those are about where the button sits, not what it is.
+ */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-heading); font-weight: 600; font-size: var(--text-base);
+  padding: var(--space-2) var(--space-6); border-radius: 0;
+  background: var(--color-primary); color: #fff; border: 2px solid var(--color-primary);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); text-decoration: none; }
+
+.btn--accent { background: var(--color-accent); border-color: var(--color-accent); }
+.btn--accent:hover { background: var(--color-accent-dark); border-color: var(--color-accent-dark); }
+
+.btn--ghost { background: transparent; color: var(--color-primary-dark); }
+.btn--ghost:hover { background: var(--color-surface); }
+
+/* Dark button, for use on a light panel. Global on purpose: it used to be
+ * defined only inside `.panel-cyan`, so using it anywhere else did nothing. */
+.btn--ink { background: var(--color-ink); color: #fff; border-color: var(--color-ink); }
+.btn--ink:hover { background: #000; border-color: #000; color: #fff; }
+
+/* White button on a saturated panel — the label takes the panel's own colour
+ * so it still reads at contrast. */
+.btn--inverse { background: #fff; color: var(--color-accent-ink); border-color: #fff; }
+.btn--inverse:hover { background: var(--overlay-white-strong); border-color: var(--overlay-white-strong); color: var(--color-accent-ink); }
+
+.btn--sm { font-size: var(--text-sm); padding: var(--space-2) var(--space-4); }
+.btn--block { width: 100%; justify-content: center; }
+
 /* ---------------------------------------------------------------- eyebrow */
 /* Small uppercase section label with a rule before it. */
 .eyebrow {
@@ -119,6 +162,43 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
 .htype.design-heuristics { background: var(--color-primary); }
 .htype.guiding-heuristics { background: var(--color-accent); }
 .htype.value-based-heuristics { background: var(--color-heur-value); }
+
+/* ------------------------------------------------ heuristic type banners */
+/* The three type tiles: a painting, a dark overlay, a title and a count.
+ * They appear as filter buttons on /heuristics/, as links on /ddd-heuristics/
+ * and compact on the home page, and had been written out three times with
+ * three class prefixes and the same gradient. `.scrim` supplies the overlay. */
+.tbanner-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+@media (min-width: 800px) { .tbanner-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.tbanner {
+  display: flex; min-height: 12rem; padding: var(--space-6);
+  color: var(--on-colour); text-align: left; border: 0; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+.tbanner::before { background: linear-gradient(180deg, var(--scrim-weak) 0%, var(--scrim-strong) 100%); transition: background 0.15s; }
+.tbanner:hover { transform: translateY(-4px); box-shadow: var(--shadow); text-decoration: none; }
+.tbanner-body { position: relative; z-index: 1; margin-top: auto; }
+.tbanner-title {
+  display: block; margin: 0; font-family: var(--font-heading); font-weight: 700;
+  font-size: var(--text-xl); color: var(--on-colour); text-shadow: 0 1px 8px var(--scrim);
+}
+.tbanner-text { display: block; color: var(--on-colour-muted); margin: var(--space-2) 0 var(--space-3); font-size: var(--text-sm); }
+.tbanner-count {
+  display: block; font-family: var(--font-heading); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm);
+  color: var(--color-primary-dark);
+}
+
+/* Selected / dimmed, for the filtering version on /heuristics/. */
+.tbanner.active { outline: 3px solid var(--color-primary); outline-offset: -3px; }
+.tbanner.active::before { background: linear-gradient(180deg, var(--scrim-weak) 0%, var(--scrim) 100%); }
+.tbanner-grid.has-active .tbanner:not(.active) { opacity: 0.5; }
+
+/* Short version: one line of copy, vertically centred (home page). */
+.tbanner--compact { min-height: 5rem; align-items: center; flex: 1; }
+.tbanner--compact .tbanner-body { margin-top: 0; }
+.tbanner--compact .tbanner-text { margin-bottom: 0; }
 
 /* -------------------------------------------------------------- card grids */
 /* `--card-min` tunes the column width per section. */
@@ -273,8 +353,7 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
 }
 .panel-cyan h1, .panel-cyan h2 { color: var(--color-ink); margin-top: 0; }
 .panel-cyan p { color: var(--color-ink-muted); }
-.panel-cyan .btn--ink { background: var(--color-ink); color: #fff; border-color: var(--color-ink); align-self: flex-start; }
-.panel-cyan .btn--ink:hover { background: #000; border-color: #000; color: #fff; }
+.panel-cyan .btn { align-self: flex-start; }
 
 /* Text over a photographic background needs a scrim to stay legible. */
 .scrim { position: relative; overflow: hidden; background-size: cover; background-position: center; }

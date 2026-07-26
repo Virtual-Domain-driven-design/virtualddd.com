@@ -183,6 +183,36 @@ describe('filters and search', () => {
     await page.close();
   });
 
+  test('a filter and Load more do not hide matches from each other', async () => {
+    // The archive reveals 30 at a time. If filtering did not reset that window,
+    // a search could look empty while its matches sat in an unrevealed batch —
+    // and the count would disagree with what is on screen.
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
+    const count = () => page.textContent('[data-test="result-count"]').then((t) => Number(t.match(/\d+/)[0]));
+    const onScreen = () => page.$$eval('[data-test="results"] [data-test="card"]:not([hidden])', (e) => e.length);
+
+    // Reveal everything, then filter: the window must go back to a first batch.
+    for (let i = 0; i < 10 && await page.isVisible('#load-more'); i++) {
+      await page.click('#load-more');
+      await page.waitForTimeout(120);
+    }
+    await page.fill('[data-test="filter-search"]', 'design');
+    await page.waitForTimeout(250);
+    const matches = await count();
+    assert.ok(matches > 0, 'the search matched nothing to test with');
+    assert.ok(await onScreen() > 0, 'the count claims matches but nothing is on screen');
+
+    // Everything the count promises must be reachable by pressing Load more.
+    for (let i = 0; i < 20 && await page.isVisible('#load-more'); i++) {
+      await page.click('#load-more');
+      await page.waitForTimeout(120);
+    }
+    assert.equal(await onScreen(), matches,
+      `the count says ${matches} but only ${await onScreen()} can be reached`);
+    await page.close();
+  });
+
   test('the stories index filters too', async () => {
     const page = await browser.newPage();
     await page.goto(`${base}/facilitating-archdes/`, { waitUntil: 'networkidle' });
@@ -323,6 +353,27 @@ describe('progressive enhancement', () => {
       assert.ok(cards > 0, `${p} shows nothing without JS`);
     }
     await ctx.close();
+  });
+
+  test('the whole navigation is reachable on a phone without JavaScript', async () => {
+    // It was not: the hamburger needs a script, so all seven links were
+    // unreachable at 390px with scripting off. The nav now ships open and the
+    // script collapses it, which is the same shape as every other enhancement
+    // here.
+    for (const js of [false, true]) {
+      const ctx = await browser.newContext({ viewport: { width: 390, height: 800 }, javaScriptEnabled: js });
+      const page = await ctx.newPage();
+      await page.goto(base + '/', { waitUntil: js ? 'load' : 'domcontentloaded' });
+      const shown = await visible(page, '[data-test="nav"] a');
+      const total = await page.$$eval('[data-test="nav"] a', (els) => els.length);
+      assert.ok(total >= 5, `expected a full nav, found ${total} links`);
+      if (js) {
+        assert.equal(shown, 0, 'with JS the nav should start collapsed behind the hamburger');
+      } else {
+        assert.equal(shown, total, `without JS only ${shown} of ${total} nav links are reachable`);
+      }
+      await ctx.close();
+    }
   });
 });
 

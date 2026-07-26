@@ -1,0 +1,44 @@
+---
+/** Gone.
+ *
+ * 261 of the 967 indexed WordPress URLs return 410 on purpose — tag and
+ * category archives, and 441 imported third-party conference videos that were
+ * never Virtual DDD content. 410 tells a search engine the removal is
+ * deliberate, which is the point; this page tells a *person* the same thing,
+ * and where to go instead.
+ *
+ * Served by Apache/LiteSpeed via `ErrorDocument 410`. See
+ * scripts/build-redirects.mjs and REVIEW-2026-07-25.md step 3.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="This page has been retired — Virtual DDD"
+  description="This page no longer exists. The sessions, recordings and heuristics it linked to are still here."
+  noindex
+>
+  <div class="wrap page">
+    <p class="eyebrow eyebrow--pink">Gone</p>
+    <h1>This page has been retired</h1>
+    <p class="lead">
+      It was one of the old tag or category listings, or a video page for a talk
+      recorded at someone else's conference. Those have been retired rather than
+      moved, so there is no newer version to send you to.
+    </p>
+    <p>
+      What is still here: every Virtual DDD session, with its recording and
+      write-up, and the heuristics that came out of them.
+    </p>
+    <p class="cta">
+      <a class="btn btn--accent" href="/sessions/">Browse the sessions</a>
+      <a class="btn btn--ghost" href="/heuristics/">Browse the heuristics</a>
+    </p>
+  </div>
+
+  <style>
+    .page { max-width: var(--content-width); padding-block: var(--space-12); }
+    .lead { font-size: var(--text-lg); color: var(--color-text-muted); max-width: 46rem; }
+    .cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+  </style>
+</BaseLayout>
