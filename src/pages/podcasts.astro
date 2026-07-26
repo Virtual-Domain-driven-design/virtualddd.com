@@ -10,6 +10,7 @@
  * stories and open spaces.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
 import { getCollection } from 'astro:content';
 import { iso, shortDate } from '../lib/dates';
 import { byDateDesc } from '../lib/collections';
@@ -77,11 +78,19 @@ const series = [
 
 const total = series.reduce((n, s) => n + s.episodes.length, 0);
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/podcasts/', Astro.site).toString(),
+  name: 'Podcasts',
+  description: `Listen to Virtual DDD: ${total} episodes across the online sessions and the Facilitating Stories series.`,
+  trail: topTrail('Podcasts', '/podcasts/'),
+});
+
 ---
 
 <BaseLayout
   title="Podcasts — Virtual DDD"
   description={`Listen to Virtual DDD: ${total} episodes across the online sessions and the Facilitating Stories series.`}
+  jsonLd={jsonLd}
   canonical={`${site}/podcasts/`}
 >
   <div class="wrap page">

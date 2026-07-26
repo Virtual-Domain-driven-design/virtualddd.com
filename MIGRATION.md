@@ -429,9 +429,10 @@ HTML is already the biggest win here; this phase makes it deliberate.
    `DefinedTermSet` on 151 heuristics — the set declared by
    `/heuristics/`, with the heuristic-to-heuristic graph as `relatedLink` and
    the sessions and stories that discussed it as `subjectOf`.
-   **Still open:** `BreadcrumbList` on nested pages (`breadcrumbs()` exists in
-   `src/lib/seo.ts` and is called by nothing), the 11 ddd-crew pages, the 5
-   open spaces, and `ItemList` on the remaining index pages.
+   Open spaces are `Event`s, ddd-crew tools are `CreativeWork`s carrying their
+   licence and attribution, indexes are `CollectionPage` + `ItemList`, and
+   every page but the home page and `/410/` has a `BreadcrumbList`. Coverage:
+   327 of 328 pages. **Done.**
 4. **Sitemap.** Add `@astrojs/sitemap`. Submit it in Phase 8.
 5. **RSS.** Generate a feed with `@astrojs/rss` and redirect `/feed/` to it
    so existing subscribers are not silently dropped.
@@ -439,10 +440,12 @@ HTML is already the biggest win here; this phase makes it deliberate.
    `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`. For a
    community that wants its sessions cited in AI answers, allowing them is
    usually right. Make it a choice, not a default.
-7. **llms.txt and markdown.** You already hold every page as clean markdown.
-   Publish an `llms.txt` index, and consider exposing the raw `.md`
-   alongside each page. This is nearly free and makes the site maximally
-   legible to LLMs.
+7. **llms.txt and markdown.** Done, all three surfaces: `/llms.txt` as the
+   index, `<page>/index.md` for all 299 content pages (advertised with
+   `<link rel="alternate" type="text/markdown">`, `AddType` in `.htaccess`),
+   and `/llms-full.txt` for the whole corpus in one request — excluding
+   ddd-crew, which is republished under CC BY-SA with its canonical upstream.
+   See CLAUDE.md, "AI legibility".
 
 Done when: every URL from the Phase 1 crawl either exists in the new site
 or has a deliberate redirect or gone status; JSON-LD, sitemap, RSS and

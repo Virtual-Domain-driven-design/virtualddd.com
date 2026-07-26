@@ -4,6 +4,11 @@
 ErrorDocument 404 /404.html
 ErrorDocument 410 /410/
 
+<IfModule mod_mime.c>
+AddType text/markdown .md
+AddCharset UTF-8 .md
+</IfModule>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 

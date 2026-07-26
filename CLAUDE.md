@@ -156,6 +156,12 @@ Phase 6, not a collection.
   `organization`, `heuristicSet`) so a type is described the same way wherever
   it appears, and `BaseLayout` emits the single `@graph` it is handed.
 
+  **Coverage is every page but `/410/`**, which is an error body. Detail pages
+  get their type, index pages a `CollectionPage` whose `ItemList` is what they
+  list, standalone pages a plain `WebPage` — and **every page except the home
+  page carries a `BreadcrumbList`**, built from `SECTIONS` in the same file so
+  a crumb cannot call a section something the navigation does not.
+
   **A heuristic is a `DefinedTerm`, not an article.** It is a named,
   self-contained rule with an author — the most quotable thing on the site —
   so each one is a term in the `DefinedTermSet` that `/heuristics/` declares,
@@ -283,6 +289,31 @@ shared layer, never copied into a second page — that copying is what made
   keyboard visitors with nothing. A browser test asserts the ring is still
   there.
 - `astro check` must stay at **0 errors, 0 warnings, 0 hints**.
+
+## AI legibility
+
+The site is meant to be read, cited and quoted by answer engines as well as
+people; `robots.txt` allows `GPTBot`, `ClaudeBot`, `PerplexityBot`,
+`Google-Extended` and `CCBot` by name, and says why in the file.
+
+Three surfaces, in ascending order of appetite:
+
+- **`/llms.txt`** — the table of contents: every session, story, heuristic,
+  tool and open space, one line each, with the guests on a session because
+  "who spoke about X" is what an archive of talks gets asked.
+- **`<page>/index.md`** — the markdown behind any content page, 299 of them,
+  advertised from the page with `<link rel="alternate" type="text/markdown">`.
+  Front matter names the source URL, the author, the date; then the words, with
+  no nav to strip. `src/lib/markdown-page.ts` builds it; `.htaccess` carries the
+  `AddType` so LiteSpeed does not serve it as a download.
+- **`/llms-full.txt`** — the whole corpus in one request, ~500 KB.
+  **ddd-crew is deliberately excluded**: it is republished under CC BY-SA with
+  its canonical upstream, so folding it into a file that reads as ours would be
+  the wrong thing to do with a share-alike licence. It stays listed in
+  `llms.txt`, and each tool's own `.md` carries the licence and the credit.
+
+None of this is a separate artefact to maintain — it is all generated from the
+markdown the sync already writes, which is the reason it is nearly free.
 
 ## ddd-crew content
 

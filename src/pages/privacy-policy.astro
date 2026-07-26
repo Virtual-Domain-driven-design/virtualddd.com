@@ -1,10 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/privacy-policy/', Astro.site).toString(),
+  name: 'Privacy Policy',
+  description: "How the Virtual DDD website handles your data, in plain terms.",
+  trail: topTrail('Privacy Policy', '/privacy-policy/'),
+});
+
 ---
 
 <BaseLayout
   title="Privacy Policy — Virtual DDD"
   description="How the Virtual DDD website handles your data, in plain terms."
+  jsonLd={jsonLd}
 >
   <div class="wrap page">
     <p class="eyebrow eyebrow--pink">Legal</p>

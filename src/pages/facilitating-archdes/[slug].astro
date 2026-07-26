@@ -7,7 +7,7 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import { youtubeEmbed } from '../../lib/embeds';
 import { excerpt } from '../../lib/excerpt';
-import { storyJsonLd, socialCard, pageTitle } from '../../lib/seo';
+import { storyJsonLd, socialCard, pageTitle, trail } from '../../lib/seo';
 import { iso as toIso, longDate, shortDate } from '../../lib/dates';
 import { heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
 
@@ -49,6 +49,7 @@ const description = d.seoMetadescription ?? excerpt(story.body ?? '', d.title, 1
 const jsonLd = storyJsonLd(Astro.site, story, {
   url,
   image: image ? await socialCard(Astro.site, image) : undefined,
+  trail: trail('stories', d.title, `/facilitating-archdes/${story.id}/`),
 });
 ---
 
@@ -58,6 +59,7 @@ const jsonLd = storyJsonLd(Astro.site, story, {
   image={image}
   ogType="article"
   jsonLd={jsonLd}
+  markdown
 >
   <article class="story detail wrap">
     <div class="detail-head">

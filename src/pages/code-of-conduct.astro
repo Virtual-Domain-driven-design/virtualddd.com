@@ -1,10 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/code-of-conduct/', Astro.site).toString(),
+  name: 'Code of Conduct',
+  description: "Our community and events are dedicated to a harassment-free experience for everyone. Read the Virtual DDD code of conduct.",
+  trail: topTrail('Code of Conduct', '/code-of-conduct/'),
+});
+
 ---
 
 <BaseLayout
   title="Code of Conduct — Virtual DDD"
   description="Our community and events are dedicated to a harassment-free experience for everyone. Read the Virtual DDD code of conduct."
+  jsonLd={jsonLd}
 >
   <div class="wrap page">
     <p class="eyebrow eyebrow--pink">Community</p>

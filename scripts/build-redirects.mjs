@@ -114,6 +114,15 @@ L.push('ErrorDocument 404 /404.html');
 // one included, is a directory with an index.html.
 L.push('ErrorDocument 410 /410/');
 L.push('');
+// Every content page also ships its own markdown (see src/lib/markdown-page.ts).
+// LiteSpeed would otherwise send .md as application/octet-stream, which makes a
+// browser download the file instead of showing it — and tells a crawler nothing
+// about what it is.
+L.push('<IfModule mod_mime.c>');
+L.push('AddType text/markdown .md');
+L.push('AddCharset UTF-8 .md');
+L.push('</IfModule>');
+L.push('');
 L.push('<IfModule mod_rewrite.c>');
 L.push('RewriteEngine On');
 

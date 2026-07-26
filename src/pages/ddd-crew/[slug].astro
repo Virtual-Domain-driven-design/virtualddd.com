@@ -1,5 +1,5 @@
 ---
-import { pageTitle } from '../../lib/seo';
+import { dddCrewJsonLd, pageTitle, socialCard, trail } from '../../lib/seo';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 
@@ -20,6 +20,14 @@ const siblings = items
   .filter((i) => i.id !== entry.id)
   .sort((a, b) => (b.data.stars ?? 0) - (a.data.stars ?? 0))
   .slice(0, 4);
+// Structured data. The licence and the attribution are the point here, so they
+// are in the data as well as in the layout — see `dddCrewJsonLd`.
+const jsonLd = dddCrewJsonLd(Astro.site, entry, {
+  url: new URL(`/ddd-crew/${entry.id}/`, Astro.site).toString(),
+  image: d.heroImage ? await socialCard(Astro.site, d.heroImage) : undefined,
+  trail: trail('dddCrew', d.title, `/ddd-crew/${entry.id}/`),
+});
+
 ---
 
 <BaseLayout
@@ -28,6 +36,8 @@ const siblings = items
   canonical={d.canonical}
   image={d.heroImage}
   ogType="article"
+  jsonLd={jsonLd}
+  markdown
 >
   <article class="dc wrap">
     <p class="detail-back"><a href="/ddd-crew/">← All ddd-crew tools</a></p>

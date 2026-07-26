@@ -72,6 +72,31 @@ export const breadcrumbs = (site: URL | undefined, trail: [string, string][]) =>
   })),
 });
 
+/** The sections a page can sit under, named once.
+ *
+ * The label is what the breadcrumb says, and it should match the navigation:
+ * a crumb that calls a section something the site does not is worse than no
+ * crumb at all. */
+export const SECTIONS = {
+  sessions: ['Online sessions', '/sessions/'],
+  stories: ['Facilitating Stories', '/facilitating-archdes/'],
+  heuristics: ['Heuristics', '/heuristics/'],
+  openSpace: ['Open Space', '/open-space/'],
+  dddCrew: ['ddd-crew tools', '/ddd-crew/'],
+  organisers: ['Organisers', '/organisers/'],
+} as const satisfies Record<string, readonly [string, string]>;
+
+/** Home → section → this page, the trail every detail page has. */
+export const trail = (
+  section: keyof typeof SECTIONS,
+  name: string,
+  path: string,
+): [string, string][] => [['Home', '/'], [...SECTIONS[section]] as [string, string], [name, path]];
+
+/** Home → this page, for a section index or a standalone page. */
+export const topTrail = (name: string, path: string): [string, string][] =>
+  [['Home', '/'], [name, path]];
+
 /** A person: the host of a session, a guest, an organiser.
  *
  * `sameAs` is the point of it — it is how a search or answer engine works out
@@ -115,6 +140,68 @@ export const graph = (...nodes: unknown[]) => ({
   '@graph': nodes.filter(Boolean),
 });
 
+/** A page that is not one of the content types: About, Podcasts, a policy.
+ *
+ * Small, but it means "no structured data at all" is never the answer for a
+ * page on this site — a crawler always gets a name, a description and where
+ * the page sits. */
+export const pageJsonLd = (
+  site: URL | undefined,
+  opts: { url: string; name: string; description: string; trail: [string, string][] },
+) =>
+  graph(
+    organization(site),
+    {
+      '@type': 'WebPage',
+      '@id': opts.url,
+      name: opts.name,
+      description: opts.description,
+      isPartOf: { '@id': abs(site, '/#website') },
+      inLanguage: 'en-GB',
+      url: opts.url,
+    },
+    breadcrumbs(site, opts.trail),
+  );
+
+/** An index: a CollectionPage whose ItemList is what it lists.
+ *
+ * The list is the point — an index without one says "this page exists" and
+ * nothing about the 108 things on it. Items are given in the order the page
+ * renders them, so position means what a reader sees. */
+export const collectionPage = (
+  site: URL | undefined,
+  opts: {
+    url: string;
+    name: string;
+    description: string;
+    items: { name: string; url: string }[];
+    trail: [string, string][];
+  },
+) =>
+  graph(
+    organization(site),
+    {
+      '@type': 'CollectionPage',
+      '@id': opts.url,
+      name: opts.name,
+      description: opts.description,
+      isPartOf: { '@id': abs(site, '/#website') },
+      inLanguage: 'en-GB',
+      url: opts.url,
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: opts.items.length,
+        itemListElement: opts.items.map((it, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: it.name,
+          url: it.url,
+        })),
+      },
+    },
+    breadcrumbs(site, opts.trail),
+  );
+
 /** A session: an Event, plus a VideoObject when the recording exists.
  *
  * Sessions are online events, so `eventAttendanceMode` is Online and the
@@ -123,7 +210,12 @@ export const graph = (...nodes: unknown[]) => ({
 export function sessionJsonLd(
   site: URL | undefined,
   session: CollectionEntry<'sessions'>,
-  opts: { url: string; image?: string; isUpcoming: boolean; performers?: PersonInput[] },
+  opts: {
+    url: string; image?: string; isUpcoming: boolean;
+    performers?: PersonInput[];
+    /** Home → section → this page. */
+    trail: [string, string][];
+  },
 ) {
   const d = session.data;
   const org = organization(site);
@@ -167,7 +259,7 @@ export function sessionJsonLd(
       }
     : null;
 
-  return graph(org, event, video);
+  return graph(org, event, video, breadcrumbs(site, opts.trail));
 }
 
 /** The heuristics collection, as one entity the individual terms belong to.
@@ -208,6 +300,8 @@ export function heuristicJsonLd(
     related: string[];
     /** The sessions and stories that discussed it. */
     discussedIn: { name: string; url: string }[];
+    /** Home → section → this page. */
+    trail: [string, string][];
   },
 ) {
   const d = heuristic.data;
@@ -245,18 +339,102 @@ export function heuristicJsonLd(
     url: opts.url,
   };
 
-  return graph(org, set, term, page);
+  return graph(org, set, term, page, breadcrumbs(site, opts.trail));
+}
+
+/** An open space: an Event, like a session but participant-led.
+ *
+ * Deliberately not routed through `sessionJsonLd`: an open space has no
+ * organiser, no RSVP and a `date` rather than a `datetime`, and forcing the
+ * two together would mean a helper full of "if this is really a session". What
+ * they share is the shape of an online Event, which is small enough to say
+ * twice. */
+export function openSpaceJsonLd(
+  site: URL | undefined,
+  entry: CollectionEntry<'openSpaces'>,
+  opts: { url: string; description: string; image?: string; trail: [string, string][] },
+) {
+  const d = entry.data;
+  const org = organization(site);
+  return graph(
+    org,
+    {
+      '@type': 'Event',
+      '@id': `${opts.url}#event`,
+      name: d.title,
+      startDate: new Date(d.date).toISOString(),
+      eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+      eventStatus: 'https://schema.org/EventScheduled',
+      location: { '@type': 'VirtualLocation', url: d.meetup ?? d.video ?? opts.url },
+      organizer: { '@id': org['@id'] },
+      description: opts.description,
+      ...(opts.image ? { image: [opts.image] } : {}),
+      ...(d.tickets ? { offers: { '@type': 'Offer', url: d.tickets, price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' } } : {}),
+      url: opts.url,
+    },
+    d.video
+      ? {
+          '@type': 'VideoObject',
+          name: d.title,
+          description: opts.description,
+          uploadDate: new Date(d.date).toISOString(),
+          embedUrl: d.video,
+          ...(opts.image ? { thumbnailUrl: [opts.image] } : {}),
+        }
+      : null,
+    breadcrumbs(site, opts.trail),
+  );
+}
+
+/** A ddd-crew tool: someone else's CreativeWork, republished here.
+ *
+ * The licence and the attribution are the whole point (CC BY-SA 4.0), so they
+ * are in the data and not only in the layout: `license`, `isBasedOn` the repo,
+ * `contributor` for the people who wrote it, and `sameAs` the upstream
+ * publication that `rel=canonical` already points at. Nothing here claims we
+ * authored it. */
+export function dddCrewJsonLd(
+  site: URL | undefined,
+  entry: CollectionEntry<'dddCrew'>,
+  opts: { url: string; image?: string; trail: [string, string][] },
+) {
+  const d = entry.data;
+  const org = organization(site);
+  return graph(
+    org,
+    {
+      '@type': 'CreativeWork',
+      '@id': `${opts.url}#work`,
+      name: d.title,
+      ...(d.description ? { description: d.description } : {}),
+      license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      creditText: 'The ddd-crew and its contributors',
+      isBasedOn: d.repo,
+      sameAs: [d.repo, d.canonical],
+      ...(d.contributors.length
+        ? { contributor: d.contributors.map((c) => person({ name: c.name, url: c.url })) }
+        : {}),
+      ...(d.category ? { genre: d.category } : {}),
+      ...(opts.image ? { image: [opts.image] } : {}),
+      // The canonical version is upstream; this page republishes it.
+      mainEntityOfPage: d.canonical,
+      publisher: { '@id': org['@id'] },
+      inLanguage: 'en',
+      url: opts.url,
+    },
+    breadcrumbs(site, opts.trail),
+  );
 }
 
 /** A story: an Article with its authors. */
 export function storyJsonLd(
   site: URL | undefined,
   story: CollectionEntry<'stories'>,
-  opts: { url: string; image?: string },
+  opts: { url: string; image?: string; trail: [string, string][] },
 ) {
   const d = story.data;
   const org = organization(site);
-  return graph(org, {
+  return graph(org, breadcrumbs(site, opts.trail), {
     '@type': 'Article',
     '@id': `${opts.url}#article`,
     headline: d.title,

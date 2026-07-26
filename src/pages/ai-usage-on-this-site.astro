@@ -1,10 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/ai-usage-on-this-site/', Astro.site).toString(),
+  name: 'AI Usage on this site',
+  description: "How Virtual DDD uses — and doesn't use — AI across our recordings, stories, heuristics and design.",
+  trail: topTrail('AI Usage on this site', '/ai-usage-on-this-site/'),
+});
+
 ---
 
 <BaseLayout
   title="AI Usage on this site — Virtual DDD"
   description="How Virtual DDD uses — and doesn't use — AI across our recordings, stories, heuristics and design."
+  jsonLd={jsonLd}
 >
   <div class="wrap page">
     <p class="eyebrow eyebrow--pink">Transparency</p>

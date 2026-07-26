@@ -77,7 +77,7 @@ describe('internal links', () => {
     for (const p of all) {
       for (const m of p.html.matchAll(/href="(\/[^"#?]*)"/g)) {
         const href = m[1];
-        if (/\.(xml|txt|ics|png|jpg|jpeg|webp|svg|ico|css|js)$/.test(href)) {
+        if (/\.(xml|txt|ics|md|png|jpg|jpeg|webp|svg|ico|css|js)$/.test(href)) {
           if (!existsSync(`${DIST}${href}`)) broken.add(`${href} (from ${p.path})`);
           continue;
         }
@@ -127,6 +127,29 @@ describe('structured data', () => {
     for (const p of all.filter((x) => /^\/facilitating-archdes\/[^/]+\/$/.test(x.path))) {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
       assert.ok(JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Article'), `${p.path} has no Article`);
+    }
+  });
+
+  // A breadcrumb that names a section the site does not have, or ends
+  // somewhere other than the page it is on, is worse than no breadcrumb: it is
+  // what a search result shows instead of the URL.
+  test('every page says where it sits', () => {
+    const skip = (path) => path === '/' || path === '/410/';
+    for (const p of all.filter((x) => !skip(x.path))) {
+      const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
+      assert.ok(raw, `${p.path} has no JSON-LD at all`);
+      const crumbs = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'BreadcrumbList');
+      assert.ok(crumbs, `${p.path} has no BreadcrumbList`);
+      const items = crumbs.itemListElement;
+      assert.equal(items[0].name, 'Home', `${p.path} breadcrumb does not start at Home`);
+      assert.equal(new URL(items.at(-1).item).pathname, p.path,
+        `${p.path} breadcrumb ends somewhere else`);
+      items.forEach((it, i) => assert.equal(it.position, i + 1, `${p.path} breadcrumb positions`));
+      // Every step must be a page that exists, not a section we renamed.
+      for (const it of items) {
+        assert.ok(all.some((x) => x.path === new URL(it.item).pathname),
+          `${p.path} breadcrumb points at ${it.item}, which is not built`);
+      }
     }
   });
 
@@ -376,9 +399,43 @@ describe('error pages', () => {
 
 describe('feeds and machine-readable files', () => {
   test('sitemap, RSS, robots.txt and llms.txt exist', () => {
-    for (const f of ['sitemap-index.xml', 'rss.xml', 'robots.txt', 'llms.txt', '.htaccess']) {
+    for (const f of ['sitemap-index.xml', 'rss.xml', 'robots.txt', 'llms.txt', 'llms-full.txt', '.htaccess']) {
       assert.ok(existsSync(`${DIST}/${f}`), `${f} missing from the build`);
     }
+  });
+
+  // Every content page ships its own markdown. The promise is the pair: a page
+  // that advertises one must have it, and it must say which page it came from
+  // — a markdown file that has drifted from its page is worse than none.
+  test('a page offering markdown has it, and it points back', () => {
+    const offered = all.filter((p) => /type="text\/markdown"/.test(p.html));
+    assert.ok(offered.length > 280, `expected 280+ pages with markdown, got ${offered.length}`);
+    for (const p of offered) {
+      const href = attr(p.html, /<link rel="alternate" type="text\/markdown"[^>]*href="([^"]+)"/);
+      assert.equal(href, `${p.path}index.md`, `${p.path} advertises ${href}`);
+      const md = readFileSync(`${DIST}${href}`, 'utf8');
+      assert.ok(md.startsWith('---\n'), `${href} has no front matter`);
+      assert.ok(md.includes(`source: "https://virtualddd.com${p.path}"`), `${href} does not name its page`);
+      assert.ok(md.split('---\n')[2]?.trim(), `${href} has front matter but no body`);
+    }
+  });
+
+  test('llms-full.txt carries the corpus, and not the republished part', () => {
+    const full = readFileSync(`${DIST}/llms-full.txt`, 'utf8');
+    assert.ok(full.length > 200_000, `llms-full.txt is only ${full.length} bytes`);
+    for (const section of ['# Online sessions', '# Facilitating Stories', '# Heuristics', '# Open Space']) {
+      assert.ok(full.includes(section), `llms-full.txt has no ${section} section`);
+    }
+    // ddd-crew is CC BY-SA with its canonical upstream; we list it, we do not
+    // fold someone else's corpus into a file that reads as ours. A session that
+    // links to a ddd-crew repo in its own body is fine — what must not appear
+    // is a ddd-crew page reproduced here as a source.
+    const sources = full.split('\n').filter((l) => l.startsWith('Source: '));
+    assert.ok(sources.length > 250, `expected 250+ sources, got ${sources.length}`);
+    assert.deepEqual(sources.filter((l) => l.includes('/ddd-crew/')), [],
+      'llms-full.txt reproduces republished ddd-crew pages');
+    assert.ok(readFileSync(`${DIST}/llms.txt`, 'utf8').includes('/llms-full.txt'),
+      'llms.txt does not point at llms-full.txt');
   });
 
   test('RSS lists sessions and stories, newest first', () => {

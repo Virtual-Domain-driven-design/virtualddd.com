@@ -4,6 +4,7 @@ import TeaserCard from '../../components/TeaserCard.astro';
 import { getCollection } from 'astro:content';
 import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
+import { collectionPage, topTrail } from '../../lib/seo';
 
 const all = (await getCollection('openSpaces')).sort(
   (a, b) => +new Date(b.data.date) - +new Date(a.data.date),
@@ -13,12 +14,22 @@ const upcoming = all
   .filter((s) => s.data.status === 'Published' && +new Date(s.data.date) > now)
   .sort((a, b) => +new Date(a.data.date) - +new Date(b.data.date));
 const past = all.filter((s) => !(s.data.status === 'Published' && +new Date(s.data.date) > now));
+const description =
+  'Online Open Spaces from Virtual DDD — participant-led unconferences where the community sets the agenda and explores software design together.';
+const jsonLd = collectionPage(Astro.site, {
+  url: new URL('/open-space/', Astro.site).toString(),
+  name: 'Open Space',
+  description,
+  items: all.map((s) => ({
+    name: s.data.title,
+    url: new URL(`/open-space/${s.id}/`, Astro.site).toString(),
+  })),
+  trail: topTrail('Open Space', '/open-space/'),
+});
+
 ---
 
-<BaseLayout
-  title="Open Space — Virtual DDD"
-  description="Online Open Spaces from Virtual DDD — participant-led unconferences where the community sets the agenda and explores software design together."
->
+<BaseLayout title="Open Space — Virtual DDD" description={description} jsonLd={jsonLd}>
   <section class="hero hero-band hero-band--padded">
     <div class="page-wash" aria-hidden="true"></div>
     <div class="wrap hero-inner">

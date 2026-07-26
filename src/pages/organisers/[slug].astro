@@ -1,5 +1,5 @@
 ---
-import { graph, organization, pageTitle, person } from '../../lib/seo';
+import { breadcrumbs, graph, organization, pageTitle, person, trail } from '../../lib/seo';
 /** An organiser's page.
  *
  * Replaces the eight near-empty WordPress `/dipl-team-member/*` pages, which
@@ -54,7 +54,7 @@ const jsonLd = graph(org, person({
   sameAs: profileLinks(d).map((l) => l.href),
   page: `${site}/organisers/${organiser.id}/`,
   memberOf: org['@id'],
-}));
+}), breadcrumbs(Astro.site, trail('organisers', d.name, `/organisers/${organiser.id}/`)));
 
 const description = d.role
   ? `${d.name} — ${d.role}. Sessions, stories and heuristics from ${d.name} at Virtual DDD.`

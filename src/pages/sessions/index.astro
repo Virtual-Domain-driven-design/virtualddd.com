@@ -4,6 +4,7 @@ import SessionCard from '../../components/SessionCard.astro';
 import { Image } from 'astro:assets';
 import { splitSessions, tagOptions } from '../../lib/collections';
 import { iso, longDateTime } from '../../lib/dates';
+import { collectionPage, topTrail } from '../../lib/seo';
 
 // Every upcoming session ships as a hero, soonest first, with all but the first
 // hidden; the same sessions ship again as cards in "more upcoming". The
@@ -13,12 +14,23 @@ const { upcoming, past } = await splitSessions();
 
 const tags = tagOptions(past);
 const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'];
+const description = 'Live online meetups on Domain-Driven Design, software architecture and design.';
+// The archive is what this page is: 100+ recorded sessions, newest first, as an
+// ItemList so a crawler gets the list rather than just the page.
+const jsonLd = collectionPage(Astro.site, {
+  url: new URL('/sessions/', Astro.site).toString(),
+  name: 'Online sessions',
+  description,
+  items: [...upcoming, ...past].map((s) => ({
+    name: s.data.title,
+    url: new URL(`/sessions/${s.id}/`, Astro.site).toString(),
+  })),
+  trail: topTrail('Online sessions', '/sessions/'),
+});
+
 ---
 
-<BaseLayout
-  title="Online sessions — Virtual DDD"
-  description="Live online meetups on Domain-Driven Design, software architecture and design."
->
+<BaseLayout title="Online sessions — Virtual DDD" description={description} jsonLd={jsonLd}>
   <div class="wrap">
     <h1>Online sessions</h1>
 

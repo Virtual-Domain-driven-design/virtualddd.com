@@ -6,6 +6,7 @@ import { getCollection } from 'astro:content';
 import { tagOptions } from '../../lib/collections';
 import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
+import { collectionPage, topTrail } from '../../lib/seo';
 
 const stories = (await getCollection('stories')).sort(
   (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
@@ -19,12 +20,22 @@ const hosts = ['andrea-magnorsky', 'andrew-harmel-law', 'kenny-baas-schwegler']
   .filter(Boolean) as typeof organisers;
 
 const tags = tagOptions(stories);
+const description =
+  'Real-world stories on facilitating software architecture and design — practical experiences from the community.';
+const jsonLd = collectionPage(Astro.site, {
+  url: new URL('/facilitating-archdes/', Astro.site).toString(),
+  name: 'Facilitating Stories',
+  description,
+  items: stories.map((s) => ({
+    name: s.data.title,
+    url: new URL(`/facilitating-archdes/${s.id}/`, Astro.site).toString(),
+  })),
+  trail: topTrail('Facilitating Stories', '/facilitating-archdes/'),
+});
+
 ---
 
-<BaseLayout
-  title="Facilitating Stories — Virtual DDD"
-  description="Real-world stories on facilitating software architecture and design — practical experiences from the community."
->
+<BaseLayout title="Facilitating Stories — Virtual DDD" description={description} jsonLd={jsonLd}>
   <!-- Intro: hosts (rotating) + explanation card, two columns like the home page -->
   <section class="wrap">
     <div class="stories-intro">

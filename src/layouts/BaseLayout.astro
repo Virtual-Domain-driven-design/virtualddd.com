@@ -31,9 +31,14 @@ interface Props {
   ogType?: 'website' | 'article';
   /** Keep a page out of the index (thin or duplicate views). */
   noindex?: boolean;
+  /** This page also exists as markdown, at `<path>index.md`. Set by the five
+   *  content types; an agent reading the site gets the words with no HTML to
+   *  strip. See src/lib/markdown-page.ts. */
+  markdown?: boolean;
 }
 const {
   title, description, canonical, jsonLd, image, ogType = 'website', noindex = false,
+  markdown = false,
 } = Astro.props;
 
 // Canonical defaults to the page's own URL, so every page has one rather than
@@ -102,6 +107,9 @@ const year = new Date().getFullYear();
 
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} — sessions and stories`} href="/rss.xml" />
+    {markdown && (
+      <link rel="alternate" type="text/markdown" title={`${title} — markdown`} href={`${Astro.url.pathname}index.md`} />
+    )}
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>

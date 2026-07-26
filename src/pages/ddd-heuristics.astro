@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import art1 from '../assets/heur-articles/article_what_do_typical_design_heuristics_look_like.jpg';
@@ -22,11 +23,19 @@ const banners = HEURISTIC_TYPES.map((t) => ({
 }));
 
 const videos = ['TP3xTZi_Qn8', '9ZgSz6xAfL8'];
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/ddd-heuristics/', Astro.site).toString(),
+  name: 'About our heuristics',
+  description: "Further reading on heuristics, how to contribute your own, the collection's licence, the three kinds we collect, and talks on design heuristics.",
+  trail: topTrail('About our heuristics', '/ddd-heuristics/'),
+});
+
 ---
 
 <BaseLayout
   title="About our heuristics — Virtual DDD"
   description="Further reading on heuristics, how to contribute your own, the collection's licence, the three kinds we collect, and talks on design heuristics."
+  jsonLd={jsonLd}
 >
   <div class="wrap page">
     <p class="detail-back"><a href="/heuristics/">← Back to heuristics</a></p>

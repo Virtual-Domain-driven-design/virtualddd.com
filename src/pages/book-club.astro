@@ -8,14 +8,23 @@
  * dates here or model it as a session/open space and link to it.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
 
 const DISCORD = 'https://discord.gg/tRJkcsFDKN';
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/book-club/', Astro.site).toString(),
+  name: 'Book club',
+  description: "The Virtual DDD book club — the community reads a book together and discusses it. The 2024 edition read Facilitating Software Architecture by Andrew Harmel-Law.",
+  trail: topTrail('Book club', '/book-club/'),
+});
+
 ---
 
 <BaseLayout
   title="Book club — Virtual DDD"
   description="The Virtual DDD book club — the community reads a book together and discusses it. The 2024 edition read Facilitating Software Architecture by Andrew Harmel-Law."
+  jsonLd={jsonLd}
   canonical={`${site}/book-club/`}
 >
   <div class="wrap page">

@@ -1,16 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, topTrail } from '../lib/seo';
 import { Image } from 'astro:assets';
 import heroImg from '../assets/about/ddd_session_93.jpg';
 import startedImg from '../assets/about/howitallstarted.webp';
 import communityImg from '../assets/about/buildingacommunity.webp';
 import decentral1 from '../assets/about/decentralising_knowledge_01.webp';
 import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
+const jsonLd = pageJsonLd(Astro.site, {
+  url: new URL('/about-us/', Astro.site).toString(),
+  name: 'About us',
+  description: "Virtual DDD is a community-driven platform for deeper knowledge of systems and software design — how we started and where we're headed.",
+  trail: topTrail('About us', '/about-us/'),
+});
+
 ---
 
 <BaseLayout
   title="About us — Virtual DDD"
   description="Virtual DDD is a community-driven platform for deeper knowledge of systems and software design — how we started and where we're headed."
+  jsonLd={jsonLd}
 >
   <div class="wrap about">
     <!-- Hero: painting + cyan Goal panel -->

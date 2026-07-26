@@ -1,5 +1,5 @@
 ---
-import { pageTitle } from '../../lib/seo';
+import { openSpaceJsonLd, pageTitle, socialCard, trail } from '../../lib/seo';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
 import PrevNext from '../../components/PrevNext.astro';
@@ -43,13 +43,27 @@ const latest: Teaser[] = [...items]
     iso: toIso(s.data.date),
     fallback: shortDate(s.data.date),
   }));
+// SEO and structured data. An open space is an Event too — participant-led,
+// but online, dated and recorded like a session.
+const url = new URL(`/open-space/${entry.id}/`, Astro.site).toString();
+const description =
+  d.seoMetadescription ?? excerpt(entry.body ?? '', `${d.title} — a Virtual DDD open space.`, 155);
+const jsonLd = openSpaceJsonLd(Astro.site, entry, {
+  url,
+  description,
+  image: d.featuredImage ? await socialCard(Astro.site, d.featuredImage) : undefined,
+  trail: trail('openSpace', d.title, `/open-space/${entry.id}/`),
+});
+
 ---
 
 <BaseLayout
   title={pageTitle(d.seoTitle ?? d.title)}
-  description={d.seoMetadescription ?? excerpt(entry.body ?? '', `${d.title} — a Virtual DDD open space.`, 155)}
+  description={description}
   image={d.featuredImage}
   ogType="article"
+  jsonLd={jsonLd}
+  markdown
 >
   <article class="os detail wrap">
     <div class="detail-head">

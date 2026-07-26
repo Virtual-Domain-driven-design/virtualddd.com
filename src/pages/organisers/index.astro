@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrganiserCard from '../../components/OrganiserCard.astro';
 import { getCollection } from 'astro:content';
+import { collectionPage, topTrail } from '../../lib/seo';
 
 // Everyone we hold a record for, not just the team-page subset: the WordPress
 // /dipl-team-member/ URLs redirect here and every one of them must land.
@@ -9,12 +10,26 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
   a.data.name.localeCompare(b.data.name),
 );
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const description =
+  'The volunteers who run Virtual DDD — the people who host the sessions, open spaces and Facilitating Stories.';
+const jsonLd = collectionPage(Astro.site, {
+  url: new URL('/organisers/', Astro.site).toString(),
+  name: 'Organisers',
+  description,
+  items: organisers.map((o) => ({
+    name: o.data.name,
+    url: new URL(`/organisers/${o.id}/`, Astro.site).toString(),
+  })),
+  trail: topTrail('Organisers', '/organisers/'),
+});
+
 ---
 
 <BaseLayout
   title="Organisers — Virtual DDD"
-  description="The volunteers who run Virtual DDD — the people who host the sessions, open spaces and Facilitating Stories."
+  description={description}
   canonical={`${site}/organisers/`}
+  jsonLd={jsonLd}
 >
   <div class="wrap page">
     <p class="eyebrow eyebrow--pink">The team</p>
