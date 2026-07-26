@@ -10,6 +10,7 @@ tags: ["software design", "software architecture"]
 video: "https://www.youtube.com/embed/bl0E7-ov4gw"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["mike-wojtyna"]
 seoMetadescription: "Mike Wojtyna on designing for requirements nobody can foresee: treating the domain as something to experiment against rather than specify up front."
 featuredImage: "./_assets/domain-experiments-with-mike-wojtyna-featured.jpg"
 ---

@@ -10,6 +10,7 @@ tags: ["microservices", "strategic design", "essential"]
 video: "https://www.ustream.tv/embed/recorded/121763272"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["nick-tune", "helin-akgul"]
 seoMetadescription: "Nick Tune previews his Strategic Microservice Patterns talk, joined by Helin Akgul, at our CraftConf meetup in Budapest."
 featuredImage: "./_assets/craftconf-meetup-with-nick-tune-and-helin-akgul-featured.jpeg"
 ---

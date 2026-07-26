@@ -2,16 +2,18 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
 import DiscussedHeuristics from '../../components/DiscussedHeuristics.astro';
+import PersonRow from '../../components/PersonRow.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import { youtubeEmbed } from '../../lib/embeds';
 import { excerpt } from '../../lib/excerpt';
-import { sessionJsonLd, socialCard, pageTitle } from '../../lib/seo';
+import { sessionJsonLd, socialCard, pageTitle, type PersonInput } from '../../lib/seo';
 import { iso as toIso, longDate } from '../../lib/dates';
+import { profileLinks, samePerson } from '../../lib/people';
 import {
-  byDateAsc, heuristicsById, isUpcoming as sessionIsUpcoming,
-  resolveHeuristics, sessionTeasers, siblings,
+  byDateAsc, guestsById, heuristicsById, isUpcoming as sessionIsUpcoming,
+  resolveRefs, sessionTeasers, siblings,
 } from '../../lib/collections';
 
 export async function getStaticPaths() {
@@ -23,12 +25,61 @@ const { session, sessions } = Astro.props;
 const { Content } = await render(session);
 const d = session.data;
 
-const discussed = resolveHeuristics(d.curatedHeuristics, await heuristicsById());
+const discussed = resolveRefs(d.curatedHeuristics, await heuristicsById());
 
 // Host — match the organiser name to the organisers collection for the rich card.
 const organisers = await getCollection('organisers');
 const orgByName = new Map(organisers.map((o) => [o.data.name.trim().toLowerCase(), o]));
 const host = d.organiser ? orgByName.get(d.organiser.trim().toLowerCase()) : undefined;
+
+// Guests — the speakers and panellists. Someone who both organises and speaks
+// has a row in each database on purpose (see CLAUDE.md), so link a guest to
+// their organiser page and fall back to the portrait and role already held
+// there rather than asking for the same thing twice.
+const guests = resolveRefs(d.guests, await guestsById())
+  .map((g) => {
+    const also = organisers.find((o) => samePerson(o.data.name, g.data.name));
+    const links = profileLinks(g.data);
+    return {
+      name: g.data.name,
+      role: g.data.role ?? also?.data.role,
+      bio: g.data.bio,
+      photo: g.data.photo ?? also?.data.photo,
+      href: also ? `/organisers/${also.id}/` : undefined,
+      links: links.length ? links : profileLinks(also?.data ?? {}),
+    };
+  })
+  // The host is already introduced below; a guest row for the same person
+  // would say it twice.
+  .filter((g) => !d.organiser || !samePerson(g.name, d.organiser));
+
+// The guest rows are worth their size once there is something in them. Until a
+// guest has been given a portrait, a role, a bio or a link, the section renders
+// as a roster of names — which is what we actually know. It upgrades itself as
+// the Notion rows are filled in.
+const guestsIntroduced = guests.some((g) => g.photo || g.role || g.bio || g.links.length);
+
+const hostLinks = profileLinks(host?.data ?? {});
+// One Person node per human on the session, guests first: they are what the
+// page is about, and the organiser hosts.
+const performers: PersonInput[] = [
+  ...guests.map((g) => ({
+    name: g.name, role: g.role, bio: g.bio,
+    url: g.links.find((l) => l.label === 'Website')?.href,
+    sameAs: g.links.map((l) => l.href),
+    page: g.href ? new URL(g.href, Astro.site).toString() : undefined,
+  })),
+  ...(d.organiser
+    ? [{
+        name: host?.data.name ?? d.organiser,
+        role: host?.data.role,
+        url: host?.data.website,
+        sameAs: hostLinks.map((l) => l.href),
+        page: host ? new URL(`/organisers/${host.id}/`, Astro.site).toString() : undefined,
+      }]
+    : []),
+  ...d.coOrganisers.map((name) => ({ name })),
+];
 
 const videoEmbed = youtubeEmbed(d.video);
 
@@ -49,6 +100,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
   url,
   image: image ? await socialCard(Astro.site, image) : undefined,
   isUpcoming,
+  performers,
 });
 ---
 
@@ -91,6 +143,9 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
       <div class="side-card">
         <p class="side-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
+        {guests.length > 0 && (
+          <p class="side-guests">With <strong>{guests.map((g) => g.name).join(', ')}</strong></p>
+        )}
         {isUpcoming && (d.humantix || d.meet) && (
           <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>
         )}
@@ -118,22 +173,32 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     <div class="detail-body">
       <div class="prose-body"><Content /></div>
 
+      {guests.length > 0 && (
+        <section class="people-card">
+          <h2>{guests.length === 1 ? 'Guest' : 'Guests'}</h2>
+          <ul class:list={['people', { 'people--names': !guestsIntroduced }]}>
+            {guests.map((g) => (
+              <li data-test="guest">
+                <PersonRow
+                  name={g.name} role={g.role} bio={g.bio} photo={g.photo}
+                  href={g.href} links={g.links} compact={!guestsIntroduced}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {(host || d.organiser) && (
-        <section class="host-card">
+        <section class="people-card">
           <h2>About the host</h2>
-          <div class="org">
-            {host?.data.photo && <Image class="org-photo" src={host.data.photo} alt={host.data.name} width={180} />}
-            <div class="org-info">
-              <p class="org-name">{host?.data.name ?? d.organiser}</p>
-              {host?.data.role && <p class="org-role">{host.data.role}</p>}
-              {host && (host.data.website || host.data.linkedin) && (
-                <p class="org-links">
-                  {host.data.website && <a href={host.data.website}>Website</a>}
-                  {host.data.linkedin && <a href={host.data.linkedin}>LinkedIn</a>}
-                </p>
-              )}
-            </div>
-          </div>
+          <PersonRow
+            name={host?.data.name ?? d.organiser!}
+            role={host?.data.role}
+            photo={host?.data.photo}
+            href={host ? `/organisers/${host.id}/` : undefined}
+            links={hostLinks}
+          />
           {d.coOrganisers.length > 0 && <p class="org-co">With {d.coOrganisers.join(', ')}</p>}
         </section>
       )}
@@ -158,6 +223,10 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .side-org { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
     .side-org strong { color: var(--color-accent-dark); }
+    /* The two credit lines belong together; only the last one opens the gap. */
+    .side-org:has(+ .side-guests) { margin-bottom: var(--space-1); }
+    .side-guests { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+    .side-guests strong { color: var(--color-text); font-weight: 600; }
     .side-rsvp { display: flex; justify-content: center; margin-bottom: var(--space-4); }
     .side-links { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; font-size: var(--text-sm); }
     .side-block { margin-top: var(--space-6); }
@@ -166,14 +235,12 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     .heur-list { margin: 0; padding-left: var(--space-4); font-size: var(--text-sm); }
     .heur-list li { margin-bottom: var(--space-2); }
 
-    /* About-the-host panel */
-    .host-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
-    .host-card h2 { margin-top: 0; }
-    .org { display: flex; gap: var(--space-4); align-items: center; }
-    .org-photo { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow); }
-    .org-name { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0; }
-    .org-role { color: var(--color-accent-dark); margin: 0 0 var(--space-2); }
-    .org-links { display: flex; gap: var(--space-4); margin: 0; font-size: var(--text-sm); }
+    /* Guests and about-the-host panels — the people are a PersonRow each. */
+    .people-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
+    .people-card h2 { margin-top: 0; }
+    .people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+    /* Names only: a wrapped roster rather than a column of near-empty rows. */
+    .people--names { flex-direction: row; flex-wrap: wrap; column-gap: var(--space-6); row-gap: var(--space-2); }
     .org-co { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-4) 0 0; }
   </style>
 </BaseLayout>

@@ -244,11 +244,12 @@ async function runSlugs(only: string | undefined, write: boolean) {
 import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
 
 const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
+const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (speakers, panellists)
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
 
 /** id -> value maps for relation resolution (page IDs are stored dashless-agnostic). */
-async function buildLookup(dataSourceId: string, label: string, valueOf: (page: any) => string) {
-  const map = new Map<string, string>();
+async function buildLookup<T>(dataSourceId: string, label: string, valueOf: (page: any) => T) {
+  const map = new Map<string, T>();
   try {
     for (const page of await queryAll(dataSourceId)) {
       map.set((page.id as string).replace(/-/g, ''), valueOf(page));
@@ -334,6 +335,7 @@ interface Helpers {
   select: (n: string) => string | undefined;
   heur: (n: string) => string[];
   person: (n: string) => string[];
+  guest: (n: string) => string[];
   img: (n: string, label: string) => Promise<string | null>;
 }
 
@@ -345,6 +347,7 @@ interface ContentSpec {
   liveStatuses: string[];
   featuredImageProp?: string; // omit to skip featured-image download
   needsPeople?: boolean;
+  needsGuests?: boolean;
   extra: (h: Helpers) => Promise<string[]>;
 }
 
@@ -352,7 +355,8 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   sessions: {
     dataSourceId: '33e9db0a-1418-4a3e-a053-33fa384e5e93',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'select',
-    liveStatuses: ['Done', 'Published'], featuredImageProp: 'Featured image', needsPeople: true,
+    liveStatuses: ['Done', 'Published'], featuredImageProp: 'Featured image',
+    needsPeople: true, needsGuests: true,
     extra: async (h) => {
       const l: string[] = [];
       if (h.date('Datetime')) l.push(`datetime: ${h.date('Datetime')}`);
@@ -365,6 +369,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       }
       const org = h.person('Organiser')[0]; if (org) l.push(`organiser: ${yamlStr(org)}`);
       const co = h.person('Co-Organisers'); if (co.length) l.push(`coOrganisers: ${yamlList(co)}`);
+      const guests = h.guest('Guests'); if (guests.length) l.push(`guests: ${yamlList(guests)}`);
       const heur = h.heur('Curated Heuristics'); if (heur.length) l.push(`curatedHeuristics: ${yamlList(heur)}`);
       const t = h.text('SEO Title'); if (t) l.push(`seoTitle: ${yamlStr(t)}`);
       const d = h.text('SEO Metadescription'); if (d) l.push(`seoMetadescription: ${yamlStr(d)}`);
@@ -473,6 +478,19 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       })
     : new Map<string, string>();
 
+  // Guests are a `reference()` in the schema, so the slug must match a file in
+  // src/content/session-guests/ — which is exactly the set of guest rows that
+  // have a slug. A row without one cannot be linked to; name it in the report
+  // rather than writing a reference the build would then fail on.
+  const guests = spec.needsGuests
+    ? await buildLookup(GUESTS_DS, 'session guests', (p) => ({
+        name: plainTitle(p, 'Name'),
+        slug: (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      }))
+    : new Map<string, { name: string; slug: string }>();
+  /** Guest relations pointing at a row with no slug, and therefore no entry. */
+  const guestless: { slug: string; ref: string }[] = [];
+
   const pages = (await queryAll(spec.dataSourceId)).filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
   const targets = limit ? pages.slice(0, limit) : pages;
   const assetDir = `${outDir}/_assets`;
@@ -505,6 +523,12 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
         return [];
       }),
       person: (n) => rel(n).map((id: string) => personName.get(id)).filter(Boolean) as string[],
+      guest: (n) => rel(n).flatMap((id: string) => {
+        const g = guests.get(id);
+        if (g?.slug) return [g.slug];
+        guestless.push({ slug, ref: g?.name || `unknown page ${id.slice(0, 8)}…` });
+        return [];
+      }),
       img: async (n, label) => {
         const u = fileUrl((get(n)?.files ?? [])[0]);
         return u ? await downloadImage(u, ctx, label) : null;
@@ -557,6 +581,15 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     list(pending);
   }
 
+  // A guest with no slug has no entry to reference. Unlike a curating
+  // heuristic this needs a person to type one word in Notion, so it is a
+  // warning — but not a --strict failure, since the session still renders.
+  if (guestless.length) {
+    console.log(`\n  ! ${guestless.length} guest relation(s) point at a row with no Slug and were left out:`);
+    list(guestless.map((g) => ({ slug: g.slug, prop: 'Guests', ref: g.ref })));
+    console.log('    Fill in Slug on those rows in the Session Guests database.');
+  }
+
   if (dropped.length) {
     console.log(`\n  ! ${dropped.length} relation(s) pointed at a page that is not in the heuristics database (deleted or archived) and were dropped:`);
     list(dropped);
@@ -607,6 +640,64 @@ async function runOrganisers(outDir: string, write: boolean) {
   if (!write) console.log(`\n  (preview only — files in ${outDir})`);
 }
 
+// --- guests command: Notion -> JSON data collection -------------------------
+//
+// Session guests are the speakers and panellists, kept apart from the
+// organisers database on purpose (see CLAUDE.md): none of the operational
+// fields — Discord, virtualddd.com mail — apply to an external speaker. The
+// fields here exist to make a good `Person`, and the links become `sameAs`.
+//
+// The Slug column is what a session's `Guests` relation resolves to, so a row
+// without one produces no entry; the sessions sync reports those.
+
+async function runGuests(outDir: string, write: boolean) {
+  const pages = await queryAll(GUESTS_DS);
+  const assetDir = `${outDir}/_assets`;
+  mkdirSync(outDir, { recursive: true });
+  console.log(`session guests: ${pages.length} -> ${outDir}\n`);
+
+  const written = new Set<string>();
+  for (const page of pages) {
+    const P = page.properties;
+    const get = (n: string) => P[n];
+    const text = (n: string) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+    const name = plainTitle(page, 'Name');
+    if (!name) continue;
+    const slug = text('Slug') || kebab(name);
+    const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
+    const photoUrl = fileUrl((get('Photo')?.files ?? [])[0]);
+    const photo = photoUrl ? await downloadImage(photoUrl, ctx, 'photo') : null;
+
+    const data: Record<string, unknown> = {
+      name,
+      slug,
+      role: text('Role') || undefined,
+      bio: text('Bio') || undefined,
+      website: get('Website')?.url ?? undefined,
+      linkedin: get('LinkedIn')?.url ?? undefined,
+      mastodon: get('Mastodon')?.url ?? undefined,
+      bluesky: get('Bluesky')?.url ?? undefined,
+      alsoAnOrganiser: get('Also an organiser')?.checkbox ?? false,
+      photo: photo ?? undefined,
+    };
+    Object.keys(data).forEach((k) => data[k] === undefined && delete data[k]);
+    const file = `${slug}.json`;
+    written.add(file);
+    writeFileSync(`${outDir}/${file}`, JSON.stringify(data, null, 2) + '\n');
+    console.log(`  ✓ ${file}${photo ? ' (photo)' : ''}${data.alsoAnOrganiser ? ' [organiser too]' : ''}`);
+  }
+
+  // A guest deleted or re-slugged in Notion must not leave an entry behind: a
+  // session relation resolves to the new slug, and the old file would linger
+  // as a person nobody can reach.
+  for (const f of readdirSync(outDir).filter((f) => f.endsWith('.json') && !written.has(f))) {
+    unlinkSync(`${outDir}/${f}`);
+    console.log(`  – removed ${f} (no longer in the guests database)`);
+  }
+
+  if (!write) console.log(`\n  (preview only — files in ${outDir})`);
+}
+
 // --- dispatch ---------------------------------------------------------------
 
 async function run() {
@@ -622,13 +713,18 @@ async function run() {
       ?? (write ? 'src/content/organisers' : 'migration-source/preview/organisers');
     return runOrganisers(outDir, write);
   }
+  if (cmd === 'guests') {
+    const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
+      ?? (write ? 'src/content/session-guests' : 'migration-source/preview/session-guests');
+    return runGuests(outDir, write);
+  }
   if (cmd === 'content') {
     const target = only ?? 'sessions';
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
       ?? (write ? `src/content/${target}` : `migration-source/preview/${target}`);
     return runContent(target, limit, outDir, write, args.includes('--strict'));
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
+  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
   process.exit(1);
 }
 

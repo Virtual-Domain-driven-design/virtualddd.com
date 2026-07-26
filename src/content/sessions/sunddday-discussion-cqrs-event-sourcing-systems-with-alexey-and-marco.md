@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/5e7lhY2q8WQ"
 podcastPlayer: "https://player.captivate.fm/episode/c15e93e3-e8d2-49d6-ab57-f9ccb18f4f7e/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["alexey-zimarev"]
 seoTitle: "CQRS and Event Sourcing in Practice"
 seoMetadescription: "Alexey Zimarev and Marco Heimeshoff on building real systems with CQRS and event sourcing: what the patterns actually are, and when they earn their keep."
 featuredImage: "./_assets/sunddday-discussion-cqrs-event-sourcing-systems-with-alexey-and-marco-featured.jpeg"

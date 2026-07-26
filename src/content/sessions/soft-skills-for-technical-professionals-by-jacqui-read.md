@@ -11,6 +11,7 @@ video: "https://www.youtube.com/watch?v=DYFKzqLnJmU"
 podcastPlayer: "https://player.captivate.fm/episode/f61fc359-8fa6-47cd-843c-c6d241cfed91/"
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["jacqui-read"]
 seoMetadescription: "Jacqui Read on why the strongest technical skills alone do not carry you, and which soft skills multiply the influence you already have."
 featuredImage: "./_assets/soft-skills-for-technical-professionals-by-jacqui-read-featured.jpg"
 ---

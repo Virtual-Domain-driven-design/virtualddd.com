@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/tRgqD2ztHpk"
 podcastPlayer: "https://player.captivate.fm/episode/1deef386-7e8c-443d-9f70-8c29c1bd2695/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["cat-swetel"]
 seoTitle: "Epistemic Injustice and Domain Crunching"
 seoMetadescription: "Cat Swetel on epistemic injustice — what we know, how we know it, and who gets to decide — and what that means for crunching a domain together."
 featuredImage: "./_assets/how-epistemic-injustice-impacts-domain-crunching-with-cat-swetel-featured.jpg"

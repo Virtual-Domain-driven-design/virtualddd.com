@@ -11,6 +11,7 @@ video: "https://youtube.com/live/tYtfeuRAubg"
 meet: "https://meet.google.com/ksm-nqwx-chu"
 humantix: "https://events.humanitix.com/streams-queues-chris-simon"
 organiser: "Andrea Magnorsky"
+guests: ["chris-simon"]
 seoTitle: "When You Need a Queue, Not Event-Driven Architecture"
 seoMetadescription: "Chris Simon on a team that adopted event-driven architecture and hit head-of-line blocking on day one — and when a queue was what they actually needed."
 featuredImage: "./_assets/its-like-10000-streams-when-what-you-need-is-a-queue-chris-simon-featured.png"

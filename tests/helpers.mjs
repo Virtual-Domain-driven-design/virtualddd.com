@@ -26,6 +26,15 @@ export function pages() {
 }
 
 export const attr = (html, re) => (html.match(re) ?? [])[1];
+
+/** Text as a reader sees it: names carry apostrophes, and HTML escapes them. */
+export const text = (s = '') =>
+  s.replace(/&(?:#39|#x27|apos);/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .trim();
 export const meta = (html, name) =>
   attr(html, new RegExp(`<meta[^>]*(?:name|property)="${name}"[^>]*content="([^"]*)"`)) ??
   attr(html, new RegExp(`<meta[^>]*content="([^"]*)"[^>]*(?:name|property)="${name}"`));

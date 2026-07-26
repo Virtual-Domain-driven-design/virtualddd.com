@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/jFEC7Pb1FtM"
 podcastPlayer: "https://player.captivate.fm/episode/da917046-4c87-44c6-948b-e2c0471fe24b/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["rebecca-wirfs-brock", "paul-rayner"]
 seoTitle: "EventStorming Types and Heuristics"
 seoMetadescription: "Rebecca Wirfs-Brock, Paul Rayner and Alberto Brandolini on the different types of EventStorming and the heuristics each of them reaches for."
 featuredImage: "./_assets/eventstorming-types-and-heuristics-with-rebecca-paul-and-alberto-featured.png"

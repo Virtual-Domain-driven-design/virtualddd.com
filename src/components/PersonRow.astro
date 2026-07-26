@@ -1,0 +1,71 @@
+---
+/** One person, in a row: portrait, name, role, bio, links.
+ *
+ * Shared because a session page shows two kinds of people — the host it is
+ * organised by, and the guests who spoke — and they should not drift apart.
+ * Most guests carry nothing but a name for now (the Notion rows were created
+ * from the session titles), so every field below is optional and the row has
+ * to look deliberate with only the first one filled in.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  name: string;
+  role?: string;
+  bio?: string;
+  photo?: ImageMetadata;
+  /** A page on this site for this person, e.g. their organiser page. */
+  href?: string;
+  links?: { label: string; href: string }[];
+  /** Name only, no portrait: for a list of people we know nothing else about.
+   *  Three tall rows holding a name each look like a page with fields
+   *  missing; a roster looks like a roster. */
+  compact?: boolean;
+}
+const { name, role, bio, photo, href, links = [], compact = false } = Astro.props;
+
+/** Initials stand in for a missing portrait, so a list of people keeps its
+ *  rhythm instead of collapsing to ragged text. */
+const initials = name
+  .split(/\s+/)
+  .filter((w) => /[\p{L}]/u.test(w))
+  .slice(0, 2)
+  .map((w) => [...w][0].toUpperCase())
+  .join('');
+---
+
+<div class:list={['person', { 'person--compact': compact }]}>
+  {compact ? null : photo
+    ? <Image class="person-photo" src={photo} alt={name} width={176} />
+    : <span class="person-photo person-ph" aria-hidden="true">{initials}</span>}
+  <div class="person-info">
+    <p class="person-name" data-test="person-name">{href ? <a href={href}>{name}</a> : name}</p>
+    {role && <p class="person-role">{role}</p>}
+    {bio && <p class="person-bio">{bio}</p>}
+    {links.length > 0 && (
+      <p class="person-links">
+        {links.map((l) => <a href={l.href}>{l.label} ↗</a>)}
+      </p>
+    )}
+  </div>
+</div>
+
+<style>
+  .person { display: flex; gap: var(--space-4); align-items: center; }
+  /* A bio makes the text column tall; a centred portrait then floats beside
+     its middle instead of introducing the person. */
+  .person:has(.person-bio) { align-items: flex-start; }
+  .person--compact { display: block; }
+  .person-photo { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow); }
+  .person-ph {
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: var(--on-colour);
+    font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl);
+    box-shadow: none;
+  }
+  .person-name { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0; }
+  .person-role { color: var(--color-accent-dark); margin: 0 0 var(--space-2); }
+  .person-bio { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
+  .person-links { display: flex; flex-wrap: wrap; gap: var(--space-4); margin: 0; font-size: var(--text-sm); }
+</style>

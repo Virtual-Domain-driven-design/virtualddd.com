@@ -31,3 +31,26 @@ export function samePerson(a: string, b: string): boolean {
 /** True when any name in the list denotes this person. */
 export const anySamePerson = (names: string[] | undefined, person: string) =>
   (names ?? []).some((n) => samePerson(n, person));
+
+/** The profiles a person may have off this site. */
+export interface Profiles {
+  website?: string;
+  linkedin?: string;
+  mastodon?: string;
+  bluesky?: string;
+}
+
+/** A person's outbound links, labelled and in one fixed order.
+ *
+ * One list, because these links are rendered on the page *and* become `sameAs`
+ * in the structured data — if they were built twice the two could disagree
+ * about what a person's profiles are. */
+export const profileLinks = (p: Profiles): { label: string; href: string }[] =>
+  ([
+    ['Website', p.website],
+    ['LinkedIn', p.linkedin],
+    ['Mastodon', p.mastodon],
+    ['Bluesky', p.bluesky],
+  ] as const)
+    .filter(([, href]) => !!href)
+    .map(([label, href]) => ({ label, href: href as string }));

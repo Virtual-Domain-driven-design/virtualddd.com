@@ -10,6 +10,7 @@ tags: ["hexagonal architecture", "tactical design", "functional core", "anti-cor
 video: "https://www.youtube.com/embed/SAjsP2igBNk"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["thomas-pierrain", "bruno-boucard"]
 seoTitle: "Beyond Hexagonal Architecture: The Functional Core"
 seoMetadescription: "After years of promoting hexagonal architecture, an alternative: the Functional Core, and what it changes about protecting your domain from the technical stack."
 featuredImage: "./_assets/beyond-the-hexagonal-architecture-functional-core-featured.jpeg"

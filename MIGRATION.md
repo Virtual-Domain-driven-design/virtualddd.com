@@ -513,12 +513,14 @@ that before cutover, not during.
   already supports it: five self-relations plus cross-links to sessions
   and stories. That graph is something WordPress was never going to render
   well, and it is the strongest argument for having done any of this.
-- Consider a `speakers` collection with `Person` structured data. People
-  search names, and speaker pages are strong SEO the current site lacks.
-  Source data already exists but is inconsistent: Sessions use an
-  `Organiser`/`Co-Organisers` relation to a people collection, while
-  Stories and Heuristics store `Authors` as a multi-select. Unifying these
-  is the prerequisite, and a reason to defer this to after cutover.
+- **Speaker pages.** Half of this is done: Session Guests is a real database,
+  54 speakers are linked to 48 sessions, they render on the session page and
+  they are `Person` performers on its `Event`. What is missing is the pages —
+  people search names — and the reason to wait is that the rows still hold a
+  name and a slug each. Fill in roles, bios, photos and links (the reporting
+  suite names the ones on upcoming sessions), then `/guests/<slug>/` becomes a
+  page worth having rather than 54 thin ones. Authors are still a multi-select
+  on Stories and Heuristics; unifying those is a separate job.
 - The Video Tags list in Notion is polluted with imported YouTube metadata
   from an unrelated channel. Irrelevant now that Videos is out of scope,
   but worth cleaning if that database is ever revived.

@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/djbbZnOIGE0"
 podcastPlayer: "https://player.captivate.fm/episode/56044b17-a51e-4680-a2c4-0b16dfd654e7/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["evelyn-van-kelle", "romeu-moura"]
 seoTitle: "How Cognitive Bias and Rank Kill Modelling Sessions"
 seoMetadescription: "Collaborative modelling depends on a diverse group putting its knowledge to use. On the biases and rank dynamics that quietly stop that happening."
 featuredImage: "./_assets/how-cognitive-biases-and-ranking-kills-your-modelling-sessions-featured.jpeg"

@@ -8,7 +8,6 @@ import { iso, shortDate } from './dates';
 import { hasFinished } from './upcoming';
 
 type Session = CollectionEntry<'sessions'>;
-type Heuristic = CollectionEntry<'heuristics'>;
 
 /** A teaser used by the sidebar and the "discussed in" carousels. */
 export interface Teaser {
@@ -74,23 +73,26 @@ export function tagOptions(entries: { data: { tags?: string[] } }[]): string[] {
   return [...set].sort();
 }
 
-/** Resolve `curatedHeuristics` references to entries.
+/** Resolve references (`curatedHeuristics`, `guests`) to their entries.
  *
- * A reference can dangle when a heuristic is un-published in Notion but a
- * session still points at it. The sync warns about those (see
+ * A reference can dangle when the target is un-published in Notion but the
+ * entry pointing at it is not re-synced. The sync warns about those (see
  * `scripts/sync-notion.ts`); here we drop them with a type guard rather than a
  * `filter(Boolean)` cast, so the result is properly typed. */
-export function resolveHeuristics(
-  refs: { id: string }[],
-  byId: Map<string, Heuristic>,
-): Heuristic[] {
+export function resolveRefs<T>(refs: { id: string }[], byId: Map<string, T>): T[] {
   return refs
     .map((r) => byId.get(r.id))
-    .filter((h): h is Heuristic => h !== undefined);
+    .filter((e): e is T => e !== undefined);
 }
 
-/** Index of every heuristic by id, for `resolveHeuristics`. */
+/** Index of every heuristic by id, for `resolveRefs`. */
 export async function heuristicsById() {
   const heuristics = await getCollection('heuristics');
   return new Map(heuristics.map((h) => [h.id, h]));
+}
+
+/** Index of every session guest by id, for `resolveRefs`. */
+export async function guestsById() {
+  const guests = await getCollection('sessionGuests');
+  return new Map(guests.map((g) => [g.id, g]));
 }

@@ -10,6 +10,7 @@ tags: ["collaborative modelling", "wardley mapping", "facilitation"]
 video: "https://www.youtube.com/embed/bobkuufKPoQ"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["ben-mosior"]
 seoMetadescription: "Wardley Mapping in the DDD toolkit: explore and define bounded contexts, weigh strategic options, and design the team topologies to support them."
 featuredImage: "./_assets/collaborating-and-communicating-with-wardley-maps-featured.jpg"
 ---

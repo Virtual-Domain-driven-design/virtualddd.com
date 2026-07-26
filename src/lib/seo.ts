@@ -72,6 +72,43 @@ export const breadcrumbs = (site: URL | undefined, trail: [string, string][]) =>
   })),
 });
 
+/** A person: the host of a session, a guest, an organiser.
+ *
+ * `sameAs` is the point of it — it is how a search or answer engine works out
+ * that the Nick Tune on this page is the one with that LinkedIn profile, which
+ * is why the guests database holds the links at all (see CLAUDE.md). Most
+ * guests still have nothing but a name, and a Person with only a name is still
+ * worth emitting: it names the speaker of the event. */
+export interface PersonInput {
+  name: string;
+  /** How they would introduce themselves — `jobTitle`. */
+  role?: string;
+  /** A sentence or two — `description`. */
+  bio?: string;
+  /** Their own site, if any. */
+  url?: string;
+  /** Every profile we hold for them, from `profileLinks`. */
+  sameAs?: string[];
+  image?: string;
+  /** Their page on this site, when they have one. */
+  page?: string;
+  /** `@id` of the Organization they belong to, for organisers. */
+  memberOf?: string;
+}
+
+export const person = (p: PersonInput) => ({
+  '@type': 'Person',
+  ...(p.page ? { '@id': `${p.page}#person` } : {}),
+  name: p.name,
+  ...(p.role ? { jobTitle: p.role } : {}),
+  ...(p.bio ? { description: p.bio } : {}),
+  ...(p.url ? { url: p.url } : {}),
+  ...(p.sameAs?.length ? { sameAs: p.sameAs } : {}),
+  ...(p.image ? { image: p.image } : {}),
+  ...(p.memberOf ? { memberOf: { '@id': p.memberOf } } : {}),
+  ...(p.page ? { mainEntityOfPage: p.page } : {}),
+});
+
 /** Wrap one or more graph nodes as a JSON-LD document. */
 export const graph = (...nodes: unknown[]) => ({
   '@context': 'https://schema.org',
@@ -86,10 +123,18 @@ export const graph = (...nodes: unknown[]) => ({
 export function sessionJsonLd(
   site: URL | undefined,
   session: CollectionEntry<'sessions'>,
-  opts: { url: string; image?: string; isUpcoming: boolean },
+  opts: { url: string; image?: string; isUpcoming: boolean; performers?: PersonInput[] },
 ) {
   const d = session.data;
   const org = organization(site);
+  // Who was on the session: the guests who spoke, and the organiser hosting
+  // them. The caller passes these enriched — roles, portraits and the profile
+  // links that make `sameAs` worth having — because it has already resolved
+  // the guest relation for the page. Without them we still know the names.
+  const performers = opts.performers ?? [
+    ...(d.organiser ? [{ name: d.organiser }] : []),
+    ...d.coOrganisers.map((name) => ({ name })),
+  ];
   const event: Record<string, unknown> = {
     '@type': 'Event',
     '@id': `${opts.url}#event`,
@@ -104,7 +149,7 @@ export function sessionJsonLd(
     organizer: { '@id': org['@id'] },
     ...(opts.image ? { image: [opts.image] } : {}),
     ...(d.seoMetadescription ? { description: d.seoMetadescription } : {}),
-    ...(d.organiser ? { performer: { '@type': 'Person', name: d.organiser } } : {}),
+    ...(performers.length ? { performer: performers.map(person) } : {}),
     ...(d.humantix && opts.isUpcoming
       ? { offers: { '@type': 'Offer', url: d.humantix, price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' } }
       : {}),

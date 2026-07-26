@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/VaNaN_j9OCA"
 podcastPlayer: "https://player.captivate.fm/episode/5820302d-55b3-4e59-8ce8-dae6068d3ddd/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["dave-farley"]
 seoMetadescription: "Dave Farley on test-driven development as a design tool rather than a testing practice, and what the Detroit and London schools each get right."
 featuredImage: "./_assets/tdd-as-a-design-tool-with-dave-farley-featured.jpeg"
 ---

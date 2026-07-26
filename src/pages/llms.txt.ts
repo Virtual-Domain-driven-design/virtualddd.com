@@ -8,7 +8,7 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 import { shortDate } from '../lib/dates';
 import { SITE_NAME, SITE_TAGLINE } from '../lib/seo';
-import { isUpcoming } from '../lib/collections';
+import { guestsById, isUpcoming, resolveRefs } from '../lib/collections';
 
 export async function GET(context: APIContext) {
   const base = (context.site ?? new URL('https://virtualddd.com')).toString().replace(/\/$/, '');
@@ -24,6 +24,12 @@ export async function GET(context: APIContext) {
   const crew = (await getCollection('dddCrew'));
 
   const upcoming = sessions.filter((s) => isUpcoming(s));
+
+  // Who spoke is the thing most often asked of an archive of talks, and it is
+  // not always in the title.
+  const guests = await guestsById();
+  const guestNames = (s: (typeof sessions)[number]) =>
+    resolveRefs(s.data.guests, guests).map((g) => g.data.name);
 
   const out = [
     `# ${SITE_NAME}`,
@@ -48,14 +54,22 @@ export async function GET(context: APIContext) {
   if (upcoming.length) {
     out.push('## Upcoming', '');
     for (const s of upcoming) {
-      out.push(link(`/sessions/${s.id}/`, s.data.title, `${shortDate(s.data.datetime)}${s.data.organiser ? `, hosted by ${s.data.organiser}` : ''}`));
+      const names = guestNames(s);
+      const note = [
+        shortDate(s.data.datetime),
+        names.length ? `with ${names.join(', ')}` : '',
+        s.data.organiser ? `hosted by ${s.data.organiser}` : '',
+      ].filter(Boolean).join(', ');
+      out.push(link(`/sessions/${s.id}/`, s.data.title, note));
     }
     out.push('');
   }
 
   out.push('## Sessions', '');
   for (const s of sessions) {
-    out.push(link(`/sessions/${s.id}/`, s.data.title, shortDate(s.data.datetime)));
+    const names = guestNames(s);
+    out.push(link(`/sessions/${s.id}/`, s.data.title,
+      [shortDate(s.data.datetime), names.length ? `with ${names.join(', ')}` : ''].filter(Boolean).join(', ')));
   }
 
   out.push('', '## Facilitating Stories', '');

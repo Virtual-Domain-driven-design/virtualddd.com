@@ -1,12 +1,12 @@
 ---
-import { pageTitle } from '../../lib/seo';
+import { graph, organization, pageTitle, person } from '../../lib/seo';
 /** An organiser's page.
  *
  * Replaces the eight near-empty WordPress `/dipl-team-member/*` pages, which
  * carried a name and nothing else. People search names, so these are worth
  * having; `Person` structured data is generated from the fields we already
- * hold. Speakers (as opposed to organisers) still can't be modelled — see
- * MIGRATION.md, the `Organiser` relation is the meetup host, not the speaker.
+ * hold. Speakers are a separate database (Sessions `Guests`) and appear on
+ * the session pages; only someone who does both has a row here as well.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TeaserCard from '../../components/TeaserCard.astro';
@@ -14,7 +14,7 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { iso, shortDate } from '../../lib/dates';
 import { byDateDesc } from '../../lib/collections';
-import { anySamePerson, samePerson } from '../../lib/people';
+import { anySamePerson, profileLinks, samePerson } from '../../lib/people';
 
 export async function getStaticPaths() {
   const organisers = await getCollection('organisers');
@@ -44,16 +44,17 @@ const SHOW = 6;
 const SHOW_LIST = 10;
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
+// The same Person shape a session's guests get, so the two descriptions of a
+// person who does both cannot drift apart.
+const org = organization(Astro.site);
+const jsonLd = graph(org, person({
   name: d.name,
-  ...(d.role ? { jobTitle: d.role } : {}),
-  ...(d.website ? { url: d.website } : {}),
-  sameAs: [d.website, d.linkedin].filter(Boolean),
-  memberOf: { '@type': 'Organization', name: 'Virtual DDD', url: `${site}/` },
-  mainEntityOfPage: `${site}/organisers/${organiser.id}/`,
-};
+  role: d.role,
+  url: d.website,
+  sameAs: profileLinks(d).map((l) => l.href),
+  page: `${site}/organisers/${organiser.id}/`,
+  memberOf: org['@id'],
+}));
 
 const description = d.role
   ? `${d.name} — ${d.role}. Sessions, stories and heuristics from ${d.name} at Virtual DDD.`

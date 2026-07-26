@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/jZo44tbff1c"
 podcastPlayer: "https://player.captivate.fm/episode/de271f64-2f37-48e9-8530-0648f0a685d3/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["mathias-verraes"]
 seoTitle: "How to Read the Blue Book: Strategic Design"
 seoMetadescription: "Mathias Verraes on reading Eric Evans's Domain-Driven Design fifteen years on — which parts of the blue book still repay the effort, and how to approach them."
 featuredImage: "./_assets/how-to-read-the-blue-book-strategic-design-with-mathias-verraes-featured.jpeg"

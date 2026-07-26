@@ -9,7 +9,7 @@ import { youtubeEmbed } from '../../lib/embeds';
 import { excerpt } from '../../lib/excerpt';
 import { storyJsonLd, socialCard, pageTitle } from '../../lib/seo';
 import { iso as toIso, longDate, shortDate } from '../../lib/dates';
-import { heuristicsById, resolveHeuristics, siblings, type Teaser } from '../../lib/collections';
+import { heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
 
 export async function getStaticPaths() {
   const stories = await getCollection('stories');
@@ -20,7 +20,7 @@ const { story, stories } = Astro.props;
 const { Content } = await render(story);
 const d = story.data;
 
-const discussed = resolveHeuristics(d.curatedHeuristics, await heuristicsById());
+const discussed = resolveRefs(d.curatedHeuristics, await heuristicsById());
 const videoEmbed = youtubeEmbed(d.youtube);
 
 // Prev / next by episode.

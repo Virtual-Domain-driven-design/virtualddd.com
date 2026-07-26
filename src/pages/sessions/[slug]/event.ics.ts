@@ -6,10 +6,15 @@
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { APIContext } from 'astro';
+import { guestsById, resolveRefs } from '../../../lib/collections';
 
 export async function getStaticPaths() {
   const sessions = await getCollection('sessions');
-  return sessions.map((session) => ({ params: { slug: session.id }, props: { session } }));
+  const guests = await guestsById();
+  return sessions.map((session) => ({
+    params: { slug: session.id },
+    props: { session, guests: resolveRefs(session.data.guests, guests).map((g) => g.data.name) },
+  }));
 }
 
 /** iCalendar wants UTC basic format: 20260805T080000Z */
@@ -25,7 +30,7 @@ function line(name: string, value: string): string {
 }
 
 export function GET({ props, params, site }: APIContext) {
-  const { session } = props as { session: CollectionEntry<'sessions'> };
+  const { session, guests } = props as { session: CollectionEntry<'sessions'>; guests: string[] };
   const d = session.data;
   const url = new URL(`/sessions/${params.slug}/`, site ?? 'https://virtualddd.com').toString();
   const start = new Date(d.datetime);
@@ -34,6 +39,7 @@ export function GET({ props, params, site }: APIContext) {
 
   const description = [
     d.seoMetadescription ?? '',
+    guests.length ? `With ${guests.join(', ')}.` : '',
     d.organiser ? `Hosted by ${d.organiser}.` : '',
     `Details: ${url}`,
     d.humantix ? `RSVP: ${d.humantix}` : '',

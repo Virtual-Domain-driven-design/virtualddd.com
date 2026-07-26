@@ -14,7 +14,7 @@
 import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
-import { pages, meta, attr, DIST } from '../helpers.mjs';
+import { pages, meta, attr, text, DIST } from '../helpers.mjs';
 
 let all;
 before(() => {
@@ -63,6 +63,30 @@ describe('what the editors control', () => {
       if (!article?.author?.length) anonymous.push(p.path);
     }
     assert.deepEqual(anonymous, [], `stories with no author in Notion: ${anonymous.join(', ')}`);
+  });
+
+  test('guests on an upcoming session are introduced', () => {
+    // A speaker row created from a session title holds a name and nothing
+    // else. That is fine for the archive — the fields exist to make a `Person`
+    // worth citing, and the ones people are about to see are the ones worth
+    // filling in first. Add a Role, Bio or a link in the Session Guests
+    // database and the page upgrades itself from a roster to a proper
+    // introduction on the next sync.
+    const bare = [];
+    for (const p of all.filter((x) => /^\/sessions\/[^/]+\/$/.test(x.path))) {
+      if (!p.html.includes('data-test="add-to-calendar"')) continue; // upcoming only
+      const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
+      const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
+      const names = [...p.html.matchAll(/data-test="guest"[\s\S]*?data-test="person-name"[^>]*>(?:<a[^>]*>)?([^<]+)/g)]
+        .map((m) => text(m[1]));
+      for (const name of names) {
+        const node = [].concat(event?.performer ?? []).find((x) => x.name === name);
+        if (!node?.jobTitle && !node?.description && !node?.sameAs?.length) {
+          bare.push(`${p.path}: ${name} has no role, bio or link`);
+        }
+      }
+    }
+    assert.deepEqual(bare, [], bare.join('\n'));
   });
 
   test('sessions carry a start time and an online location', () => {

@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/RM0uErMljoA"
 podcastPlayer: "https://player.captivate.fm/episode/d7f5cfea-c243-4559-a538-1d4df3526da4/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["jutta-eckstein", "maryse-meinen"]
 seoTitle: "Better Products Through Cross-Functional Teams"
 seoMetadescription: "Jutta Eckstein and Maryse Meinen on how the composition of a team quietly decides who the product ends up serving — and who it leaves out."
 featuredImage: "./_assets/design-better-products-with-real-cross-functional-teams-jutta-maryse-featured.jpeg"

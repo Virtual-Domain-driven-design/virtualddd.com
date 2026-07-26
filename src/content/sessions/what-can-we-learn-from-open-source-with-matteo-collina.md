@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/F4SwUssweGY"
 podcastPlayer: "https://player.captivate.fm/episode/b6ad1524-6e06-4d9a-96a1-ee68d5fac393/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["matteo-collina"]
 seoMetadescription: "Matteo Collina, long-time Node.js contributor and TSC member, on what the rest of us can learn from how open source actually gets built."
 featuredImage: "./_assets/what-can-we-learn-from-open-source-with-matteo-collina-featured.jpeg"
 ---

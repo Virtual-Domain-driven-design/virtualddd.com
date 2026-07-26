@@ -63,7 +63,24 @@ The cost of the split is that someone who both organises and speaks has a row
 in each. That is deliberate — `Also an organiser` on the guest row marks it, so
 the duplicate is findable rather than accidental. The alternative, one people
 table with a flag, was rejected: it would have put 60+ external speakers into
-the database the community is actually run from.
+the database the community is actually run from. On the site the two rows are
+rejoined by name (`samePerson` in `src/lib/people.ts`): a guest who matches an
+organiser links to that organiser page and borrows its portrait and role, so
+nothing is typed twice.
+
+Guests sync down to `src/content/session-guests/*.json` (`npm run sync:guests`)
+and Sessions `guests` is an Astro `reference()` to them — the one people
+relation modelled as a reference rather than a name string, because these rows
+carry the profile links that become `sameAs`. The `Slug` column is what the
+relation resolves to; a guest row without one produces no entry and the
+sessions sync reports it.
+
+Guests render on the session page and are `performer` on its `Event`. The
+section adapts: while a guest has nothing but a name — which is true of all 54
+after the backfill — it is a roster of names, and it becomes portrait-and-bio
+rows as soon as anyone fills the fields in. **Speaker pages are not built.**
+Fifty-four pages carrying one name each would be thin; revisit when the rows
+have bios.
 
 **Videos are out of scope.** The Notion Videos database and its ~536 live URLs
 are not authored here; they get a redirect/archive decision in `MIGRATION.md`
@@ -215,7 +232,9 @@ shared layer, never copied into a second page — that copying is what made
   point, since this module decides what every generated page says.
 - **`src/components/`** — `TeaserCard` is *the* card; `SessionCard`/`StoryCard`
   are thin wrappers over it. `Carousel`, `PrevNext`, `HeuristicCard`,
-  `HeuristicDetail`, `HeuristicTypePage`.
+  `HeuristicDetail`, `HeuristicTypePage`. `PersonRow` is *the* person —
+  portrait, name, role, bio, links — used for a session's host and its guests,
+  with `compact` for a name we know nothing else about.
 - Page `<style>` blocks are for what is genuinely local to that page only.
 - Progressive enhancement is a rule, not a preference: every `<time>` ships a
   server-rendered fallback, filters only hide pre-rendered cards, the mobile
@@ -252,9 +271,10 @@ since `ddd-crew.github.io` already publishes these.
   ceiling, so a silent prune failure shows up as a test rather than a slow rsync)
 - `npm run preview` — serve the built site
 - `npm run sync` — the whole content pipeline: Notion (all four collections +
-  organisers) then the ddd-crew repos. This is the "script and a commit"
-  fallback the deploy invariant depends on; per-collection scripts
-  (`sync:sessions`, `sync:heuristics`, …) exist for a targeted run.
+  organisers and guests) then the ddd-crew repos. This is the "script and a
+  commit" fallback the deploy invariant depends on; per-collection scripts
+  (`sync:sessions`, `sync:heuristics`, …) exist for a targeted run. Guests sync
+  **before** sessions, since a session references them.
   Add `--strict` to fail on a *dangling* relation — one pointing at a page
   that is not in the heuristics database (deleted or archived). A relation to
   a heuristic that exists but is still being curated is normal: it is
@@ -289,7 +309,8 @@ the design work in Phase 5 cheap to keep doing.
 
 Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
 `filter-reset`, `type-filter`, `next-session`, `add-to-calendar`, `prev`,
-`next`, `nav`, `nav-toggle`. Add to that list rather than reaching for a class.
+`next`, `nav`, `nav-toggle`, `guest`, `person-name`. Add to that list rather
+than reaching for a class.
 
 ### Blocking vs reporting
 

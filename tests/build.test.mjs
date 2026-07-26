@@ -14,7 +14,7 @@ import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { pages, meta, attr, DIST } from './helpers.mjs';
+import { pages, meta, attr, text, DIST } from './helpers.mjs';
 
 let all;
 before(() => {
@@ -127,6 +127,29 @@ describe('structured data', () => {
     for (const p of all.filter((x) => /^\/facilitating-archdes\/[^/]+\/$/.test(x.path))) {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
       assert.ok(JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Article'), `${p.path} has no Article`);
+    }
+  });
+
+  // Who spoke is why the guests database exists: `sameAs` is how an answer
+  // engine works out that this Nick Tune is that one. A guest credited on the
+  // page but missing from the Event is the failure that would go unnoticed.
+  test('a session that credits guests names them as performers', () => {
+    const sessions = all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
+    const withGuests = sessions.filter((p) => p.html.includes('data-test="guest"'));
+    assert.ok(withGuests.length > 20,
+      `expected the guest relation to reach 20+ sessions, got ${withGuests.length}`);
+
+    for (const p of withGuests) {
+      const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
+      const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
+      const performers = [].concat(event.performer ?? []);
+      const credited = [...p.html.matchAll(/data-test="guest"[\s\S]*?data-test="person-name"[^>]*>(?:<a[^>]*>)?([^<]+)/g)]
+        .map((m) => text(m[1]));
+      assert.ok(credited.length, `${p.path} has a guest row with no name`);
+      for (const name of credited) {
+        assert.ok(performers.some((x) => x['@type'] === 'Person' && x.name === name),
+          `${p.path} credits ${name} on the page but not in the Event`);
+      }
     }
   });
 });

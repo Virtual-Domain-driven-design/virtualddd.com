@@ -12,6 +12,7 @@ podcastPlayer: "https://player.captivate.fm/episode/0f609660-e4f2-49d2-83f7-99c4
 miro: "https://miro.com/app/board/uXjVNkcj8nA=/?share_link_id=218487956167"
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["chris-simon"]
 seoMetadescription: "Chris Simon on the range of tools for building domain knowledge together — example mapping, BDD, EventStorming, domain storytelling — and how to keep it."
 featuredImage: "./_assets/managing-domain-knowledge-with-chris-simon-featured.jpeg"
 ---

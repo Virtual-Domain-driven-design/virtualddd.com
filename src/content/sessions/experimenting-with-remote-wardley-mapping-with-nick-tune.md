@@ -10,6 +10,7 @@ tags: ["strategic design", "remote work", "collaborative modelling", "wardley ma
 video: "https://www.youtube.com/embed/Rvt7k542fOI"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["nick-tune"]
 seoMetadescription: "Nick Tune on running Wardley Mapping remotely — anticipating how domains evolve and what that means for the boundaries you draw today."
 featuredImage: "./_assets/experimenting-with-remote-wardley-mapping-with-nick-tune-featured.jpeg"
 ---

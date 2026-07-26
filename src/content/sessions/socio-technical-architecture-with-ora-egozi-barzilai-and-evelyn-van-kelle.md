@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/YqbXEhO237w"
 podcastPlayer: "https://player.captivate.fm/episode/2d26b610-4422-4474-b4d5-89551a4881d5/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["ora-egozi-barzilai", "evelyn-van-kelle"]
 seoTitle: "Socio-Technical Architecture in Practice"
 seoMetadescription: "Ora Egozi-Barzilai and Evelyn van Kelle on socio-technical architecture — the interrelatedness of the social and the technical, and designing for both."
 featuredImage: "./_assets/socio-technical-architecture-with-ora-egozi-barzilai-and-evelyn-van-kelle-featured.jpeg"
