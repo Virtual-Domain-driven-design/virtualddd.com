@@ -2,12 +2,14 @@
  * Fill in the Session Guests profile fields in Notion, from what the sessions
  * already said about their speakers.
  *
- * The 54 guest rows were created from session titles and so hold a name and a
- * slug each. Many session descriptions introduce their speaker — an "About the
- * speaker" block, a byline, a parenthesised job title — and that copy belongs
- * on the person, where it becomes `Person.jobTitle`, `description` and
- * `sameAs`. `data/guest-profiles.csv` is that extraction, read and written by
- * hand so a sentence about a real person is never assembled by a regex.
+ * The 54 guest rows were created from session titles and so hold a name each.
+ * Many session descriptions introduce their speaker — an "About the speaker"
+ * block, a byline, a parenthesised job title — and that copy belongs on the
+ * person, where it becomes `Person.description` and `sameAs`.
+ * `data/guest-profiles.csv` is that extraction, read and written by hand so a
+ * sentence about a real person is never assembled by a regex. What someone
+ * does is a clause of their bio, not a field of its own: "Matthew is the
+ * co-author of Team Topologies" says it, and one field is one thing to fill in.
  *
  * **It only ever fills an empty field.** Anything already typed in Notion wins,
  * because Notion is the source of truth and someone editing their own bio must
@@ -88,7 +90,7 @@ const byName = new Map(pages.map((p) => [plain(p.properties?.Name).toLowerCase()
 console.log(`${rows.length} rows of copy against ${pages.length} guests in Notion\n`);
 
 /** Text fields, then URL fields — the URLs become `sameAs`. */
-const TEXT = [['role', 'Role'], ['bio', 'Bio']];
+const TEXT = [['bio', 'Bio']];
 const URLS = [['website', 'Website'], ['linkedin', 'LinkedIn'], ['mastodon', 'Mastodon'], ['bluesky', 'Bluesky']];
 
 let changed = 0, kept = 0, missing = 0;

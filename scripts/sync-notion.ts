@@ -478,17 +478,14 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       })
     : new Map<string, string>();
 
-  // Guests are a `reference()` in the schema, so the slug must match a file in
-  // src/content/session-guests/ — which is exactly the set of guest rows that
-  // have a slug. A row without one cannot be linked to; name it in the report
-  // rather than writing a reference the build would then fail on.
+  // Guests are a `reference()` in the schema, so this must resolve exactly the
+  // way `runGuests` names its files: from the guest's name. A row with no name
+  // has no entry; name the session in the report rather than writing a
+  // reference the build would then fail on.
   const guests = spec.needsGuests
-    ? await buildLookup(GUESTS_DS, 'session guests', (p) => ({
-        name: plainTitle(p, 'Name'),
-        slug: (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      }))
-    : new Map<string, { name: string; slug: string }>();
-  /** Guest relations pointing at a row with no slug, and therefore no entry. */
+    ? await buildLookup(GUESTS_DS, 'session guests', (p) => plainTitle(p, 'Name'))
+    : new Map<string, string>();
+  /** Guest relations pointing at a row that produced no entry. */
   const guestless: { slug: string; ref: string }[] = [];
 
   const pages = (await queryAll(spec.dataSourceId)).filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
@@ -524,9 +521,9 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       }),
       person: (n) => rel(n).map((id: string) => personName.get(id)).filter(Boolean) as string[],
       guest: (n) => rel(n).flatMap((id: string) => {
-        const g = guests.get(id);
-        if (g?.slug) return [g.slug];
-        guestless.push({ slug, ref: g?.name || `unknown page ${id.slice(0, 8)}…` });
+        const name = guests.get(id);
+        if (name) return [kebab(name)];
+        guestless.push({ slug, ref: `unknown page ${id.slice(0, 8)}…` });
         return [];
       }),
       img: async (n, label) => {
@@ -581,13 +578,11 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     list(pending);
   }
 
-  // A guest with no slug has no entry to reference. Unlike a curating
-  // heuristic this needs a person to type one word in Notion, so it is a
-  // warning — but not a --strict failure, since the session still renders.
+  // Reported rather than fatal: the session still renders, minus that guest.
   if (guestless.length) {
-    console.log(`\n  ! ${guestless.length} guest relation(s) point at a row with no Slug and were left out:`);
+    console.log(`\n  ! ${guestless.length} guest relation(s) resolved to nothing and were left out:`);
     list(guestless.map((g) => ({ slug: g.slug, prop: 'Guests', ref: g.ref })));
-    console.log('    Fill in Slug on those rows in the Session Guests database.');
+    console.log('    The row is missing from the Session Guests database, or has an empty Name.');
   }
 
   if (dropped.length) {
@@ -647,8 +642,10 @@ async function runOrganisers(outDir: string, write: boolean) {
 // fields — Discord, virtualddd.com mail — apply to an external speaker. The
 // fields here exist to make a good `Person`, and the links become `sameAs`.
 //
-// The Slug column is what a session's `Guests` relation resolves to, so a row
-// without one produces no entry; the sessions sync reports those.
+// A guest has **no slug and no page** — the entry exists to hold the bio and
+// the links that become `sameAs`, and its file name is derived from the name
+// purely so a session's `Guests` relation has something to resolve to. Nothing
+// here is ever a URL, so a guest renamed in Notion just renames the entry.
 
 async function runGuests(outDir: string, write: boolean) {
   const pages = await queryAll(GUESTS_DS);
@@ -662,16 +659,18 @@ async function runGuests(outDir: string, write: boolean) {
     const get = (n: string) => P[n];
     const text = (n: string) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
     const name = plainTitle(page, 'Name');
-    if (!name) continue;
-    const slug = text('Slug') || kebab(name);
+    if (!name) { console.log('  ! a guest row has no name, skipping'); continue; }
+    const slug = kebab(name);
+    if (written.has(`${slug}.json`)) {
+      console.log(`  ! two guests are both named "${name}"; keeping the first. Rename one in Notion.`);
+      continue;
+    }
     const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
     const photoUrl = fileUrl((get('Photo')?.files ?? [])[0]);
     const photo = photoUrl ? await downloadImage(photoUrl, ctx, 'photo') : null;
 
     const data: Record<string, unknown> = {
       name,
-      slug,
-      role: text('Role') || undefined,
       bio: text('Bio') || undefined,
       website: get('Website')?.url ?? undefined,
       linkedin: get('LinkedIn')?.url ?? undefined,

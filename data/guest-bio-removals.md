@@ -50,8 +50,8 @@ should be kept.
 ## 3. `see-the-forest-for-the-trees-trond-hjorteland`
 
 Guest: **Trond Hjorteland**. Block: the `**About Trond**` heading, the line
-"Senior IT Consultant and sociotechnical practitioner." (now his Role) and the
-paragraph under it (now his Bio). Nothing is lost.
+"Senior IT Consultant and sociotechnical practitioner." and the paragraph under
+it — both folded into his Bio. Nothing is lost.
 
 ## 4. `slow-down-to-speed-up-your-decision-making-gien-verschatse`
 
@@ -80,8 +80,7 @@ about the talk, not the person. Only the one paragraph goes.
 ## 7. `surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion`
 
 Guest: **Emilio Carrión**. Block: the last line, "Emilio Carrión | Staff
-Engineer at Mercadona Tech", which is now his Role.
-
-**But** he has no Bio, so the Guests section does not render on this page yet —
-delete this line now and the page stops saying who he is. Either write him a
-Bio in Notion first, or leave this one alone.
+Engineer at Mercadona Tech", which is now his whole Bio ("Emilio is a Staff
+Engineer at Mercadona Tech."). The page says it either way, so this one is a
+straight duplicate — though a fuller bio for an upcoming speaker would be
+better than either.

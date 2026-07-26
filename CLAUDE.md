@@ -71,28 +71,40 @@ nothing is typed twice.
 Guests sync down to `src/content/session-guests/*.json` (`npm run sync:guests`)
 and Sessions `guests` is an Astro `reference()` to them — the one people
 relation modelled as a reference rather than a name string, because these rows
-carry the profile links that become `sameAs`. The `Slug` column is what the
-relation resolves to; a guest row without one produces no entry and the
-sessions sync reports it.
+carry the profile links that become `sameAs`.
 
-Guests are `performer` on a session's `Event` and are named in the sidebar
-credit ("With …") on every session that had them. The **Guests section itself
-is gated on a `Bio`**: a panel of bare names says no more than the credit
-already does, so the section appears only once someone has been introduced, and
-appears by itself on the next sync after a Bio is written. `npm run test:content`
-reports guests on *upcoming* sessions who still have none.
+**A guest has no slug, no page and no role field.** The entry's file name is
+`kebab(name)` and exists only so the relation resolves; it is never a URL, so
+renaming a guest in Notion is free. And what someone does is a clause of their
+bio — "Matthew is the co-author of Team Topologies" — not a field beside it:
+one field is one thing for an editor to fill in, and it reads as a sentence
+instead of a job title. (The `Role` and `Slug` columns still exist in Notion
+and nothing reads them.)
+
+Two levels of rendering, both on the session page:
+
+- **Every** session with guests names them under the title —
+  `Guests: A, B` — which is the question a reader arrives with.
+- A guest with a **`Bio`** (and a portrait, when there is one) gets a block
+  **below the description**, where someone who has just read the abstract is
+  ready to be told who is giving it. No bio, no block; write one in Notion and
+  it appears on the next sync. `npm run test:content` reports guests on
+  *upcoming* sessions who still have none.
+
+Either way they are `performer` on the session's `Event`, so the structured
+data does not depend on how much of a bio anyone got round to writing.
 
 `data/guest-profiles.csv` is the one-time harvest of what the session
-descriptions already said about their speakers — 8 bios, 19 roles, 4 links —
-pushed into Notion by `npm run guests:profiles`. It only ever fills an **empty**
-field, so anyone editing their own bio in Notion wins over a re-run. The copy
-was read and written by hand: a sentence about a real person is not something
-to assemble with a regex. `data/guest-bio-removals.md` lists the source blocks
+descriptions already said about their speakers — 19 bios and 4 links — pushed
+into Notion by `npm run guests:profiles`. It only ever fills an **empty** field,
+so anyone editing their own bio in Notion wins over a re-run. The copy was read
+and written by hand: a sentence about a real person is not something to
+assemble with a regex. `data/guest-bio-removals.md` lists the source blocks
 still duplicated in a session description, for a human to approve before
 anything is deleted from Notion.
 
-**Speaker pages are not built.** Fifty-four pages carrying one name each would
-be thin; revisit when more rows have bios.
+**Speaker pages are not built** — and are now unlikely to be: without a slug
+there is nothing to build them from, which is the decision, not an oversight.
 
 **Videos are out of scope.** The Notion Videos database and its ~536 live URLs
 are not authored here; they get a redirect/archive decision in `MIGRATION.md`
@@ -299,11 +311,11 @@ since `ddd-crew.github.io` already publishes these.
   everything else, but ~290 of them were authored at once, and a CSV is
   reviewable in a way that editing 290 Notion rows is not. Re-running is safe:
   it only writes a field whose value actually differs.
-- `npm run guests:profiles` — push `data/guest-profiles.csv` (speaker roles,
-  bios and links harvested from the session descriptions) into the Session
-  Guests database. Dry run by default; `--write` applies. It fills **empty**
-  fields only, so it can never overwrite what someone typed in Notion —
-  `--force` if you mean to.
+- `npm run guests:profiles` — push `data/guest-profiles.csv` (speaker bios and
+  links harvested from the session descriptions) into the Session Guests
+  database. Dry run by default; `--write` applies. It fills **empty** fields
+  only, so it can never overwrite what someone typed in Notion — `--force` if
+  you mean to.
 - `npm run check:urls` — assert that every one of the 967 indexed WordPress
   URLs is served, redirected to a page that exists, or Gone. Run after
   `npm run build`; it fails the build rather than letting a URL 404.
@@ -326,8 +338,8 @@ the design work in Phase 5 cheap to keep doing.
 
 Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
 `filter-reset`, `type-filter`, `next-session`, `add-to-calendar`, `prev`,
-`next`, `nav`, `nav-toggle`, `guest`, `person-name`. Add to that list rather
-than reaching for a class.
+`next`, `nav`, `nav-toggle`, `guest`, `guest-credit`, `person-name`. Add to
+that list rather than reaching for a class.
 
 ### Blocking vs reporting
 

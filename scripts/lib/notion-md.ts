@@ -17,8 +17,19 @@ export function norm(s: string): string {
     .trim();
 }
 
+/** A file name from a person's name.
+ *
+ * Accents are folded rather than dropped, because dropping them mangles the
+ * name: Gáspár Nagy became `g-sp-r-nagy` and Emilio Carrión `emilio-carri-n`.
+ * No existing organiser slug changes — they are all ASCII — and a guest has no
+ * URL at all, so this is safe to have fixed after the fact. */
 export function kebab(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return s
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 export function plainTitle(page: any, prop: string): string {

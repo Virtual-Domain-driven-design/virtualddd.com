@@ -42,7 +42,6 @@ const guests = resolveRefs(d.guests, await guestsById())
     const links = profileLinks(g.data);
     return {
       name: g.data.name,
-      role: g.data.role ?? also?.data.role,
       bio: g.data.bio,
       photo: g.data.photo ?? also?.data.photo,
       href: also ? `/organisers/${also.id}/` : undefined,
@@ -53,12 +52,13 @@ const guests = resolveRefs(d.guests, await guestsById())
   // would say it twice.
   .filter((g) => !d.organiser || !samePerson(g.name, d.organiser));
 
-// The section earns its place once a guest has actually been introduced. A
-// bio is the test, because that is the sentence the section exists to carry —
-// a panel of names alone says no more than the sidebar credit already does.
-// Nothing is lost meanwhile: the credit still names them, and the structured
-// data still says who performed. Write a Bio in Notion and the section appears
-// on the next sync.
+// Two levels, deliberately. A guest we only know the name of is a credit under
+// the title — one line, where a reader looks for who is on it. A guest with a
+// bio (and a portrait, when there is one) is worth a block below the
+// description, where someone who has just read the abstract is ready to be
+// told who is giving it. Write a Bio in Notion and the block appears on the
+// next sync; until then nothing is lost, because the credit names them and the
+// structured data still says who performed.
 const guestsIntroduced = guests.some((g) => g.bio);
 
 const hostLinks = profileLinks(host?.data ?? {});
@@ -66,7 +66,7 @@ const hostLinks = profileLinks(host?.data ?? {});
 // page is about, and the organiser hosts.
 const performers: PersonInput[] = [
   ...guests.map((g) => ({
-    name: g.name, role: g.role, bio: g.bio,
+    name: g.name, bio: g.bio,
     url: g.links.find((l) => l.label === 'Website')?.href,
     sameAs: g.links.map((l) => l.href),
     page: g.href ? new URL(g.href, Astro.site).toString() : undefined,
@@ -121,6 +121,11 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
         {d.level?.map((l) => <span class="chip chip--label">{l}</span>)}
       </div>
       <h1>{d.title}</h1>
+      {guests.length > 0 && (
+        <p class="guest-credit" data-test="guest-credit">
+          {guests.length === 1 ? 'Guest' : 'Guests'}: <strong>{guests.map((g) => g.name).join(', ')}</strong>
+        </p>
+      )}
 
       {videoEmbed ? (
         <div class="video">
@@ -145,9 +150,6 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
       <div class="side-card">
         <p class="side-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
-        {guests.length > 0 && (
-          <p class="side-guests" data-test="guest-credit">With <strong>{guests.map((g) => g.name).join(', ')}</strong></p>
-        )}
         {isUpcoming && (d.humantix || d.meet) && (
           <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>
         )}
@@ -181,7 +183,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
           <ul class="people">
             {guests.map((g) => (
               <li data-test="guest">
-                <PersonRow name={g.name} role={g.role} bio={g.bio} photo={g.photo} href={g.href} links={g.links} />
+                <PersonRow name={g.name} bio={g.bio} photo={g.photo} href={g.href} links={g.links} />
               </li>
             ))}
           </ul>
@@ -215,17 +217,16 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
   <style>
     .detail-head .chips { margin-bottom: var(--space-3); }
     /* Layout, media and prose come from patterns.css (.detail, .video, .prose-body). */
-    .detail-head h1 { margin-bottom: var(--space-6); }
+    .detail-head h1 { margin-bottom: var(--space-3); }
+    /* Who is on it, directly under the title — the question a reader arrives with. */
+    .guest-credit { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
+    .guest-credit strong { color: var(--color-text); font-family: var(--font-heading); font-weight: 600; }
 
     /* Sidebar */
     .side-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); }
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .side-org { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
     .side-org strong { color: var(--color-accent-dark); }
-    /* The two credit lines belong together; only the last one opens the gap. */
-    .side-org:has(+ .side-guests) { margin-bottom: var(--space-1); }
-    .side-guests { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-4); }
-    .side-guests strong { color: var(--color-text); font-weight: 600; }
     .side-rsvp { display: flex; justify-content: center; margin-bottom: var(--space-4); }
     .side-links { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; font-size: var(--text-sm); }
     .side-block { margin-top: var(--space-6); }

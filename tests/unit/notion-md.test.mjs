@@ -174,6 +174,11 @@ describe('Notion property reading', () => {
     assert.equal(norm('EventStorming: Split & Merge!'), 'eventstorming split merge');
     assert.equal(kebab('Rebecca Wirfs-Brock'), 'rebecca-wirfs-brock');
     assert.equal(kebab('  Trailing --- dashes  '), 'trailing-dashes');
+    // A guest entry is named after the person; dropping the accent instead of
+    // folding it turned Gáspár Nagy into `g-sp-r-nagy`.
+    assert.equal(kebab('Gáspár Nagy'), 'gaspar-nagy');
+    assert.equal(kebab('Emilio Carrión'), 'emilio-carrion');
+    assert.equal(kebab('Michael Plöd'), 'michael-plod');
   });
 });
 

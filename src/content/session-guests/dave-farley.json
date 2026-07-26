@@ -1,6 +1,5 @@
 {
   "name": "Dave Farley",
-  "slug": "dave-farley",
-  "role": "Co-author of Continuous Delivery",
+  "bio": "Dave is the co-author of the Continuous Delivery book, and a firm believer that test-driven development is one of the core principles of doing proper continuous delivery.",
   "alsoAnOrganiser": false
 }
