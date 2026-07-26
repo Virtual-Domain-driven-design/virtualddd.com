@@ -1,14 +1,19 @@
-/** Assertions over the built site — no browser, so these run in about a second.
+/** Contract assertions over the built site — no browser, about a second.
  *
- * These are the checks that caught real defects during the rebuild: missing
- * SEO tags, words glued to links by Astro's whitespace handling, and internal
- * links pointing at pages that don't exist.
+ * Everything here is a promise to somebody outside this repo: a search engine,
+ * a feed reader, a person with a bookmark. Breaking one of these is invisible
+ * locally and expensive months later, so these block the deploy.
+ *
+ * Content quality — anything an editor can break from Notion — is deliberately
+ * *not* here; it lives in tests/content/ and reports without blocking. See
+ * CLAUDE.md, "Testing".
  *
  * Run after `npm run build`.
  */
 import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import { pages, meta, attr, DIST } from './helpers.mjs';
 
 let all;
@@ -19,21 +24,11 @@ before(() => {
 });
 
 describe('every page', () => {
-  test('has a non-empty, unique <title>', () => {
-    const seen = new Map();
+  test('has a non-empty <title>', () => {
     for (const p of all) {
       const title = attr(p.html, /<title>([^<]*)<\/title>/);
       assert.ok(title && title.trim(), `${p.path} has no <title>`);
-      const dupe = seen.get(title);
-      // Type indexes intentionally share a shape; anything else must be unique.
-      assert.ok(!dupe, `${p.path} duplicates the title of ${dupe}: "${title}"`);
-      seen.set(title, p.path);
     }
-  });
-
-  test('has a meta description', () => {
-    const missing = all.filter((p) => !meta(p.html, 'description')).map((p) => p.path);
-    assert.deepEqual(missing, [], `pages without a description: ${missing.join(', ')}`);
   });
 
   test('has an absolute canonical matching its own path', () => {
@@ -59,22 +54,12 @@ describe('every page', () => {
   });
 
   test('has exactly one <h1>', () => {
+    // Editors cannot break this from Notion any more — the sync demotes body
+    // headings — so a failure here means the templates regressed.
     for (const p of all) {
       const n = (p.html.match(/<h1[\s>]/g) ?? []).length;
       assert.equal(n, 1, `${p.path} has ${n} h1 elements`);
     }
-  });
-
-  test('never renders a word glued to a link', () => {
-    // Astro strips the newline between text and a following <a>, which shipped
-    // "Feel free tocontact us in Discord" to production.
-    const bad = [];
-    for (const p of all) {
-      for (const m of p.html.matchAll(/[a-z,]<a\s+href="[^"]*"[^>]*>[A-Za-z]/g)) {
-        bad.push(`${p.path}: …${p.html.slice(Math.max(0, m.index - 25), m.index + 45)}…`);
-      }
-    }
-    assert.deepEqual(bad, [], `glued links:\n${bad.join('\n')}`);
   });
 
   test('never renders undefined, NaN or [object Object]', () => {
@@ -128,26 +113,75 @@ describe('structured data', () => {
     }
   });
 
-  test('sessions describe an Event with a start date and online location', () => {
+  test('sessions are Events and stories are Articles', () => {
+    // The shape, not the contents — whether a given session filled in its
+    // fields is an editorial question (tests/content/).
     const sessions = all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
     assert.ok(sessions.length > 100, `expected 100+ session pages, got ${sessions.length}`);
     for (const p of sessions) {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
-      const nodes = JSON.parse(raw)['@graph'];
-      const event = nodes.find((n) => n['@type'] === 'Event');
+      const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
       assert.ok(event, `${p.path} has no Event`);
-      assert.match(event.startDate, /^\d{4}-\d{2}-\d{2}T/, `${p.path} Event.startDate`);
       assert.equal(event.eventAttendanceMode, 'https://schema.org/OnlineEventAttendanceMode');
-      assert.ok(event.location?.url, `${p.path} Event.location.url`);
     }
-  });
-
-  test('stories describe an Article with authors', () => {
     for (const p of all.filter((x) => /^\/facilitating-archdes\/[^/]+\/$/.test(x.path))) {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
-      const article = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Article');
-      assert.ok(article, `${p.path} has no Article`);
-      assert.ok(article.author?.length > 0, `${p.path} Article has no authors`);
+      assert.ok(JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Article'), `${p.path} has no Article`);
+    }
+  });
+});
+
+describe('the upcoming/past split', () => {
+  // The home and session-index heroes must ship *every* upcoming session, or
+  // the client-side sweep has nothing to promote and the pick silently freezes
+  // at build time again.
+  const upcomingInContent = () => {
+    const dir = 'src/content/sessions';
+    const grace = 3 * 60 * 60 * 1000;
+    return readdirSync(dir).filter((f) => f.endsWith('.md')).filter((f) => {
+      const md = readFileSync(join(dir, f), 'utf8');
+      const status = md.match(/^status:\s*"?([^"\n]+)"?/m)?.[1]?.trim();
+      const dt = md.match(/^datetime:\s*"?([^"\n]+)"?/m)?.[1]?.trim();
+      return status === 'Published' && dt && +new Date(dt) + grace > Date.now();
+    }).length;
+  };
+
+  for (const path of ['/', '/sessions/']) {
+    test(`${path} ships every upcoming session, not just the first`, () => {
+      const page = all.find((p) => p.path === path);
+      const rendered = (page.html.match(/data-test="next-session"/g) ?? []).length;
+      assert.equal(rendered, upcomingInContent(),
+        `${path} rendered ${rendered} upcoming sessions; the sweep can only choose between what ships`);
+    });
+  }
+
+  test('the archive runs from yesterday backwards', () => {
+    // Each card carries its date on an inner <time data-iso>, so read the
+    // results region in document order rather than guessing from the anchor.
+    const page = all.find((p) => p.path === '/sessions/');
+    const start = page.html.indexOf('data-test="results"');
+    const end = page.html.indexOf('id="noresults"');
+    assert.ok(start > 0 && end > start, 'could not find the results region on /sessions/');
+    const region = page.html.slice(start, end);
+
+    const isos = [...region.matchAll(/data-iso="([^"]+)"/g)].map((m) => +new Date(m[1]));
+    assert.ok(isos.length > 100, `expected the whole archive, read ${isos.length} dates`);
+    for (let i = 1; i < isos.length; i++) {
+      assert.ok(isos[i] <= isos[i - 1],
+        `out of order at ${i}: ${new Date(isos[i]).toISOString()} follows ${new Date(isos[i - 1]).toISOString()}`);
+    }
+    assert.ok(isos[0] < Date.now(), 'the archive leads with a session that has not happened yet');
+  });
+
+  test('the home page lists its latest sessions newest first', () => {
+    const page = all.find((p) => p.path === '/');
+    const start = page.html.indexOf('Latest sessions');
+    const end = page.html.indexOf('Follow us on Bluesky');
+    assert.ok(start > 0 && end > start, 'could not find the latest-sessions region on the home page');
+    const isos = [...page.html.slice(start, end).matchAll(/data-iso="([^"]+)"/g)].map((m) => +new Date(m[1]));
+    assert.ok(isos.length >= 4, `expected several latest sessions, read ${isos.length}`);
+    for (let i = 1; i < isos.length; i++) {
+      assert.ok(isos[i] <= isos[i - 1], `latest sessions out of order at ${i}`);
     }
   });
 });
@@ -180,9 +214,9 @@ describe('feeds and machine-readable files', () => {
     assert.doesNotMatch(txt, /^Disallow: \/\*\?tag=/m);
   });
 
-  test('every upcoming session has a calendar file', () => {
-    const upcoming = all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path) && p.html.includes('Add to calendar'));
-    for (const p of upcoming) {
+  test('every session offering a calendar file has one', () => {
+    const offering = all.filter((p) => p.html.includes('data-test="add-to-calendar"'));
+    for (const p of offering) {
       const ics = `${DIST}${p.path}event.ics`;
       assert.ok(existsSync(ics), `${p.path} offers a calendar file that wasn't built`);
       const body = readFileSync(ics, 'utf8');
@@ -192,15 +226,28 @@ describe('feeds and machine-readable files', () => {
   });
 });
 
-describe('assets', () => {
-  test('no unreferenced files survive in _astro', () => {
-    // prune-dist.mjs runs as part of the build; this guards against it silently
-    // failing and re-inflating the deploy from 24 MB to 46 MB.
-    const referenced = new Set();
+describe('the deploy', () => {
+  test('stays under the size we agreed to ship', () => {
+    // prune-dist.mjs runs as part of the build and drops the unreferenced
+    // originals Astro emits beside its .webp. When it silently stops working
+    // the deploy nearly doubles, and rsync over SSH to shared hosting is the
+    // one place that hurts. A ceiling, not an exact figure — content grows.
+    const CEILING_MB = 50;
+    const bytes = (dir) => readdirSync(dir, { withFileTypes: true }).reduce((sum, e) => {
+      const p = join(dir, e.name);
+      return sum + (e.isDirectory() ? bytes(p) : statSync(p).size);
+    }, 0);
+    const mb = bytes(DIST) / 1024 / 1024;
+    assert.ok(mb < CEILING_MB, `dist is ${mb.toFixed(1)} MB, over the ${CEILING_MB} MB ceiling — has prune-dist stopped working?`);
+  });
+
+  test('references no asset that was pruned away', () => {
+    const missing = new Set();
     for (const p of all) {
-      for (const m of p.html.matchAll(/\/_astro\/([A-Za-z0-9._-]+)/g)) referenced.add(m[1]);
+      for (const m of p.html.matchAll(/(?:src|href)="(\/_astro\/[^"]+)"/g)) {
+        if (!existsSync(`${DIST}${m[1]}`)) missing.add(`${m[1]} (from ${p.path})`);
+      }
     }
-    for (const css of readFileSync(`${DIST}/.htaccess`, 'utf8') ? [] : []) referenced.add(css);
-    assert.ok(referenced.size > 100, 'expected the pages to reference many assets');
+    assert.deepEqual([...missing], [], `pruned assets still referenced:\n${[...missing].join('\n')}`);
   });
 });

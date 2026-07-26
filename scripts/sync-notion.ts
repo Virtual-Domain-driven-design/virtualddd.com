@@ -18,6 +18,11 @@ import { readFileSync } from 'node:fs';
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
 import sharp from 'sharp';
+import {
+  createBlocksToMd, existingSlug, fileUrl, kebab, norm, plainTitle,
+  resolveRelation, statusOf, yamlList, yamlStr,
+  type AssetCtx, type StatusKind,
+} from './lib/notion-md';
 
 dotenv.config({ path: 'local.env' });
 
@@ -59,8 +64,6 @@ async function api<T>(label: string, fn: () => Promise<T>, attempt = 0): Promise
 
 // --- collection config ------------------------------------------------------
 
-type StatusKind = 'select' | 'status';
-
 interface CollectionCfg {
   dataSourceId: string;
   titleProp: string;
@@ -93,14 +96,6 @@ const COLLECTIONS: Record<string, CollectionCfg> = {
 
 // --- helpers ----------------------------------------------------------------
 
-/** Normalise a title the same way the WXR CSV `norm` column was built. */
-function norm(s: string): string {
-  return (s || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-}
-
 /** Minimal CSV reader for the derived files (no embedded newlines/quotes). */
 function readCsv(path: string): Record<string, string>[] {
   const lines = readFileSync(path, 'utf8').split(/\r?\n/).filter((l) => l.length);
@@ -131,20 +126,8 @@ function splitCsvLine(line: string): string[] {
   return out;
 }
 
-function plainTitle(page: any, prop: string): string {
-  const p = page.properties?.[prop];
-  return (p?.title ?? []).map((t: any) => t.plain_text).join('').trim();
-}
-
-function statusName(page: any, cfg: CollectionCfg): string {
-  const p = page.properties?.[cfg.statusProp];
-  return (cfg.statusKind === 'select' ? p?.select?.name : p?.status?.name) ?? '';
-}
-
-function existingSlug(page: any): string {
-  const p = page.properties?.['slug'];
-  return (p?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-}
+const statusName = (page: any, cfg: CollectionCfg): string =>
+  statusOf(page, cfg.statusKind, cfg.statusProp);
 
 async function queryAll(dataSourceId: string): Promise<any[]> {
   const rows: any[] = [];
@@ -276,32 +259,6 @@ async function buildLookup(dataSourceId: string, label: string, valueOf: (page: 
   return map;
 }
 
-function richText(rts: any[] = []): string {
-  return rts.map((rt) => {
-    let t = rt.plain_text ?? '';
-    const a = rt.annotations ?? {};
-    if (a.code) t = '`' + t + '`';
-    if (a.bold) t = `**${t}**`;
-    if (a.italic) t = `*${t}*`;
-    if (a.strikethrough) t = `~~${t}~~`;
-    let href = rt.href ?? rt.text?.link?.url;
-    // A Notion mention links to a bare page id ("/e342ff0d…"), which is not a
-    // URL on this site. Where the visible text is itself a URL, use that;
-    // otherwise keep the text and drop the dead link.
-    if (href && /^\/?[0-9a-f]{32}$/.test(href.replace(/^\//, ''))) {
-      href = /^https?:\/\//.test(t) ? t : undefined;
-    }
-    if (href) t = `[${t}](${href})`;
-    return t;
-  }).join('');
-}
-
-function fileUrl(f: any): string {
-  return f?.type === 'external' ? f.external?.url : f?.file?.url ?? '';
-}
-
-interface AssetCtx { dir: string; slug: string; count: number }
-
 const EXT_BY_CT: Record<string, string> = {
   'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif',
   'image/webp': 'webp', 'image/svg+xml': 'svg', 'image/avif': 'avif',
@@ -348,6 +305,13 @@ async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise
   }
 }
 
+/** The converter, bound to this script's paged API reads and image downloads.
+ * The rules themselves live in scripts/lib/notion-md.ts and are unit-tested. */
+const { blocksToMd, seenUnhandled } = createBlocksToMd({
+  childrenOf: (id) => childrenOf(id),
+  downloadImage: (url, ctx, label) => downloadImage(url, ctx, label),
+});
+
 async function childrenOf(blockId: string): Promise<any[]> {
   const out: any[] = [];
   let cursor: string | undefined;
@@ -358,84 +322,6 @@ async function childrenOf(blockId: string): Promise<any[]> {
     cursor = res.has_more ? (res.next_cursor as string) : undefined;
   } while (cursor);
   return out;
-}
-
-const seenUnhandled = new Set<string>();
-
-/** Render a list of blocks to markdown. `indent` handles nested lists. */
-async function blocksToMd(blocks: any[], ctx: AssetCtx | null, indent = ''): Promise<string> {
-  const out: string[] = [];
-  let numIdx = 0;
-  for (const b of blocks) {
-    const t = b.type;
-    if (t !== 'numbered_list_item') numIdx = 0;
-    const data = b[t];
-    const kids = b.has_children ? await childrenOf(b.id) : [];
-    const nestable = ['paragraph', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'callout', 'toggle'].includes(t);
-    const nested = kids.length && nestable ? '\n' + (await blocksToMd(kids, ctx, indent + '  ')) : '';
-
-    switch (t) {
-      case 'paragraph':
-        out.push(indent + richText(data.rich_text) + nested); break;
-      // Headings are demoted one level: the page title is the h1, so a Notion
-      // heading_1 in the body would be a second one. Two heuristics already
-      // shipped with three h1s each because of this.
-      case 'heading_1': out.push(`## ${richText(data.rich_text)}`); break;
-      case 'heading_2': out.push(`### ${richText(data.rich_text)}`); break;
-      case 'heading_3': out.push(`#### ${richText(data.rich_text)}`); break;
-      case 'bulleted_list_item': out.push(`${indent}- ${richText(data.rich_text)}${nested}`); break;
-      case 'numbered_list_item': out.push(`${indent}${++numIdx}. ${richText(data.rich_text)}${nested}`); break;
-      case 'to_do': out.push(`${indent}- [${data.checked ? 'x' : ' '}] ${richText(data.rich_text)}${nested}`); break;
-      case 'quote': out.push(`> ${richText(data.rich_text)}`); break;
-      case 'callout': {
-        const icon = data.icon?.emoji ? data.icon.emoji + ' ' : '';
-        out.push(`> ${icon}${richText(data.rich_text)}${nested ? '\n' + nested : ''}`); break;
-      }
-      case 'code':
-        out.push('```' + (data.language ?? '') + '\n' + richText(data.rich_text) + '\n```'); break;
-      case 'divider': out.push('---'); break;
-      case 'image': {
-        const url = fileUrl(data); const cap = richText(data.caption);
-        let rel: string | null = url;
-        if (url && ctx) rel = await downloadImage(url, ctx, `body-${++ctx.count}`);
-        out.push(rel ? `![${cap}](${rel})` : ''); break;
-      }
-      case 'video': case 'embed': case 'bookmark': case 'link_preview': {
-        const url = data.url ?? fileUrl(data);
-        // Preserve the URL as an autolink; a later pass can upgrade YouTube to an iframe component.
-        out.push(url ? `[${url}](${url})` : ''); break;
-      }
-      case 'toggle':
-        out.push(`<details><summary>${richText(data.rich_text)}</summary>\n\n${nested}\n</details>`); break;
-      case 'table': {
-        const rows = kids.filter((k) => k.type === 'table_row');
-        if (!rows.length) break;
-        const toRow = (r: any) => '| ' + r.table_row.cells.map((c: any) => richText(c).replace(/\|/g, '\\|').replace(/\n/g, ' ')).join(' | ') + ' |';
-        const md = [toRow(rows[0])];
-        md.push('| ' + Array(rows[0].table_row.cells.length).fill('---').join(' | ') + ' |');
-        rows.slice(1).forEach((r) => md.push(toRow(r)));
-        out.push(md.join('\n')); break;
-      }
-      case 'table_row': break; // handled by its parent table
-      case 'child_page': break; // skip nested pages
-      default:
-        seenUnhandled.add(t);
-        out.push(`<!-- TODO block: ${t} -->`);
-    }
-  }
-  return out.filter((s) => s !== undefined).join('\n\n');
-}
-
-function yamlStr(s: string): string {
-  return '"' + (s ?? '').replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
-}
-function yamlList(items: string[]): string {
-  return '[' + items.map(yamlStr).join(', ') + ']';
-}
-
-function statusOf(page: any, kind: StatusKind): string {
-  const p = page.properties?.['Status'];
-  return (kind === 'select' ? p?.select?.name : p?.status?.name) ?? '';
 }
 
 interface Helpers {
@@ -610,10 +496,10 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
       select: (n) => get(n)?.select?.name ?? undefined,
       heur: (n) => rel(n).flatMap((id: string) => {
-        const found = heurSlug.get(id);
-        if (found) return [found];
-        const inCuration = heurPending.get(id);
-        if (inCuration) pending.push({ slug, prop: n, ref: `${inCuration.title} (${inCuration.status})` });
+        const r = resolveRelation(id, heurSlug, heurPending);
+        if (r.kind === 'resolved') return [r.slug];
+        if (r.kind === 'pending') pending.push({ slug, prop: n, ref: `${r.title} (${r.status})` });
+        // If the lookup itself failed there is nothing to be dangling against.
         else if (heurLookupOk) dropped.push({ slug, prop: n, ref: `unknown page ${id.slice(0, 8)}…` });
         return [];
       }),
@@ -684,10 +570,6 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
 }
 
 // --- organisers command: Notion -> JSON data collection ---------------------
-
-function kebab(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-}
 
 async function runOrganisers(outDir: string, write: boolean) {
   const pages = await queryAll(PEOPLE_DS); // the "Virtual DDD Organisers" data source

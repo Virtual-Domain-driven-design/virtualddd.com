@@ -128,6 +128,11 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
   grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min, 16rem)), 1fr));
 }
 
+/* A card the `js-next` sweep can show or hide, without the wrapper becoming the
+ * grid item — cards stretch to equal height only while they are the item
+ * themselves. `[hidden]` still wins, because global.css marks it !important. */
+.js-next-item { display: contents; }
+
 /* ----------------------------------------------------------- detail layout */
 /* Head + body in one column, sticky sidebar alongside from 900px. */
 .detail { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }

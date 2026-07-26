@@ -95,7 +95,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
           <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>
         )}
         {isUpcoming && (
-          <a class="btn btn--ghost side-rsvp" href={`/sessions/${session.id}/event.ics`}>Add to calendar</a>
+          <a class="btn btn--ghost side-rsvp" data-test="add-to-calendar" href={`/sessions/${session.id}/event.ics`}>Add to calendar</a>
         )}
         {(d.video || d.miro) && (
           <p class="side-links">

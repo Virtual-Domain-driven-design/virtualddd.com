@@ -62,6 +62,20 @@ Phase 6, not a collection.
   the passage of time. `Ended` is an optional internal "awaiting
   post-production" marker the website ignores. The `Video` (YouTube) link is
   usually present from `Published` on.
+
+  Concretely: pages that lead with a session (home, `/sessions/`) render
+  **every** upcoming session, soonest first, all but the first `hidden`. The
+  `js-next` sweep in `BaseLayout` picks the first one that has not finished and
+  re-checks every minute, so when a session has been the page moves to the
+  following one on its own. A session stays "next" for `SESSION_GRACE_MS`
+  (3 hours, in `src/lib/upcoming.ts`) after its start — someone arriving late
+  wants today's join link, not next month's RSVP — and that is the same window
+  the `.js-live` links use. The rule lives in one place because it runs twice,
+  at build and in the browser; `tests/unit/upcoming.test.mjs` is its
+  specification. Anything else about a session (its appearance in the archive,
+  in "latest sessions", in the feed) is settled at build time, which is fine:
+  those change when an organiser marks the session `Done`, and that already
+  triggers a rebuild.
 - **Open spaces / stories / heuristics**: `Status = Published`.
 - Only rows passing their gate produce files. Reconcile counts after syncing
   (Sessions archive ≈ 108; verified 107 are `Done`).
@@ -124,7 +138,13 @@ shared layer, never copied into a second page — that copying is what made
 - **`src/lib/`** — `dates` (every date format; the `data-format` values must
   match `BaseLayout`'s local-time script), `embeds` (`youtubeEmbed`),
   `excerpt`, `collections` (session split, teasers, siblings, tag options,
-  relation resolution), `heuristics` (the three types — one definition).
+  relation resolution), `heuristics` (the three types — one definition),
+  `upcoming` (which session is next — imported by both the build and the
+  client script, so the two cannot disagree).
+- **`scripts/lib/notion-md.ts`** — the Notion → markdown rules, with the API
+  client, the rate limiting and the image downloads left in
+  `scripts/sync-notion.ts` and injected. Pure enough to unit-test; that is the
+  point, since this module decides what every generated page says.
 - **`src/components/`** — `TeaserCard` is *the* card; `SessionCard`/`StoryCard`
   are thin wrappers over it. `Carousel`, `PrevNext`, `HeuristicCard`,
   `HeuristicDetail`, `HeuristicTypePage`.
@@ -154,7 +174,8 @@ since `ddd-crew.github.io` already publishes these.
 - `npm run dev` — local dev server
 - `npm run build` — static build to `dist/`, then `scripts/prune-dist.mjs`
   drops the unreferenced originals Astro emits alongside its `.webp`
-  (~22 MB of a 46 MB build)
+  (~22 MB per build; `dist` lands around 37 MB and is asserted under a 50 MB
+  ceiling, so a silent prune failure shows up as a test rather than a slow rsync)
 - `npm run preview` — serve the built site
 - `npm run sync` — the whole content pipeline: Notion (all four collections +
   organisers) then the ddd-crew repos. This is the "script and a commit"
@@ -173,24 +194,64 @@ since `ddd-crew.github.io` already publishes these.
 
 ## Testing
 
-Four layers, cheapest first. `npm test` runs the first three against a fresh
-build; the fourth needs a deployed host.
+**Test the promises, not the pixels.** A promise is something a third party
+depends on and that breaks silently: a URL, a redirect, a feed, a canonical, a
+JSON-LD shape, "this page works with JavaScript off", "the next session is the
+next one". Those get hard tests. Layout, copy and components are what we are
+still deliberately changing — the brand is the fixed point, not the design — so
+tests must not pin them down.
 
-1. **Types and build** — `astro check` (must stay 0/0/0) and `npm run build`.
-2. **`tests/build.test.mjs`** — assertions over `dist/` with no browser, about a
-   second. Titles, descriptions, canonicals, OG/Twitter, one `<h1>` per page,
-   JSON-LD parses and carries the right types, internal links resolve and end
-   in a slash, feeds and `.ics` exist, and no word is glued to a link. Most of
-   these exist because that exact defect shipped once.
-3. **`tests/urls.test.mjs`** — replays `public/.htaccess` against the 967-URL
+### The test surface
+
+Tests select **only** `[data-test]` hooks and `js-*` behaviour classes. Never a
+styling class (`.card`, `.site-nav`), never an id the CSS also targets, never
+visible copy. A restyle then cannot break a behaviour test, which is what makes
+the design work in Phase 5 cheap to keep doing.
+
+Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
+`filter-reset`, `type-filter`, `next-session`, `add-to-calendar`, `nav`,
+`nav-toggle`. Add to that list rather than reaching for a class.
+
+### Blocking vs reporting
+
+The suite sits on the publish path, so **a test an editor can turn red from
+Notion must not stop a deploy** — that would make publishing hostage to CI and
+break the invariant above. Two suites:
+
+- **Blocking** (`npm test`): unit rules, `astro check`, the build, contract
+  assertions over `dist/`, the redirect map, and browser behaviour. If one of
+  these fails the site is broken; do not deploy.
+- **Reporting** (`npm run test:content`): duplicate titles, missing meta
+  descriptions, glued links, stories with no author, sessions with no start
+  time. Real defects, but they belong to whoever holds the Notion page. Run
+  them, read them, fix them in Notion — do not gate the deploy on them.
+
+`npm run test:all` runs both.
+
+### The five layers, cheapest first
+
+1. **`tests/unit/*`** (`npm run test:unit`) — pure rules, no build, no browser,
+   under a second. `notion-md` covers the Notion → markdown conversion that
+   produces every page under `src/content/`: heading demotion, annotations,
+   dead page-id links, tables, unknown block types, and the published /
+   curating / dangling relation split. `upcoming` covers which session is next,
+   including the several-upcoming case the live content cannot demonstrate.
+   Run with `--import tsx`, since these import the TypeScript directly.
+2. **Types and build** — `astro check` (must stay 0/0/0) and `npm run build`.
+3. **`tests/build.test.mjs`** — assertions over `dist/`, about a second.
+   Canonicals, OG/Twitter, one `<h1>`, internal links resolve and end in a
+   slash, JSON-LD types, feeds and `.ics`, the archive ordered newest first,
+   every upcoming session shipped, and a size ceiling on the deploy.
+4. **`tests/urls.test.mjs`** — replays `public/.htaccess` against the 967-URL
    Phase 1 inventory: everything is served, redirected to a page that exists, or
    Gone, with no chains.
-4. **`tests/browser.test.mjs`** — Playwright against the built site served
+5. **`tests/browser.test.mjs`** — Playwright against the built site served
    statically. Horizontal overflow at 360 and 390 px (the bug class that hit 14
-   of 24 story pages), the filters including the legacy `?tag=` landing, the
-   carousels, the local-time and countdown scripts, rendering with JavaScript
-   off, and accessible names. `TEST_FULL=1` widens the page sample from a
-   handful per collection to all of them.
+   of 24 story pages), search and filtering including the legacy `?tag=`
+   landing, the next-session sweep and the countdown and join links **with the
+   clock moved**, local time in a non-UTC timezone, carousels, rendering with
+   JavaScript off, and accessible names. `TEST_FULL=1` widens the page sample
+   from a handful per collection to all of them.
 
 **`npm run verify:live <url>`** is the one that cannot run locally: it requests
 real URLs from a deployed host and checks the status codes, because only

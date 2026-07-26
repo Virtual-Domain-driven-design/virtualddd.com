@@ -5,6 +5,7 @@
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { iso, shortDate } from './dates';
+import { hasFinished } from './upcoming';
 
 type Session = CollectionEntry<'sessions'>;
 type Heuristic = CollectionEntry<'heuristics'>;
@@ -19,13 +20,16 @@ export interface Teaser {
   fallback?: string;
 }
 
-/** A session is upcoming while it is Published and its datetime is in the future.
+/** A session is upcoming while it is Published and has not finished yet.
  *
- * Note this is evaluated at *build* time. Pages render both states and let the
- * client-side sweep in BaseLayout demote a session once its start time passes,
- * so the archive stays correct without a rebuild. */
+ * "Finished" allows a grace period after the start (see `./upcoming`), so a
+ * session that is happening right now is still the one the site points at.
+ *
+ * Evaluated at *build* time. Pages that lead with a single upcoming session
+ * render **all** of them and let the `js-next` sweep in BaseLayout pick the
+ * first one still standing, so the passage of time needs no rebuild. */
 export const isUpcoming = (s: Session, at: number = Date.now()) =>
-  s.data.status === 'Published' && +new Date(s.data.datetime) > at;
+  s.data.status === 'Published' && !hasFinished(+new Date(s.data.datetime), at);
 
 export const byDateAsc = (a: Session, b: Session) =>
   +new Date(a.data.datetime) - +new Date(b.data.datetime);

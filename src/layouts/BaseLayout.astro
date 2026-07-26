@@ -108,10 +108,10 @@ const year = new Date().getFullYear();
       </div>
       <div class="wrap header-inner">
         <a href="/" class="brand"><Image src={logo} alt="Virtual DDD" width={400} /></a>
-        <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">
+        <button class="nav-toggle" data-test="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">
           <span></span><span></span><span></span>
         </button>
-        <nav class="site-nav" id="site-nav">
+        <nav class="site-nav" id="site-nav" data-test="nav">
           {mainNav.map((n) => <a href={n.href} class:list={[{ current: isCurrent(n.href) }]}>{n.label}</a>)}
         </nav>
       </div>
@@ -220,6 +220,8 @@ const year = new Date().getFullYear();
     </style>
 
     <script>
+      import { nextUpcomingIndex, hasFinished } from '../lib/upcoming';
+
       const header = document.getElementById('site-header');
       if (header) {
         const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 60);
@@ -259,6 +261,32 @@ const year = new Date().getFullYear();
         sync();
         setInterval(sync, 60000);
       });
+
+      // Which upcoming session is "next" — decided here, not at build time.
+      //
+      // Pages that lead with a session render every upcoming one (.js-next,
+      // soonest first) and every companion card (.js-next-item). Without this
+      // sweep the choice freezes at whatever was next when the site was last
+      // built, so a session that has been and gone keeps its RSVP hero and a
+      // countdown stuck at "Happening now" until someone rebuilds.
+      const heroes = [...document.querySelectorAll<HTMLElement>('.js-next')];
+      if (heroes.length) {
+        const starts = heroes.map((el) => new Date(el.dataset.iso ?? '').getTime());
+        const empty = document.querySelector<HTMLElement>('[data-next-empty]');
+        const sweep = () => {
+          const now = Date.now();
+          const i = nextUpcomingIndex(starts, now);
+          heroes.forEach((el, n) => { el.hidden = n !== i; });
+          // A companion card shows unless it has been, or is the hero itself.
+          document.querySelectorAll<HTMLElement>('.js-next-item').forEach((el) => {
+            const start = new Date(el.dataset.iso ?? '').getTime();
+            el.hidden = hasFinished(start, now) || (i >= 0 && start === starts[i]);
+          });
+          if (empty) empty.hidden = i >= 0;
+        };
+        sweep();
+        setInterval(sweep, 60000);
+      }
 
       // Live countdown for any <* class="js-countdown" data-iso>.
       document.querySelectorAll<HTMLElement>('.js-countdown').forEach((el) => {

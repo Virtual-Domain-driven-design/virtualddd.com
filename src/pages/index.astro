@@ -7,11 +7,14 @@ import OrganiserCard from '../components/OrganiserCard.astro';
 import Carousel from '../components/Carousel.astro';
 import { getCollection } from 'astro:content';
 import { splitSessions } from '../lib/collections';
+import { iso } from '../lib/dates';
 import { HEURISTIC_TYPES } from '../lib/heuristics';
 import { graph, organization, SITE_NAME, SITE_TAGLINE } from '../lib/seo';
 
-const { upcoming: upcomingSessions, past } = await splitSessions();
-const upcoming = upcomingSessions[0];
+// Every upcoming session ships in the HTML, soonest first, with all but the
+// first hidden. The `js-next` sweep re-picks in the browser, so once a session
+// finishes the home page moves to the following one on its own.
+const { upcoming, past } = await splitSessions();
 const latest = past.slice(0, 8);
 const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
 
@@ -82,8 +85,14 @@ try {
 >
   <div class="wrap">
     <section class="next-section">
-      {upcoming && (
-        <div class="ns-session"><FeaturedSession session={upcoming} eyebrow="Upcoming session" /></div>
+      {upcoming.length > 0 && (
+        <div class="ns-session">
+          {upcoming.map((s, i) => (
+            <div class="js-next" data-test="next-session" data-iso={iso(s.data.datetime)} hidden={i !== 0}>
+              <FeaturedSession session={s} eyebrow="Upcoming session" />
+            </div>
+          ))}
+        </div>
       )}
       <aside class="ns-about panel-cyan">
         <h1>Learn software &amp; systems design, together.</h1>

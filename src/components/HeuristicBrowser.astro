@@ -23,7 +23,7 @@ const banners = showBanners
   {banners.length > 0 && (
     <div class="hb-banners" id="hb-banners" role="group" aria-label="Filter by heuristic type">
       {banners.map((t) => (
-        <button type="button" class="hb-banner scrim" data-type={t.key} style={`background-image: url(${t.bg.src})`}>
+        <button type="button" class="hb-banner scrim" data-test="type-filter" data-type={t.key} style={`background-image: url(${t.bg.src})`}>
           <span class="hbn-body">
             <span class="hbn-title">{t.title}</span>
             <span class="hbn-text">{t.text}</span>
@@ -36,12 +36,12 @@ const banners = showBanners
 
   <div class="filters hb-filters">
     <input type="search" id="hq" placeholder="Search heuristics…" aria-label="Search heuristics" />
-    <select id="hf-tag" aria-label="Filter by tag">
+    <select id="hf-tag" data-test="filter-tag" aria-label="Filter by tag">
       <option value="">All tags</option>
       {tags.map((t) => <option value={t}>{t}</option>)}
     </select>
-    <button id="hf-reset" class="filter-reset" type="button">Reset</button>
-    <span class="result-count" id="hb-count"></span>
+    <button id="hf-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
+    <span class="result-count" id="hb-count" data-test="result-count"></span>
   </div>
 
   <div class="grid-cards" id="h-cards">

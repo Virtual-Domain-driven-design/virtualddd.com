@@ -1,9 +1,13 @@
-/** Browser tests against the *built* site, served the way a static host does.
+/** Behaviour, in a real browser, against the *built* site.
  *
  * These cover what static HTML checks cannot: layout at real viewport widths,
- * and the progressive-enhancement scripts (filters, carousels, local time).
- * Every failure here has a precedent — the mobile overflow that affected 14 of
- * 24 story pages was invisible to every other kind of check.
+ * and the progressive-enhancement scripts. Every failure here has a precedent —
+ * the mobile overflow that affected 14 of 24 story pages was invisible to every
+ * other kind of check.
+ *
+ * **Selectors are the contract.** Tests here select only `[data-test]` hooks and
+ * `js-*` behaviour classes, never a styling class and never visible copy, so
+ * restyling a section cannot break them. See CLAUDE.md, "The test surface".
  *
  * Run after `npm run build`. Sampled rather than exhaustive so it stays quick;
  * `npm run test:full` widens the sample.
@@ -32,6 +36,10 @@ after(async () => {
   await browser?.close();
   server?.close();
 });
+
+/** Count what the visitor can actually see. */
+const visible = (page, selector) =>
+  page.$$eval(selector, (els) => els.filter((e) => e.offsetParent !== null || e.getClientRects().length).length);
 
 describe('layout', () => {
   // 360px is the narrowest phone worth supporting; 390 is a current iPhone.
@@ -70,36 +78,99 @@ describe('layout', () => {
   }
 });
 
-describe('filters', () => {
-  test('the session archive filters and counts', async () => {
+describe('the next session', () => {
+  // The rule itself — which of several upcoming sessions is next — is proved in
+  // tests/unit/upcoming.test.mjs, because the site has only one upcoming
+  // session to render. What is proved here is the wiring: that the choice is
+  // made in the browser, from the clock, rather than frozen into the build.
+  for (const path of ['/', '/sessions/']) {
+    test(`${path} chooses its featured session from the clock, not the build`, async () => {
+      const page = await browser.newPage();
+      await page.goto(base + path, { waitUntil: 'load' });
+
+      const heroes = await page.$$('[data-test="next-session"]');
+      if (!heroes.length) {
+        await page.close();
+        return; // nothing scheduled; the section is absent by design
+      }
+      assert.equal(await visible(page, '[data-test="next-session"]'), 1,
+        'exactly one upcoming session should be on show');
+
+      // The session on show must be one that has not finished.
+      const shownIso = await page.$eval('[data-test="next-session"]:not([hidden])', (el) => el.dataset.iso);
+      assert.ok(new Date(shownIso).getTime() + 3 * 60 * 60 * 1000 > Date.now(),
+        `the featured session (${shownIso}) has already been`);
+      await page.close();
+    });
+
+    test(`${path} stops featuring a session once it has been`, async () => {
+      // The defect this guards: the pick was made at build time, so a session
+      // that had already happened kept its RSVP hero and a countdown stuck at
+      // "Happening now" until someone rebuilt the site.
+      const page = await browser.newPage();
+      await page.goto(base + path, { waitUntil: 'load' });
+      const isos = await page.$$eval('[data-test="next-session"]', (els) => els.map((e) => e.dataset.iso));
+      if (!isos.length) { await page.close(); return; }
+
+      // A day after the last upcoming session, nothing should still be offered.
+      const after = new Date(Math.max(...isos.map((i) => +new Date(i))) + 86400000);
+      await page.clock.install({ time: after });
+      await page.goto(base + path, { waitUntil: 'load' });
+      await page.clock.runFor(1000);
+      assert.equal(await visible(page, '[data-test="next-session"]'), 0,
+        'a session that has been and gone is still being advertised');
+      await page.close();
+    });
+  }
+});
+
+describe('filters and search', () => {
+  test('the session archive searches, and every card left matches', async () => {
     const page = await browser.newPage();
     await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
-    const total = await page.textContent('#count');
-    assert.match(total, /^\d+ sessions?$/);
+    const total = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
+    assert.ok(total > 100, `expected the full archive, got ${total}`);
 
-    await page.fill('#q', 'eventstorming');
+    await page.fill('[data-test="filter-search"]', 'eventstorming');
     await page.waitForTimeout(200);
-    const filtered = Number((await page.textContent('#count')).split(' ')[0]);
-    assert.ok(filtered > 0 && filtered < Number(total.split(' ')[0]), `filter did nothing: ${filtered}`);
+    const filtered = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
+    assert.ok(filtered > 0 && filtered < total, `search did nothing useful: ${filtered} of ${total}`);
 
-    // Every visible card must actually match — the filter hides, it does not delete.
-    const visibleTitles = await page.$$eval('#cards .card:not([hidden])', (els) =>
-      els.map((e) => (e.dataset.title ?? '') + '|' + (e.dataset.tags ?? '')));
-    assert.ok(visibleTitles.every((t) => t.includes('eventstorming')), 'a non-matching card stayed visible');
+    // The filter hides; it does not delete. Anything still on show must match.
+    const shown = await page.$$eval('[data-test="results"] [data-test="card"]:not([hidden])',
+      (els) => els.map((e) => `${e.dataset.title ?? ''}|${e.dataset.tags ?? ''}`));
+    assert.ok(shown.length > 0, 'a search with matches showed no cards');
+    assert.ok(shown.every((t) => t.includes('eventstorming')), 'a non-matching card stayed on show');
 
-    await page.click('#f-reset');
+    await page.click('[data-test="filter-reset"]');
     await page.waitForTimeout(200);
-    assert.equal(await page.textContent('#count'), total, 'reset did not restore the full list');
+    const restored = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
+    assert.equal(restored, total, 'reset did not restore the full list');
+    await page.close();
+  });
+
+  test('filtering by tag shows only cards carrying that tag', async () => {
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
+    const tag = await page.$eval('[data-test="filter-tag"] option:nth-child(2)', (o) => o.value);
+    await page.selectOption('[data-test="filter-tag"]', tag);
+    await page.waitForTimeout(200);
+    const shown = await page.$$eval('[data-test="results"] [data-test="card"]:not([hidden])',
+      (els) => els.map((e) => e.dataset.tags ?? ''));
+    assert.ok(shown.length > 0, `tag "${tag}" matched nothing`);
+    assert.ok(shown.every((t) => t.includes(tag)), `a card without "${tag}" stayed on show`);
     await page.close();
   });
 
   test('a legacy tag URL lands pre-filtered', async () => {
+    // 289 WordPress tag archives 301 here; landing on the unfiltered index
+    // would make those redirects a lie.
     const page = await browser.newPage();
     await page.goto(`${base}/sessions/?tag=collaborative-modelling`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(200);
-    const n = Number((await page.textContent('#count')).split(' ')[0]);
+    const n = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
     assert.ok(n > 0 && n < 100, `expected a filtered subset, got ${n}`);
-    assert.equal(await page.inputValue('#f-tag'), 'collaborative modelling');
+    assert.equal(await page.inputValue('[data-test="filter-tag"]'), 'collaborative modelling');
     await page.close();
   });
 
@@ -107,50 +178,113 @@ describe('filters', () => {
     const page = await browser.newPage();
     await page.goto(`${base}/sessions/?tag=this-tag-never-existed`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(200);
-    const n = Number((await page.textContent('#count')).split(' ')[0]);
+    const n = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
     assert.ok(n > 100, `unknown tag emptied the archive (${n} shown)`);
     await page.close();
   });
 
-  test('the heuristics browser filters by type and by tag', async () => {
+  test('the stories index filters too', async () => {
+    const page = await browser.newPage();
+    await page.goto(`${base}/facilitating-archdes/`, { waitUntil: 'networkidle' });
+    const total = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
+    const tag = await page.$eval('[data-test="filter-tag"] option:nth-child(2)', (o) => o.value);
+    await page.selectOption('[data-test="filter-tag"]', tag);
+    await page.waitForTimeout(200);
+    const filtered = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
+    assert.ok(filtered > 0 && filtered <= total, `story tag filter returned ${filtered}`);
+    await page.close();
+  });
+
+  test('the heuristics browser filters by type', async () => {
     const page = await browser.newPage();
     await page.goto(`${base}/heuristics/`, { waitUntil: 'networkidle' });
-    const total = Number((await page.textContent('#hb-count')).split(' ')[0]);
+    const count = () => page.textContent('[data-test="result-count"]').then((t) => Number(t.match(/\d+/)[0]));
+    const total = await count();
 
-    await page.click('.hb-banner[data-type="guiding-heuristics"]');
+    await page.click('[data-test="type-filter"][data-type="guiding-heuristics"]');
     await page.waitForTimeout(200);
-    const guiding = Number((await page.textContent('#hb-count')).split(' ')[0]);
-    assert.ok(guiding > 0 && guiding < total);
+    const guiding = await count();
+    assert.ok(guiding > 0 && guiding < total, `type filter returned ${guiding} of ${total}`);
+    const types = await page.$$eval('[data-test="card"]:not([hidden])', (els) => els.map((e) => e.dataset.type));
+    assert.ok(types.every((t) => t === 'guiding-heuristics'), 'a heuristic of another type stayed on show');
 
-    await page.click('#hf-reset');
+    await page.click('[data-test="filter-reset"]');
     await page.waitForTimeout(200);
-    assert.equal(Number((await page.textContent('#hb-count')).split(' ')[0]), total);
+    assert.equal(await count(), total, 'reset did not restore the full list');
+    await page.close();
+  });
+});
+
+describe('time', () => {
+  test('dates render in the visitor timezone, over a server-rendered fallback', async () => {
+    const tz = 'Pacific/Auckland'; // far from UTC, so a swap is unambiguous
+    const ctx = await browser.newContext({ timezoneId: tz });
+    const page = await ctx.newPage();
+
+    // What ships in the HTML, before any script runs.
+    await page.goto(`${base}/sessions/`, { waitUntil: 'domcontentloaded' });
+    const fallback = await page.$eval('.js-local', (el) => el.textContent.trim());
+    assert.ok(fallback.length > 0, 'no server-rendered date to fall back to');
+
+    await page.waitForTimeout(400);
+    const swapped = await page.$eval('.js-local', (el) => el.textContent.trim());
+    const iso = await page.$eval('.js-local', (el) => el.dataset.iso);
+    const expected = new Date(iso).toLocaleString('en-NZ', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
+    const hour = expected.match(/\d{1,2}/)[0];
+    assert.match(swapped, new RegExp(`\\b${hour}`), `${swapped} is not the ${tz} time of ${iso}`);
+    await ctx.close();
+  });
+
+  test('the countdown counts down, and turns over at the start', async () => {
+    const page = await browser.newPage();
+    await page.goto(base + '/', { waitUntil: 'load' });
+    const el = await page.$('.js-countdown[data-iso]');
+    if (!el) { await page.close(); return; }
+    const iso = await el.getAttribute('data-iso');
+
+    // An hour before: it must be counting, and the numbers must move.
+    await page.clock.install({ time: new Date(+new Date(iso) - 3600_000) });
+    await page.goto(base + '/', { waitUntil: 'load' });
+    await page.clock.runFor(1500);
+    const first = await page.$eval('.js-countdown', (e) => e.textContent);
+    assert.match(first, /\d/, `countdown showed "${first}" an hour before the start`);
+    await page.clock.runFor(5000);
+    const later = await page.$eval('.js-countdown', (e) => e.textContent);
+    assert.notEqual(later, first, 'the countdown is not ticking');
+
+    // Once the start passes it must stop counting down to a time gone by.
+    await page.clock.install({ time: new Date(+new Date(iso) + 60_000) });
+    await page.goto(base + '/', { waitUntil: 'load' });
+    await page.clock.runFor(1500);
+    const now = await page.$eval('.js-countdown', (e) => e.textContent);
+    assert.doesNotMatch(now, /-/, `countdown went negative: "${now}"`);
+    assert.ok(now.trim().length > 0, 'the countdown emptied itself at the start');
+    await page.close();
+  });
+
+  test('join links appear near the start and not before', async () => {
+    const page = await browser.newPage();
+    await page.goto(base + '/', { waitUntil: 'load' });
+    const el = await page.$('.js-live[data-iso]');
+    if (!el) { await page.close(); return; }
+    const iso = await el.getAttribute('data-iso');
+
+    for (const [offsetMs, shown, when] of [
+      [-24 * 3600_000, false, 'a day before'],
+      [-30 * 60_000, true, 'half an hour before'],
+      [30 * 60_000, true, 'half an hour in'],
+      [6 * 3600_000, false, 'six hours after'],
+    ]) {
+      await page.clock.install({ time: new Date(+new Date(iso) + offsetMs) });
+      await page.goto(base + '/', { waitUntil: 'load' });
+      await page.clock.runFor(1000);
+      assert.equal(await visible(page, '.js-live') > 0, shown, `join links ${when} the start`);
+    }
     await page.close();
   });
 });
 
 describe('progressive enhancement', () => {
-  test('dates render in the visitor timezone, with a server fallback', async () => {
-    const page = await browser.newPage();
-    await page.goto(`${base}/sessions/`, { waitUntil: 'domcontentloaded' });
-    // The fallback text is in the HTML before any script runs.
-    const raw = await page.$eval('.js-local', (el) => el.textContent.trim());
-    assert.ok(raw.length > 0, 'no server-rendered date to fall back to');
-    await page.waitForTimeout(400);
-    const swapped = await page.$eval('.js-local', (el) => el.textContent.trim());
-    assert.ok(swapped.length > 0);
-    await page.close();
-  });
-
-  test('the countdown runs on an upcoming session', async () => {
-    const page = await browser.newPage();
-    await page.goto(base + '/', { waitUntil: 'networkidle' });
-    await page.waitForTimeout(600);
-    const text = await page.$eval('.js-countdown', (el) => el.textContent);
-    assert.match(text, /Starts in \d+d|Happening now/, `countdown said "${text}"`);
-    await page.close();
-  });
-
   test('carousels scroll', async (t) => {
     // Needs a carousel with more cards than fit; a two-card row is legitimately
     // not scrollable, and asserting on one tests nothing.
@@ -185,7 +319,7 @@ describe('progressive enhancement', () => {
     const page = await ctx.newPage();
     for (const p of ['/', '/sessions/', '/heuristics/', '/facilitating-archdes/']) {
       await page.goto(base + p, { waitUntil: 'domcontentloaded' });
-      const cards = await page.$$eval('.card', (els) => els.filter((e) => !e.hidden).length);
+      const cards = await page.$$eval('[data-test="card"]', (els) => els.filter((e) => !e.hidden).length);
       assert.ok(cards > 0, `${p} shows nothing without JS`);
     }
     await ctx.close();
@@ -193,7 +327,7 @@ describe('progressive enhancement', () => {
 });
 
 describe('accessibility basics', () => {
-  test('images have alt attributes and buttons have accessible names', async () => {
+  test('images have alt attributes and controls have accessible names', async () => {
     const page = await browser.newPage();
     const problems = [];
     for (const p of ['/', '/sessions/', '/heuristics/', '/organisers/', '/podcasts/']) {
@@ -217,10 +351,10 @@ describe('accessibility basics', () => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 800 } });
     const page = await ctx.newPage();
     await page.goto(base + '/', { waitUntil: 'networkidle' });
-    assert.equal(await page.isVisible('.site-nav a'), false, 'nav should start collapsed on mobile');
-    await page.click('.nav-toggle');
+    assert.equal(await page.isVisible('[data-test="nav"] a'), false, 'nav should start collapsed on mobile');
+    await page.click('[data-test="nav-toggle"]');
     await page.waitForTimeout(200);
-    assert.equal(await page.isVisible('.site-nav a'), true, 'the hamburger did not open the nav');
+    assert.equal(await page.isVisible('[data-test="nav"] a'), true, 'the hamburger did not open the nav');
     await ctx.close();
   });
 });

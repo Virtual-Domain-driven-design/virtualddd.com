@@ -5,12 +5,11 @@ import { Image } from 'astro:assets';
 import { splitSessions, tagOptions } from '../../lib/collections';
 import { iso, longDateTime } from '../../lib/dates';
 
+// Every upcoming session ships as a hero, soonest first, with all but the first
+// hidden; the same sessions ship again as cards in "more upcoming". The
+// `js-next` sweep promotes the next one still standing as time passes, so this
+// page does not need rebuilding just because a session has been and gone.
 const { upcoming, past } = await splitSessions();
-
-const featured = upcoming[0];
-const f = featured?.data;
-const featuredIso = f ? iso(f.datetime) : '';
-const featuredDate = f ? longDateTime(f.datetime) : '';
 
 const tags = tagOptions(past);
 const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'];
@@ -23,38 +22,52 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
   <div class="wrap">
     <h1>Online sessions</h1>
 
-    {featured && (
+    {upcoming.length > 0 && (
       <section class="hero" aria-label="Next session">
         <p class="eyebrow eyebrow--pink">Next session</p>
-        <div class="hero-card">
-          <div class="hero-img">
-            {f!.featuredImage ? <Image src={f!.featuredImage} alt="" width={720} /> : <div class="card-thumb-ph"></div>}
-          </div>
-          <div class="hero-body">
-            <div class="badges">
-              {f!.typeOfSession && <span class="badge badge--type">{f!.typeOfSession}</span>}
-              {f!.level?.map((l) => <span class="badge">{l}</span>)}
-            </div>
-            <h2><a href={`/sessions/${featured.id}/`}>{f!.title}</a></h2>
-            <p class="hero-date"><time class="js-local" data-format="datetime" datetime={featuredIso} data-iso={featuredIso}>{featuredDate}</time></p>
-            {f!.organiser && <p class="hero-host">Hosted by {f!.organiser}</p>}
-            <div class="hero-cta">
-              {f!.humantix
-                ? <a class="btn btn--accent" href={f!.humantix}>RSVP to attend</a>
-                : <a class="btn btn--accent" href={`/sessions/${featured.id}/`}>More info →</a>}
-              {f!.humantix && <a class="btn btn--ghost" href={`/sessions/${featured.id}/`}>More info →</a>}
-            </div>
-            {(f!.meet || f!.video) && (
-              <div class="hero-live js-live" data-iso={featuredIso}>
-                <span class="hero-live-label">Starting soon</span>
-                {f!.meet && <a class="btn" href={f!.meet}>Join Google Meet</a>}
-                {f!.video && <a class="btn btn--ghost" href={f!.video}>Watch livestream</a>}
+        {upcoming.map((session, i) => {
+          const f = session.data;
+          const sIso = iso(f.datetime);
+          return (
+            <div class="hero-card js-next" data-test="next-session" data-iso={sIso} hidden={i !== 0}>
+              <div class="hero-img">
+                {f.featuredImage ? <Image src={f.featuredImage} alt="" width={720} /> : <div class="card-thumb-ph"></div>}
               </div>
-            )}
-          </div>
-        </div>
+              <div class="hero-body">
+                <div class="badges">
+                  {f.typeOfSession && <span class="badge badge--type">{f.typeOfSession}</span>}
+                  {f.level?.map((l) => <span class="badge">{l}</span>)}
+                </div>
+                <h2><a href={`/sessions/${session.id}/`}>{f.title}</a></h2>
+                <p class="hero-date"><time class="js-local" data-format="datetime" datetime={sIso} data-iso={sIso}>{longDateTime(f.datetime)}</time></p>
+                {f.organiser && <p class="hero-host">Hosted by {f.organiser}</p>}
+                <div class="hero-cta">
+                  {f.humantix
+                    ? <a class="btn btn--accent" href={f.humantix}>RSVP to attend</a>
+                    : <a class="btn btn--accent" href={`/sessions/${session.id}/`}>More info →</a>}
+                  {f.humantix && <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>}
+                </div>
+                {(f.meet || f.video) && (
+                  <div class="hero-live js-live" data-iso={sIso}>
+                    <span class="hero-live-label">Starting soon</span>
+                    {f.meet && <a class="btn" href={f.meet}>Join Google Meet</a>}
+                    {f.video && <a class="btn btn--ghost" href={f.video}>Watch livestream</a>}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
         {upcoming.length > 1 && (
-          <div class="grid-cards more-upcoming">{upcoming.slice(1).map((s) => <SessionCard session={s} />)}</div>
+          /* Every upcoming session appears here; the sweep hides whichever one
+             is currently the hero, and any that have already been. */
+          <div class="grid-cards more-upcoming">
+            {upcoming.map((s, i) => (
+              <div class="js-next-item" data-iso={iso(s.data.datetime)} hidden={i === 0}>
+                <SessionCard session={s} />
+              </div>
+            ))}
+          </div>
         )}
       </section>
     )}
@@ -63,7 +76,7 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
       <h2>Past sessions</h2>
 
       <div class="filters">
-        <input type="search" id="q" placeholder="Search title or tag…" aria-label="Search sessions" />
+        <input type="search" id="q" data-test="filter-search" placeholder="Search title or tag…" aria-label="Search sessions" />
         <select id="f-level" aria-label="Filter by level">
           <option value="">All levels</option>
           <option value="Beginner">Beginner</option>
@@ -74,15 +87,15 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
           <option value="">All types</option>
           {types.map((t) => <option value={t}>{t}</option>)}
         </select>
-        <select id="f-tag" aria-label="Filter by tag">
+        <select id="f-tag" data-test="filter-tag" aria-label="Filter by tag">
           <option value="">All tags</option>
           {tags.map((t) => <option value={t}>{t}</option>)}
         </select>
-        <button id="f-reset" class="filter-reset" type="button">Reset</button>
-        <span class="result-count" id="count"></span>
+        <button id="f-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
+        <span class="result-count" id="count" data-test="result-count"></span>
       </div>
 
-      <div class="grid-cards" id="cards">{past.map((s) => <SessionCard session={s} />)}</div>
+      <div class="grid-cards" id="cards" data-test="results">{past.map((s) => <SessionCard session={s} />)}</div>
       <p class="no-results" id="noresults" hidden>No sessions match your filters.</p>
       <div class="load-wrap"><button id="load-more" type="button" class="btn btn--ghost">Load more</button></div>
     </section>

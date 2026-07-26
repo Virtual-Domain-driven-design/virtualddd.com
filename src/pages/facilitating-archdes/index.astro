@@ -65,16 +65,16 @@ const tags = tagOptions(stories);
     <div class="wrap">
       <div class="archive-head">
         <p class="eyebrow eyebrow--cyan">All stories</p>
-        <span class="result-count" id="count"></span>
+        <span class="result-count" id="count" data-test="result-count"></span>
       </div>
 
       <div class="filters">
-        <input type="search" id="q" placeholder="Search title, author or tag…" aria-label="Search stories" />
-        <select id="f-tag" aria-label="Filter by tag">
+        <input type="search" id="q" data-test="filter-search" placeholder="Search title, author or tag…" aria-label="Search stories" />
+        <select id="f-tag" data-test="filter-tag" aria-label="Filter by tag">
           <option value="">All tags</option>
           {tags.map((t) => <option value={t}>{t}</option>)}
         </select>
-        <button id="f-reset" class="filter-reset" type="button">Reset</button>
+        <button id="f-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
       </div>
 
       <div class="grid-cards story-list" id="cards">
