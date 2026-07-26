@@ -1,6 +1,6 @@
 /** A short plain-text preview drawn from a markdown body.
  *
- * Used for card previews and (from Phase 6) as the meta-description fallback
+ * Used for card previews and as the meta-description fallback
  * when Notion carries no `SEO Metadescription`.
  */
 export function excerpt(md: string, fallback = '', max = 190): string {
@@ -10,7 +10,7 @@ export function excerpt(md: string, fallback = '', max = 190): string {
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     // Bare URLs read as noise in a search result and burn characters — one
     // session opened its description with a twitter.com link, another with a
-    // WordPress URL that now only resolves through a redirect.
+    // address that now only resolves through a redirect.
     // Not `\S+`: that swallows a closing bracket and leaves "Storytelling ( is".
     .replace(/\bhttps?:\/\/[^\s)\]]+/g, ' ')
     .replace(/^\s*#{1,6}\s+.*$/gm, ' ')

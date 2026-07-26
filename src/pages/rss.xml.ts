@@ -1,6 +1,6 @@
 /** The feed.
  *
- * WordPress's /feed/ was last built in March 2024 and contained only six
+ * The old /feed/ was last built in March 2024 and contained only six
  * ddd-crew posts, because the custom post types were excluded from it — so
  * subscribers have had nothing for two years. This one carries what the site
  * is actually about: sessions and stories, newest first. `/feed/` redirects

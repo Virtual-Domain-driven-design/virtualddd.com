@@ -6,7 +6,7 @@
  *
  * Content quality — anything an editor can break from Notion — is deliberately
  * *not* here; it lives in tests/content/ and reports without blocking. See
- * CLAUDE.md, "Testing".
+ * AGENTS.md, "Testing".
  *
  * Run after `npm run build`.
  */
@@ -36,7 +36,7 @@ describe('every page', () => {
       const c = attr(p.html, /<link rel="canonical" href="([^"]*)"/);
       assert.ok(c, `${p.path} has no canonical`);
       assert.ok(c.startsWith('https://'), `${p.path} canonical is not absolute: ${c}`);
-      // ddd-crew pages canonicalise upstream on purpose (CC BY-SA, Phase 4).
+      // ddd-crew pages canonicalise upstream on purpose (CC BY-SA).
       if (!p.path.startsWith('/ddd-crew/') || p.path === '/ddd-crew/') {
         assert.equal(new URL(c).pathname, p.path, `${p.path} canonical points elsewhere: ${c}`);
       }

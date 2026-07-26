@@ -3,7 +3,6 @@ title: "The hard skills? with Diana Montalion"
 slug: "the-hard-skills-with-diana-montalion"
 status: "Done"
 datetime: 2022-06-07T17:00:00.000+00:00
-wordpressPublishedDate: 2022-06-07
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["systems thinking", "software architecture", "digital transformation"]

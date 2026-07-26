@@ -4,8 +4,8 @@ import OrganiserCard from '../../components/OrganiserCard.astro';
 import { getCollection } from 'astro:content';
 import { collectionPage, topTrail } from '../../lib/seo';
 
-// Everyone we hold a record for, not just the team-page subset: the WordPress
-// /dipl-team-member/ URLs redirect here and every one of them must land.
+// Everyone we hold a record for, not just the team-page subset: the retired
+// /dipl-team-member/ addresses redirect here and every one must land.
 const organisers = (await getCollection('organisers')).sort((a, b) =>
   a.data.name.localeCompare(b.data.name),
 );

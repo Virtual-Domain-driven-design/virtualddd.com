@@ -3,7 +3,6 @@ title: "What can we learn from open-source with Matteo Collina"
 slug: "what-can-we-learn-from-open-source-with-matteo-collina"
 status: "Done"
 datetime: 2020-08-04T16:30:00.000+00:00
-wordpressPublishedDate: 2020-08-04
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["oss"]

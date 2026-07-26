@@ -3,7 +3,6 @@ title: "Can business capabilities be useful in DDD with Trond Hjorteland"
 slug: "can-business-capabilities-be-useful-in-ddd-with-trond-hjorteland"
 status: "Done"
 datetime: 2019-06-25T18:00:00.000+00:00
-wordpressPublishedDate: 2019-06-25
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["capability modelling", "software architecture"]

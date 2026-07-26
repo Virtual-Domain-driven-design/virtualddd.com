@@ -53,7 +53,7 @@ export function GET({ props, params, site }: APIContext) {
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',
     line('UID', `${params.slug}@virtualddd.com`),
-    line('DTSTAMP', stamp(new Date(d.wordpressPublishedDate ?? d.datetime))),
+    line('DTSTAMP', stamp(new Date(d.datetime))),
     line('DTSTART', stamp(start)),
     line('DTEND', stamp(end)),
     line('SUMMARY', d.title),

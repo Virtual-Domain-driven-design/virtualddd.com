@@ -3,7 +3,6 @@ title: "Trying out online EventStorming"
 slug: "trying-out-online-eventstorming"
 status: "Done"
 datetime: 2020-01-21T18:00:00.000+00:00
-wordpressPublishedDate: 2020-01-21
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["remote work", "eventstorming", "design heuristics"]

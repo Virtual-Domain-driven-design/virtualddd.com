@@ -3,7 +3,6 @@ title: "CraftConf meetup with Nick Tune and Helin Akgul"
 slug: "craftconf-meetup-with-nick-tune-and-helin-akgul"
 status: "Done"
 datetime: 2019-05-08T17:00:00.000+00:00
-wordpressPublishedDate: 2019-05-08
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["microservices", "strategic design", "essential"]

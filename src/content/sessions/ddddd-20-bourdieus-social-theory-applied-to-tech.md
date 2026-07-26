@@ -3,7 +3,6 @@ title: "[DDDDD-20] Bourdieu's social theory applied to tech"
 slug: "ddddd-20-bourdieus-social-theory-applied-to-tech"
 status: "Done"
 datetime: 2020-05-15T09:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["DDDDD", "sociotechnical system", "bourdieu", "culture"]

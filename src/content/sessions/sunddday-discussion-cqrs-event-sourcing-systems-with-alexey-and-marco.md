@@ -3,7 +3,6 @@ title: "SunDDDay discussion: CQRS & Event Sourcing systems with Alexey and Marco
 slug: "sunddday-discussion-cqrs-event-sourcing-systems-with-alexey-and-marco"
 status: "Done"
 datetime: 2019-08-25T17:00:00.000+00:00
-wordpressPublishedDate: 2019-08-25
 typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["cqrs/es", "event sourcing", "cqrs"]

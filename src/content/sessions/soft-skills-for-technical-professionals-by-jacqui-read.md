@@ -3,7 +3,6 @@ title: "Soft Skills for Technical Professionals by Jacqui Read"
 slug: "soft-skills-for-technical-professionals-by-jacqui-read"
 status: "Done"
 datetime: 2024-02-22T18:00:00.000+00:00
-wordpressPublishedDate: 2024-02-22
 typeOfSession: "talk"
 level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["software architecture", "software development", "diagramming"]

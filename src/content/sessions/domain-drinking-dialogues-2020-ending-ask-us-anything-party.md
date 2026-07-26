@@ -3,7 +3,6 @@ title: "Domain-Drinking Dialogues - 2020 ending Ask us anything party"
 slug: "domain-drinking-dialogues-2020-ending-ask-us-anything-party"
 status: "Done"
 datetime: 2020-12-21T18:00:00.000+00:00
-wordpressPublishedDate: 2020-12-21
 typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["essential", "strategic design", "tactical design", "collaborate modelling"]

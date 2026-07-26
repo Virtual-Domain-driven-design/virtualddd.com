@@ -3,7 +3,6 @@ title: "Lost in bounded context translations with Julie, Indu, Michael and Nick"
 slug: "lost-in-bounded-context-translations-with-julie-indu-michael-and-nick"
 status: "Done"
 datetime: 2020-03-17T18:00:00.000+00:00
-wordpressPublishedDate: 2020-03-17
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["bounded context", "strategic design"]

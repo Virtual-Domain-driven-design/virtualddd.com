@@ -3,7 +3,6 @@ title: "[DDDDD-20] Context Maps - practically applied"
 slug: "ddddd-20-context-maps-practically-applied"
 status: "Done"
 datetime: 2020-05-15T09:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["DDDDD", "context mapping", "strategic design", "collaborative modelling"]

@@ -32,8 +32,6 @@ const sessions = defineCollection({
       status: z.enum(['Ideas', 'Drafting', 'Planned', 'GoLive', 'Published', 'Ended', 'Done']),
       // Drives the upcoming (future) vs past (elapsed) split, client-side.
       datetime: z.coerce.date(),
-      // Used to match/verify the preserved WordPress URL.
-      wordpressPublishedDate: z.coerce.date().optional(),
       typeOfSession: z.enum(['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on']).optional(),
       level: z.array(z.enum(['Advanced', 'Intermediate', 'Beginner'])).default([]),
       tags: z.array(z.string()).default([]),
@@ -116,7 +114,7 @@ const heuristics = defineCollection({
 });
 
 // Organisers: structured data (no body), generated from the Virtual DDD
-// Organisers Notion DB. Public team info was migrated out of WordPress.
+// Organisers Notion database. Drives /organisers/.
 const organisers = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/organisers' }),
   schema: ({ image }) =>

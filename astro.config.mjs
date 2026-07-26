@@ -4,9 +4,9 @@ import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // Canonical origin — used by sitemap, RSS and canonical URLs (Phase 6).
+  // Canonical origin — used by the sitemap, the feed and every canonical URL.
   site: 'https://virtualddd.com',
-  // Match WordPress's trailing-slash URLs so existing links don't 301 (Phase 1).
+  // Every URL ends in a slash, so existing links never 301. A test enforces it.
   trailingSlash: 'always',
   integrations: [
     sitemap({

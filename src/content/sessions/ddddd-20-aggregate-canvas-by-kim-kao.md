@@ -3,7 +3,6 @@ title: "[DDDDD-20] Aggregate Canvas by Kim Kao"
 slug: "ddddd-20-aggregate-canvas-by-kim-kao"
 status: "Done"
 datetime: 2020-05-15T04:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["DDDDD", "aggregate", "aggregate canvas"]

@@ -3,7 +3,6 @@ title: "TDD as a design tool with Dave Farley"
 slug: "tdd-as-a-design-tool-with-dave-farley"
 status: "Done"
 datetime: 2020-11-10T18:30:00.000+00:00
-wordpressPublishedDate: 2020-11-10
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["tdd", "bdd", "continuous delivery", "tactical patterns"]

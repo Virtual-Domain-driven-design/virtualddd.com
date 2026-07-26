@@ -3,7 +3,6 @@ title: "Team Topologies Workshop with Luke and Andy"
 slug: "team-topologies-workshop-with-luke-and-andy"
 status: "Done"
 datetime: 2025-03-05T19:00:00.000+13:00
-wordpressPublishedDate: 2025-03-05
 typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["team topologies", "teams and organizations", "sociotechnical systems"]

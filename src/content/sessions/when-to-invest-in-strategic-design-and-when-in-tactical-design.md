@@ -3,7 +3,6 @@ title: "When to invest in Strategic design and when in Tactical design"
 slug: "when-to-invest-in-strategic-design-and-when-in-tactical-design"
 status: "Done"
 datetime: 2021-11-02T18:00:00.000+00:00
-wordpressPublishedDate: 2021-11-02
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["strategic design", "software architecture", "tactical design", "polarity mapping", "design patterns"]

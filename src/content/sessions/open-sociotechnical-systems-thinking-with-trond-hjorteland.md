@@ -3,7 +3,6 @@ title: "Open Sociotechnical Systems Thinking with Trond Hjorteland"
 slug: "open-sociotechnical-systems-thinking-with-trond-hjorteland"
 status: "Done"
 datetime: 2021-11-22T18:00:00.000+00:00
-wordpressPublishedDate: 2021-11-22
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["strategic design", "software architecture", "sociotechnical systems", "design patterns"]

@@ -3,7 +3,6 @@ title: "Psychologic safety in remote collaboration with Gitte Klitgaard"
 slug: "psychologic-safety-in-remote-collaboration-with-gitte-klitgaard"
 status: "Done"
 datetime: 2020-09-29T17:00:00.000+00:00
-wordpressPublishedDate: 2020-09-29
 typeOfSession: "debate"
 level: ["Intermediate"]
 tags: ["agile teams", "psychological safety", "remote facilitation", "remote collaboration", "collaborative modelling", "socio-technical"]

@@ -7,7 +7,7 @@
  *
  * **Selectors are the contract.** Tests here select only `[data-test]` hooks and
  * `js-*` behaviour classes, never a styling class and never visible copy, so
- * restyling a section cannot break them. See CLAUDE.md, "The test surface".
+ * restyling a section cannot break them. See AGENTS.md, "The test surface".
  *
  * Run after `npm run build`. Sampled rather than exhaustive so it stays quick;
  * `npm run test:full` widens the sample.
@@ -163,7 +163,7 @@ describe('filters and search', () => {
   });
 
   test('a legacy tag URL lands pre-filtered', async () => {
-    // 289 WordPress tag archives 301 here; landing on the unfiltered index
+    // 289 retired tag archives 301 here; landing on the unfiltered index
     // would make those redirects a lie.
     const page = await browser.newPage();
     await page.goto(`${base}/sessions/?tag=collaborative-modelling`, { waitUntil: 'networkidle' });

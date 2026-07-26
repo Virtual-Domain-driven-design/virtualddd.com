@@ -3,7 +3,6 @@ title: "[DDDDD-20] Build a Bounded Context Mob Firedrill"
 slug: "ddddd-20-build-a-bounded-context-mob-firedrill"
 status: "Done"
 datetime: 2020-05-15T15:30:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["DDDDD", "bounded context", "eventstorming", "mob programming"]

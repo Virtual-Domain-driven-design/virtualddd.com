@@ -3,7 +3,6 @@ title: "Remote facilitation with Kirsten Clacey, Jay-Allen Morris and Jo Perold"
 slug: "remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold"
 status: "Done"
 datetime: 2020-09-22T17:00:00.000+00:00
-wordpressPublishedDate: 2020-09-22
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["agile teams", "cross functional", "remote facilitation", "remote collaboration", "collaborative modelling", "socio-technical"]

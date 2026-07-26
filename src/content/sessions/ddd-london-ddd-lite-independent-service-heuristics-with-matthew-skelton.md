@@ -3,7 +3,6 @@ title: "[DDD London] DDD-Lite: Independent Service Heuristics with Matthew Skelt
 slug: "ddd-london-ddd-lite-independent-service-heuristics-with-matthew-skelton"
 status: "Done"
 datetime: 2020-05-12T17:30:00.000+00:00
-wordpressPublishedDate: 2020-05-12
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["service design", "design heuristics", "team topologies"]

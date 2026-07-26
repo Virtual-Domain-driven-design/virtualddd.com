@@ -3,7 +3,6 @@ title: "Impact Mapping to manage change and strategic design"
 slug: "impact-mapping-to-manage-change-and-strategic-design"
 status: "Done"
 datetime: 2019-06-13T16:30:00.000+00:00
-wordpressPublishedDate: 2019-06-13
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["impact mapping", "collaborative modelling", "strategic design"]

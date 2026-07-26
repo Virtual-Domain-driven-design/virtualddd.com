@@ -3,7 +3,6 @@ title: "[DDDDD-20] Functional Domain Modelling in Practice"
 slug: "ddddd-20-functional-domain-modelling-in-practice"
 status: "Done"
 datetime: 2020-05-15T13:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "hands-on"
 level: ["Intermediate"]
 tags: ["DDDDD", "functional programming", "functional domain modelling"]

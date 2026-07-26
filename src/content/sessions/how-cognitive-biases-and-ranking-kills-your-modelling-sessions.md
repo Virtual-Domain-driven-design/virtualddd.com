@@ -3,7 +3,6 @@ title: "How cognitive biases and ranking kills your modelling sessions"
 slug: "how-cognitive-biases-and-ranking-kills-your-modelling-sessions"
 status: "Done"
 datetime: 2020-04-07T17:00:00.000+00:00
-wordpressPublishedDate: 2020-04-07
 typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["socio-technical", "bias", "deep democracy"]

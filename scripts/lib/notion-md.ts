@@ -9,14 +9,6 @@
  * downloads and the file writing; it imports the rules from here.
  */
 
-/** Normalise a title the same way the WXR CSV `norm` column was built. */
-export function norm(s: string): string {
-  return (s || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-}
-
 /** A file name from a person's name.
  *
  * Accents are folded rather than dropped, because dropping them mangles the
@@ -37,15 +29,10 @@ export function plainTitle(page: any, prop: string): string {
   return (p?.title ?? []).map((t: any) => t.plain_text).join('').trim();
 }
 
-export function existingSlug(page: any): string {
-  const p = page.properties?.['slug'];
-  return (p?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-}
-
 export type StatusKind = 'select' | 'status';
 
 /** The Status value, from whichever of Notion's two status types the database
- * uses. The four databases are not consistent about this — see CLAUDE.md. */
+ * uses. The four databases are not consistent about this — see AGENTS.md. */
 export function statusOf(page: any, kind: StatusKind, prop = 'Status'): string {
   const p = page.properties?.[prop];
   return (kind === 'select' ? p?.select?.name : p?.status?.name) ?? '';

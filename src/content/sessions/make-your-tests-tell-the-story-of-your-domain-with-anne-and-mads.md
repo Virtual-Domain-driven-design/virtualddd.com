@@ -3,7 +3,6 @@ title: "Make your tests tell the story of your domain with Anne and Mads"
 slug: "make-your-tests-tell-the-story-of-your-domain-with-anne-and-mads"
 status: "Done"
 datetime: 2019-11-12T18:00:00.000+00:00
-wordpressPublishedDate: 2019-11-12
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["testing", "collaborative modelling", "essential"]

@@ -3,7 +3,6 @@ title: "Patterns of BDD Automation - a Fireside chat with Seb Rose and Gáspár 
 slug: "patterns-of-bdd-automation-a-fireside-chat-with-seb-rose-and-gaspar-nagy"
 status: "Done"
 datetime: 2025-11-25T17:00:00.000+01:00
-wordpressPublishedDate: 2025-11-11
 typeOfSession: "fireside-chat"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["behaviour-driven development", "Automation", "collaborative modelling", "patterns"]

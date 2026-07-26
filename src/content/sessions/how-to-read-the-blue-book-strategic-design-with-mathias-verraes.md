@@ -3,7 +3,6 @@ title: "How To Read the Blue Book: Strategic Design with Mathias Verraes"
 slug: "how-to-read-the-blue-book-strategic-design-with-mathias-verraes"
 status: "Done"
 datetime: 2019-07-23T17:00:00.000+00:00
-wordpressPublishedDate: 2019-07-23
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["strategic design"]

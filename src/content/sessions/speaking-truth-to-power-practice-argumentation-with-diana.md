@@ -3,7 +3,6 @@ title: "Speaking truth to power: practice argumentation with Diana"
 slug: "speaking-truth-to-power-practice-argumentation-with-diana"
 status: "Done"
 datetime: 2020-07-21T17:00:00.000+00:00
-wordpressPublishedDate: 2020-07-21
 typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["socio-technical", "decision-making"]

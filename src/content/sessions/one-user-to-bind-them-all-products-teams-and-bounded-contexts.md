@@ -3,7 +3,6 @@ title: "One user to bind them all? Products, teams and bounded contexts"
 slug: "one-user-to-bind-them-all-products-teams-and-bounded-contexts"
 status: "Done"
 datetime: 2020-07-29T17:00:00.000+00:00
-wordpressPublishedDate: 2020-07-29
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
 tags: ["ux", "bounded context", "team topology", "socio-technical", "strategic design"]

@@ -3,7 +3,6 @@ title: "Udi Dahan - Ask me Anything"
 slug: "udi-dahan-ask-me-anything"
 status: "Done"
 datetime: 2021-03-10T15:45:00.000+00:00
-wordpressPublishedDate: 2021-03-10
 typeOfSession: "fireside-chat"
 level: ["Intermediate"]
 tags: ["event-driven architecture", "cqrs/es", "event sourcing", "long running process", "process manager", "bounded context"]

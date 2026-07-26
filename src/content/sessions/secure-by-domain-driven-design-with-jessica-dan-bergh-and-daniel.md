@@ -3,7 +3,6 @@ title: "Secure by Domain-driven design with Jessica, Dan Bergh and Daniel"
 slug: "secure-by-domain-driven-design-with-jessica-dan-bergh-and-daniel"
 status: "Done"
 datetime: 2020-04-03T14:00:00.000+00:00
-wordpressPublishedDate: 2020-04-03
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["secure by design"]

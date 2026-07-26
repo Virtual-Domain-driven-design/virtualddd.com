@@ -3,7 +3,6 @@ title: "[DDDDD-20] Remote Bounded Context Modelling"
 slug: "ddddd-20-remote-bounded-context-modelling"
 status: "Done"
 datetime: 2020-05-15T06:30:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["DDDDD", "visual collaboration", "bounded context"]

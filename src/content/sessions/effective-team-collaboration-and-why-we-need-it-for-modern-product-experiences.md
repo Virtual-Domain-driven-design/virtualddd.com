@@ -3,7 +3,6 @@ title: "Effective team collaboration and why we need it for modern product exper
 slug: "effective-team-collaboration-and-why-we-need-it-for-modern-product-experiences"
 status: "Done"
 datetime: 2022-05-05T17:00:00.000+00:00
-wordpressPublishedDate: 2022-05-05
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["architect decisions", "software design", "long term impact"]

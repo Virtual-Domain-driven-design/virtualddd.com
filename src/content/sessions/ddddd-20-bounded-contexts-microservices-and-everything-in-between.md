@@ -3,7 +3,6 @@ title: "[DDDDD-20] Bounded Contexts, Microservices, and Everything In Between"
 slug: "ddddd-20-bounded-contexts-microservices-and-everything-in-between"
 status: "Done"
 datetime: 2020-05-15T05:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["DDDDD", "bounded context", "socio-technical", "microservices", "software architecture"]

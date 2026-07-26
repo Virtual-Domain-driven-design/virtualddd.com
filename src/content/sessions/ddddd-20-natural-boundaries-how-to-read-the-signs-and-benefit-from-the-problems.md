@@ -3,7 +3,6 @@ title: "[DDDDD-20] Natural Boundaries - how to read the signs and benefit from t
 slug: "ddddd-20-natural-boundaries-how-to-read-the-signs-and-benefit-from-the-problems"
 status: "Done"
 datetime: 2020-05-15T16:45:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
 tags: ["bounded context", "socio-technical", "ux", "organisational design"]

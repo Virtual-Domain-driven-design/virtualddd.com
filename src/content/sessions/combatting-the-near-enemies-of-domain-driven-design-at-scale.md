@@ -3,7 +3,6 @@ title: "Combatting the Near Enemies of Domain Driven Design at Scale"
 slug: "combatting-the-near-enemies-of-domain-driven-design-at-scale"
 status: "Done"
 datetime: 2019-12-11T18:00:00.000+00:00
-wordpressPublishedDate: 2019-12-11
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["strategic design"]

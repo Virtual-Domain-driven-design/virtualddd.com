@@ -3,7 +3,6 @@ title: "DDD & Domain Modeling: Using AI to Accelerate Design - with Staffan Palo
 slug: "ddd-domain-modeling-using-ai-to-accelerate-design-with-staffan-palopaa"
 status: "Done"
 datetime: 2024-04-02T17:00:00.000+00:00
-wordpressPublishedDate: 2024-04-02
 typeOfSession: "hands-on"
 level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["ai", "software architecture", "software modelling"]

@@ -3,7 +3,6 @@ title: "Free Trial Workshop: First Steps in DDD with Andrew (#BlackLivesMatter e
 slug: "free-trial-workshop-first-steps-in-ddd-with-andrew-blacklivesmatter-edition"
 status: "Done"
 datetime: 2020-07-20T14:00:00.000+00:00
-wordpressPublishedDate: 2020-07-20
 typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["hands-on", "essential"]

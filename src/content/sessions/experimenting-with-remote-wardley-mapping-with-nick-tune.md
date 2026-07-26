@@ -3,7 +3,6 @@ title: "Experimenting with Remote Wardley Mapping with Nick Tune"
 slug: "experimenting-with-remote-wardley-mapping-with-nick-tune"
 status: "Done"
 datetime: 2020-05-01T17:00:00.000+00:00
-wordpressPublishedDate: 2020-05-01
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["strategic design", "remote work", "collaborative modelling", "wardley maps"]

@@ -3,8 +3,8 @@
  *
  * `check-redirects.mjs` simulates mod_rewrite. Only a real request against real
  * Apache/LiteSpeed proves that the .htaccess is honoured, that 410 really means
- * 410, and that no redirect takes two hops. Run this against staging before
- * cutover (MIGRATION.md Phase 9, step 4) and against production after.
+ * 410, and that no redirect takes two hops. Run it against staging before a
+ * release and against production after.
  *
  *   node scripts/verify-live.mjs https://staging.virtualddd.com
  *   node scripts/verify-live.mjs https://virtualddd.com --all

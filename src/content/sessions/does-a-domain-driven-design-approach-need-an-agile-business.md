@@ -3,7 +3,6 @@ title: "Does a Domain-driven design approach need an agile business?"
 slug: "does-a-domain-driven-design-approach-need-an-agile-business"
 status: "Done"
 datetime: 2019-12-03T18:30:00.000+00:00
-wordpressPublishedDate: 2019-12-03
 typeOfSession: "debate"
 level: ["Intermediate"]
 tags: ["agile", "essential"]

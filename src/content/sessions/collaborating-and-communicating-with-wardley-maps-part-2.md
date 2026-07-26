@@ -3,7 +3,6 @@ title: "Collaborating and Communicating with Wardley Maps Part 2"
 slug: "collaborating-and-communicating-with-wardley-maps-part-2"
 status: "Done"
 datetime: 2021-06-22T17:00:00.000+00:00
-wordpressPublishedDate: 2021-06-22
 typeOfSession: "hands-on"
 level: ["Intermediate"]
 tags: ["collaborative modelling", "wardley mapping", "facilitation"]

@@ -3,7 +3,6 @@ title: "Introduction to Domain-Driven Design and Collaborative software design -
 slug: "introduction-to-domain-driven-design-and-collaborative-software-design-kenny-baas-schwegler"
 status: "Done"
 datetime: 2024-09-12T18:00:00.000+12:00
-wordpressPublishedDate: 2024-09-12
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["eventstorming"]

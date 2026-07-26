@@ -3,7 +3,6 @@ title: "Practical Residuality by Barry M O'Reilly"
 slug: "practical-residuality-by-barry-m-oreilly"
 status: "Done"
 datetime: 2023-08-29T17:00:00.000+00:00
-wordpressPublishedDate: 2023-08-29
 typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["software design", "software architecture", "complexity theory", "event-driven architecture"]

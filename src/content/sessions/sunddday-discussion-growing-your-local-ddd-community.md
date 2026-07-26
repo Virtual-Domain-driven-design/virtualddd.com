@@ -3,7 +3,6 @@ title: "SunDDDay Discussion: Growing your local DDD community"
 slug: "sunddday-discussion-growing-your-local-ddd-community"
 status: "Done"
 datetime: 2019-12-01T18:00:00.000+00:00
-wordpressPublishedDate: 2019-12-01
 typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["community"]

@@ -3,7 +3,6 @@ title: "EventStorming Types and Heuristics with Rebecca, Paul and Alberto"
 slug: "eventstorming-types-and-heuristics-with-rebecca-paul-and-alberto"
 status: "Done"
 datetime: 2019-08-08T22:00:00.000+00:00
-wordpressPublishedDate: 2019-08-08
 typeOfSession: "panel-discussion"
 level: ["Beginner"]
 tags: ["eventstorming", "design heuristics", "big picture"]

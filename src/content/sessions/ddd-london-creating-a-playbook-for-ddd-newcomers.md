@@ -3,7 +3,6 @@ title: "[DDD London] Creating a Playbook for DDD Newcomers"
 slug: "ddd-london-creating-a-playbook-for-ddd-newcomers"
 status: "Done"
 datetime: 2020-05-21T17:00:00.000+00:00
-wordpressPublishedDate: 2020-05-21
 typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["essential"]

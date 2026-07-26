@@ -3,7 +3,6 @@ title: "Experimenting with remote Big Picture EventStorming"
 slug: "experimenting-with-remote-big-picture-eventstorming"
 status: "Done"
 datetime: 2020-07-15T17:00:00.000+00:00
-wordpressPublishedDate: 2020-07-15
 typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["eventstorming", "remote work"]

@@ -1,14 +1,14 @@
 /** Pre-select a filter from the query string, client-side.
  *
- * WordPress published a page per tag (`/sessions_tag/eventstorming/`). Those
- * URLs 301 here as `/sessions/?tag=eventstorming`, so the visitor has to land
- * on the filtered view, not a generic index.
+ * The site once published a page per tag (`/sessions_tag/eventstorming/`).
+ * Those addresses 301 here as `/sessions/?tag=eventstorming`, so the visitor
+ * has to land on the filtered view, not a generic index.
  *
  * An unknown tag deliberately applies nothing: three legacy slugs
  * (`ux-ui-design`, `cqrs-es`, `business-it-alignment`) no longer exist as
  * tags, and showing the whole archive beats an empty results page.
  */
-/** WordPress slug form: lower case, non-alphanumerics collapsed to hyphens.
+/** The slug form those addresses used: lower case, non-alphanumerics to hyphens.
  *  Tags are stored as prose ("Collaborative Modeling"), so both sides of the
  *  comparison have to be slugified for `?tag=collaborative-modeling` to hit. */
 const slugify = (s: string) =>

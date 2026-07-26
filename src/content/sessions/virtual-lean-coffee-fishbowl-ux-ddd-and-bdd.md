@@ -3,7 +3,6 @@ title: "Virtual Lean Coffee Fishbowl: UX, DDD and BDD"
 slug: "virtual-lean-coffee-fishbowl-ux-ddd-and-bdd"
 status: "Done"
 datetime: 2020-01-16T19:00:00.000+00:00
-wordpressPublishedDate: 2020-01-16
 typeOfSession: "debate"
 level: ["Advanced"]
 tags: ["ux", "bdd", "socio-technical"]

@@ -3,7 +3,6 @@ title: "[DDDDD-20]  « it's traverse »"
 slug: "ddddd-20-its-traverse"
 status: "Done"
 datetime: 2020-05-15T06:30:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["DDDDD", "functional programming", "haskell"]

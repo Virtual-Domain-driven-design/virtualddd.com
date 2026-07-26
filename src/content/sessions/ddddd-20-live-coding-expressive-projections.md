@@ -3,7 +3,6 @@ title: "[DDDDD-20] Live coding: Expressive Projections"
 slug: "ddddd-20-live-coding-expressive-projections"
 status: "Done"
 datetime: 2020-05-15T15:30:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["DDDDD", "live coding", "haskell", "event sroucing", "projections"]

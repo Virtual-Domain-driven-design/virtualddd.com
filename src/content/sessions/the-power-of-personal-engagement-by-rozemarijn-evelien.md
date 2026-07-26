@@ -3,7 +3,6 @@ title: "The power of personal engagement by Rozemarijn & Evelien"
 slug: "the-power-of-personal-engagement-by-rozemarijn-evelien"
 status: "Done"
 datetime: 2023-02-07T18:00:00.000+00:00
-wordpressPublishedDate: 2023-02-07
 typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["behavioral science", "team building", "software development", "agile coaching"]

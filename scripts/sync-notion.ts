@@ -1,25 +1,21 @@
 /**
- * Notion sync (Phase 3).
+ * Notion → src/content/. The script the whole publishing loop rests on.
  *
- * Subcommands:
- *   slugs            Match Sessions/Open Spaces to their WordPress slug and
- *                    (optionally) write the `slug` property back to Notion.
- *                    Read-only unless --write is passed.
+ *   content --collection=<name>   pages to markdown
+ *   organisers                    the team, as JSON
+ *   guests                        session speakers, as JSON
  *
- * Flags:
- *   --dry-run        Print the proposed mapping; write nothing. (default)
- *   --write          Actually write the matched slugs into Notion.
- *   --collection=X   Limit to one collection (sessions | open-spaces).
+ * Nothing here is hand-edited afterwards: Notion is the source of truth and
+ * this is the only writer. Add --write to land files under src/content/;
+ * without it everything goes to a preview directory instead.
  *
- * Slug source of truth: migration-source/derived/*.csv, derived from the
- * WordPress WXR export. See MIGRATION.md Phase 1/3 and CLAUDE.md.
+ * See AGENTS.md, "Content model".
  */
-import { readFileSync } from 'node:fs';
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
 import sharp from 'sharp';
 import {
-  createBlocksToMd, existingSlug, fileUrl, kebab, norm, plainTitle,
+  createBlocksToMd, fileUrl, kebab, plainTitle,
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
@@ -62,73 +58,7 @@ async function api<T>(label: string, fn: () => Promise<T>, attempt = 0): Promise
   }
 }
 
-// --- collection config ------------------------------------------------------
-
-interface CollectionCfg {
-  dataSourceId: string;
-  titleProp: string;
-  statusProp: string;
-  statusKind: StatusKind;
-  /** Statuses whose rows have a live WordPress URL (need a preserved slug). */
-  liveStatuses: string[];
-  /** WXR-derived slug file. */
-  derivedCsv: string;
-}
-
-const COLLECTIONS: Record<string, CollectionCfg> = {
-  sessions: {
-    dataSourceId: '33e9db0a-1418-4a3e-a053-33fa384e5e93',
-    titleProp: 'Name',
-    statusProp: 'Status',
-    statusKind: 'select',
-    liveStatuses: ['Done', 'Published'],
-    derivedCsv: 'migration-source/derived/sessions.csv',
-  },
-  'open-spaces': {
-    dataSourceId: '0cfb73c7-a638-4948-a4df-5fe06dcd2dd1',
-    titleProp: 'Name',
-    statusProp: 'Status',
-    statusKind: 'status',
-    liveStatuses: ['Published', 'Done'],
-    derivedCsv: 'migration-source/derived/open-space.csv',
-  },
-};
-
-// --- helpers ----------------------------------------------------------------
-
-/** Minimal CSV reader for the derived files (no embedded newlines/quotes). */
-function readCsv(path: string): Record<string, string>[] {
-  const lines = readFileSync(path, 'utf8').split(/\r?\n/).filter((l) => l.length);
-  const header = splitCsvLine(lines[0]);
-  return lines.slice(1).map((line) => {
-    const cells = splitCsvLine(line);
-    const row: Record<string, string> = {};
-    header.forEach((h, i) => (row[h] = cells[i] ?? ''));
-    return row;
-  });
-}
-
-function splitCsvLine(line: string): string[] {
-  const out: string[] = [];
-  let cur = '';
-  let inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (inQ) {
-      if (c === '"' && line[i + 1] === '"') { cur += '"'; i++; }
-      else if (c === '"') inQ = false;
-      else cur += c;
-    } else if (c === '"') inQ = true;
-    else if (c === ',') { out.push(cur); cur = ''; }
-    else cur += c;
-  }
-  out.push(cur);
-  return out;
-}
-
-const statusName = (page: any, cfg: CollectionCfg): string =>
-  statusOf(page, cfg.statusKind, cfg.statusProp);
-
+/** Every row of a data source, paged. */
 async function queryAll(dataSourceId: string): Promise<any[]> {
   const rows: any[] = [];
   let cursor: string | undefined;
@@ -144,102 +74,13 @@ async function queryAll(dataSourceId: string): Promise<any[]> {
   return rows;
 }
 
-// --- slug matching ----------------------------------------------------------
-
-interface Match {
-  pageId: string;
-  name: string;
-  status: string;
-  existing: string;
-  proposed: string | null;
-  note: string;
-}
-
-async function matchSlugs(cfg: CollectionCfg): Promise<Match[]> {
-  const wp = readCsv(cfg.derivedCsv);
-  const byNorm = new Map<string, string[]>(); // norm -> [slug,...]
-  for (const r of wp) {
-    const arr = byNorm.get(r.norm) ?? [];
-    arr.push(r.slug);
-    byNorm.set(r.norm, arr);
-  }
-
-  const pages = await queryAll(cfg.dataSourceId);
-  const matches: Match[] = [];
-  for (const page of pages) {
-    const title = plainTitle(page, cfg.titleProp);
-    const status = statusName(page, cfg);
-    const live = cfg.liveStatuses.includes(status);
-    const existing = existingSlug(page);
-
-    let proposed: string | null = null;
-    let note = '';
-    if (!live) {
-      note = 'not live (no WordPress URL) — skip';
-    } else {
-      const hits = byNorm.get(norm(title)) ?? [];
-      if (hits.length === 1) {
-        proposed = hits[0];
-        note = existing && existing !== proposed ? `differs from existing "${existing}"` : 'ok';
-      } else if (hits.length === 0) {
-        note = 'NO WP MATCH — needs manual slug';
-      } else {
-        note = `AMBIGUOUS — ${hits.length} WP matches`;
-      }
-    }
-    matches.push({ pageId: page.id, name: title, status, existing, proposed, note });
-  }
-  return matches;
-}
-
-// --- slugs command ----------------------------------------------------------
-
-async function runSlugs(only: string | undefined, write: boolean) {
-  const targets = only ? [only] : Object.keys(COLLECTIONS);
-  for (const key of targets) {
-    const cfg = COLLECTIONS[key];
-    if (!cfg) { console.error(`unknown collection: ${key}`); continue; }
-
-    const matches = await matchSlugs(cfg);
-    const live = matches.filter((m) => !m.note.startsWith('not live'));
-    const ok = live.filter((m) => m.proposed && (m.note === 'ok' || m.note.startsWith('differs')));
-    const problems = live.filter((m) => !m.proposed);
-
-    console.log(`\n=== ${key} (${cfg.derivedCsv}) ===`);
-    console.log(`live rows: ${live.length} | matched: ${ok.length} | problems: ${problems.length}`);
-
-    for (const m of live) {
-      const flag = m.proposed ? (m.note.startsWith('differs') ? '~' : '✓') : '✗';
-      console.log(`  ${flag} ${m.proposed ?? '(none)'}   ⟵ "${m.name}"  [${m.status}]${m.note === 'ok' ? '' : '  — ' + m.note}`);
-    }
-
-    if (problems.length) {
-      console.log(`\n  ${problems.length} row(s) need attention before writing.`);
-    }
-
-    if (write) {
-      const toWrite = ok.filter((m) => m.existing !== m.proposed);
-      console.log(`\n  --write: updating ${toWrite.length} row(s) in Notion...`);
-      for (const m of toWrite) {
-        await api('pages.update', () => notion.pages.update({
-          page_id: m.pageId,
-          properties: { slug: { rich_text: [{ text: { content: m.proposed! } }] } },
-        }));
-        console.log(`    wrote ${m.proposed}`);
-      }
-      console.log('  done.');
-    } else {
-      console.log('\n  (dry-run — nothing written. Re-run with --write to apply.)');
-    }
-  }
-}
-
 // --- content command: Notion pages -> markdown ------------------------------
 //
-// Hand-rolled block -> markdown converter (v5 data-source API compatible).
-// Preserves embeds/callouts, which the plan calls out as easy to lose.
-// First slice: sessions. Writes to a preview dir under --dry-run so fidelity
-// can be inspected before anything lands in src/content/.
+// Hand-rolled block -> markdown converter (Notion v5 data-source API).
+// Embeds and callouts are preserved deliberately — they are the first thing a
+// naive converter loses. Under --dry-run the output goes to a preview
+// directory so fidelity can be inspected before anything lands in
+// src/content/.
 
 import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
 
@@ -360,7 +201,6 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     extra: async (h) => {
       const l: string[] = [];
       if (h.date('Datetime')) l.push(`datetime: ${h.date('Datetime')}`);
-      const wp = h.date('Wordpress Published date'); if (wp) l.push(`wordpressPublishedDate: ${wp.slice(0, 10)}`);
       if (h.select('Type of session')) l.push(`typeOfSession: ${yamlStr(h.select('Type of session')!)}`);
       const level = h.multi('Level'); if (level.length) l.push(`level: ${yamlList(level)}`);
       const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
@@ -638,7 +478,7 @@ async function runOrganisers(outDir: string, write: boolean) {
 // --- guests command: Notion -> JSON data collection -------------------------
 //
 // Session guests are the speakers and panellists, kept apart from the
-// organisers database on purpose (see CLAUDE.md): none of the operational
+// organisers database on purpose (see AGENTS.md): none of the operational
 // fields — Discord, virtualddd.com mail — apply to an external speaker. The
 // fields here exist to make a good `Person`, and the links become `sameAs`.
 //
@@ -706,7 +546,6 @@ async function run() {
   const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
   const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
 
-  if (cmd === 'slugs') return runSlugs(only, write);
   if (cmd === 'organisers') {
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
       ?? (write ? 'src/content/organisers' : 'migration-source/preview/organisers');
@@ -723,7 +562,7 @@ async function run() {
       ?? (write ? `src/content/${target}` : `migration-source/preview/${target}`);
     return runContent(target, limit, outDir, write, args.includes('--strict'));
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
+  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
   process.exit(1);
 }
 

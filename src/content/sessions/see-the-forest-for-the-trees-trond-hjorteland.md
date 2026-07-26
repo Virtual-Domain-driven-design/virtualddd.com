@@ -3,7 +3,6 @@ title: "See the Forest for the Trees - Trond Hjorteland"
 slug: "see-the-forest-for-the-trees-trond-hjorteland"
 status: "Done"
 datetime: 2025-11-04T08:00:00.000+13:00
-wordpressPublishedDate: 2025-10-05
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["systems thinking"]

@@ -3,7 +3,6 @@ title: "Relationship(s) between problem and solution space"
 slug: "relationships-between-problem-and-solution-space"
 status: "Done"
 datetime: 2021-01-26T18:30:00.000+00:00
-wordpressPublishedDate: 2021-01-26
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
 tags: ["strategic design", "ux"]

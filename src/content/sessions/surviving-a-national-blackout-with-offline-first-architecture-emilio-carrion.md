@@ -3,7 +3,6 @@ title: "Surviving a National Blackout with Offline-First Architecture | Emilio C
 slug: "surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"
 status: "Published"
 datetime: 2026-08-05T18:00:00.000+12:00
-wordpressPublishedDate: 2026-07-12
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["software design", "software architecture", "chaos-engineering"]

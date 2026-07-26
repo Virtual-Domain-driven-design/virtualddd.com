@@ -3,7 +3,6 @@ title: "Introducing DDD to your Company with Barry O Sullivan"
 slug: "introducing-ddd-to-your-company-with-barry-o-sullivan"
 status: "Done"
 datetime: 2019-09-24T17:00:00.000+00:00
-wordpressPublishedDate: 2019-09-24
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["essential"]

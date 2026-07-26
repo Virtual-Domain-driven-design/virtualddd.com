@@ -3,7 +3,6 @@ title: "Escaping the Enshittification Trap: Systems Thinking for Sustainable Qua
 slug: "escaping-the-enshittification-trap-systems-thinking-for-sustainable-quality"
 status: "Done"
 datetime: 2025-08-20T19:00:00.000+12:00
-wordpressPublishedDate: 2025-08-20
 typeOfSession: "talk"
 level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["systems thinking", "quality"]

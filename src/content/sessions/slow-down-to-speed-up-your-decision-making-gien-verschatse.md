@@ -3,7 +3,6 @@ title: "Slow down to speed up your decision-making - Gien Verschatse"
 slug: "slow-down-to-speed-up-your-decision-making-gien-verschatse"
 status: "Done"
 datetime: 2025-10-02T19:00:00.000+13:00
-wordpressPublishedDate: 2025-10-02
 typeOfSession: "talk"
 level: ["Intermediate", "Advanced"]
 tags: ["decision-making", "architect decisions", "sociotechnical systems"]

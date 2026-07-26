@@ -3,7 +3,6 @@ title: "Outcome Mapping for Flow engineering with Steve Pereira"
 slug: "outcome-mapping-for-flow-engineering-with-steve-pereira"
 status: "Done"
 datetime: 2021-09-01T17:30:00.000+00:00
-wordpressPublishedDate: 2021-09-01
 typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["flow engineering", "outcome mapping"]

@@ -3,7 +3,6 @@ title: "How to improve modelling with Behaviour-driven development"
 slug: "how-to-improve-modelling-with-behaviour-driven-development"
 status: "Done"
 datetime: 2020-04-14T17:30:00.000+00:00
-wordpressPublishedDate: 2020-04-14
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["bdd", "collaborative modelling"]

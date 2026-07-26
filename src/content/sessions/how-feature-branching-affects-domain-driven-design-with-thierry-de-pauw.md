@@ -3,7 +3,6 @@ title: "How feature branching affects domain-driven design with Thierry de Pauw"
 slug: "how-feature-branching-affects-domain-driven-design-with-thierry-de-pauw"
 status: "Done"
 datetime: 2020-01-08T18:00:00.000+00:00
-wordpressPublishedDate: 2020-01-08
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["continuous delivery"]

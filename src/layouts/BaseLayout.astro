@@ -22,7 +22,7 @@ interface Props {
   /** Absolute canonical URL. Defaults to this page's own URL. */
   canonical?: string;
   /** Structured data, generated from properties we already hold — never
-   *  hand-authored in Notion. Emitted as a JSON-LD script (Phase 6). */
+   *  hand-authored in Notion. Emitted as a single JSON-LD script. */
   jsonLd?: Record<string, unknown>;
   /** Social card image. Pass the imported asset, not its `.src`: referencing
    *  the original would keep every unoptimised source file in the deploy. */
@@ -51,7 +51,7 @@ const ogImage = await socialCard(Astro.site, image ?? ogDefault);
 // Single source for the navigation. `section: true` lists it under "Explore"
 // in the footer, which used to be a hand-maintained second copy; `nav: false`
 // keeps a page out of the main bar while still giving it a home in the footer
-// (the WordPress nav had nine items and was already crowded).
+// (nine items is already a crowded navigation).
 const nav = [
   { href: '/', label: 'Home' },
   { href: '/sessions/', label: 'Online sessions', section: true },

@@ -3,7 +3,6 @@ title: "An Introduction to Residuality Theory by Barry M O'Reilly"
 slug: "an-introduction-to-residuality-theory-by-barry-m-oreilly"
 status: "Done"
 datetime: 2022-10-25T17:00:00.000+00:00
-wordpressPublishedDate: 2022-10-25
 typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["software design", "software architecture", "complexity theory"]

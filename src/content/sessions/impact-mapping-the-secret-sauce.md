@@ -3,7 +3,6 @@ title: "Impact Mapping - The Secret Sauce"
 slug: "impact-mapping-the-secret-sauce"
 status: "Done"
 datetime: 2025-07-02T18:00:00.000+12:00
-wordpressPublishedDate: 2025-07-02
 typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["hands-on", "software modeling", "diagramming", "software architecture"]

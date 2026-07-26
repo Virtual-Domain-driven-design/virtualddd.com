@@ -3,7 +3,6 @@ title: "SunDDDay discussion: EventStorming and User story mapping for domain dis
 slug: "sunddday-discussion-eventstorming-and-user-story-mapping-for-domain-discovery"
 status: "Done"
 datetime: 2019-05-26T14:30:00.000+00:00
-wordpressPublishedDate: 2019-05-26
 typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["eventstorming", "user story mapping", "collaborative modelling"]

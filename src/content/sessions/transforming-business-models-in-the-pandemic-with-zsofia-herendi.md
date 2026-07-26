@@ -3,7 +3,6 @@ title: "Transforming business models in the pandemic with Zsofia Herendi"
 slug: "transforming-business-models-in-the-pandemic-with-zsofia-herendi"
 status: "Done"
 datetime: 2021-02-16T18:30:00.000+00:00
-wordpressPublishedDate: 2021-02-16
 typeOfSession: "debate"
 level: ["Intermediate"]
 tags: ["business model canvas", "strategic design"]

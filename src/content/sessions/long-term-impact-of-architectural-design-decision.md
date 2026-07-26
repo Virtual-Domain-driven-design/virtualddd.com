@@ -3,7 +3,6 @@ title: "Long term impact of architectural design decision"
 slug: "long-term-impact-of-architectural-design-decision"
 status: "Done"
 datetime: 2022-03-31T17:00:00.000+00:00
-wordpressPublishedDate: 2022-03-31
 typeOfSession: "panel-discussion"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["architecte decisions", "software design", "long term impact"]

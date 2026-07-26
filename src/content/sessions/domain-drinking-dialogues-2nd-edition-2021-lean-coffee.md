@@ -3,7 +3,6 @@ title: "Domain-Drinking Dialogues 2nd edition - 2021 Lean coffee"
 slug: "domain-drinking-dialogues-2nd-edition-2021-lean-coffee"
 status: "Done"
 datetime: 2021-12-28T18:00:00.000+00:00
-wordpressPublishedDate: 2021-12-28
 typeOfSession: "debate"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["essential", "strategic design", "tactical design", "collaborate modelling"]

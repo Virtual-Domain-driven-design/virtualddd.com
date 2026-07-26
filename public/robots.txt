@@ -1,6 +1,6 @@
 # Virtual DDD — a community that wants its sessions read, cited and quoted.
 #
-# AI crawlers are allowed on purpose (MIGRATION.md Phase 6, decided 2026-07-25).
+# AI crawlers are allowed on purpose, and that is a decision, not a default.
 # The whole point of publishing heuristics and session write-ups is that people
 # find them, and answer engines are now part of how people find things. The
 # content is CC BY-SA where it comes from ddd-crew, and community-authored

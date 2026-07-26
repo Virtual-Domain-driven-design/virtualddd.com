@@ -3,7 +3,6 @@ title: "Fifty Ways to Scale Your Agile with Grady Booch"
 slug: "fifty-ways-to-scale-your-agile-with-grady-booch"
 status: "Done"
 datetime: 2021-07-27T17:00:00.000+00:00
-wordpressPublishedDate: 2021-07-27
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["agile", "architecture", "scaling"]

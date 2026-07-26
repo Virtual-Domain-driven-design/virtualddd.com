@@ -3,7 +3,6 @@ title: "[DDDDD-20] Panel:Remote related trainings with Michael, Gien, Zsofia, St
 slug: "ddddd-20-panelremote-related-trainings-with-michael-gien-zsofia-stefan-kacper"
 status: "Done"
 datetime: 2020-05-15T14:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "panel-discussion"
 level: ["Beginner"]
 tags: ["DDDDD", "remote facilitation"]

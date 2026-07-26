@@ -3,7 +3,6 @@ title: "From The Problem To Software - a Walkthrough with Krisztina Hirth"
 slug: "from-the-problem-to-software-a-walkthrough-with-krisztina-hirth"
 status: "Done"
 datetime: 2022-02-08T18:00:00.000+00:00
-wordpressPublishedDate: 2022-02-08
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["continuous improvement", "walktrough", "product development", "teams and organizations"]

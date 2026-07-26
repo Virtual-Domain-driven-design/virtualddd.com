@@ -3,7 +3,6 @@ title: "Orchestration and choreography with Laila Bougria & Udi Dahan"
 slug: "orchestration-and-choreography-with-laila-bougria-udi-dahan"
 status: "Done"
 datetime: 2023-07-26T16:00:00.000+00:00
-wordpressPublishedDate: 2023-07-26
 typeOfSession: "fireside-chat"
 level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["software design", "software architecture", "event-driven architecture", "orchestration", "choreography"]

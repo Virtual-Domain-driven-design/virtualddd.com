@@ -8,7 +8,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  createBlocksToMd, kebab, norm, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  createBlocksToMd, kebab, resolveRelation, richText, statusOf, yamlList, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -170,8 +170,7 @@ describe('Notion property reading', () => {
     assert.equal(statusOf({ properties: {} }, 'status'), '');
   });
 
-  test('normalises and kebabs titles', () => {
-    assert.equal(norm('EventStorming: Split & Merge!'), 'eventstorming split merge');
+  test('kebabs a name into an entry id', () => {
     assert.equal(kebab('Rebecca Wirfs-Brock'), 'rebecca-wirfs-brock');
     assert.equal(kebab('  Trailing --- dashes  '), 'trailing-dashes');
     // A guest entry is named after the person; dropping the accent instead of

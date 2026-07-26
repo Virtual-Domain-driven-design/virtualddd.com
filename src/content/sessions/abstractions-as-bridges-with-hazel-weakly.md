@@ -3,7 +3,6 @@ title: "Abstractions as bridges with Hazel Weakly"
 slug: "abstractions-as-bridges-with-hazel-weakly"
 status: "Done"
 datetime: 2025-01-21T06:30:00.000+01:00
-wordpressPublishedDate: 2025-01-21
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 video: "https://youtu.be/67ufd370cFY"

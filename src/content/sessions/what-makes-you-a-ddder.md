@@ -3,7 +3,6 @@ title: "What makes you a DDD'er?"
 slug: "what-makes-you-a-ddder"
 status: "Done"
 datetime: 2020-11-24T18:00:00.000+00:00
-wordpressPublishedDate: 2020-11-24
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["essential", "strategic design", "tactical design", "collaborate modelling"]

@@ -3,7 +3,6 @@ title: "Domain-Driven Frontend with Francesco Strazzullo"
 slug: "domain-driven-frontend-with-francesco-strazzullo"
 status: "Done"
 datetime: 2021-09-21T16:00:00.000+00:00
-wordpressPublishedDate: 2021-09-21
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["frontend", "software architecture", "tactical patterns"]

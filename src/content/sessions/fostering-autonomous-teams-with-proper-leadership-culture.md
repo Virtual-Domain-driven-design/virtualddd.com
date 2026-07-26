@@ -3,7 +3,6 @@ title: "Fostering autonomous teams with proper leadership culture"
 slug: "fostering-autonomous-teams-with-proper-leadership-culture"
 status: "Done"
 datetime: 2021-02-23T18:30:00.000+00:00
-wordpressPublishedDate: 2021-02-23
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
 tags: ["strategic design", "leadership", "culture"]

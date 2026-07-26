@@ -3,7 +3,6 @@ title: "Balancing upfront design versus iterative design"
 slug: "balancing-upfront-design-versus-iterative-design"
 status: "Done"
 datetime: 2020-06-25T18:00:00.000+00:00
-wordpressPublishedDate: 2020-06-25
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["software architecture", "strategic design", "ux"]

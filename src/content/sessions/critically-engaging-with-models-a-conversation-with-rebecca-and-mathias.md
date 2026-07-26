@@ -3,7 +3,6 @@ title: "Critically Engaging with Models a conversation with Rebecca"
 slug: "critically-engaging-with-models-a-conversation-with-rebecca-and-mathias"
 status: "Done"
 datetime: 2026-01-28T20:00:00.000+01:00
-wordpressPublishedDate: 2025-12-30
 typeOfSession: "debate"
 level: ["Advanced"]
 tags: ["Critical Thinking", "systems thinking", "software modelling", "cognitive bias"]

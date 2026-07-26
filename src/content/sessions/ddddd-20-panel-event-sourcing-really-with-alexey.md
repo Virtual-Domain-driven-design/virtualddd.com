@@ -3,7 +3,6 @@ title: "[DDDDD-20] Panel: Event Sourcing, Really with Alexey"
 slug: "ddddd-20-panel-event-sourcing-really-with-alexey"
 status: "Done"
 datetime: 2020-05-15T10:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "panel-discussion"
 level: ["Beginner"]
 tags: ["DDDDD", "event sourcing"]

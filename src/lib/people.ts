@@ -1,8 +1,8 @@
 /** Matching people across collections.
  *
- * People are modelled inconsistently in Notion (see MIGRATION.md): Sessions use
- * an `Organiser` relation to the people database, while Stories and Heuristics
- * store `Authors` as free-text multi-select. So the same person appears as
+ * People are modelled two ways in Notion (see AGENTS.md): Sessions use an
+ * `Organiser` relation to the people database, while Stories and Heuristics
+ * store `Authors` as a free-text multi-select. So the same person appears as
  * "Kenny Baas-Schwegler" on a session and "Kenny Schwegler" on a story.
  *
  * Until that is unified, match on names rather than pretending they are ids.

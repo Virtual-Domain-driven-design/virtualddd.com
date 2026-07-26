@@ -1,9 +1,9 @@
 /** SEO and structured data, generated from properties we already hold.
  *
- * MIGRATION.md Phase 6: JSON-LD is never hand-authored in Notion — it is
- * derived from the date, authors, video URL and so on that the sync already
- * writes. Everything here takes an absolute site URL because OG tags and
- * JSON-LD must not use relative paths.
+ * JSON-LD is never hand-authored in Notion — it is derived from the date, the
+ * authors, the video URL and everything else the sync already writes.
+ * Everything here takes an absolute site URL, because OG tags and JSON-LD must
+ * not use relative paths.
  */
 import type { CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
@@ -101,7 +101,7 @@ export const topTrail = (name: string, path: string): [string, string][] =>
  *
  * `sameAs` is the point of it — it is how a search or answer engine works out
  * that the Nick Tune on this page is the one with that LinkedIn profile, which
- * is why the guests database holds the links at all (see CLAUDE.md). Most
+ * is why the guests database holds the links at all (see AGENTS.md). Most
  * guests still have nothing but a name, and a Person with only a name is still
  * worth emitting: it names the speaker of the event. */
 export interface PersonInput {

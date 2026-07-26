@@ -3,7 +3,6 @@ title: "Sharing your (Systems) knowledge with Bytesize Architecture Sessions wit
 slug: "sharing-your-systems-knowledge-with-bytesize-architecture-sessions-with-andrea-magnorsky"
 status: "Done"
 datetime: 2022-11-17T18:00:00.000+00:00
-wordpressPublishedDate: 2022-11-17
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["software design", "software architecture", "diagramming", "software modeling"]

@@ -1,17 +1,12 @@
 /**
- * Prove that every indexed WordPress URL is deliberately handled.
+ * Prove that every inherited URL is deliberately handled.
  *
- * This is MIGRATION.md Phase 6's "done when": every URL from the Phase 1 crawl
- * either exists in the new site, redirects somewhere that exists, or is Gone.
- * Nothing is allowed to just 404.
+ * Replays the generated .htaccess against the 967-address inventory in data/:
+ * each one must be served by a built page, redirected once to a page that
+ * exists, or returned as 410 Gone. Nothing is allowed to simply 404.
  *
- * It evaluates `public/.htaccess` the way mod_rewrite would — first matching
- * rule wins — against `data/live-urls.txt`, then checks each redirect target
- * against the built `dist/`. Run after `npm run build`.
- *
- *   node scripts/check-redirects.mjs
- *
- * Exits non-zero if any URL is unhandled or points at a page that isn't there.
+ * Simulation, not proof — only a real server proves the rules are honoured.
+ * Run `npm run verify:live <url>` against a deployed host for that.
  */
 import { existsSync, readFileSync } from 'node:fs';
 

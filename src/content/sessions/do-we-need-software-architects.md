@@ -3,7 +3,6 @@ title: "Do we need software architects?"
 slug: "do-we-need-software-architects"
 status: "Done"
 datetime: 2021-06-01T17:00:00.000+00:00
-wordpressPublishedDate: 2021-06-01
 typeOfSession: "debate"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["software architect", "ivory tower", "team topologies", "collaboration"]

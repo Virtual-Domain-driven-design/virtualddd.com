@@ -3,7 +3,6 @@ title: "Rethinking software development: insights from 20+ years in the field"
 slug: "rethinking-software-development-insights-from-20-years-in-the-field"
 status: "Done"
 datetime: 2026-05-11T19:00:00.000+02:00
-wordpressPublishedDate: 2026-05-01
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["software architecture", "refactoring", "software development"]

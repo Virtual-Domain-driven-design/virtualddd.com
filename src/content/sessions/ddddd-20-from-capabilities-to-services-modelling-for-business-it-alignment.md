@@ -3,7 +3,6 @@ title: "[DDDDD-20] From Capabilities to Services: Modelling for business-IT alig
 slug: "ddddd-20-from-capabilities-to-services-modelling-for-business-it-alignment"
 status: "Done"
 datetime: 2020-05-15T07:30:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["DDDDD", "enterprise architecture", "capabilities", "services", "business/IT alignment"]

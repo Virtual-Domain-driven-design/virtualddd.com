@@ -3,7 +3,6 @@ title: "[DDDDD-20] DDD For Small Organizations"
 slug: "ddddd-20-ddd-for-small-organizations"
 status: "Done"
 datetime: 2020-05-15T19:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["DDDDD", "startup", "essential"]

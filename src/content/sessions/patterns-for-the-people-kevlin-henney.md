@@ -3,7 +3,6 @@ title: "Patterns for the People - Kevlin Henney"
 slug: "patterns-for-the-people-kevlin-henney"
 status: "Done"
 datetime: 2019-04-02T17:00:00.000+00:00
-wordpressPublishedDate: 2019-04-02
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["patterns"]

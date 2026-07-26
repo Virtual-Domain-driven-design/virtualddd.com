@@ -3,7 +3,6 @@ title: "What is an aggregate with Thomas Ploch"
 slug: "what-is-an-aggregate-with-thomas-ploch"
 status: "Done"
 datetime: 2019-11-06T17:30:00.000+00:00
-wordpressPublishedDate: 2019-11-06
 typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["aggregate", "functional programming", "tactical design"]

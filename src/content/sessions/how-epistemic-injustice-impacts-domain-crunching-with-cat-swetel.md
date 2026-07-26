@@ -3,7 +3,6 @@ title: "How Epistemic injustice impacts Domain Crunching with Cat Swetel"
 slug: "how-epistemic-injustice-impacts-domain-crunching-with-cat-swetel"
 status: "Done"
 datetime: 2021-04-06T17:00:00.000+00:00
-wordpressPublishedDate: 2021-04-06
 typeOfSession: "fireside-chat"
 level: ["Advanced"]
 tags: ["Inclusion", "diversity", "domain crunching", "epistemic injustice"]

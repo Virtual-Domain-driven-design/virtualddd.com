@@ -3,7 +3,6 @@ title: "What writing a book taught us about collaborative modeling"
 slug: "what-writing-a-book-taught-us-about-collaborative-modeling"
 status: "Done"
 datetime: 2022-03-07T16:30:00.000+00:00
-wordpressPublishedDate: 2022-03-07
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["domain storytelling", "software architecture", "collaborative modelling"]

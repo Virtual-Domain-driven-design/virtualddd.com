@@ -3,7 +3,6 @@ title: "Splitting systems towards bounded contexts and microservices"
 slug: "splitting-systems-towards-bounded-contexts-and-microservices"
 status: "Done"
 datetime: 2021-01-12T18:30:00.000+00:00
-wordpressPublishedDate: 2021-01-12
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["essential", "strategic design", "software architecture", "large-scale systems"]

@@ -3,7 +3,6 @@ title: "It's like 10,000 streams when what you need is a queue - Chris Simon"
 slug: "its-like-10000-streams-when-what-you-need-is-a-queue-chris-simon"
 status: "Done"
 datetime: 2026-05-26T18:00:00.000+12:00
-wordpressPublishedDate: 2026-02-18
 typeOfSession: "talk"
 level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["event-driven architecture"]

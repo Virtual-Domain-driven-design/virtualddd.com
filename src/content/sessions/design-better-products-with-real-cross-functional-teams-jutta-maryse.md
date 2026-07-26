@@ -3,7 +3,6 @@ title: "Design better products with real cross-functional teams - Jutta & Maryse
 slug: "design-better-products-with-real-cross-functional-teams-jutta-maryse"
 status: "Done"
 datetime: 2020-08-26T17:00:00.000+00:00
-wordpressPublishedDate: 2020-08-26
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["agile teams", "cross functional", "agile", "product design", "diversity", "Inclusion", "socio-technical"]

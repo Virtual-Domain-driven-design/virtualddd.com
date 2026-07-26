@@ -3,7 +3,6 @@ title: "The Innovation of Cumulative Cultures and Developer Problem-Solving"
 slug: "the-innovation-of-cumulative-cultures-and-developer-problem-solving"
 status: "Done"
 datetime: 2025-04-15T20:00:00.000+12:00
-wordpressPublishedDate: 2025-04-15
 typeOfSession: "talk"
 level: ["Intermediate"]
 video: "https://youtu.be/wYhX3QxskxQ"

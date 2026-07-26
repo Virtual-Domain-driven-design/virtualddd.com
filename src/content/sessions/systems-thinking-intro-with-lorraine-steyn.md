@@ -3,7 +3,6 @@ title: "Systems Thinking Intro with Lorraine Steyn"
 slug: "systems-thinking-intro-with-lorraine-steyn"
 status: "Done"
 datetime: 2024-06-27T18:00:00.000+02:00
-wordpressPublishedDate: 2024-06-27
 typeOfSession: "talk"
 level: ["Beginner"]
 tags: ["systems thinking"]

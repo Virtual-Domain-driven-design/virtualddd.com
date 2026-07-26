@@ -3,7 +3,6 @@ title: "Case-study context mapping with Michael Plöd"
 slug: "case-study-context-mapping-with-michael-plod"
 status: "Done"
 datetime: 2020-11-03T18:00:00.000+00:00
-wordpressPublishedDate: 2020-11-03
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["collaborative modelling", "context mapping"]

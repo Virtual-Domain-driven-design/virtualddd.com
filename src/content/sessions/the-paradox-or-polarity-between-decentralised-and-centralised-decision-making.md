@@ -3,7 +3,6 @@ title: "The paradox or polarity between decentralised and centralised decision-m
 slug: "the-paradox-or-polarity-between-decentralised-and-centralised-decision-making"
 status: "Done"
 datetime: 2025-09-23T19:00:00.000+12:00
-wordpressPublishedDate: 2025-09-23
 typeOfSession: "talk"
 level: ["Intermediate", "Advanced", "Beginner"]
 tags: ["decision-making"]

@@ -3,7 +3,6 @@ title: "[DDDDD-20] Extreme Context Mapping"
 slug: "ddddd-20-extreme-context-mapping"
 status: "Done"
 datetime: 2020-05-15T13:00:00.000+00:00
-wordpressPublishedDate: 2020-05-15
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["DDDDD", "context mapping", "strategic design", "eventstorming"]

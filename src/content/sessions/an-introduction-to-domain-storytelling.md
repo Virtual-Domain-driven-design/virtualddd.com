@@ -3,7 +3,6 @@ title: "An Introduction to Domain Storytelling"
 slug: "an-introduction-to-domain-storytelling"
 status: "Done"
 datetime: 2020-02-18T19:00:00.000+00:00
-wordpressPublishedDate: 2020-02-18
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["collaborative modelling", "domain storytelling", "remote work"]

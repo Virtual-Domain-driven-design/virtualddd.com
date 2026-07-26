@@ -3,7 +3,6 @@ title: "How Autonomy Saved One of Spotify’s Most Loved Features From Being Kil
 slug: "how-autonomy-saved-one-of-spotifys-most-loved-features-from-being-killed"
 status: "Done"
 datetime: 2025-05-14T20:00:00.000+12:00
-wordpressPublishedDate: 2025-05-14
 typeOfSession: "talk"
 level: ["Intermediate"]
 video: "https://youtu.be/aulGzLoCwJk"

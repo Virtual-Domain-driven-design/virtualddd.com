@@ -3,7 +3,6 @@ title: "[Hands-on] Exploring Techniques For Modelling Bounded Context Collaborat
 slug: "hands-on-exploring-techniques-for-modelling-bounded-context-collaboration"
 status: "Done"
 datetime: 2020-08-13T17:00:00.000+00:00
-wordpressPublishedDate: 2020-08-13
 typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["visual collaboration", "complexity thinking", "bounded contexts", "distributed systems", "eventstorming", "domain story telling", "domain message flow modelling"]

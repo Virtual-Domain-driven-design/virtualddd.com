@@ -3,7 +3,6 @@ title: "Socio-technical architecture with Ora Egozi-Barzilai and Evelyn van Kell
 slug: "socio-technical-architecture-with-ora-egozi-barzilai-and-evelyn-van-kelle"
 status: "Done"
 datetime: 2019-07-18T16:30:00.000+00:00
-wordpressPublishedDate: 2019-07-18
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
 tags: ["socio-technical", "strategic design"]

@@ -3,7 +3,6 @@ title: "Domain Experiments with Mike Wojtyna"
 slug: "domain-experiments-with-mike-wojtyna"
 status: "Done"
 datetime: 2023-06-29T17:00:00.000+00:00
-wordpressPublishedDate: 2023-06-29
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["software design", "software architecture"]

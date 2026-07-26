@@ -3,7 +3,6 @@ title: "Decoding Paradoxes: Why are many good ideas in Software Delivery counter
 slug: "decoding-paradoxes-why-are-many-good-ideas-in-software-delivery-counter-intuitive"
 status: "Done"
 datetime: 2024-07-16T20:00:00.000+02:00
-wordpressPublishedDate: 2024-07-16
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["complexity thinking", "sociotechnical system", "systems thinking", "agile coaching", "team topology", "complexity theory", "sociotechnical systems"]

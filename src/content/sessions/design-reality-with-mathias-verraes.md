@@ -3,7 +3,6 @@ title: "Design & Reality with Mathias Verraes"
 slug: "design-reality-with-mathias-verraes"
 status: "Done"
 datetime: 2022-01-13T18:00:00.000+00:00
-wordpressPublishedDate: 2022-01-13
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["essential", "software design", "domain language"]

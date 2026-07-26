@@ -3,7 +3,6 @@ title: "Beyond the hexagonal architecture: Functional Core & ..."
 slug: "beyond-the-hexagonal-architecture-functional-core"
 status: "Done"
 datetime: 2021-02-02T18:30:00.000+00:00
-wordpressPublishedDate: 2021-02-02
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["hexagonal architecture", "tactical design", "functional core", "anti-corruption layer"]

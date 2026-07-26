@@ -3,7 +3,6 @@ title: "Live coding - Legacy live coding with Dr. Carola Lilienthal"
 slug: "live-coding-legacy-live-coding-with-dr-carola-lilienthal"
 status: "Done"
 datetime: 2021-03-23T17:00:00.000+00:00
-wordpressPublishedDate: 2021-03-23
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["legacy", "refactoring", "anemic domain model", "java"]

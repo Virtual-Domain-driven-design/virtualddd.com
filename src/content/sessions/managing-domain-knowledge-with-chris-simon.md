@@ -3,7 +3,6 @@ title: "Managing Domain Knowledge with Chris Simon"
 slug: "managing-domain-knowledge-with-chris-simon"
 status: "Done"
 datetime: 2024-03-14T08:00:00.000+00:00
-wordpressPublishedDate: 2024-03-14
 typeOfSession: "talk"
 level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["ux", "design patterns", "software development", "ux/ui design"]
