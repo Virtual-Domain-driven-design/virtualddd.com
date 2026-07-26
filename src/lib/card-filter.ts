@@ -18,7 +18,7 @@
 export const packFacet = (values: readonly string[]): string =>
   values.map((v) => v.trim().toLowerCase()).filter(Boolean).join('|');
 
-export interface FilterState {
+interface FilterState {
   /** What is typed in the search box. */
   term?: string;
   /** facet key → the single selected value, or '' for "all". */
@@ -26,7 +26,7 @@ export interface FilterState {
 }
 
 /** A card's `data-*` attributes, as `HTMLElement.dataset` gives them. */
-export type CardData = Record<string, string | undefined>;
+type CardData = Record<string, string | undefined>;
 
 /** True when a facet is unset, or the card carries that exact value. */
 const hasValue = (packed: string | undefined, value: string): boolean =>

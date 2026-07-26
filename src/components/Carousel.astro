@@ -21,7 +21,7 @@ const { eyebrow, autoplayMs, prevLabel = 'Previous', nextLabel = 'Next', class: 
 <section class:list={[className]}>
   {eyebrow && <p class="eyebrow eyebrow--cyan">{eyebrow}</p>}
   <div class="carousel-wrap" data-autoplay={autoplayMs ?? undefined}>
-    <button class="carousel-arrow carousel-prev" data-test="carousel-prev" type="button" aria-label={prevLabel}>‹</button>
+    <button class="carousel-arrow carousel-prev" type="button" aria-label={prevLabel}>‹</button>
     <div class="carousel" data-test="carousel"><slot /></div>
     <button class="carousel-arrow carousel-next" data-test="carousel-next" type="button" aria-label={nextLabel}>›</button>
   </div>

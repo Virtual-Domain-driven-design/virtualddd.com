@@ -3,28 +3,21 @@
  * Only the heuristics themselves: the three type indexes share this route's
  * `[slug]` namespace on the HTML side, but they are generated pages with no
  * markdown of their own. */
-import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
-import { markdownResponse } from '../../../lib/markdown-page';
+import { markdownPaths, markdownFor } from '../../../lib/markdown-page';
 
-export async function getStaticPaths() {
-  const heuristics = await getCollection('heuristics');
-  return heuristics.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
-}
+export const getStaticPaths = () => markdownPaths('heuristics');
 
-export function GET(context: APIContext) {
-  const { entry } = context.props as { entry: any };
-  const d = entry.data;
-  return markdownResponse(context, {
-    title: d.title,
+export const GET = (context: APIContext) =>
+  markdownFor(context, (entry) => ({
+    title: entry.data.title,
     path: `/heuristics/${entry.id}/`,
-    authors: d.authors,
-    tags: d.tags,
+    authors: entry.data.authors,
+    tags: entry.data.tags,
     body: entry.body ?? '',
     extra: {
-      type: d.type?.[0] ? d.type[0].replace(/-/g, ' ') : 'heuristic',
-      question: d.question,
-      submitter: d.submitter,
+      type: entry.data.type?.[0] ? entry.data.type[0].replace(/-/g, ' ') : 'heuristic',
+      question: entry.data.question,
+      submitter: entry.data.submitter,
     },
-  });
-}
+  }));

@@ -10,6 +10,7 @@
  * expects, and because it lets the metadata be skipped by anything that only
  * wants prose.
  */
+import { getCollection, type CollectionKey } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export interface MarkdownPage {
@@ -50,4 +51,23 @@ export function markdownResponse(context: APIContext, page: MarkdownPage): Respo
   return new Response(lines.join('\n'), {
     headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
   });
+}
+
+/** The paths for a `<page>/index.md` route: one per entry in the collection.
+ *
+ * These five routes were the same file five times over. What is worth writing
+ * per section is the front matter, so that is all each route now says.
+ */
+export async function markdownPaths(collection: CollectionKey) {
+  const items = await getCollection(collection);
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+/** The response for one, given what its front matter should say. */
+export async function markdownFor(
+  context: APIContext,
+  describe: (entry: any) => MarkdownPage | Promise<MarkdownPage>,
+): Promise<Response> {
+  const { entry } = context.props as { entry: unknown };
+  return markdownResponse(context, await describe(entry));
 }

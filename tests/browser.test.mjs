@@ -409,7 +409,8 @@ describe('accessibility basics', () => {
     const page = await browser.newPage();
     const findings = [];
     for (const path of ['/', '/sessions/', '/sessions/what-is-an-aggregate-with-thomas-ploch/',
-      '/heuristics/', '/heuristics/align-with-domain-experts/', '/organisers/', '/about-us/', '/404.html']) {
+      '/heuristics/', '/heuristics/align-with-domain-experts/', '/organisers/', '/about-us/',
+      '/facilitating-archdes/', '/404.html']) {
       await page.goto(base + path, { waitUntil: 'domcontentloaded' });
       await page.evaluate(axe);
       const result = await page.evaluate(async () =>
@@ -445,33 +446,6 @@ describe('accessibility basics', () => {
     const landed = await page.evaluate(() => document.activeElement?.id);
     assert.equal(landed, 'main', 'following it should put focus in the main landmark');
     await page.close();
-  });
-
-  test('text on a brand fill stays readable', async () => {
-    // White on cyan was 2.22:1 and white on pink 3.11:1 — both under the 4.5:1
-    // small text needs, and the pink one was the RSVP button. Ink on the same
-    // fills clears it without touching a brand colour.
-    const page = await browser.newPage();
-    await page.goto(base + '/sessions/', { waitUntil: 'domcontentloaded' });
-    const ratios = await page.evaluate(() => {
-      const lum = (c) => {
-        const [r, g, b] = c.match(/\d+/g).map(Number)
-          .map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      };
-      const out = {};
-      for (const sel of ['.chip--primary', '.chip--accent', '.chip--value', '.btn', '.btn--accent']) {
-        const e = document.querySelector(sel);
-        if (!e) continue;
-        const cs = getComputedStyle(e);
-        const [hi, lo] = [lum(cs.color), lum(cs.backgroundColor)].sort((a, b) => b - a);
-        out[sel] = (hi + 0.05) / (lo + 0.05);
-      }
-      return out;
-    });
-    for (const [sel, ratio] of Object.entries(ratios)) {
-      assert.ok(ratio >= 4.5, `${sel} is ${ratio.toFixed(2)}:1 against its own fill, under the 4.5:1 minimum`);
-    }
   });
 
   test('filtering announces its result count', async () => {

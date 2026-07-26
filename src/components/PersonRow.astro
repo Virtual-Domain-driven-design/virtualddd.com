@@ -34,7 +34,7 @@ const initials = name
     ? <Image class="person-photo" src={photo} alt={name} width={176} />
     : <span class="person-photo person-ph" aria-hidden="true">{initials}</span>}
   <div class="person-info">
-    <p class="person-name" data-test="person-name">{href ? <a href={href}>{name}</a> : name}</p>
+    <p class="person-name">{href ? <a href={href}>{name}</a> : name}</p>
     {role && <p class="person-role">{role}</p>}
     {bio && <p class="person-bio">{bio}</p>}
     {links.length > 0 && (

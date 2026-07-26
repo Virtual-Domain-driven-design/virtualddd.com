@@ -33,7 +33,7 @@ export const anySamePerson = (names: string[] | undefined, person: string) =>
   (names ?? []).some((n) => samePerson(n, person));
 
 /** The profiles a person may have off this site. */
-export interface Profiles {
+interface Profiles {
   website?: string;
   linkedin?: string;
   mastodon?: string;

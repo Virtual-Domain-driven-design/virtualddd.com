@@ -21,12 +21,6 @@ export const shortDate = (value: DateLike) =>
 export const longDate = (value: DateLike) =>
   d(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
-/** `Wed, 5 Aug 2026, 08:00` — compact date + time. `data-format="datetime"` */
-export const shortDateTime = (value: DateLike) =>
-  d(value).toLocaleString('en-GB', {
-    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
-  });
-
 /** `Wednesday, 5 August 2026, 08:00 GMT+2` — the featured/next session. `data-format="datetime"` */
 export const longDateTime = (value: DateLike) =>
   d(value).toLocaleString('en-GB', {

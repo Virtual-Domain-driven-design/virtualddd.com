@@ -8,7 +8,7 @@ import heurDesign from '../assets/heur-design.jpg';
 import heurGuiding from '../assets/heur-guiding.jpg';
 import heurValue from '../assets/heur-value.jpg';
 
-export type HeuristicType = 'design-heuristics' | 'guiding-heuristics' | 'value-based-heuristics';
+type HeuristicType = 'design-heuristics' | 'guiding-heuristics' | 'value-based-heuristics';
 
 /** The chip colour each type wears, wherever it is labelled. */
 export const chipTone = (type: HeuristicType | string | undefined): string =>

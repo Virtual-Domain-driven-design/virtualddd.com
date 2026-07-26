@@ -1,22 +1,15 @@
 /** The markdown behind an open space. See src/lib/markdown-page.ts. */
-import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
-import { markdownResponse } from '../../../lib/markdown-page';
+import { markdownPaths, markdownFor } from '../../../lib/markdown-page';
 
-export async function getStaticPaths() {
-  const items = await getCollection('openSpaces');
-  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
-}
+export const getStaticPaths = () => markdownPaths('openSpaces');
 
-export function GET(context: APIContext) {
-  const { entry } = context.props as { entry: any };
-  const d = entry.data;
-  return markdownResponse(context, {
-    title: d.title,
+export const GET = (context: APIContext) =>
+  markdownFor(context, (entry) => ({
+    title: entry.data.title,
     path: `/open-space/${entry.id}/`,
-    date: d.date,
-    tags: d.tags,
+    date: entry.data.date,
+    tags: entry.data.tags,
     body: entry.body ?? '',
-    extra: { type: 'Open Space', video: d.video },
-  });
-}
+    extra: { type: 'Open Space', video: entry.data.video },
+  }));

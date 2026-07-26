@@ -404,8 +404,10 @@ order; each step is small.
 3. **`package.json`** — a `sync:<name>` script, and add it to `sync:notion`. If
    another collection references it, sync it **first**.
 4. **Routes** — `src/pages/<section>/index.astro` and `[slug].astro`.
-5. **`src/pages/<section>/[slug]/index.md.ts`** — the markdown twin, and pass
-   `markdown` to `BaseLayout` so the page advertises it.
+5. **`src/pages/<section>/[slug]/index.md.ts`** — the markdown twin:
+   `markdownPaths(collection)` and `markdownFor(context, …)` do the route, so
+   all the file says is what belongs in the front matter. Pass `markdown` to
+   `BaseLayout` so the page advertises it.
 6. **`src/lib/seo.ts`** — a JSON-LD helper for the type, a `SECTIONS` entry for
    breadcrumbs, and `collectionPage(...)` on the index.
 7. **`src/lib/collections.ts`** — any shared query the pages both need.
