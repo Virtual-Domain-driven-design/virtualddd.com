@@ -46,8 +46,24 @@ Collections and their Notion data sources (verified schemas):
 | stories | `25aa485a-fafc-8047-94b7-000b3bbb228c` | `slug` (+ `full slug` formula) | `SEO Title`, `SEO Metadescription`, `Focus keyphrase` |
 | heuristics | `e7743290-3850-404e-ae98-23a4caf0488e` | `Slug` | `Meta Description`, `Focus Keyphrase` |
 
-People relation target (Sessions `Organiser`/`Co-Organisers`):
-`collection://cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6`.
+People relation targets. There are deliberately **two**, because they are two
+different things:
+
+- **Organisers** — `collection://cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6`, the
+  target of Sessions `Organiser`/`Co-Organisers`. This is an *operational*
+  database: Discord accounts, virtualddd.com email, who organises what. It
+  drives `/organisers/`.
+- **Session Guests** — `collection://d82910e0-cac0-46f8-8a20-cb3a3376d5eb`, the
+  target of Sessions `Guests`. Speakers and panellists. None of the operational
+  fields apply to an external speaker, so they do not live in the organisers
+  database; the fields here exist to produce good `Person` structured data, and
+  the links become `sameAs`.
+
+The cost of the split is that someone who both organises and speaks has a row
+in each. That is deliberate — `Also an organiser` on the guest row marks it, so
+the duplicate is findable rather than accidental. The alternative, one people
+table with a flag, was rejected: it would have put 60+ external speakers into
+the database the community is actually run from.
 
 **Videos are out of scope.** The Notion Videos database and its ~536 live URLs
 are not authored here; they get a redirect/archive decision in `MIGRATION.md`
