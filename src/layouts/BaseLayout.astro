@@ -1,11 +1,19 @@
 ---
-import '@fontsource/rajdhani/500.css';
-import '@fontsource/rajdhani/600.css';
-import '@fontsource/rajdhani/700.css';
-import '@fontsource/poppins/400.css';
-import '@fontsource/poppins/500.css';
-import '@fontsource/poppins/600.css';
-import '@fontsource/poppins/700.css';
+// Latin subsets only. The default entrypoints ship latin-ext and devanagari
+// too — 21 files where 6 are ever requested. A browser would not download the
+// rest (unicode-range keeps them out), but they still travel in every deploy.
+// Poppins 500 is not imported: nothing on the site asks for it.
+import '@fontsource/rajdhani/latin-500.css';
+import '@fontsource/rajdhani/latin-600.css';
+import '@fontsource/rajdhani/latin-700.css';
+import '@fontsource/poppins/latin-400.css';
+import '@fontsource/poppins/latin-600.css';
+import '@fontsource/poppins/latin-700.css';
+// The two above the fold: the body face and the face every heading uses.
+// Without a preload they are discovered only after the CSS parses, which is a
+// flash of fallback text on a slow connection.
+import poppins400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
+import rajdhani600 from '@fontsource/rajdhani/files/rajdhani-latin-600-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/patterns.css';
@@ -14,7 +22,8 @@ import logo from '../assets/logo-virtualddd.png';
 import Socials from '../components/Socials.astro';
 import ogDefault from '../assets/logo-virtualddd.png';
 import { splitSessions } from '../lib/collections';
-import { SITE_NAME, TWITTER, socialCard } from '../lib/seo';
+import { SITE_NAME, TWITTER } from '../lib/seo';
+import { socialCard } from '../lib/social-card';
 
 interface Props {
   title: string;
@@ -89,6 +98,8 @@ const year = new Date().getFullYear();
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="preload" as="font" type="font/woff2" href={poppins400} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={rajdhani600} crossorigin />
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex, follow" />}
 
@@ -138,7 +149,7 @@ const year = new Date().getFullYear();
     <footer class="site-footer">
       <div class="wrap footer-grid">
         <div class="footer-latest">
-          <h3>Latest sessions</h3>
+          <h2>Latest sessions</h2>
           <ul>
             {latest.map((s) => (
               <li>
@@ -151,7 +162,7 @@ const year = new Date().getFullYear();
           </ul>
         </div>
         <div class="footer-explore">
-          <h3>Explore</h3>
+          <h2>Explore</h2>
           <ul>
             {sections.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
           </ul>
@@ -227,7 +238,7 @@ const year = new Date().getFullYear();
 
       .site-footer { margin-top: var(--space-16); border-top: 1px solid var(--color-border); background: var(--color-surface); }
       .footer-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-8); padding-block: var(--space-12) var(--space-8); }
-      .footer-grid h3 { font-size: var(--text-lg); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-4); }
+      .footer-grid h2 { font-size: var(--text-lg); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-4); }
       .footer-latest ul, .footer-explore ul { list-style: none; margin: 0; padding: 0; }
       .footer-latest li { margin-bottom: var(--space-3); }
       .footer-latest a { display: flex; gap: var(--space-3); align-items: center; color: var(--color-text); }

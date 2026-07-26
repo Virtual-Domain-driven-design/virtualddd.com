@@ -11,7 +11,7 @@ tags: ["Software Architecture", "Conflict Management", "Facilitating Software De
 
 A facilitator can offer to formally make the decision and take on the accountability, after asking for the team’s consent. This unblocks the process while protecting the psychological safety of team members who do not feel ready for that level of responsibility. It is a temporary measure to maintain momentum.
 
-### Example
+## Example
 
 A junior developer was uncomfortable signing off on the framework choice, so the architect asked for consent to make the decision and then formally made the choice on their behalf.
 

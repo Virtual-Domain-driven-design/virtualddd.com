@@ -11,7 +11,7 @@ tags: ["EventStorming", "Sociotechnical Systems", "Psychological Safety", "Cogni
 
 Alberto Brandolini often says that meeting room tables and chairs should be removed or pushed away when preparing an EventStorming workshop. This is the best way to foster collaboration, engagement, and mobility of your participants. However, where do you put all the sticky notes and markers when you don't have a table?
 
-### Summary of the solution
+## Summary of the solution
 
 Using standing tables for stationery is a great way to avoid clutter on the floor or having your supplies dispatched everywhere in the room. They allow people to use them to write down stickies, without getting in the way by forcing them to sit down, since writing down a sticky note on your lap may not be the best for readability.
 

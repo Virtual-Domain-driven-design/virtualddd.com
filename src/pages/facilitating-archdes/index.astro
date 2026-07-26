@@ -4,6 +4,8 @@ import OrganiserCard from '../../components/OrganiserCard.astro';
 import TeaserCard from '../../components/TeaserCard.astro';
 import { getCollection } from 'astro:content';
 import { tagOptions } from '../../lib/collections';
+import { packFacet } from '../../lib/card-filter';
+import CardFilter from '../../components/CardFilter.astro';
 import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
 import { collectionPage, topTrail } from '../../lib/seo';
@@ -40,7 +42,7 @@ const jsonLd = collectionPage(Astro.site, {
   <section class="wrap">
     <div class="stories-intro">
       <div class="si-hosts">
-        <p class="eyebrow eyebrow--cyan">Your hosts</p>
+        <h2 class="eyebrow eyebrow--cyan">Your hosts</h2>
         <div class="solo-carousel">
           <div class="solo">
             <div class="solo-track">
@@ -74,48 +76,42 @@ const jsonLd = collectionPage(Astro.site, {
   <!-- Story archive -->
   <section class="archive">
     <div class="wrap">
-      <div class="archive-head">
-        <p class="eyebrow eyebrow--cyan">All stories</p>
-        <span class="result-count" id="count" data-test="result-count" aria-live="polite" role="status"></span>
-      </div>
+      <h2 class="eyebrow eyebrow--cyan">All stories</h2>
 
-      <div class="filters">
-        <input type="search" id="q" data-test="filter-search" placeholder="Search title, author or tag…" aria-label="Search stories" />
-        <select id="f-tag" data-test="filter-tag" aria-label="Filter by tag">
-          <option value="">All tags</option>
-          {tags.map((t) => <option value={t}>{t}</option>)}
-        </select>
-        <button id="f-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
-      </div>
-
-      <div class="grid-cards story-list" id="cards">
-        {stories.map((s) => {
-          const d = s.data;
-          const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
-          return (
-            <TeaserCard
-              class="story-card"
-              href={`/facilitating-archdes/${s.id}/`}
-              title={d.title}
-              img={d.featuredImage ?? d.featuredImageSquared}
-              imgWidth={720}
-              badge={d.episode != null ? `Ep ${d.episode}` : undefined}
-              iso={d.publishedDate ? iso(d.publishedDate) : undefined}
-              dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}
-              accentMeta
-              sub={d.authors.length > 0 ? `by ${authors}` : undefined}
-              excerpt={excerpt(s.body ?? '', d.seoMetadescription ?? '')}
-              more="Read more →"
-              data={{
-                title: d.title.toLowerCase(),
-                authors: d.authors.join(' ').toLowerCase(),
-                tags: d.tags.map((t) => t.toLowerCase()).join('|'),
-              }}
-            />
-          );
-        })}
-      </div>
-      <p class="no-results" id="noresults" hidden>No stories match your filters.</p>
+      <CardFilter
+        noun={{ one: 'story', many: 'stories' }}
+        searchLabel="Search stories"
+        searchPlaceholder="Search title, author or tag…"
+        facets={[{ key: 'tags', param: 'tag', allLabel: 'All tags', label: 'Filter by tag', options: tags }]}
+        emptyMessage="No stories match your filters."
+      >
+        <div class="grid-cards story-list">
+          {stories.map((s) => {
+            const d = s.data;
+            const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
+            return (
+              <TeaserCard
+                class="story-card"
+                href={`/facilitating-archdes/${s.id}/`}
+                title={d.title}
+                img={d.featuredImage ?? d.featuredImageSquared}
+                imgWidth={720}
+                badge={d.episode != null ? `Ep ${d.episode}` : undefined}
+                iso={d.publishedDate ? iso(d.publishedDate) : undefined}
+                dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}
+                accentMeta
+                sub={d.authors.length > 0 ? `by ${authors}` : undefined}
+                excerpt={excerpt(s.body ?? '', d.seoMetadescription ?? '')}
+                more="Read more →"
+                data={{
+                  search: [d.title, ...d.authors, ...d.tags].join(' ').toLowerCase(),
+                  tags: packFacet(d.tags),
+                }}
+              />
+            );
+          })}
+        </div>
+      </CardFilter>
     </div>
   </section>
 
@@ -154,8 +150,6 @@ const jsonLd = collectionPage(Astro.site, {
   </style>
 
   <script>
-    import { applyUrlFilter } from '../../lib/filter-url';
-
     // Rotating host carousel — shuffle order each load, then auto-advance.
     document.querySelectorAll<HTMLElement>('.solo-carousel').forEach((car) => {
       const track = car.querySelector<HTMLElement>('.solo-track');
@@ -186,46 +180,5 @@ const jsonLd = collectionPage(Astro.site, {
       start();
     });
 
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .story-card'));
-    const q = document.getElementById('q') as HTMLInputElement;
-    const fTag = document.getElementById('f-tag') as HTMLSelectElement;
-    const reset = document.getElementById('f-reset') as HTMLButtonElement;
-    const count = document.getElementById('count') as HTMLElement;
-    const noResults = document.getElementById('noresults') as HTMLElement;
-
-    function matches(c: HTMLElement): boolean {
-      const term = q.value.trim().toLowerCase();
-      const tag = fTag.value.toLowerCase();
-      const d = c.dataset;
-      const okTerm =
-        !term ||
-        (d.title ?? '').includes(term) ||
-        (d.authors ?? '').includes(term) ||
-        (d.tags ?? '').includes(term);
-      const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
-      return okTerm && okTag;
-    }
-
-    function apply() {
-      let matched = 0;
-      cards.forEach((c) => {
-        const ok = matches(c);
-        c.hidden = !ok;
-        if (ok) matched++;
-      });
-      count.textContent = `${matched} stor${matched === 1 ? 'y' : 'ies'}`;
-      noResults.hidden = matched > 0;
-    }
-
-    [q, fTag].forEach((el) => el.addEventListener('input', apply));
-    reset.addEventListener('click', () => {
-      q.value = '';
-      fTag.value = '';
-      apply();
-    });
-
-    // Landing from a legacy /facilitating-archdes_tag/<tag>/ URL.
-    applyUrlFilter(fTag);
-    apply();
   </script>
 </BaseLayout>

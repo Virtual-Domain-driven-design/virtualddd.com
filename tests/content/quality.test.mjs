@@ -85,6 +85,25 @@ describe('what the editors control', () => {
     assert.deepEqual(bare, [], bare.join('\n'));
   });
 
+  test('a body does not skip a heading level', () => {
+    // Someone navigating by heading hears a level that is not there. The cause
+    // is nearly always a Notion page that opens with a heading_3, so the fix is
+    // in Notion — which is why this reports rather than blocks.
+    //
+    // ddd-crew is excluded: those pages are republished from someone else's
+    // README under CC BY-SA, and their structure is not ours to correct.
+    const skipped = [];
+    for (const p of all) {
+      if (p.path.startsWith('/ddd-crew/')) continue;
+      const levels = [...p.html.matchAll(/<h([1-6])[\s>]/g)].map((m) => +m[1]);
+      const jumps = levels
+        .map((l, i) => (i && l > levels[i - 1] + 1 ? `h${levels[i - 1]}→h${l}` : null))
+        .filter(Boolean);
+      if (jumps.length) skipped.push(`${p.path}: ${[...new Set(jumps)].join(', ')}`);
+    }
+    assert.deepEqual(skipped, [], skipped.join('\n'));
+  });
+
   test('sessions carry a start time and an online location', () => {
     const bad = [];
     for (const p of all.filter((x) => /^\/sessions\/[^/]+\/$/.test(x.path))) {

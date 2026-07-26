@@ -20,7 +20,7 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
 
 :information: You can copy the [Google Form Template here](https://drive.google.com/drive/u/2/folders/1O14fE_xjzfWA1qQVb50JPLga_H9EDtXf)
 
-### Familiarity Assessment Survey
+## Familiarity Assessment Survey
 
 - How do you assess yourself on DDD? (choose one)
   - ( ) Never used
@@ -54,7 +54,7 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
   - [ ] Workshops and Trainings
   - [ ] Others... (open text)
 
-#### General DDD Concepts
+### General DDD Concepts
 
 - Which is the most important thing about DDD in your opinion? (Open text)
 
@@ -75,7 +75,7 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
 
 - What's a Big Ball of Mud? (Open text)
 
-#### Strategic Design
+### Strategic Design
 
 - Which Strategic Patterns are you familiar with? (Multiple choices)
   - [ ] Bounded Contexts
@@ -98,7 +98,7 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
 
 - Which kind of Context Mappings do you know? (Open text)
 
-#### Domain Modelling with Event Storming
+### Domain Modelling with Event Storming
 
 - Are you familiar with Event Storming? (Choose one)
   - ( ) No 
@@ -113,7 +113,7 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
 
 - How does Event Storming relate to Strategic Design and Tactical Design? (Open text)
 
-#### Tactical Design
+### Tactical Design
 
 - Would you apply Hexagonal Architecture and DDD together. Why (or why not)?  (Open text)
 - Would you apply Layered Architecture together. Why (or why not)? (Open text)
@@ -145,7 +145,7 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
 - When have you used CQRS? (Open text)
 
 - In which scenarios do you use Event Sourcing? In which don't? (Open text)
-#### Your experience with DDD
+### Your experience with DDD
 
 - Where did you struggle the most with DDD? (Open text)
 
@@ -155,11 +155,11 @@ Instead, we expect to help organizations identify DDD knowledge gaps and use the
 
 - How would you address a Big Ball of Mud? (Open text)
 
-### Contributors
+## Contributors
 
 Thanks to all [existing and future contributors](https://github.com/ddd-crew/ddd-familiarity-assessment/graphs/contributors) who have contributed to the DDD Familiarity Assessment.
 
-### Contributions, Questions, and Feedback
+## Contributions, Questions, and Feedback
 
 The DDD Familiarity Assessment is freely available for you to use. In addition, your feedback and ideas are welcome to improve it or to create new versions.
 

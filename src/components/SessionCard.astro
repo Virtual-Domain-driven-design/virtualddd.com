@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import TeaserCard from './TeaserCard.astro';
 import { iso, shortDate } from '../lib/dates';
+import { packFacet } from '../lib/card-filter';
 
 interface Props {
   session: CollectionEntry<'sessions'>;
@@ -24,9 +25,9 @@ const level = d.level.length === LEVELS ? 'All levels' : d.level.join(', ');
   metaSuffix={level || undefined}
   sub={d.organiser ? `Hosted by ${d.organiser}` : undefined}
   data={{
-    title: d.title.toLowerCase(),
-    tags: d.tags.map((t) => t.toLowerCase()).join('|'),
-    level: (d.level ?? []).join(' '),
-    type: d.typeOfSession ?? '',
+    search: [d.title, d.organiser ?? '', ...d.tags].join(' ').toLowerCase(),
+    tags: packFacet(d.tags),
+    level: packFacet(d.level ?? []),
+    type: packFacet([d.typeOfSession ?? '']),
   }}
 />

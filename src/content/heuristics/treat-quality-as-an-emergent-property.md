@@ -11,7 +11,7 @@ tags: ["Software Architecture", "Software Design", "Quality"]
 
 View quality not as a final gate but as an emergent property of the entire development ecosystem. Focus on improving systemic factors like communication clarity, psychological safety, and feedback loop speed. A healthy system will naturally produce a high-quality outcome.
 
-### Example
+## Example
 
 Instead of relying solely on a final testing phase, we invest in improving our requirements communication process. We know that clear, shared understanding prevents entire classes of defects from ever being created.
 

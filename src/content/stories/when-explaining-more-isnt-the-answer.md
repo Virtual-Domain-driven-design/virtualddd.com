@@ -20,7 +20,7 @@ We hit resistance in our architecture work, and what do we do? We explain more. 
 
 Diana shared this challenge with us in this installment of Stories on Facilitating Software Architecture and Design. It's a story about discovering that the instinct to explain more often makes things worse, and that designing experiences instead of explanations can create the architectural breakthroughs that months of talking never will.
 
-### The Realization at Kripalu
+## The Realization at Kripalu
 
 Diana found herself at a retreat center, taking a break from the exhaustion of constant explanation. The environment was predominantly female—the exact opposite of the tech spaces where she'd spent 25 years, often as the only woman in the room. More striking was how learning happened there: experientially, through movement and practice, not through endless discussion.
 
@@ -28,7 +28,7 @@ Diana found herself at a retreat center, taking a break from the exhaustion of c
 
 Then her phone pinged. The organizer of Domain-Driven Design Europe was asking about the workshop she'd proposed. The timing felt like the universe nudging her: what would she actually do differently?
 
-### Modeling the Patriarchy to Learn Systems Thinking
+## Modeling the Patriarchy to Learn Systems Thinking
 
 Diana and her training partner Matt Wynne designed a workshop around the iceberg model—a systems thinking tool that looks beneath surface events to the structures, patterns, and mental models that generate them. But they didn't frame it abstractly.
 
@@ -38,7 +38,7 @@ They asked participants to model a system that produces a specific outcome: 91.8
 
 Kenny mentioned he took the iceberg model back to his company and saw patterns emerge just by working through it. The format itself teaches.
 
-### The Miracle of Trying It
+## The Miracle of Trying It
 
 In her current role, Diana caught herself falling into the old pattern. Resistance to architectural change? Explain more. Make another model. Say more words. She recognized it this time and shifted.
 
@@ -48,7 +48,7 @@ The results surprised even her. People who were very resistant to particular cha
 
 Being wrong early—before you've spent significant time, energy, and money—is the goal. The experience surfaces whether the direction works much faster than explanation ever could.
 
-### Working Inside Uncertainty
+## Working Inside Uncertainty
 
 Both Kenny and Andrea pressed on the uncertainty inherent in this approach. How do you deal with not knowing exactly what will happen in a workshop? How do you handle organizations that want guaranteed deliverables?
 
@@ -60,7 +60,7 @@ She's not interested in philosophical debates about this. Instead, she focuses o
 
 This requires consent. You can't trick people into experiential learning. If an organization demands complete certainty about workshop outcomes, Diana's honest: she doesn't know if she can work effectively in that environment. You need at least a little willingness to step into the unknown together.
 
-### Interrupting Patterns
+## Interrupting Patterns
 
 Andrea picked up on something subtle in Diana's approach: she's not just facilitating people to articulate what they already think. She's listening for where thinking will go down the same familiar path—even when it seems like new thinking—and gently interrupting that pattern.
 
@@ -70,7 +70,7 @@ The facilitator's role includes recognizing these cognitive patterns and creatin
 
 "It's a little bit like a flock of birds where you have to be grounded enough in the space to be flying with the flock while you're facilitating. If you're trying to marshal it, it won't work. If you're trying to control it, it won't work. But also if you turn off your brain and just flow with it, you're not actually adding the tension where it should go."
 
-### Unpacking the Dynamics
+## Unpacking the Dynamics
 
 - **The explanation trap scales with experience**: Twenty years in, Diana was still defaulting to "explain more" when facing resistance. Seniority doesn't automatically break this pattern—you have to recognize it and consciously choose differently.
 
@@ -84,13 +84,13 @@ The facilitator's role includes recognizing these cognitive patterns and creatin
 
 - **Harder than command and control**: When friction disappears, the real difficulty of facilitative leadership emerges. You're uncertain too. You're experimenting too. You're vulnerable alongside the people you're working with. This is genuinely more difficult than just telling people what to do.
 
-### The Science and the Art
+## The Science and the Art
 
 Diana's closing thought brings together the listening, the pattern recognition, and the vulnerability: facilitation is both a science and an art. It's both deep listening and also "an energetic interruption of pattern in some way that is helpful."
 
 When you catch yourself wanting to explain more, that might be the signal to design an experience instead. Not because experiences are always better, but because if explaining more hasn't worked yet, it probably won't work with another iteration. The breakthrough you're looking for might require actually trying something, together, and discovering what you learn.
 
-### Further Reading
+## Further Reading
 
 - Book: Learning System Thinking: Essential Non-Linear Skills and Practices for Software Professionals (Diana Montalion), Learning Systems Thinking shows you how systems thinking can guide you through the complexity of modern systems. Through a series of practices and real-world scenarios, you'll learn to shift your perspective in order to design, develop, and deliver better outcomes. 
 

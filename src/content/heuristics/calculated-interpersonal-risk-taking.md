@@ -11,7 +11,7 @@ tags: ["Deep Democracy", "Stoicism", "Facilitating Software Design and Architect
 
 Sometimes, direct and empathetic engagement carries interpersonal risk but can yield significant breakthroughs. Prepare for potential negative outcomes by considering pros, cons, and a plan for managing the situation. Maintain professionalism and avoid taking offenses personally.
 
-### Examples
+## Examples
 
 Initiating a direct conversation with a highly resistant stakeholder, knowing they might react negatively, but having a strategy to remain professional and detached from the outcome.
 

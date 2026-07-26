@@ -183,16 +183,27 @@ async function processRepo(spec: (typeof REPOS)[number]) {
     '',
   ].filter((l) => l !== null).join('\n');
 
-  // Demote every heading one level. The README's own `# Title` would otherwise
-  // be a second <h1> on a page that already has one (some READMEs have five),
-  // which is bad for search and for anyone navigating by heading.
-  const demoted = md
-    .split('\n')
-    .map((line, i, lines) => {
-      // Leave fenced code blocks alone.
-      const fences = lines.slice(0, i).filter((l) => /^\s*```/.test(l)).length;
-      if (fences % 2 === 1) return line;
-      return line.replace(/^(#{1,5}) /, '#$1 ');
+  // Normalise the heading levels so the shallowest one in the README becomes an
+  // h2, under the page's own h1.
+  //
+  // Demoting everything by one was wrong for the READMEs whose top level is
+  // already `##`: those became h3s with no h2 above them, so the page told a
+  // screen reader about a level that was not there. Shifting by the distance
+  // to h2 handles both — a README with a `# Title` moves down one, a README
+  // starting at `###` moves up one, and one already at `##` is left alone.
+  const lines = md.split('\n');
+  const inFence = lines.map((_, i) => lines.slice(0, i).filter((l) => /^\s*```/.test(l)).length % 2 === 1);
+  const levels = lines
+    .map((l, i) => (inFence[i] ? null : l.match(/^(#{1,6}) /)?.[1].length ?? null))
+    .filter((n): n is number => n !== null);
+  const shift = levels.length ? 2 - Math.min(...levels) : 0;
+  const demoted = lines
+    .map((line, i) => {
+      if (inFence[i]) return line;
+      return line.replace(/^(#{1,6}) /, (_m, hashes: string) => {
+        const level = Math.min(6, Math.max(2, hashes.length + shift));
+        return '#'.repeat(level) + ' ';
+      });
     })
     .join('\n');
 

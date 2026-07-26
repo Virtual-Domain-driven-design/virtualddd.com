@@ -11,7 +11,7 @@ tags: ["ADR", "Decision-Making Process", "Conflict Management", "Decentralised D
 
 Break large, multifaceted decisions into a series of smaller, more focused ones. This isolates areas of disagreement, allowing the team to make progress on the majority of points. It prevents a single objection from derailing the entire initiative. It also avoids decision paralysis by making smaller, more contained decisions at the earliest responsible moment. This approach is analogous to making small, frequent code commits, allowing for easier course correction. It is better to make a reversible decision now than to delay indefinitely in search of perfect information.
 
-### Example
+## Example
 
 - Instead of one large ADR, break it into twenty small decisions. This allows the team to agree on eighteen and focus discussion only on the two that are contentious.
 

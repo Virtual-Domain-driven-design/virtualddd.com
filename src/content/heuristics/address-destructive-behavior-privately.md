@@ -14,19 +14,19 @@ metaDescription: "When someone's behaviour disrupts a session, address it one-on
 
 When you observe destructive behavior from a participant, address it in a private one-on-one conversation rather than calling it out publicly. Share your observations about what happened and what impact you noticed, then ask questions to understand where the behavior comes from. Avoid accusations or judgments. The goal is to understand what benefit that behavior provides to them, because all behavior serves some purpose for the person doing it.
 
-### Example
+## Example
 
 After a CTO disrupted an event storming session by slow-clapping during a vulnerable moment, the facilitator initiated a private conversation. Rather than saying "your behavior was destructive," they shared their observations about what happened and how it affected them and the group, then asked questions to understand his perspective. Through this conversation, they learned he was under pressure from his team and that this kind of behavior typically earned him compliments in his environment.
 
-### Context
+## Context
 
 Public confrontation puts people on the spot and usually makes them defensive, which prevents any real understanding or change. The hardest part is leaving your own judgments out of the conversation, especially when you felt personally triggered. You may not get to the full truth, especially if someone keeps their guard up, but understanding even part of the context helps you see the behavior as a response to their environment rather than pure malice.
 
-### When This Might Not Apply
+## When This Might Not Apply
 
 If the person is defensive and won't engage in genuine dialogue, you may get only superficial answers and never reach understanding—this is still acceptable as a first attempt. If the disruptive behavior happens repeatedly despite private conversations, you may need to set explicit session boundaries rather than continuing to seek understanding.
 
-### Variations
+## Variations
 
 - **Early intervention**: If you notice early patterns (first disruption), have the conversation sooner to potentially prevent escalation
 

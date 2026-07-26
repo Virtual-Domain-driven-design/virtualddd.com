@@ -16,7 +16,7 @@ Short description
 
 Align bounded contexts in socio-technical systems to support the value stream of the business. Use these at a strategic level when you are in a position to understand the value stream of the business.
 
-### Examples
+## Examples
 
 For example, in an ecommerce company selling physical items online, the value stream activities include:
 
@@ -30,7 +30,7 @@ For example, in an ecommerce company selling physical items online, the value st
 
 In parallel, there’s a marketing system to place advertisements, and after the sale is done, there will be some customer care functionality. This and all of the above are activities of the value stream. They can happen in parallel, and the stream might be somewhat complicated, but they can be carried on independently of one another. However, they have dependencies; for example, the system in charge of letting customers place an order obviously needs to know the stock of the available items – they are interconnected.
 
-### Context
+## Context
 
 > “If you can’t describe what you are doing as a process, you don’t know what you’re doing.” - William Edwards Deming
 

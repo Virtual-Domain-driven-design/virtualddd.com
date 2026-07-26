@@ -19,7 +19,7 @@ There is a version of career progression that looks like success from the outsid
 
 Larisa Feldman joined the Virtual DDD podcast to share a story that doesn't start with a design problem or a troubled system. It starts with a decision she kept refusing to make — and what eventually changed her mind. Larisa is an architect at REA Group, the company behind realestate.com.au, and before that she spent 18 years at National Australia Bank. Her route into architecture was neither planned nor obvious, and the story of how she got there says something worth sitting with about what the role actually is, and who it's actually for.
 
-### The Architects Nobody Wanted to Become
+## The Architects Nobody Wanted to Become
 
 At a large bank, you see a lot of architects. Integration architects, solution architects, domain architects, enterprise architects — each with a defined lane and a specific set of responsibilities. Larisa worked alongside many of them over nearly two decades, and she noticed a pattern.
 
@@ -29,7 +29,7 @@ The sadness wasn't mysterious. These were people who would develop a clear, well
 
 Larisa was good at working with architects. She understood their proposals, pushed back when she had context they lacked, and often ended up explaining how the systems actually worked before any design conversation could begin. But she never wanted to be one of them. The sadness in their eyes, as she put it, protected her.
 
-### What Happens When Architects Don't Know the System
+## What Happens When Architects Don't Know the System
 
 As Larisa moved into more senior roles — including a stint as principal engineer for mobile internet banking — she kept running into the same problem from a different angle. Architects would arrive with proposals, and she would have to spend time explaining constraints and context they didn't have. Mobile was a particularly sharp example.
 
@@ -41,7 +41,7 @@ Her solution was practical: she started writing things down. Instead of having t
 
 Kenny noted during the conversation that this situation is common, and the analogy he reached for was striking: it's like someone from a distant village making decisions about what you can build on your house, without ever having walked your street. The decision-maker has authority, but no context. The person with context has no authority. And often, the result is that the engineering community simply ignores the architects and does what it thinks is right anyway.
 
-### The Reluctant Yes
+## The Reluctant Yes
 
 Larisa eventually left financial services and joined REA Group — a company that operates quite differently from a large bank. No change review panels. No separation between product and technology. Everything goes to production. The first time she heard that, it was a shock.
 
@@ -51,7 +51,7 @@ When she was offered the chance to apply for an architecture role on a major mod
 
 That's a quiet but important motivation. It's not ambition in the conventional sense — it's more like a threshold of frustration combined with a genuine belief that you could contribute something. She became an architect almost by accident, but not without reason.
 
-### What the Role Looks Like From the Inside
+## What the Role Looks Like From the Inside
 
 Once in the role, some of the things she had found opaque started to make sense. Mapping the capabilities of systems, for instance — something she had previously dismissed as bureaucratic busywork — became useful once she could see why it was needed. The field of vision as an architect is wider than it is as a principal engineer, and that width changes what information becomes valuable.
 
@@ -59,7 +59,7 @@ But she was also clear about what she thinks makes the role worth doing. The mea
 
 She also described the glue function that she sees as central to the job: sitting between the development community and leadership, making sure the concerns of each are visible to the other. If that connection isn't there, she's not sure what the role is actually for.
 
-### Patterns Worth Noticing
+## Patterns Worth Noticing
 
 - **The context gap is a structural problem, not a personal failing.** When architects don't have system context and engineers don't have organisational visibility, both groups end up making decisions in partial darkness. The question worth asking is what structures are in place to close that gap — not whether the individuals are trying hard enough.
 
@@ -71,11 +71,11 @@ She also described the glue function that she sees as central to the job: sittin
 
 - **The "people from the next village" problem scales.** Kenny's analogy about distant decision-makers is worth holding onto. When the people making architectural decisions are too far removed from the systems they're deciding about, teams find ways to route around them. That's not necessarily a failure of the teams — it may be a sign that the architecture function is positioned too far from where decisions actually need to be made.
 
-### Closing Thought
+## Closing Thought
 
 Larisa's story isn't really about becoming an architect. It's about watching a role closely for years, understanding exactly what made it difficult, and then choosing it anyway — in a context where the conditions were different enough to make it worth trying. The question she leaves behind isn't how to encourage more people into architecture. It's something harder: whether the conditions in your organisation are ones where a thoughtful, experienced person would actually want to do the job.
 
-### Further Reading
+## Further Reading
 
 **Mentioned in this episode:**
 

@@ -9,9 +9,8 @@ import HeuristicTypePage from '../../components/HeuristicTypePage.astro';
 import { getCollection } from 'astro:content';
 import { HEURISTIC_TYPES } from '../../lib/heuristics';
 import { curatesHeuristic, HEURISTIC_RELATIONS } from '../../lib/collections';
-import {
-  breadcrumbs, graph, heuristicJsonLd, heuristicSet, organization, pageTitle, socialCard, trail,
-} from '../../lib/seo';
+import { breadcrumbs, graph, heuristicJsonLd, heuristicSet, organization, pageTitle, trail } from '../../lib/seo';
+import { socialCard } from '../../lib/social-card';
 import { excerpt } from '../../lib/excerpt';
 
 export async function getStaticPaths() {

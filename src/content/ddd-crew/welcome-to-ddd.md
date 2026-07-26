@@ -19,7 +19,7 @@ This project contains definitions of DDD and fundamental concepts to reduce the 
 ![DDD on a page](./_assets/welcome-to-ddd/ddd_on_a_page2.png)
 ![DDD on a page](./_assets/welcome-to-ddd/ddd_on_a_page3.png)
 
-### Getting started with DDD
+## Getting started with DDD
 
 DDD is not an all-or-nothing deal. You can apply the ideas from DDD as much or as little as you feel is beneficial to the project you're working on.
 

@@ -366,3 +366,71 @@ is urgent, and each is cheaper once there is a reason to touch that file anyway.
 Not defects; they belong on the ToDo board, not in this file: guests on cards
 (U10), site-wide search, a submit-a-heuristic form, bringing the videos section
 back. The last three are already there.
+
+---
+
+## 6. Follow-up: the "fix soon after" list, and a test-suite audit
+
+Done after the review above, in the same pass.
+
+### What was fixed
+
+| # | Item | Result |
+|---|---|---|
+| F4 | Fonts | 21 files → **6**, 552 KB → **72 KB** (latin subsets only, Poppins 500 dropped), plus a preload for the two faces above the fold |
+| U6 | Heading outline | Section labels that were already visible became real `<h2>`s; the two ingests now agree that a body's shallowest heading is an h2. **Zero heading skips** across the site, from 8 of 11 pages and 160 heuristics |
+| F1 | Three filters | One `<CardFilter>` + one pure rule. 187 lines of near-duplicate script → **84 shared**, and the pages carry **0**, **32** (a carousel) and **0** |
+| T1 | Unit coverage | 2 of 10 `src/lib` modules → **5**, +36 unit tests (`people`, `card-filter`, `seo`) |
+| T2 | axe-core | Runs over one page of each shape, WCAG 2.1/2.2 A + AA |
+| U9 | Reduced motion | Done earlier, with the accessibility batch |
+
+**axe found three defects the manual review missed**, all now fixed: a
+contrast failure on the About page's AI banner subtitle, and links inside
+sentences distinguished by colour alone on two pages — cyan against white text
+is under the 3:1 the guidelines require, so a reader who does not perceive hue
+saw no link. Links in running text are underlined now.
+
+Two notes on the refactor. Extracting `socialCard` into its own module is what
+made `seo.ts` unit-testable at all: it was the only part needing `astro:assets`,
+which exists only inside a build. And the `samePerson` tests pin a **known
+limitation** rather than hiding it — "Chris Simon" and "Chris Simons" match,
+which is the price of matching "Kenny Schwegler" to "Kenny Baas-Schwegler".
+Nobody on the site is affected; the test is there so that tightening the rule is
+a decision rather than a surprise.
+
+### The audit: were the tests holding the site still?
+
+In places, yes. Seven kinds of coupling were found and removed — five of them
+by the refactor breaking tests that should not have broken.
+
+| Coupling | Where | Now |
+|---|---|---|
+| CSS id as a selector | `#load-more` | `[data-test="load-more"]` |
+| Styling class as a selector | `.carousel`, `.carousel-next` | hooks on both |
+| Visible copy as a region boundary | the home page's "Latest sessions" … "Follow us on Bluesky" | `[data-test="latest-sessions"]` |
+| Implementation attribute | `[data-type="guiding-heuristics"]` on a filter button | reads the value off the control, so renaming a heuristic type is free |
+| **A named piece of content** | `?tag=collaborative-modelling` | reads a tag off the page and slugifies it |
+| Substring counting | `html.match(/data-test="card"/g)` also counted the selector inside a script | `countHook()`, which strips scripts and counts elements |
+| Hardcoded extension list | adding a font preload broke the internal-link test | any href with an extension is a file |
+
+The most valuable change is the last category in the table above but one.
+**`assert.ok(sessions.length > 100)` meant an editor unpublishing nine sessions
+would turn the deploy red** — which is precisely what the suite's own rule
+forbids. Those magic floors are now relationships:
+
+- every published session has a page,
+- every published heuristic has a `DefinedTerm`,
+- every entry in a content collection offers its markdown,
+- `llms-full.txt` carries every entry we author,
+- an unknown tag shows *exactly* what the page holds, rather than "more than 100".
+
+Each says what we actually mean, catches more (a page lost between content and
+build, not just a big drop), and cannot be broken from Notion. Where no
+relationship exists the floor was lowered to one only a broken build could
+reach, with a comment saying that is what it is for.
+
+**Verdict: the suite now helps a refactor rather than resisting one.** The
+evidence is this pass — replacing three filter implementations with one changed
+markup, ids, attributes and script structure across three pages, and every test
+that broke was a test that had been reaching past the agreed surface. The rules
+that prevent a recurrence are in AGENTS.md, "The test surface".

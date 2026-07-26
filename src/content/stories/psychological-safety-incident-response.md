@@ -20,7 +20,7 @@ We often assume that resolving a major outage requires centralized command and c
 
 That's the challenge Liz Fong-Jones shared with us in this installment of Stories on Facilitating Software Architecture and Design. It's a story about how a 30-minute Google Cloud outage was resolved not by the war room, but by someone who wasn't even on the initial response team.
 
-### July 2018: When Google Cloud Went Dark
+## July 2018: When Google Cloud Went Dark
 
 In July 2018, Liz had just joined Google's centralized incident management program as a volunteer. It's a role that exists at most large tech companies—a group of people scattered globally who can jump in when an outage is too big for any single team to handle.
 
@@ -28,7 +28,7 @@ Then her pager went off. Almost every Google Cloud service was down. Not just Go
 
 The initial response followed the playbook: bring in the Google Front End team (the massive reverse proxy handling all *.google.com traffic) and the traffic team responsible for load balancing and routing. When they realized the blast radius extended to customer services, they triggered a company-wide escalation. That's when Liz became incident commander.
 
-### The Fix That Came From Outside
+## The Fix That Came From Outside
 
 What happened next wasn't what you'd expect from a centralized war room.
 
@@ -40,7 +40,7 @@ The issue? A canary deployment system designed to limit blast radius had paradox
 
 When the engineer reverted the change, the crashes stopped immediately. The team could see leading indicators—the number of available front ends stabilizing. They still had to deal with thundering herds and backend pressure, but they had a mechanism of causation and a path to recovery.
 
-### What Made Self-Correction Possible
+## What Made Self-Correction Possible
 
 This story highlights two critical patterns in incident response.
 
@@ -54,7 +54,7 @@ The recognition came later—through thorough retrospectives, emphasizing system
 
 As Liz put it: "Why would you fire the employee that now has $10,000 worth of learning?"
 
-### Unpacking the Dynamics
+## Unpacking the Dynamics
 
 - **Executives staying out of the way**: Leadership joined the bridge to ensure the outage had sufficient resources and urgency, but they didn't speak up to pressure or intimidate. Their presence was about support, not control.
 
@@ -66,7 +66,7 @@ As Liz put it: "Why would you fire the employee that now has $10,000 worth of le
 
 - **Safety features creating new failure modes**: A canary system designed to isolate risk created a new attack surface. The metadata about the canary had to be distributed globally, and that distribution path became the failure point.
 
-### Building Resilience in Humans
+## Building Resilience in Humans
 
 Liz mentioned three heuristics for recognizing psychological safety:
 
@@ -80,7 +80,7 @@ The challenge isn't just building resilient systems. It's building resilient peo
 
 What matters is whether they feel safe enough to raise their hand, say what happened, and help everyone else stop looking in the wrong direction. That's the kind of resilience that actually prevents the next outage from lasting longer than it needs to.
 
-### Further Reading
+## Further Reading
 
 **Psychological Safety**: Book Amy C. Edmondson, *The Fearless Organization* - Shows how psychological safety enables teams to surface issues fast during incidents, just like the engineer who self-corrected without fear.[https://www.amazon.com/Fearless-Organization-Psychological-Safety-Performance/dp/1119477247]
 

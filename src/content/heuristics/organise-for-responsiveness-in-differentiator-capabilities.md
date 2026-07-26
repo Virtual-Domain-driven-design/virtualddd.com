@@ -9,14 +9,14 @@ submitter: "Nick Tune"
 tags: ["Strategic design"]
 ---
 
-### Short description
+## Short description
 
 
 
-### Examples
+## Examples
 
 
 
-### Context
+## Context
 
 Use these at a strategic level when defining bounded context. When you want to seperate core domains from supporting and generic subdomains

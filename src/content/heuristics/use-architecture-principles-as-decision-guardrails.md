@@ -11,7 +11,7 @@ tags: ["Software Architecture", "Decentralised Decision-Making", "Facilitating S
 
 Establish clear, shared architecture principles that teams must consult during their decision-making process. These principles act as a framework, ensuring non-functional requirements like cost are consistently considered. This provides guardrails for autonomy.
 
-### Example
+## Example
 
 To prevent teams from treating technology like a 'candy shop,' they were required to evaluate choices against architecture principles. This forced them to consider factors like cost, leading to more responsible decisions.
 

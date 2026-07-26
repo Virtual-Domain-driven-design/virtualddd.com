@@ -46,7 +46,7 @@ const jsonLd = collectionPage(Astro.site, {
   <div class="wrap">
     {upcoming.length > 0 && (
       <section class="up">
-        <p class="eyebrow eyebrow--cyan">Upcoming</p>
+        <h2 class="eyebrow eyebrow--cyan">Upcoming</h2>
         <div class="grid">
           {upcoming.map((s) => (
             <TeaserCard
@@ -67,7 +67,7 @@ const jsonLd = collectionPage(Astro.site, {
     )}
 
     <section class="archive">
-      <p class="eyebrow eyebrow--cyan">Past open spaces</p>
+      <h2 class="eyebrow eyebrow--cyan">Past open spaces</h2>
       <div class="grid">
         {past.map((s) => (
           <TeaserCard

@@ -19,7 +19,7 @@ We've all been in that meeting. Someone proposes a solution, someone else propos
 
 Laïla Bougria has spent over two decades in software engineering, much of it working in messaging and event-driven systems at Particular Software. She joined Andrew Harmel-Law, Kenny Schwegler, and Andrea Magnorsky on *Facilitating Software Architecture and Design* to talk about something that isn't often discussed directly: the gap between having a good idea and being able to actually move a team toward it. Her stories are less about technical decisions and more about what happens to people when they have to make them together.
 
-### The Problem Isn't the Solutions — It's That Everyone's Solving Something Different
+## The Problem Isn't the Solutions — It's That Everyone's Solving Something Different
 
 Laïla's starting point is something she's seen repeat across teams, companies, and years: people jump to comparing solutions before they've agreed on the problem. "There's a tendency to immediately start comparing possible solutions against each other," she says, "and that can cause a lot of friction because it very quickly becomes my opinion versus that of a coworker."
 
@@ -27,7 +27,7 @@ At Particular Software, this is addressed structurally through an RFC process. B
 
 The insight is simple but easy to overlook. When two people argue about solutions, they often aren't disagreeing about implementation. They're working from different assumptions about the goal. Surfacing the problem first gives everyone a shared reference point, and it makes the comparison of alternatives feel less like a contest.
 
-### From "That's a Horrible Idea" to "What Are You Assuming?"
+## From "That's a Horrible Idea" to "What Are You Assuming?"
 
 Even with a good process, people still have gut reactions. Laïla is honest about this. "If someone brings up an alternative and I'm like, oh no, that's a horrible idea — my younger self would have just said it."
 
@@ -37,7 +37,7 @@ What changed is not that she stopped having those reactions, but what she does w
 
 Kenny raised a follow-up that gets at something real: what about the person who's already decided, who isn't open to alternatives at all? Laïla's response is to turn the same question back on them — not as a challenge, but genuinely. What assumptions do you think we're getting wrong? What risks are you seeing? Giving someone a constructive channel for their resistance often reveals that underneath the stubbornness is a legitimate concern that just hasn't been articulated yet.
 
-### When Two Teams Have to Share a Decision
+## When Two Teams Have to Share a Decision
 
 The conversation moved into territory that anyone working with distributed teams will recognise. Kenny described the classic standoff in event-driven systems: one team emits fine-grained events, another team wants a summary event, and neither team is technically wrong. It's a negotiation with no obvious right answer — and a real risk of turning into a power struggle.
 
@@ -47,7 +47,7 @@ But she doesn't stop at empathy. She also makes the technical case visible. In h
 
 She also notes that the need for a summary event in the first place is often a signal worth paying attention to. It might indicate that the service boundary isn't quite right. That's a harder conversation, but catching it early is much cheaper than discovering it after more systems have been built on top of the assumption.
 
-### Building Evidence Instead of Winning Arguments
+## Building Evidence Instead of Winning Arguments
 
 One of the more distinctive things Laïla described is her habit of keeping track — not to build a case against a colleague, but to test her own instincts against what actually happens.
 
@@ -57,7 +57,7 @@ But she was equally candid about the second scenario, where she was just as conv
 
 That second story matters as much as the first. The technique isn't about being vindicated. It's about having a method to stay honest with yourself over time.
 
-### A Practice for Letting Go (Without Actually Letting Go Yet)
+## A Practice for Letting Go (Without Actually Letting Go Yet)
 
 Kenny named something that resonated across the conversation: perfectionism as the enemy of design. The feeling that a decision is wrong, even when you've been outvoted, doesn't just go away because the meeting ended.
 
@@ -67,7 +67,7 @@ Laïla has developed a personal practice around this. Every six to twelve weeks,
 
 She calls these personal retrospectives, distinct from the team variety. The team retrospective surfaces shared problems. The personal one surfaces your own patterns — where your instincts were right, where they weren't, and what context you might be carrying from a previous environment that doesn't apply here.
 
-### What This Conversation Is Actually About
+## What This Conversation Is Actually About
 
 A few patterns running through Laïla's stories are worth naming:
 
@@ -89,7 +89,7 @@ What Laïla describes isn't a frictionless process. It's a set of practices for 
 
 The question worth sitting with after this conversation: when you feel strongly that something is wrong, are you treating that feeling as a conclusion, or as the start of an inquiry?
 
-### Further Reading
+## Further Reading
 
 **Worth exploring:**
 

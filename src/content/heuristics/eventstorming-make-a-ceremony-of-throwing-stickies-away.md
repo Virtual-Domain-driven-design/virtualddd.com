@@ -11,12 +11,12 @@ tags: ["Sociotechnical Systems", "EventStorming", "Psychological Safety", "Ranki
 
 When people are new to EventStorming, their initial approach is often to be reluctant to write things that aren't 100% correct. By making an example of the first sticky you throw away as a facilitator, you allow everyone to try something, be wrong, and improve over time. Doing so helps set the stage for iterative learning.
 
-### Examples
+## Examples
 
 1. Doing a Big Picture EventStorming.
 
 2. Put a paper basket in the middle of the wall, so that it is easily accessible and very prominent.
 
-### Context
+## Context
 
 Opening up a Big Picture EventStorming session

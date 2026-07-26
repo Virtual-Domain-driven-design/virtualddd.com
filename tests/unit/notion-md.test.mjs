@@ -64,16 +64,32 @@ describe('rich text', () => {
 });
 
 describe('blocks to markdown', () => {
-  test('demotes every heading by one level', async () => {
-    // The page title is the h1. Notion heading_1 in a body shipped pages with
-    // three h1s before this rule existed.
-    const out = await md([
-      block('heading_1', { rich_text: [text('One')] }),
-      block('heading_2', { rich_text: [text('Two')] }),
-      block('heading_3', { rich_text: [text('Three')] }),
-    ]);
-    assert.equal(out, '## One\n\n### Two\n\n#### Three');
-    assert.doesNotMatch(out, /^# /m, 'a body heading must never become an h1');
+  test('moves the shallowest heading to h2, keeping the rest relative', async () => {
+    // The page title is the h1, so a body never has one. But demoting *every*
+    // heading by one was only right for a body that opens with heading_1: an
+    // author who opens with heading_2 got a page whose first heading was an
+    // h3, and 160 heuristics shipped that way.
+    const h = (n, s) => block(`heading_${n}`, { rich_text: [text(s)] });
+
+    // Opens at heading_1: unchanged from the old behaviour.
+    assert.equal(await md([h(1, 'One'), h(2, 'Two'), h(3, 'Three')]),
+      '## One\n\n### Two\n\n#### Three');
+
+    // Opens at heading_2: already correct, so nothing moves.
+    assert.equal(await md([h(2, 'Two'), h(3, 'Three')]), '## Two\n\n### Three');
+
+    // Opens at heading_3: promoted, and the relative structure is kept.
+    assert.equal(await md([h(3, 'A'), h(3, 'B')]), '## A\n\n## B');
+
+    // Depth is judged over the whole document, not the first heading seen.
+    assert.equal(await md([h(3, 'Deep'), h(2, 'Shallow')]), '### Deep\n\n## Shallow');
+  });
+
+  test('never emits an h1 from a body', async () => {
+    for (const n of [1, 2, 3]) {
+      const out = await md([block(`heading_${n}`, { rich_text: [text('x')] })]);
+      assert.doesNotMatch(out, /^# /m, `heading_${n} became an h1`);
+    }
   });
 
   test('numbers ordered lists and restarts after other content', async () => {

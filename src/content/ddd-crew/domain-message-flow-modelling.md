@@ -19,11 +19,11 @@ A [bounded context](https://martinfowler.com/bliki/BoundedContext.html) is a sub
 
 A Domain Message Flow Diagram is a simple visualisation showing the flow of messages (commands, events, queries) between actors, bounded contexts, and systems, for a single scenario.
 
-### Formats
+## Formats
 
 There are 2 basic formats, but there is no formal specification so adjust the tool to suit your needs if the basic formats don't work for you.
 
-#### Separate Message & Contents
+### Separate Message & Contents
 
 The separate message & contents format uses 2 shapes for each message: 1 for the name and order of the message and a separate box to display the contents of the message (the information it carries).
 
@@ -37,7 +37,7 @@ Then show the contents of each message in a separate box next to each message:
 
 ![Message Flow Messages & Contents](./_assets/domain-message-flow-modelling/messages-and-contents.jpg)
 
-#### Combined Message & Contents
+### Combined Message & Contents
 
 The combined message & contents format uses a single shape to capture the message name, order, and contents.
 
@@ -45,11 +45,11 @@ The combined message & contents format uses a single shape to capture the messag
 
 This format is good when you want to focus on the contents of each message from the beginning.
 
-#### Downloads
+### Downloads
 
 - [Domain Message Flow Modelling (miro board backup)](https://github.com/ddd-crew/domain-message-flow-modelling/blob/master/resources/Domain-Message-Flow-Modelling-en-v1.rtb)
 
-### How to Use
+## How to Use
 
 When you have an initial cut of your architecture - you have identified candidate bounded contexts - you can begin design the message flows.
 
@@ -72,24 +72,24 @@ The message should contain 3 elements:
 _Note:_ In case of a query, the response is just as important as the request. The information can be seen and represented as one unit, like this
 <img src="./_assets/domain-message-flow-modelling/query-req-resp.png" alt="Message as a query" width="250" height="auto">
 
-### Visualisation Tips
+## Visualisation Tips
 
 The number one problem with Domain Message Flow Diagrams, and diagrams in general, is too much information. [Miller's Law](https://en.wikipedia.org/wiki/Miller%27s_law) is a good heuristic to use here. Aim to have between 5 and 9 messages on your diagram.
 
 If you find that adding the data to each message is breaking your flow of progress, you can defer the data section of each message it until you have placed all of your messages.
 
-#### Time-Dependent Messages
+### Time-Dependent Messages
 Sometimes messages are time-driven. E.g. scenario: cancel an online order after 5 minutes of inactivity. A visualisation like this could work fine. Important is to pay attention to the semantics: **within** or **after** or **every** 5 minutes are very different conditions.
 <img src="./_assets/domain-message-flow-modelling/time-dependent-message.png" alt="Time-dependent Message" width="80%" height="auto">
 
 
-### Additional Resources
+## Additional Resources
 
 - [DDD Pattern: Library Contexts](https://medium.com/nick-tune-tech-strategy-blog/ddd-pattern-library-contexts-d6ae81f462ef)
 - [Mapper Contexts & Supercontexts: Decoupling Domain-Specific and Domain-Generic Bounded Contexts](https://medium.com/nick-tune-tech-strategy-blog/mapper-contexts-supercontexts-decoupling-domain-specific-and-domain-generic-bounded-contexts-5eb6a1e7c5fc)
 - [Gateway Interchange Contexts](https://medium.com/nick-tune-tech-strategy-blog/gateway-interchange-contexts-899696e67848)
 
-### Contributors
+## Contributors
 
 Thanks to all [existing and future contributors](https://github.com/ddd-crew/domain-message-flow-modelling/graphs/contributors) and to the following individuals who have all contributed to Domain Message Flow Modelling:
 
@@ -102,7 +102,7 @@ Domain Message Flow Diagrams are heavily inspired by:
 - [Simon Brown's C4 Container Diagrams](https://c4model.com/)
 - [Domain Storytelling](https://domainstorytelling.org/)
 
-### Contributions and Feedback
+## Contributions and Feedback
 
 The Domain Message Flow Modelling notation is freely available for you to use. In addition, your feedback and ideas are welcome to improve the technique or to create alternative versions.
 

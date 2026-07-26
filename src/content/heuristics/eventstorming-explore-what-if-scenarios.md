@@ -11,7 +11,7 @@ tags: ["EventStorming", "Sociotechnical Systems", "Cognitive Bias", "Collaborati
 
 At the beginning of an EventStorming session, we tend to focus on the happy path, what happens when things go well and we reach the end of our process without an issue. But life is not that easy! We all know that sometimes things don't go according to the initial plan.
 
-### Summary of the solution
+## Summary of the solution
 
 After you figure out the nominal scenario, focus on other branches. What happens when this thing does not work? What if the API call to that *External System* fails? What if there is not enough money on the bank account?
 

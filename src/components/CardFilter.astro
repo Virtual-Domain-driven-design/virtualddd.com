@@ -1,0 +1,165 @@
+---
+/** The filter bar over a grid of pre-rendered cards.
+ *
+ * One component for what used to be three: the sessions archive, the stories
+ * archive and the heuristics browser each carried their own markup, their own
+ * script and their own DOM ids for the same four behaviours. They had already
+ * drifted — different matching rules, different ids, and only two of the three
+ * announced their result count.
+ *
+ * Everything ships rendered. This only ever *hides* cards, so the page works
+ * with JavaScript off and a crawler sees the whole archive.
+ *
+ * Cards must carry the `data-search` / `data-<facet>` contract described in
+ * `src/lib/card-filter.ts`. Extra controls (the heuristic type banners) go in
+ * the `controls` slot; give each button `data-filter-toggle`, `data-facet` and
+ * `data-value` and this handles the toggling.
+ */
+interface Facet {
+  /** The card attribute this reads: `key: 'tags'` matches `data-tags`. */
+  key: string;
+  /** Query parameter to land pre-filtered from, when it differs from the key.
+   *  The retired tag archives point at `?tag=`, singular. */
+  param?: string;
+  /** The "no filter" option, e.g. "All tags". */
+  allLabel: string;
+  label: string;
+  options: string[];
+}
+
+interface Props {
+  noun: { one: string; many: string };
+  searchLabel: string;
+  searchPlaceholder: string;
+  facets?: Facet[];
+  /** Show this many, with a "Load more" button. Omit to show everything. */
+  pageSize?: number;
+  emptyMessage: string;
+}
+const {
+  noun, searchLabel, searchPlaceholder, facets = [], pageSize, emptyMessage,
+} = Astro.props;
+---
+
+<div class="card-filter" data-card-filter data-noun-one={noun.one} data-noun-many={noun.many}
+     data-page-size={pageSize ? String(pageSize) : undefined}>
+  <slot name="controls" />
+
+  <div class="filters">
+    <input type="search" data-test="filter-search" data-filter-search
+           placeholder={searchPlaceholder} aria-label={searchLabel} />
+    {facets.map((f) => (
+      <select data-filter-facet={f.key} data-filter-param={f.param ?? f.key} aria-label={f.label}
+              data-test={f.key === 'tags' ? 'filter-tag' : undefined}>
+        <option value="">{f.allLabel}</option>
+        {f.options.map((o) => <option value={o}>{o}</option>)}
+      </select>
+    ))}
+    <button class="filter-reset" data-test="filter-reset" data-filter-reset type="button">Reset</button>
+    <!-- The count is the only feedback a screen-reader user gets, so it is a
+         live region: filtering is silent without it. -->
+    <span class="result-count" data-test="result-count" data-filter-count
+          aria-live="polite" role="status"></span>
+  </div>
+
+  <div data-filter-results data-test="results"><slot /></div>
+
+  <p class="no-results" data-filter-empty hidden>{emptyMessage}</p>
+  {pageSize && (
+    <p class="filter-more">
+      <button class="btn btn--ghost" data-test="load-more" data-filter-more type="button">Load more</button>
+    </p>
+  )}
+</div>
+
+<style>
+  /* `.filters`, `.no-results` and the card grid come from patterns.css. */
+  .card-filter .filters { margin-bottom: var(--space-8); }
+  .result-count { margin-left: auto; }
+  .filter-more { text-align: center; margin-top: var(--space-8); }
+</style>
+
+<script>
+  import { matchesCard, countLabel } from '../lib/card-filter';
+  import { slugMatches } from '../lib/filter-url';
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-card-filter]')) {
+    const q = root.querySelector<HTMLInputElement>('[data-filter-search]')!;
+    const selects = Array.from(root.querySelectorAll<HTMLSelectElement>('[data-filter-facet]'));
+    const toggles = Array.from(root.querySelectorAll<HTMLElement>('[data-filter-toggle]'));
+    const reset = root.querySelector<HTMLButtonElement>('[data-filter-reset]')!;
+    const count = root.querySelector<HTMLElement>('[data-filter-count]')!;
+    const empty = root.querySelector<HTMLElement>('[data-filter-empty]')!;
+    const more = root.querySelector<HTMLButtonElement>('[data-filter-more]');
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-test="card"]'));
+    const noun = { one: root.dataset.nounOne ?? 'result', many: root.dataset.nounMany ?? 'results' };
+    const step = Number(root.dataset.pageSize ?? 0);
+
+    /** Facet values held by the toggle buttons rather than a select. */
+    const toggled: Record<string, string> = {};
+    let limit = step;
+
+    const state = () => ({
+      term: q.value,
+      facets: {
+        ...Object.fromEntries(selects.map((s) => [s.dataset.filterFacet!, s.value])),
+        ...toggled,
+      },
+    });
+
+    function apply(resetLimit = false) {
+      if (resetLimit) limit = step;
+      const st = state();
+      const matched = cards.filter((c) => matchesCard(c.dataset, st));
+      cards.forEach((c) => (c.hidden = true));
+      (step ? matched.slice(0, limit) : matched).forEach((c) => (c.hidden = false));
+      count.textContent = countLabel(matched.length, noun);
+      empty.hidden = matched.length > 0;
+      if (more) more.hidden = matched.length <= limit;
+    }
+
+    const paintToggles = () => toggles.forEach((t) => {
+      const on = toggled[t.dataset.facet!] === t.dataset.value;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-pressed', String(on));
+      t.parentElement?.classList.toggle('has-active', Object.values(toggled).some(Boolean));
+    });
+
+    [q, ...selects].forEach((el) => el.addEventListener('input', () => apply(true)));
+    toggles.forEach((t) => t.addEventListener('click', () => {
+      const facet = t.dataset.facet!;
+      toggled[facet] = toggled[facet] === t.dataset.value ? '' : (t.dataset.value ?? '');
+      paintToggles();
+      apply(true);
+    }));
+    reset.addEventListener('click', () => {
+      q.value = '';
+      selects.forEach((s) => (s.value = ''));
+      Object.keys(toggled).forEach((k) => (toggled[k] = ''));
+      paintToggles();
+      apply(true);
+    });
+    more?.addEventListener('click', () => { limit += step; apply(false); });
+
+    // Land pre-filtered from a query string: `?tag=…` is where the retired tag
+    // archives point, and `?type=…` is linked from the heuristics info page.
+    // A value that no longer exists deliberately applies nothing — showing the
+    // whole archive beats an empty page.
+    const params = new URLSearchParams(location.search);
+    let landed = false;
+    for (const s of selects) {
+      const want = params.get(s.dataset.filterParam ?? s.dataset.filterFacet!);
+      const hit = want && Array.from(s.options).find((o) => slugMatches(o.value, want));
+      if (hit) { s.value = hit.value; landed = true; }
+    }
+    for (const t of toggles) {
+      const want = params.get(t.dataset.facet!);
+      if (want && t.dataset.value === want) { toggled[t.dataset.facet!] = want; landed = true; }
+    }
+    if (landed) {
+      paintToggles();
+      requestAnimationFrame(() => root.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+    apply(true);
+  }
+</script>

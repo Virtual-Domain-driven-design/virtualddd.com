@@ -14,7 +14,7 @@ During an EventStorming session the group starts with a chaotic exploration of a
 
 ![](./_assets/eventstorming-introduce-new-colours-iteratively-body-1.jpg)
 
-### Examples
+## Examples
 
 1. When there is a discussion popping up about two domain events as outcomes from the same action, you need a business rule (yellow) in between.
 
@@ -22,6 +22,6 @@ During an EventStorming session the group starts with a chaotic exploration of a
 
 3. If people are discussing about the information needed in order to make a decision we might add information.
 
-### Context
+## Context
 
 Use it during a process or design level EventStorming, when we need to be more explicit.

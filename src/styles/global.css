@@ -25,6 +25,20 @@ h3 { font-size: var(--text-xl); margin-top: var(--space-8); }
 p { margin: 0 0 var(--space-4); }
 a { color: var(--color-primary); text-decoration: none; }
 a:hover { color: var(--color-primary-dark); text-decoration: underline; }
+
+/* A link inside a sentence is underlined.
+ *
+ * Colour alone is not enough to mark a link in running text: cyan on the
+ * near-black canvas is under the 3:1 the guidelines ask for *against the
+ * surrounding words*, so a reader who does not perceive the hue sees no link
+ * at all. Rows of links that are not prose — the footer, a sidebar's list of
+ * outbound links — are excluded: nothing there is a sentence. */
+p a, li a, blockquote a, dd a { text-decoration: underline; text-underline-offset: 0.15em; }
+.btn, .chip, .eyebrow a,
+.footer-links a, .footer-explore a, .footer-latest a,
+.side-links a, .org-links a, .person-links a, .filters a, .detail-back a, .prevnext a {
+  text-decoration: none;
+}
 img { max-width: 100%; height: auto; display: block; }
 
 blockquote {

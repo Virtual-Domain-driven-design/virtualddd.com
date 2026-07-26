@@ -19,7 +19,7 @@ We fight about Agile versus Six Sigma, build versus buy, in-house versus outsour
 
 That's the challenge Simon Wardley shared with us in this installment of Stories on Facilitating Software Architecture and Design. It's a story about how HS2, Britain's high-speed rail project, avoided the typical government IT disaster by doing something simple: looking at their landscape before picking their methods.
 
-### The Sunday Afternoon That Changed Everything
+## The Sunday Afternoon That Changed Everything
 
 James Finley, CIO for HS2, had a problem. They needed to build a virtual railway before building the physical one—because it's cheaper to mess up a virtual landscape than the English countryside. The typical approach would be to group components by domain (engineering, back office, infrastructure), outsource to different partners, and watch the cost overruns pile up.
 
@@ -27,7 +27,7 @@ James spent a Sunday afternoon doing something different. He mapped the entire s
 
 Not just a component diagram. Not just an architecture graph. A proper map. He started with users at the top—architects who needed to virtually walk through the railway, engineers who needed geographical information. Then he traced down through their needs: GIS systems, land registry, project information systems, risk management. Finally, he asked a critical question about each component: how evolved is it?
 
-### The Axis That Changes Everything
+## The Axis That Changes Everything
 
 Some components sat firmly in commodity territory. Power, compute, data centers—utterly standard. But land referencing systems? Custom built. 3D visualization for this specific railway? Novel, evolving, uncertain.
 
@@ -37,7 +37,7 @@ Genesis and custom-built components on the left side of the map? Build in-house 
 
 James took the map back to his team. They challenged it, refined it, challenged it again. Then they built the system using multiple methods simultaneously. They delivered ahead of schedule, under budget—remarkable for any government engineering project.
 
-### The Story We Tell Ourselves
+## The Story We Tell Ourselves
 
 Simon's told this story at various conferences. At Agile conferences, he says "Agile has its place, but it's not appropriate everywhere." They want to burn him. At Six Sigma conferences, same story, same reaction. Scaled Agile Framework devotees? Same problem.
 
@@ -45,13 +45,13 @@ The issue isn't chaos in most organizations. It's too much order. Too much "this
 
 The worst part? When projects fail using the wrong method, we generate predictable excuses. "We didn't specify the requirements well enough" is the classic one. But you can't specify novel work well enough. That's the whole point. The work is going to change. You need methods that embrace that, not fight it.
 
-### Why Military Backgrounds Help
+## Why Military Backgrounds Help
 
 James had an advantage. He came from the Navy, where situational awareness isn't optional. Military folks understand viscerally why maps matter, why context matters, why looking at the landscape before picking your approach isn't just nice—it's survival.
 
 For people without that background, especially those who've spent 20 years applying one methodology everywhere, suggesting they look at context sounds like "you've been doing it wrong for 20 years." Which they have. But if they're senior, they really don't want to hear it.
 
-### The Politics of Visibility
+## The Politics of Visibility
 
 When you map a system, things become visible. That's powerful. It's also dangerous.
 
@@ -61,7 +61,7 @@ You can hide the Eiffel Tower in your map of Paris. But if it appears in six oth
 
 This also handles the dominant personality problem. Yes, loud voices will shape their group's map. But you're looking for signals across all the maps, not any single view.
 
-### Stories Versus Maps
+## Stories Versus Maps
 
 Simon made a subtle point about why maps work better than stories for design discussions. We're told great leaders are great storytellers. So when you challenge someone's story, you're challenging their leadership. They get defensive.
 
@@ -69,7 +69,7 @@ Challenge a map instead. It's not personal. It's about whether this component is
 
 He once mapped culture itself—using Brexit supporters and opponents. Two groups who couldn't agree on anything in story form. But they could have productive arguments about where components sat on the map. The map created safe space for challenge.
 
-### Unpacking the Dynamics
+## Unpacking the Dynamics
 
 - **Context blindness creates methodology wars**: We argue Agile versus Six Sigma because we're not looking at what we're building. If we mapped it, we'd see we need both in different places.
 
@@ -83,7 +83,7 @@ He once mapped culture itself—using Brexit supporters and opponents. Two group
 
 - **Safe challenge requires depersonalization**: Moving from story to map moves criticism from "you're wrong" to "this representation might be incomplete."
 
-### The Practice Problem
+## The Practice Problem
 
 You can't learn mapping from a book any more than you can learn guitar from a book. At some point, you have to map something real. Andrea described joining Simon's transport research group specifically to practice—to see how mapping works on systems, not just theory.
 
@@ -93,7 +93,7 @@ Start small if you're not at the top. Map a problem space with your immediate te
 
 James Finley didn't revolutionize government IT delivery with exotic new methods. He used Agile where it fit, products where they fit, outsourcing where it fit. The revolution was looking at the landscape first, then picking tools that matched what he saw. Everything else followed from that one Sunday afternoon spent mapping instead of methodologizing.
 
-### Further Reading
+## Further Reading
 
 **Wardley Mapping**: Simon Wardley, *On Being Lost* - Free online resource unpacking how maps expose context blindness and defeat one-size-fits-all methodologies in real projects (https://medium.com/@swardley/on-being-lost-2cf99e43f582).
 

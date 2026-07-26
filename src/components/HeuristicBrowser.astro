@@ -1,5 +1,12 @@
 ---
+/** The heuristics browser: the three type banners, the filter bar and the grid.
+ *
+ * Used on `/heuristics/` with the banners, and on each type index without them
+ * — there the type is already decided by the page. The filtering itself is
+ * `CardFilter`; the banners are toggle buttons it understands.
+ */
 import HeuristicCard from './HeuristicCard.astro';
+import CardFilter from './CardFilter.astro';
 import type { CollectionEntry } from 'astro:content';
 import { HEURISTIC_TYPES } from '../lib/heuristics';
 import { tagOptions } from '../lib/collections';
@@ -19,11 +26,23 @@ const banners = showBanners
   : [];
 ---
 
-<div class="hb">
+<CardFilter
+  noun={{ one: 'heuristic', many: 'heuristics' }}
+  searchLabel="Search heuristics"
+  searchPlaceholder="Search heuristics…"
+  facets={[{ key: 'tags', param: 'tag', allLabel: 'All tags', label: 'Filter by tag', options: tags }]}
+  pageSize={24}
+  emptyMessage="No heuristics match your filters."
+>
   {banners.length > 0 && (
-    <div class="hb-banners tbanner-grid" id="hb-banners" role="group" aria-label="Filter by heuristic type">
+    <div slot="controls" class="hb-banners tbanner-grid" role="group" aria-label="Filter by heuristic type">
       {banners.map((t) => (
-        <button type="button" class="hb-banner tbanner scrim" data-test="type-filter" data-type={t.key} style={`background-image: url(${t.bg.src})`}>
+        <button
+          type="button" class="hb-banner tbanner scrim"
+          data-test="type-filter" data-filter-toggle data-facet="type" data-value={t.key}
+          aria-pressed="false"
+          style={`background-image: url(${t.bg.src})`}
+        >
           <span class="tbanner-body">
             <span class="tbanner-title">{t.title}</span>
             <span class="tbanner-text">{t.text}</span>
@@ -34,96 +53,13 @@ const banners = showBanners
     </div>
   )}
 
-  <div class="filters hb-filters">
-    <input type="search" id="hq" placeholder="Search heuristics…" aria-label="Search heuristics" />
-    <select id="hf-tag" data-test="filter-tag" aria-label="Filter by tag">
-      <option value="">All tags</option>
-      {tags.map((t) => <option value={t}>{t}</option>)}
-    </select>
-    <button id="hf-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
-    <span class="result-count" id="hb-count" data-test="result-count" aria-live="polite" role="status"></span>
-  </div>
-
-  <div class="grid-cards" id="h-cards">
+  <div class="grid-cards hb-grid">
     {items.map((h) => <HeuristicCard heuristic={h} />)}
   </div>
-  <p class="no-results" id="hb-none" hidden>No heuristics match your filters.</p>
-  <div class="hb-load"><button id="hb-more" type="button" class="btn btn--ghost">Load more</button></div>
-</div>
+</CardFilter>
 
 <style>
   /* Banners come from patterns.css (.tbanner); this is the only local bit. */
   .hb-banners { margin-bottom: var(--space-8); }
-
-  /* Filters, the card grid and the result count come from patterns.css. */
-  .hb-filters { margin: 0 0 var(--space-8); }
-  .result-count { margin-left: auto; }
-  .grid-cards { --card-min: 16.25rem; }
-  .hb-load { text-align: center; margin-top: var(--space-8); }
+  .hb-grid { --card-min: 16.25rem; }
 </style>
-
-<script>
-  import { applyUrlFilter } from '../lib/filter-url';
-
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('#h-cards .card'));
-  const q = document.getElementById('hq') as HTMLInputElement;
-  const fTag = document.getElementById('hf-tag') as HTMLSelectElement;
-  const reset = document.getElementById('hf-reset') as HTMLButtonElement;
-  const count = document.getElementById('hb-count') as HTMLElement;
-  const none = document.getElementById('hb-none') as HTMLElement;
-  const more = document.getElementById('hb-more') as HTMLButtonElement;
-  const bannersWrap = document.getElementById('hb-banners');
-  const banners = Array.from(document.querySelectorAll<HTMLElement>('.hb-banner'));
-  const STEP = 24;
-  let limit = STEP;
-  let activeType = '';
-
-  function matches(c: HTMLElement): boolean {
-    const term = q.value.trim().toLowerCase();
-    const tag = fTag.value.toLowerCase();
-    const d = c.dataset;
-    const okTerm = !term || (d.title ?? '').includes(term) || (d.question ?? '').includes(term) || (d.tags ?? '').includes(term);
-    const okTyp = !activeType || d.type === activeType;
-    const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
-    return okTerm && okTyp && okTag;
-  }
-
-  function apply(resetLimit = false) {
-    if (resetLimit) limit = STEP;
-    const matched = cards.filter(matches);
-    cards.forEach((c) => (c.hidden = true));
-    matched.slice(0, limit).forEach((c) => (c.hidden = false));
-    count.textContent = `${matched.length} heuristic${matched.length === 1 ? '' : 's'}`;
-    none.hidden = matched.length > 0;
-    more.hidden = matched.length <= limit;
-  }
-
-  banners.forEach((bn) => bn.addEventListener('click', () => {
-    const t = bn.dataset.type ?? '';
-    activeType = activeType === t ? '' : t;
-    banners.forEach((x) => x.classList.toggle('active', x.dataset.type === activeType));
-    bannersWrap?.classList.toggle('has-active', activeType !== '');
-    apply(true);
-  }));
-  [q, fTag].forEach((el) => el.addEventListener('input', () => apply(true)));
-  reset.addEventListener('click', () => {
-    q.value = ''; fTag.value = ''; activeType = '';
-    banners.forEach((x) => x.classList.remove('active'));
-    bannersWrap?.classList.remove('has-active');
-    apply(true);
-  });
-  more.addEventListener('click', () => { limit += STEP; apply(false); });
-
-  // Landing from a legacy /heuristics_tag/<tag>/ URL.
-  applyUrlFilter(fTag);
-
-  // Activate a type filter from ?type=… (e.g. linked from the info page) and scroll to results.
-  const initialType = new URLSearchParams(location.search).get('type') ?? '';
-  if (initialType && banners.some((b) => b.dataset.type === initialType)) {
-    activeType = initialType;
-    banners.forEach((x) => x.classList.toggle('active', x.dataset.type === activeType));
-    bannersWrap?.classList.add('has-active');
-    requestAnimationFrame(() => document.getElementById('hb-banners')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-  }
-  apply(true);
-</script>

@@ -11,7 +11,7 @@ tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-
 
 Begin writing the ADR at the start of the decision-making process, not as an afterthought for documentation. Use its structure collaboratively as a tool to guide team discussion, explore options, and identify necessary research. The document becomes a guide for deliberation.
 
-### Examples
+## Examples
 
 A team now starts by creating a draft ADR together. They use it to frame the context, list options, and decide on any spikes needed for investigation.
 

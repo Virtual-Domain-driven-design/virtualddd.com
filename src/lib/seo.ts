@@ -6,7 +6,6 @@
  * not use relative paths.
  */
 import type { CollectionEntry } from 'astro:content';
-import { getImage } from 'astro:assets';
 
 export const SITE_NAME = 'Virtual DDD';
 export const SITE_TAGLINE = 'A community for Domain-Driven Design, software architecture and design';
@@ -29,21 +28,6 @@ export const abs = (site: URL | undefined, path: string) =>
  */
 export const pageTitle = (text: string, { brand = false } = {}) =>
   brand ? `${text} — ${SITE_NAME}` : text;
-
-/** The social card for an image: one 1200px JPEG, used by both the OG tags and
- *  the JSON-LD so they agree and only one derivative is emitted.
- *
- *  Never reference the original asset here: `.src` points at the unoptimised
- *  source file, which would then have to ship (≈18 MB across the site) purely
- *  to satisfy a meta tag. JPEG rather than WebP because social scrapers still
- *  handle WebP inconsistently. */
-export async function socialCard(site: URL | undefined, image: ImageMetadata) {
-  // Sharp cannot rasterise SVG here, and social scrapers will not render one
-  // anyway — those pages fall back to the site card.
-  if (image.format === 'svg') return abs(site, image.src);
-  const card = await getImage({ src: image, width: 1200, format: 'jpeg', quality: 80 });
-  return abs(site, card.src);
-}
 
 /** The organisation, referenced by @id from the other graphs. */
 export const organization = (site: URL | undefined) => ({

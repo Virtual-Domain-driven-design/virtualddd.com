@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SessionCard from '../../components/SessionCard.astro';
+import CardFilter from '../../components/CardFilter.astro';
 import { Image } from 'astro:assets';
 import { splitSessions, tagOptions } from '../../lib/collections';
 import { iso, longDateTime } from '../../lib/dates';
@@ -87,29 +88,20 @@ const jsonLd = collectionPage(Astro.site, {
     <section class="archive">
       <h2>Past sessions</h2>
 
-      <div class="filters">
-        <input type="search" id="q" data-test="filter-search" placeholder="Search title or tag…" aria-label="Search sessions" />
-        <select id="f-level" aria-label="Filter by level">
-          <option value="">All levels</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
-        </select>
-        <select id="f-type" aria-label="Filter by type">
-          <option value="">All types</option>
-          {types.map((t) => <option value={t}>{t}</option>)}
-        </select>
-        <select id="f-tag" data-test="filter-tag" aria-label="Filter by tag">
-          <option value="">All tags</option>
-          {tags.map((t) => <option value={t}>{t}</option>)}
-        </select>
-        <button id="f-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
-        <span class="result-count" id="count" data-test="result-count" aria-live="polite" role="status"></span>
-      </div>
-
-      <div class="grid-cards" id="cards" data-test="results">{past.map((s) => <SessionCard session={s} />)}</div>
-      <p class="no-results" id="noresults" hidden>No sessions match your filters.</p>
-      <div class="load-wrap"><button id="load-more" type="button" class="btn btn--ghost">Load more</button></div>
+      <CardFilter
+        noun={{ one: 'session', many: 'sessions' }}
+        searchLabel="Search sessions"
+        searchPlaceholder="Search title, host or tag…"
+        facets={[
+          { key: 'level', allLabel: 'All levels', label: 'Filter by level', options: ['Beginner', 'Intermediate', 'Advanced'] },
+          { key: 'type', allLabel: 'All types', label: 'Filter by type', options: types },
+          { key: 'tags', param: 'tag', allLabel: 'All tags', label: 'Filter by tag', options: tags },
+        ]}
+        pageSize={30}
+        emptyMessage="No sessions match your filters."
+      >
+        <div class="grid-cards">{past.map((s) => <SessionCard session={s} />)}</div>
+      </CardFilter>
     </section>
   </div>
 
@@ -137,57 +129,7 @@ const jsonLd = collectionPage(Astro.site, {
       .hero-img { aspect-ratio: auto; }
     }
 
-    /* Filters, cards and the result count come from patterns.css. */
-    .result-count { margin-left: auto; }
     .grid-cards { --card-min: 16.25rem; }
-    .load-wrap { text-align: center; margin-top: var(--space-8); }
   </style>
 
-  <script>
-    import { applyUrlFilter } from '../../lib/filter-url';
-
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .card'));
-    const q = document.getElementById('q') as HTMLInputElement;
-    const fLevel = document.getElementById('f-level') as HTMLSelectElement;
-    const fType = document.getElementById('f-type') as HTMLSelectElement;
-    const fTag = document.getElementById('f-tag') as HTMLSelectElement;
-    const reset = document.getElementById('f-reset') as HTMLButtonElement;
-    const count = document.getElementById('count') as HTMLElement;
-    const noResults = document.getElementById('noresults') as HTMLElement;
-    const loadMore = document.getElementById('load-more') as HTMLButtonElement;
-    const STEP = 30;
-    let limit = STEP;
-
-    function matches(c: HTMLElement): boolean {
-      const term = q.value.trim().toLowerCase();
-      const lvl = fLevel.value, typ = fType.value, tag = fTag.value.toLowerCase();
-      const d = c.dataset;
-      const okTerm = !term || (d.title ?? '').includes(term) || (d.tags ?? '').includes(term);
-      const okLvl = !lvl || (d.level ?? '').includes(lvl);
-      const okTyp = !typ || d.type === typ;
-      const okTag = !tag || ('|' + (d.tags ?? '') + '|').includes('|' + tag + '|');
-      return okTerm && okLvl && okTyp && okTag;
-    }
-
-    function apply(resetLimit = false) {
-      if (resetLimit) limit = STEP;
-      const matched = cards.filter(matches);
-      cards.forEach((c) => (c.hidden = true));
-      matched.slice(0, limit).forEach((c) => (c.hidden = false));
-      count.textContent = `${matched.length} session${matched.length === 1 ? '' : 's'}`;
-      noResults.hidden = matched.length > 0;
-      loadMore.hidden = matched.length <= limit;
-    }
-
-    [q, fLevel, fType, fTag].forEach((el) => el.addEventListener('input', () => apply(true)));
-    reset.addEventListener('click', () => {
-      q.value = ''; fLevel.value = ''; fType.value = ''; fTag.value = '';
-      apply(true);
-    });
-    loadMore.addEventListener('click', () => { limit += STEP; apply(false); });
-
-    // Landing from a legacy /sessions_tag/<tag>/ URL.
-    applyUrlFilter(fTag);
-    apply(true);
-  </script>
 </BaseLayout>

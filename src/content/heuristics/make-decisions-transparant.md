@@ -11,11 +11,11 @@ complements: ["evaluate-architectural-options-against-team-pain-points", "surfac
 specializes: ["evaluate-options-against-team-frustrations"]
 ---
 
-### Context
+## Context
 
 Transparency is a crucial starting point for any organisation looking to improve its decision-making process, regardless of its current state. By increasing visibility, you can pinpoint areas that need improvement and begin to shift the culture.
 
-### Examples
+## Examples
 
 Instead of an architect or a small group making decisions behind closed doors, a team starts documenting their decision-making process for everyone to see. This provides a memory of what happened and why, making it easier for others to understand and contribute.
 

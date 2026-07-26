@@ -3,6 +3,7 @@
  *  in the "discussed heuristics" carousel on sessions and stories. */
 import type { CollectionEntry } from 'astro:content';
 import { heuristicType, chipTone } from '../lib/heuristics';
+import { packFacet } from '../lib/card-filter';
 
 interface Props {
   heuristic: CollectionEntry<'heuristics'>;
@@ -19,10 +20,9 @@ const info = heuristicType(type);
   class="card card--heuristic"
   data-test="card"
   href={`/heuristics/${heuristic.id}/`}
-  data-type={type}
-  data-title={d.title.toLowerCase()}
-  data-question={(d.question ?? '').toLowerCase()}
-  data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
+  data-search={[d.title, d.question ?? '', ...d.tags].join(' ').toLowerCase()}
+  data-type={packFacet([type])}
+  data-tags={packFacet(d.tags)}
 >
   {showType && type && <span class:list={['chip', 'chip--label', chipTone(type)]}>{info?.label ?? 'Heuristic'}</span>}
   {d.question && <p class="card-q">{d.question}</p>}

@@ -13,7 +13,7 @@ Reverse-engineer Architecture Decision Records (ADRs) for foundational decisions
 
 One useful approach is to conduct an EventStorming and focus on domain events that highlight important past events and decisions made. That way, modelling a timeline of relevant information that led up to certain decisions. After the EventStorming you can then write these down in ADR’s.
 
-### Example
+## Example
 
 An architect offered to write down past decisions, like why a technology was chosen, creating ADRs to fill in the project’s history. This gave clarity on original constraints, such as not having enough people at the time.
 

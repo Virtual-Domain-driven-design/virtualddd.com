@@ -20,11 +20,11 @@ When we kick off a major system modernization, we often fixate on the new tech s
 
 That exact frustration is what Michael Plöd shared with us in this installment of Stories on Facilitating Software Architecture and Design. It's a story about a veteran architect, a stubborn system, and the surprising power of simply asking "why."
 
-### The Modernization Mandate Meets Reality
+## The Modernization Mandate Meets Reality
 
 Michael was leading the architecture for a large legacy system modernization. This wasn't a small project. We're talking 20-30 year old systems, COBOL, very old UIs, all embedded in a rigid, hierarchical organization. The company had decided to modernize, throwing around every buzzword in the book: microservices, cloud, agile, DDD, Angular, Spring Boot, DevOps, Kubernetes. Michael called it "conference-driven development." His job was to sort through the hype and bring some sense to the frenzy.
 
-### A Wall of Resistance
+## A Wall of Resistance
 
 Amidst all the modernization talk, Michael encountered heavy resistance from one particular person. This wasn't just minor pushback; it was outright vetoes in steering committees. Other managers suggested getting this person "under control." Michael, initially frustrated, found himself struggling to understand the root of this resistance. Why was this person acting like this?
 
@@ -32,7 +32,7 @@ Michael decided to confront the issue head-on. He approached the individual, who
 
 Despite the cold reception, they met. Michael started honestly: "I don't understand the resistance you have towards the modernization efforts”. There's something you see that I don't. You have over 30 years here; you know more than I do. I want to understand where your resistance comes from so we can avoid costly mistakes." The veteran brushed him off, accusing Michael of wanting to "throw everything under the bus." Michael left dissatisfied.
 
-### The Unlikely Confession
+## The Unlikely Confession
 
 Two weeks later, to Michael's surprise, the veteran approached him. "Let's meet again," he said. In the meeting, the veteran revealed: "You need to thank my wife for this meeting." Apparently, Michael's initial approach had angered him, and he’d brought that anger home. His wife had told him, "Why don't you tell him what this fuss is all about?"
 
@@ -40,7 +40,7 @@ What followed was a raw, honest confession. "Listen," the veteran began, "I star
 
 Michael realized he finally had the context. He responded, "Thank you. Now we are talking. I understand." He reminded himself of a principle he often shares: "Legacy systems must have been very successful, otherwise they couldn't pay your daily rates." He added, "No one 20 years ago got up saying, 'Let's build a really bad system.'"
 
-### Reframing the Future
+## Reframing the Future
 
 Michael explained that the veteran had made excellent decisions for his context – economies of scale, reusability, centralisation. But the environment had changed, shifting towards "economies of speed." The veteran admitted he'd "never looked at it from this perspective."
 
@@ -48,7 +48,7 @@ Michael didn't push. He let it sit. A week later, he approached the veteran with
 
 The veteran's initial reaction was typical: "Michael, I want to kick you out of the room right now because I hate your positive attitude all the time." But he let it sink in. A few days later, Michael received a simple email: "I'm in."
 
-### Unpacking the Dynamics
+## Unpacking the Dynamics
 
 - **Empathy isn't a soft skill; it's a critical architectural tool.** Understanding a stakeholder's history and motivations unlocks progress.
 

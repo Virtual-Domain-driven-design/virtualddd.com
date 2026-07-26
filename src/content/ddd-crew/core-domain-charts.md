@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/core-domain-charts/"
 license: "CC-BY-SA-4.0"
 category: "Strategic design"
 order: 2
-stars: 613
+stars: 614
 heroImage: "./_assets/core-domain-charts/core-domain-chart-template.jpg"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
@@ -23,25 +23,25 @@ The true power of this technique is the conversations that it triggers, especial
 
 ![alt text](./_assets/core-domain-charts/core-domain-chart-template.jpg "Core Domain Chart")
 
-### How to Use
+## How to Use
 
 There are a variety of ways the Core Domain Chart can be used, but it's important not to try to and visualise all the possible information in a single diagram. Below are multiple versions showing different types of information to choose from.
 
-#### (Sub)Domain/Bounded Context Portfolio 
+### (Sub)Domain/Bounded Context Portfolio 
 
 This is the simplest flavour. Simply plot each of your (sub)domains or bounded contexts on the chart to get a relative sense of ordering between them.
 
-#### Context Map With Team Topologies
+### Context Map With Team Topologies
 
 You can augment your Core Domain Charts with the dependencies between your bounded contexts and the type of [Team Topologies](https://github.com/TeamTopologies) Interaction Mode in play.
 
-#### Architecture Migration
+### Architecture Migration
 
 With a slight tweak of the y-axis label, core domain charts can be used to plan the order in which you migrate from your current architecture to your target architecture.
 
 ![alt text](./_assets/core-domain-charts/architecture-migration-core-domain-chart.jpg "Architecture Migration Core Domain Chart")
 
-### Suggestions for Measuring Complexity and Differentiation
+## Suggestions for Measuring Complexity and Differentiation
 
 Firstly, measuring complexity and differentiation of your domains is hard and is usually quite subjective. Strategy is a bet on the future, so you can never be sure exactly how complex or differentiating something will turn out to be. But there is still a lot of value in discussing and visualising your beliefs of the complexity and differentiation of each domain.
 
@@ -67,13 +67,13 @@ Complexity can manifest in different forms. Here are some clues for uncovering t
 - How long does it take for a newcomer to ramp up and be efficient?
 
 
-### Examples
+## Examples
 
 Check out the [Examples](https://github.com/ddd-crew/core-domain-charts/blob/master/examples) to get a better understanding of these charts.
 
 Please feel free to create a pull request with your own examples.
 
-### Additional Resources
+## Additional Resources
 
 - [Core Domain Patterns](https://medium.com/nick-tune-tech-strategy-blog/core-domain-patterns-941f89446af5)
 
@@ -81,7 +81,7 @@ Please feel free to create a pull request with your own examples.
 
 - An alternative and complementary tool to assess process complexity is [Bernd Rücker](https://twitter.com/berndruecker)'s [Process Automation Map](https://blog.bernd-ruecker.com/exploring-the-process-automation-map-7d9aa181a747)
 
-### Contributors
+## Contributors
 
 Thanks to all [existing and future contributors](https://github.com/ddd-crew/core-domain-charts/graphs/contributors) and to [Eduardo da Silva](https://twitter.com/emgsilva) who has contributed to the Core Domain Chart:
 
@@ -90,7 +90,7 @@ The Core Domain Chart was inspired heavily by:
 - [Wardley Mapping](https://medium.com/wardleymaps)
 - [Team Topologies](https://teamtopologies.com/)
 
-### Contributions, Questions and Feedback
+## Contributions, Questions and Feedback
 
 The Core Domain Chart is freely available for you to use. In addition, your feedback and ideas are welcome to improve it or to create new versions.
 

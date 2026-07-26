@@ -13,7 +13,7 @@ metaDescription: "When a workshop discussion drifts, return to the goal everyone
 
 If a clear, aligned goal exists, use it as a reference point to guide the discussion. Periodically, 'zoom out' to remind participants of the shared objective and evaluate if the current path serves that goal.
 
-### Example
+## Example
 
 When the workshop started drifting towards detailed documentation, the facilitator could have referred back to the agreed-upon goal of 'rethinking the process' to prompt a course correction.
 

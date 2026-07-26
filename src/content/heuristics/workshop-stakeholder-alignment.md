@@ -14,7 +14,7 @@ metaDescription: "Align every stakeholder on the purpose and the intended outcom
 
 Before a collaborative workshop, conduct dedicated 'setting the stage' sessions with all stakeholder groups, especially those in positions of power. Explicitly discuss and align on the workshop's goals and expected outcomes to prevent misdirection.
 
-### Example
+## Example
 
 The facilitator assumed alignment between a product owner and their manager, only to discover two days prior that the manager sought documentation while the product owner aimed for a complete rethink. This misalignment led to an exhausting workshop focused on 'as-is' processes rather than future design.
 

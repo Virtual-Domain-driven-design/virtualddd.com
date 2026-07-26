@@ -20,7 +20,7 @@ In any organisation that empowers its teams, a critical question eventually aris
 
 Continuing our conversation with architect Pete and tech lead Elena, we explored this exact challenge. Pete shared that it’s often the first question people ask when they hear about their advice process: "What about a decision you didn't like?" His answer reveals a crucial shift in mindset, moving from control to influence and self-reflection.
 
-#### The First Reaction: "This is Wrong"
+## The First Reaction: "This is Wrong"
 
 Pete recounted an early experience with their advice process. A team was keen to try a new technology, driven by the excitement of pushing boundaries. "I used the phrase 'kids in the sweet shop'," he explained. "They wanted to try something new, but you could see that it wasn't quite right and it wasn't well thought out."
 
@@ -28,7 +28,7 @@ This is a familiar feeling for many architects. Your experience and perspective 
 
 "It's really difficult to have a conversation when your emotions are telling you it's the wrong decision," Pete admitted. But his reflection on this moment is where the real lesson lies.
 
-#### The Turn Inward: Was My Advice Good Enough?
+## The Turn Inward: Was My Advice Good Enough?
 
 Instead of focusing on the team's choice, Pete turned his focus inward. "A lot of it is actually about you," he reflected. "My feedback was clearly not good enough. If I had a more persuasive argument or given some bit of information that would've helped change their mind, perhaps the outcome would have been different."
 
@@ -44,7 +44,7 @@ This is a powerful re-framing. The responsibility shifts from policing decisions
 
 This introspection is even more critical when emotional attachment is involved. Pete candidly shared how Elena’s team made a decision to replace a part of the system he had worked on extensively. "Elena was effectively throwing everything I'd done in the bin," he said. "But it was moving forward, and I knew it was the right decision. You have to take your emotion out of it."
 
-#### Creating Guardrails for Good Decisions
+## Creating Guardrails for Good Decisions
 
 Of course, this doesn't mean leaving teams to fend for themselves in a "candy shop" of infinite technological choices. For the model to work, teams need a framework to help them navigate complex decisions. From her perspective as a tech lead, Elena highlighted two elements that were essential.
 
@@ -54,7 +54,7 @@ Of course, this doesn't mean leaving teams to fend for themselves in a "candy sh
 
 2. **A Supportive Culture:** Skills like asking good questions, understanding financial implications, and communicating trade-offs don't always come naturally. Elena emphasised the role Pete and another architect, Andrew, played in coaching the teams. "It's important to have someone who will support and advise you," she said. Their role wasn't to make the decision for the team, but to help the team build the skills to make the right decision themselves.
 
-#### Navigating Boundaries and "Context Wars"
+## Navigating Boundaries and "Context Wars"
 
 The complexity multiplies when a decision impacts more than one team or blurs the lines of ownership. These situations can quickly escalate into what Pete calls "context wars," where teams become defensive over their domains.
 

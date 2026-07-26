@@ -19,7 +19,7 @@ Designers and senior engineers were equally skeptical, but the team was still ab
 
 In this talk, you’ll learn how Spotify’s organisational culture of Agile management and autonomous teams enables innovation, using the Discover Weekly feature as an example.
 
-### The speaker
+## The speaker
 
 Joakim Sundén is a founding partner of [Better Product Work](https://www.betterproductwork.com/),
  where he helps visionary leaders challenge the conventional way of 

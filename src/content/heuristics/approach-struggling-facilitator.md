@@ -13,6 +13,6 @@ metaDescription: "When a facilitator is visibly struggling, offer support rather
 
 Assume positive intent and acknowledge that facilitators, like anyone, can be busy or momentarily forget things. Offer support by gently raising concerns or asking clarifying questions, recognising they might be grateful for the assistance.
 
-### Example
+## Example
 
 A participant should consider that a facilitator might be 'too busy with other things' or 'in a hustle' and might appreciate a gentle prompt rather than a direct challenge.

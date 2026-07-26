@@ -19,7 +19,7 @@ There's a pattern that turns up in almost every struggling team. The problem get
 
 We recorded this episode at Domain-Driven Design Europe, where Andrea Magnorsky, Kenny Schwegler, and Andrew Harmel-Law spent the conference asking attendees and speakers a single question: what's the hardest part of facilitating software architecture and design? Nine people, Mathias Verraes, Zsófia Herendi, Stefan Hofer, Samantha Dellaert, Eric Evans, Henning Schwentner, Hadi Ahmadi, Alexandra Junghans, and Susanne Kaiser answered, and the answers sorted themselves into three groups — one about how organisations are wired, one about who's actually in the room, and one about the facilitator's own state of mind. None of them was really about software.
 
-### The Problem Is Rarely Just Technical
+## The Problem Is Rarely Just Technical
 
 Matthias Verraes opened with a story most people on a platform or core team will recognise straight away. A central team owned shared infrastructure. Teams in different countries could commit directly into that codebase and also file feature requests. Things broke constantly, and the core team got the blame every time.
 
@@ -35,7 +35,7 @@ Susanne Kaiser named the version of this that shows up at budget time. Managemen
 
 Her response is to switch languages. Find out what outcomes leadership is actually chasing, and connect the work to those. She points to the *Accelerate* research as a useful bridge, because it speaks in terms of productivity, profitability, and market share — words that travel upward better than "exploring the problem domain." "We have the same goal in the end, but we speak different languages."
 
-### You Can't Model Without the Right People
+## You Can't Model Without the Right People
 
 Henning Schwentner named the constraint anyone who has run a collaborative modelling session has hit. You can have the best process going, but if the people with real domain knowledge aren't there, the output won't match reality. Proxies, developers, and managers who think they know what happens but don't will only get you an approximation.
 
@@ -49,7 +49,7 @@ Stefan Hofer, co-creator of Domain Storytelling, described his own shift. He wen
 
 His advice for anyone starting out is practical. Find a local meetup or a conference with hands-on workshops, where the barrier to trying this is low. Books help, but at some point you have to actually do it.
 
-### The Facilitator Is Part of the System
+## The Facilitator Is Part of the System
 
 Eric Evans offered something that sounds obvious until you sit with it. He collaborates because solo design simply doesn't work — early in his career he'd be handed a feature, build it with no real interaction with anyone, and the results were terrible. Effectiveness came first. The fun was a consequence.
 
@@ -63,7 +63,7 @@ Alexandra Junghans, who teaches software engineering students in Lucerne, makes 
 
 Her advice for anyone hesitating is the shortest in the episode: just start. "I'm a beginner as well. There's nothing to lose. We can just start." You don't need perfect conditions or full buy-in to begin.
 
-### What These Conversations Have in Common
+## What These Conversations Have in Common
 
 Taken together, these short answers describe the same ground from different angles:
 
@@ -79,7 +79,7 @@ Taken together, these short answers describe the same ground from different angl
 
 - **Facilitation means creating conditions, not controlling outcomes.** Across all nine answers, the job looks less like steering people toward a predetermined answer and more like making it possible for the right people to see the right things together.
 
-### What Doesn't Get Fixed
+## What Doesn't Get Fixed
 
 One detail from Matthias's story is worth holding onto: his fix never got implemented. He mapped the problem, surfaced the structural causes, proposed a sensible intervention, and the organisation didn't act on it, because he didn't have the access to make it happen. That's probably more common than anyone admits. Good facilitation can make a problem visible and give people a shared language for it. It can't always overcome the power structures that kept the problem invisible in the first place — which is exactly Hadi's point that you can work with those structures, but you can't remove them.
 
@@ -87,7 +87,7 @@ So the question worth sitting with isn't "what's the right technique for collabo
 
 ---
 
-### Further Reading
+## Further Reading
 
 **Mentioned in this episode:**
 

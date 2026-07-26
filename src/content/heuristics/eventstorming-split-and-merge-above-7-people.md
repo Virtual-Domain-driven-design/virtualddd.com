@@ -12,13 +12,13 @@ seoTitle: "EventStorming: Split and Merge Above Seven People"
 
 Have a maximum of 7 people for a process or a design leven EventStoming. We want to split and merge when we have more than 7 people.
 
-### Examples
+## Examples
 
 1. Doing a process or design level EventStorming.
 
 2. With a big picture EventStorming we never split and merge.
 
-### Context
+## Context
 
 Setting up for a process or design level EventStorming.
 

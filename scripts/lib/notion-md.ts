@@ -89,9 +89,30 @@ export interface MdDeps {
 export function createBlocksToMd(deps: MdDeps) {
   const seenUnhandled = new Set<string>();
 
-  /** Render a list of blocks to markdown. `indent` handles nested lists. */
-  async function blocksToMd(blocks: any[], ctx: AssetCtx | null, indent = ''): Promise<string> {
+  /** How far this document's headings must move so its shallowest becomes an
+   *  h2, sitting under the page title's h1.
+   *
+   * Demoting everything by one — the old rule — was right only for a body that
+   * starts with a Notion heading_1. Most do not: an author who opens with
+   * heading_2 produced a page whose first heading was an h3, which tells a
+   * screen reader about a level that is not there. 160 heuristics shipped that
+   * way. Shifting by the distance to h2 handles every case, and leaves a body
+   * that already starts at heading_1 exactly as it was. */
+  const NOTION_HEADING = { heading_1: 1, heading_2: 2, heading_3: 3 } as const;
+  const headingShift = (blocks: any[]) => {
+    const levels = blocks
+      .map((b) => NOTION_HEADING[b.type as keyof typeof NOTION_HEADING])
+      .filter((n) => n !== undefined) as number[];
+    return levels.length ? 2 - Math.min(...levels) : 0;
+  };
+
+  /** Render a list of blocks to markdown. `indent` handles nested lists.
+   *  `shift` is computed once for the document and passed down. */
+  async function blocksToMd(blocks: any[], ctx: AssetCtx | null, indent = '', shift?: number): Promise<string> {
     const out: string[] = [];
+    const move = shift ?? headingShift(blocks);
+    const heading = (level: number, rt: any[]) =>
+      `${'#'.repeat(Math.min(6, Math.max(2, level + move)))} ${richText(rt)}`;
     let numIdx = 0;
     for (const b of blocks) {
       const t = b.type;
@@ -99,17 +120,15 @@ export function createBlocksToMd(deps: MdDeps) {
       const data = b[t];
       const kids = b.has_children ? await deps.childrenOf(b.id) : [];
       const nestable = ['paragraph', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'callout', 'toggle'].includes(t);
-      const nested = kids.length && nestable ? '\n' + (await blocksToMd(kids, ctx, indent + '  ')) : '';
+      const nested = kids.length && nestable ? '\n' + (await blocksToMd(kids, ctx, indent + '  ', move)) : '';
 
       switch (t) {
         case 'paragraph':
           out.push(indent + richText(data.rich_text) + nested); break;
-        // Headings are demoted one level: the page title is the h1, so a Notion
-        // heading_1 in the body would be a second one. Two heuristics already
-        // shipped with three h1s each because of this.
-        case 'heading_1': out.push(`## ${richText(data.rich_text)}`); break;
-        case 'heading_2': out.push(`### ${richText(data.rich_text)}`); break;
-        case 'heading_3': out.push(`#### ${richText(data.rich_text)}`); break;
+        // Never an h1: the page title is the only one. See `headingShift`.
+        case 'heading_1': out.push(heading(1, data.rich_text)); break;
+        case 'heading_2': out.push(heading(2, data.rich_text)); break;
+        case 'heading_3': out.push(heading(3, data.rich_text)); break;
         case 'bulleted_list_item': out.push(`${indent}- ${richText(data.rich_text)}${nested}`); break;
         case 'numbered_list_item': out.push(`${indent}${++numIdx}. ${richText(data.rich_text)}${nested}`); break;
         case 'to_do': out.push(`${indent}- [${data.checked ? 'x' : ' '}] ${richText(data.rich_text)}${nested}`); break;

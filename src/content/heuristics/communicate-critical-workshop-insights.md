@@ -13,7 +13,7 @@ metaDescription: "Get the uncomfortable findings to the people who were not in t
 
 Prepare a concise, evidence-based summary of observations, outcomes, and recommendations. Present this 'ground truth' to key stakeholders, especially those who were not fully present, framing it as a path to their ultimate success.
 
-### Example
+## Example
 
 After the manager left the workshop, the facilitators debriefed him with a 'McKinsey-style' presentation, detailing observed insights (e.g., technical vs. business edge cases) and offering recommendations, even if they challenged his initial assumptions.
 

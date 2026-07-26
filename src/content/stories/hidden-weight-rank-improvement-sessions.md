@@ -20,7 +20,7 @@ Welcome to another instalment of Stories on Facilitating Software Architecture a
 
 During a recent discussion, Paul shared a powerful story from his time as a tech lead. It’s a candid account of a well-intentioned decision that had a deeply negative, albeit unintentional, impact on a team member. It serves as a crucial lesson on the gap between intent and impact, and the unseen power dynamics at play in any team.
 
-#### The Refactoring Session That Went Wrong
+## The Refactoring Session That Went Wrong
 
 Paul set the scene for us. It was the late 2000s, and he was the tech lead for a distributed team with developers in Colorado, Chicago, and Buenos Aires. They were working on a complex system, and Paul was keen to introduce practices like Domain-Driven Design and Test-Driven Development.
 
@@ -32,7 +32,7 @@ What happened next was unexpected. "Not long after that call," Paul recounted, "
 
 He soon discovered the reason. The code he had chosen to publicly critique and refactor had been written primarily by one of the contractors on the team. "He felt very embarrassed and shamed by what I'd done," Paul admitted. "It implied to the rest of the team that the code he'd been involved in was not up to par."
 
-#### Acknowledging the Real Impact
+## Acknowledging the Real Impact
 
 This is the moment where the story turns from a mistake into a lesson. Paul recognised the gravity of the situation. He reached out to the developer, apologised, and then later extended that apology to the entire team. Fortunately, the developer accepted the apology and returned, continuing as a key member of the team.
 
@@ -40,7 +40,7 @@ Reflecting on the event, Paul was clear about his misstep. "I remember at the ti
 
 This experience became a wake-up call about awareness, the power we wield in leadership roles, and the importance of finding better ways to influence change—ways that involve coming alongside people rather than putting them in a spotlight.
 
-#### Unpacking the Dynamics at Play
+## Unpacking the Dynamics at Play
 
 Paul’s story prompted a deeper discussion about the forces at work in such a situation.
 
@@ -59,7 +59,7 @@ When we critique code, we are not just critiquing lines of text. As Andrew Harme
 **3. Moving Beyond "Good Intentions"**
 It’s easy to defend our actions by saying, "but my intentions were good." This is a form of cognitive dissonance that prevents real learning. The crucial step Paul took was to move past his intentions and focus on the actual impact. How did the other person feel? What damage was done to the relationship and team trust? True leadership involves taking responsibility for the outcome, not just the intent. This means offering a genuine apology—"I was wrong"—rather than a hollow "I'm sorry you feel that way."
 
-#### Better Ways to Guide and Influence
+## Better Ways to Guide and Influence
 
 So, how could this have been handled differently? The conversation highlighted several alternative approaches for guiding teams toward better practices.
 

@@ -12,6 +12,6 @@ seoTitle: "Formalise Architectural Advice Forums"
 
 Establish a formal, recurring forum where teams present their architectural decisions to the wider group. This practice moves knowledge sharing from informal conversations to a structured process. It fosters reuse, consistency, and collective learning across the organization.
 
-### Examples
+## Examples
 
 The advisory forum allows teams to hear what others are doing and what decisions they are making. This prevents teams from working in isolation and enables knowledge reuse.

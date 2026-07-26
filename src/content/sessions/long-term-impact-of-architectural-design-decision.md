@@ -16,7 +16,7 @@ featuredImage: "./_assets/long-term-impact-of-architectural-design-decision-feat
 
 There is a quote made famous by Ruth Malan from Grady Booch: 'Architecture represents the significant design decisions that shape a system.' And shaping a system takes time, and seeing the impact of these significant design decisions can take years after the changes have been done. And most of us are usually not there to reak the benefit, or worse, feel its pain. So in collaboration with D-EDGE we will have a panel of people that did experience and will discuss how architecture decisions shaped the system years after the change.
 
-### About D-EDGE
+## About D-EDGE
 
 Have you ever booked a hotel online? Then you've probably used D-EDGE without knowing it. Every day, we help more than 17,000 hotels worldwide to develop their online visibility and sales through a range of SaaS and digital marketing solutions. Amongst the 480 D-EDGERS, the R&D team is made up of a hundred or so enthusiasts who are reinventing hotel booking for both the traveller and the hotelier. As a subsidiary of the Accor group, D-EDGE simplifies the life of independent hotels and hotel chains alike.
 [https://www.meetup.com/D-EDGE-tech/ 

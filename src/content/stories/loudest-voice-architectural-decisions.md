@@ -20,7 +20,7 @@ It happens more often than we admit: architectural decisions get made not throug
 
 That's the challenge Gien Verschatse shared with us in this installment of Stories on Facilitating Software Architecture and Design. It's a story about what happens when a team lacks the skills to make architectural decisions collaboratively, and how technical choices can mask deeper organizational dysfunction.
 
-### From Phoenix to Ashes
+## From Phoenix to Ashes
 
 Gien joined a company early in her career to work on a Phoenix project—one of those fresh-start initiatives that promise to do everything better. Six months in, the company killed it. Too slow, not sellable. The team got reassigned to maintain the old product instead.
 
@@ -28,7 +28,7 @@ The old system hadn't aged well. We're talking technologies that were outdated e
 
 Still, the team tried to make the best of it. They were enthusiastic about domain-driven design. They had no architects, just software developers figuring things out together. Gien organized an EventStorming session to understand where they were. She worked with the team to map technical debt from an emotional angle: What frustrates you most? What makes your job difficult?
 
-### The EventStorming That Went Nowhere
+## The EventStorming That Went Nowhere
 
 The EventStorming was a disaster. Gien couldn't get people to step away from how the system currently worked. They were stuck in the present, unable to imagine alternatives. The session that was supposed to open up possibilities just reinforced how trapped everyone felt.
 
@@ -36,7 +36,7 @@ Meanwhile, the team had other dynamics at play. One developer with a dominant pe
 
 Meetings were tense. The team wanted to modernize, but the loudest voice in the room kept winning. That voice wanted to implement an event sourcing system—cutting edge at the time, exciting technology. The decision got made without much thought about consequences.
 
-### The Architecture That Solved Nothing
+## The Architecture That Solved Nothing
 
 The event sourcing system got built completely alongside everything that already existed. The emotional wall of technical debt the team had mapped? None of it got tackled. People would only see relief two or three years down the line when they could finally kill parts of the old system.
 
@@ -46,7 +46,7 @@ The new architecture created new problems. The QA team didn't know how to test i
 
 Nobody thought about what this would mean for other teams. Nobody had the skills to think through architectural decisions properly. Nobody was there who knew how to facilitate this kind of choice.
 
-### The Exodus
+## The Exodus
 
 People started leaving. The work wasn't getting better. The job wasn't getting easier. There was no end in sight. Eventually, Gien left too, after a massive burnout. She felt like she'd failed—that she couldn't make it work in that environment.
 
@@ -54,7 +54,7 @@ Looking back fifteen years later, she sees it differently. "It was pretty toxic 
 
 The company itself barely survived. At some point, one person was left maintaining the product for remaining customers. The company eventually invested in a different, similar product they acquired instead.
 
-### Unpacking the Dynamics
+## Unpacking the Dynamics
 
 Several patterns emerge from this story:
 
@@ -70,7 +70,7 @@ Several patterns emerge from this story:
 
 - **The failure of leaving**: Gien felt like a failure for leaving. Many people do. But staying in toxic situations doesn't make you stronger—it makes you burned out. "Quit sooner. It's okay to quit bad environments."
 
-### What Would Help Now
+## What Would Help Now
 
 When asked what she'd do differently with her current experience, Gien described a different approach entirely:
 
@@ -80,12 +80,12 @@ She'd also look for the values and fears driving the strong preferences. Why the
 
 By talking about value-based heuristics and preferences instead of emotions directly, you can have the conversation without triggering people's defenses. "We're talking about your emotions," Gien noted, "but in a way that people don't quite get you're talking about emotions. After 20 years in the software industry, which is male dominated, I have found a way to talk about emotions that isn't really talking about emotions."
 
-### The Real Cost
+## The Real Cost
 
 This story isn't really about event sourcing, or FoxPro, or even one dominant developer. It's about what happens when teams lack the skills and structures to make architectural decisions together. When there's no one to facilitate, no one to dig into the values and fears driving preferences, no one to think through consequences beyond the immediate technical excitement.
 
 The cost shows up in burnout, in people leaving, in companies that barely survive. The architectural decision was bad not because event sourcing was wrong, but because the process that led to it was broken. And in software, process and structure aren't separate from technical decisions—they're what makes good technical decisions possible in the first place.
 
-### Further Reading
+## Further Reading
 
 **Value-based heuristics: **The Psychology of Computer Programming: Silver Anniversary Edition by  Gerald M. Weinberg.  Looks at computer programming as human performance, a social activity, and an individual activity and reviews programming tools. 

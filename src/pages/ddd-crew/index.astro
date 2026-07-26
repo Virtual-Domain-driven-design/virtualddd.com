@@ -58,7 +58,7 @@ const jsonLd = collectionPage(Astro.site, {
   <div class="wrap">
     {grouped.map((g) => (
       <section class="cat">
-        <p class="eyebrow eyebrow--cyan">{g.cat}</p>
+        <h2 class="eyebrow eyebrow--cyan">{g.cat}</h2>
         <div class="grid">
           {g.items.map((i) => (
             <a class="card tool" href={`/ddd-crew/${i.id}/`}>
@@ -77,7 +77,7 @@ const jsonLd = collectionPage(Astro.site, {
     ))}
 
     <section class="linkouts">
-      <p class="eyebrow eyebrow--cyan">More from the ddd-crew</p>
+      <h2 class="eyebrow eyebrow--cyan">More from the ddd-crew</h2>
       <p class="lo-note">These live on GitHub — head over to explore or contribute.</p>
       <div class="lo-grid">
         {linkOuts.map((l) => (

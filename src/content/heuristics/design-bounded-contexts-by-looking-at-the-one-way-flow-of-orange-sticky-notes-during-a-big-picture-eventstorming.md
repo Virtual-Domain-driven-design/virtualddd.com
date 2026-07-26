@@ -10,11 +10,11 @@ tags: ["EventStorming", "Bounded Context"]
 seoTitle: "Design Bounded Contexts by One-Way Sticky Flow"
 ---
 
-### Short description
+## Short description
 
 From a big picture EventStorming workshop, looking for one-way flow of orange stickies, and puth them in the same boundary.
 
-### Examples
+## Examples
 
 - A new hotel is created.
 
@@ -30,6 +30,6 @@ From a big picture EventStorming workshop, looking for one-way flow of orange st
 
 - The room was released.
 
-### Context
+## Context
 
 When a domain experts puts a train of orange sticky notes back to back on the wall in the same swimlane, this mean he/she is working on the same related concepts which allighn a business line in which he/she operates.

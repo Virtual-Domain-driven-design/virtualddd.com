@@ -21,7 +21,7 @@ Recently, we had the pleasure of hearing a story from Elena Stojmilova, a Techni
 
 It wasn’t a simple switch, but a profound cultural and professional shift. Here’s what she learned along the way.
 
-#### The Weight of a Decision
+## The Weight of a Decision
 
 The change began during a period of wider transformation. As the company migrated to the cloud and adopted new ways of working, the decision was made to create autonomous teams responsible for their own architectural choices.
 
@@ -33,7 +33,7 @@ The initial excitement of freedom, however, quickly met the sobering reality of 
 
 This shift from focusing on a single piece of code to seeing the entire system—with its costs, dependencies, and product implications—was the first major hurdle. But it was also, as Elena reflected, “the most powerful way of learning.”
 
-#### Finding Our Feet with Support and Structure
+## Finding Our Feet with Support and Structure
 
 Making this leap would have been impossible without the right support systems. Elena emphasised that at the beginning, teams don’t necessarily have all the skills needed to make these high-level decisions. This is where guidance, not dictation, becomes critical.
 
@@ -51,7 +51,7 @@ This Socratic approach helped build the team’s decision-making muscle. Alongsi
 
 These tools were not just about process; they were about creating a deliberate and transparent way to navigate complex choices.
 
-#### The First Forum: Navigating a Sea of Opinions
+## The First Forum: Navigating a Sea of Opinions
 
 The first experience with the Architectural Advisory Forum was a trial by fire.
 
@@ -63,7 +63,7 @@ This influx of feedback, some of which disagreed with the team’s proposed dire
 
 This experience taught a valuable lesson: feedback, even when it feels like criticism, is essential. It helps you see what you might have missed and kicks the tyres on your decision. The key is to remain calm, consider every point, but ultimately retain ownership of the final choice.
 
-#### Four Years On: A Culture of Collaboration
+## Four Years On: A Culture of Collaboration
 
 Today, the process looks very different. The initial challenges have given way to a mature, collaborative culture.
 

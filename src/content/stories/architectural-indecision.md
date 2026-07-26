@@ -22,7 +22,7 @@ This is a common and uncomfortable moment for anyone facilitating software archi
 
 In our recent story of Facilitating Software Architecture and Design we talked about the heart of this challenge. It provides a valuable lesson in leading by listening and knowing when to step in.
 
-#### A Story of Growth and Hesitation
+## A Story of Growth and Hesitation
 
 An organisation was scaling rapidly, with plans to grow from eight to over one hundred developers in the next 2 years. The existing codebase, built on vanilla JavaScript, wouldn't support this growth. The CTO mandated a move to a modern framework, and the choice was narrowed to Vue or React.
 
@@ -36,7 +36,7 @@ The team agreed. With their consent, he made the call to go with React. But the 
 
 The answer was clear: training. And so, training was arranged for the entire team. The decision was made, the pressure was relieved, and a constructive path forward was established.
 
-#### Deconstructing the Silence
+## Deconstructing the Silence
 
 This story highlights a crucial aspect of our work: silence doesn't always mean apathy. When a team won't decide, it's often rooted in deeper issues.
 
@@ -46,7 +46,7 @@ This story highlights a crucial aspect of our work: silence doesn't always mean 
 
 **It's Okay Not to Have an Opinion:** We often assume everyone wants to be involved in every major decision. The reality is that some people are happy to trust the judgement of others and focus on their work. Forcing participation from those who would rather abstain can be counterproductive.
 
-#### Practical Tools for the Facilitator
+## Practical Tools for the Facilitator
 
 Navigating these situations requires more than just technical knowledge; it demands empathy and a flexible approach. The story offers a few powerful techniques.
 
@@ -65,7 +65,7 @@ The phrase "disagree and commit" is often used as a way to shut down discussion.
 **3. Create Psychological Safety**
 People need to feel safe to voice uncertainty or a dissenting opinion without fear of negative consequences. As a facilitator, you can proxy for those who are hesitant. If someone shares a valid concern privately, you can offer to bring it to the group yourself. Using tools like Architecture Decision Records (ADRs) also helps by formally documenting the context, the trade-offs, and the reasoning behind a choice. This shifts the focus from who made the decision to why the decision was made, based on the information available at the time.
 
-#### The Goal is Progress, Not Perfect Consensus
+## The Goal is Progress, Not Perfect Consensus
 
 Facilitating software architecture is less about enforcing patterns and more about navigating the complex human dynamics of a team. While we should always strive to enable teams to own their decisions, our primary role is to ensure the system and the team can move forward in a healthy way.
 

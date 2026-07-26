@@ -22,7 +22,7 @@ const DISCORD_PATH =
 ---
 
 <div class="side-block side-discord">
-  <p class="eyebrow eyebrow--cyan">Community</p>
+  <h2 class="eyebrow eyebrow--cyan">Community</h2>
   <div class="sd-head">
     <span class="sd-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d={DISCORD_PATH} /></svg>
@@ -34,13 +34,13 @@ const DISCORD_PATH =
 </div>
 
 <div class="side-block">
-  <p class="eyebrow eyebrow--cyan">Follow us</p>
+  <h2 class="eyebrow eyebrow--cyan">Follow us</h2>
   <Socials />
 </div>
 
 {latest.length > 0 && (
   <div class="side-block">
-    <p class="eyebrow eyebrow--cyan">{latestLabel}</p>
+    <h2 class="eyebrow eyebrow--cyan">{latestLabel}</h2>
     <ul class="side-latest">
       {latest.map((i) => (
         <li>

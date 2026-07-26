@@ -14,6 +14,10 @@
  */
 import { test, describe, before, after } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 import { readdirSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { serveDist } from './helpers.mjs';
@@ -129,7 +133,7 @@ describe('filters and search', () => {
     const page = await browser.newPage();
     await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
     const total = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
-    assert.ok(total > 100, `expected the full archive, got ${total}`);
+    assert.ok(total > 10, `the archive rendered only ${total} cards`);
 
     await page.fill('[data-test="filter-search"]', 'eventstorming');
     await page.waitForTimeout(200);
@@ -165,12 +169,21 @@ describe('filters and search', () => {
   test('a legacy tag URL lands pre-filtered', async () => {
     // 289 retired tag archives 301 here; landing on the unfiltered index
     // would make those redirects a lie.
+    //
+    // The tag is read off the page and slugified, rather than named here: this
+    // suite blocks the deploy, and an editor renaming a tag in Notion must not
+    // be able to turn it red.
     const page = await browser.newPage();
-    await page.goto(`${base}/sessions/?tag=collaborative-modelling`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/sessions/`, { waitUntil: 'domcontentloaded' });
+    const tag = await page.$eval('[data-test="filter-tag"] option:nth-child(2)', (o) => o.value);
+    const slug = tag.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+    await page.goto(`${base}/sessions/?tag=${slug}`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(200);
     const n = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
-    assert.ok(n > 0 && n < 100, `expected a filtered subset, got ${n}`);
-    assert.equal(await page.inputValue('[data-test="filter-tag"]'), 'collaborative modelling');
+    const total = await page.$$eval('[data-test="results"] [data-test="card"]', (e) => e.length);
+    assert.ok(n > 0 && n < total, `expected a filtered subset of ${total}, got ${n}`);
+    assert.equal(await page.inputValue('[data-test="filter-tag"]'), tag);
     await page.close();
   });
 
@@ -179,7 +192,8 @@ describe('filters and search', () => {
     await page.goto(`${base}/sessions/?tag=this-tag-never-existed`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(200);
     const n = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
-    assert.ok(n > 100, `unknown tag emptied the archive (${n} shown)`);
+    const total = await page.$$eval('[data-test="results"] [data-test="card"]', (e) => e.length);
+    assert.equal(n, total, `an unknown tag filtered the archive down to ${n} of ${total}`);
     await page.close();
   });
 
@@ -193,8 +207,8 @@ describe('filters and search', () => {
     const onScreen = () => page.$$eval('[data-test="results"] [data-test="card"]:not([hidden])', (e) => e.length);
 
     // Reveal everything, then filter: the window must go back to a first batch.
-    for (let i = 0; i < 10 && await page.isVisible('#load-more'); i++) {
-      await page.click('#load-more');
+    for (let i = 0; i < 10 && await page.isVisible('[data-test="load-more"]'); i++) {
+      await page.click('[data-test="load-more"]');
       await page.waitForTimeout(120);
     }
     await page.fill('[data-test="filter-search"]', 'design');
@@ -204,8 +218,8 @@ describe('filters and search', () => {
     assert.ok(await onScreen() > 0, 'the count claims matches but nothing is on screen');
 
     // Everything the count promises must be reachable by pressing Load more.
-    for (let i = 0; i < 20 && await page.isVisible('#load-more'); i++) {
-      await page.click('#load-more');
+    for (let i = 0; i < 20 && await page.isVisible('[data-test="load-more"]'); i++) {
+      await page.click('[data-test="load-more"]');
       await page.waitForTimeout(120);
     }
     assert.equal(await onScreen(), matches,
@@ -231,12 +245,17 @@ describe('filters and search', () => {
     const count = () => page.textContent('[data-test="result-count"]').then((t) => Number(t.match(/\d+/)[0]));
     const total = await count();
 
-    await page.click('[data-test="type-filter"][data-type="guiding-heuristics"]');
+    // Which type is not the point — that picking one shows only that one is.
+    // Reading the value off the control keeps this test out of the way of
+    // renaming a heuristic type.
+    const control = page.locator('[data-test="type-filter"]').nth(1);
+    const wanted = await control.getAttribute('data-value');
+    await control.click();
     await page.waitForTimeout(200);
     const guiding = await count();
     assert.ok(guiding > 0 && guiding < total, `type filter returned ${guiding} of ${total}`);
     const types = await page.$$eval('[data-test="card"]:not([hidden])', (els) => els.map((e) => e.dataset.type));
-    assert.ok(types.every((t) => t === 'guiding-heuristics'), 'a heuristic of another type stayed on show');
+    assert.ok(types.every((t) => t === wanted), 'a heuristic of another type stayed on show');
 
     await page.click('[data-test="filter-reset"]');
     await page.waitForTimeout(200);
@@ -328,14 +347,14 @@ describe('progressive enhancement', () => {
     for (const path of candidates) {
       await page.goto(base + path, { waitUntil: 'load' });
       await page.waitForTimeout(300);
-      const scrollable = await page.$$eval('.carousel', (els) =>
+      const scrollable = await page.$$eval('[data-test="carousel"]', (els) =>
         els.some((el) => el.scrollWidth > el.clientWidth + 6));
       if (!scrollable) continue;
 
-      const before = await page.$eval('.carousel', (el) => el.scrollLeft);
-      await page.click('.carousel-next');
+      const before = await page.$eval('[data-test="carousel"]', (el) => el.scrollLeft);
+      await page.click('[data-test="carousel-next"]');
       await page.waitForTimeout(900);
-      const after = await page.$eval('.carousel', (el) => el.scrollLeft);
+      const after = await page.$eval('[data-test="carousel"]', (el) => el.scrollLeft);
       assert.ok(after > before, `the next arrow did not scroll the carousel on ${path}`);
       await page.close();
       return;
@@ -378,6 +397,33 @@ describe('progressive enhancement', () => {
 });
 
 describe('accessibility basics', () => {
+  // A whole-page audit, run on one page of each shape. This exists because a
+  // pre-launch review found contrast, target-size and heading defects by hand
+  // that 56 tests had missed — and because the four checks below it are the
+  // specific ones worth naming, not the whole of accessibility.
+  //
+  // Scoped to WCAG 2.1/2.2 A and AA. A finding here is a real defect on a real
+  // page, not a style opinion.
+  test('axe finds nothing on a page of each shape', async () => {
+    const axe = readFileSync(require.resolve('axe-core'), 'utf8');
+    const page = await browser.newPage();
+    const findings = [];
+    for (const path of ['/', '/sessions/', '/sessions/what-is-an-aggregate-with-thomas-ploch/',
+      '/heuristics/', '/heuristics/align-with-domain-experts/', '/organisers/', '/about-us/', '/404.html']) {
+      await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(axe);
+      const result = await page.evaluate(async () =>
+        await window.axe.run(document, {
+          runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+        }));
+      for (const v of result.violations) {
+        findings.push(`${path} — ${v.id} (${v.impact}): ${v.nodes.length}× ${v.nodes[0].target.join(' ')}`);
+      }
+    }
+    await page.close();
+    assert.deepEqual(findings, [], `accessibility violations:\n${findings.join('\n')}`);
+  });
+
   // The four defects a pre-launch review found by hand. Each was invisible to
   // the suite at the time, and each is the kind that comes back on the next
   // restyle unless something holds it down.

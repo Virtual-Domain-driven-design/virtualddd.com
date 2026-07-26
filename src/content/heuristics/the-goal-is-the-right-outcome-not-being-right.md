@@ -11,6 +11,6 @@ tags: ["Sociotechnical Systems", "Facilitating Software Design and Architecture"
 
 The objective of a design discussion is not to prove one's own correctness but to arrive at a sound, team-owned solution. Focusing on 'being right' closes off collaboration and can lead to enforced, poorly understood decisions. The true goal is collective understanding and commitment.
 
-### Examples
+## Examples
 
 Instead of forcing her 'right' solution, the facilitator allowed the team to implement their idea. The goal shifted from winning the argument to ensuring the team learned the underlying principle, even if it was through failure.

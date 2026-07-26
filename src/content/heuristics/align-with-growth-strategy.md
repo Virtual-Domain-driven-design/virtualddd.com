@@ -10,10 +10,10 @@ tags: ["Strategic design"]
 enables: ["pause-every-ten-minutes-invite-dissent"]
 ---
 
-### Short description
+## Short description
 
 Create separate context for parts of the system business wants to scale up
 
-### Context
+## Context
 
 Use these at a strategic level when defining bounded context. When you want to seperate core domains from supporting and generic subdomains

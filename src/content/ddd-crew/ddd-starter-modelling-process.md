@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/ddd-starter-modelling-process/"
 license: "CC-BY-SA-4.0"
 category: "Getting started"
 order: 2
-stars: 5939
+stars: 5943
 heroImage: "./_assets/ddd-starter-modelling-process/ddd-crew-modeling-process--cirlces-feed-each-other.svg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
@@ -91,71 +91,71 @@ __Navigation:__
   - [Contributors](#contributors)
   - [Contributions and Feedback](#contributions-and-feedback)
 
-### When to use the DDD Starter Modelling Process?
+## When to use the DDD Starter Modelling Process?
 
 If you're new to DDD or just not sure where to start, this process can reduce your cognitive load. It will guide you through following scenarios, and possibly others:
 
-#### Kicking Off a Greenfield Project
+### Kicking Off a Greenfield Project
 
 At the start of a new project the number of things you need to think about can be overwhelming. One or two iterations of this process can help you put the foundations in place.
 
-#### Beginning a Brownfield Migration
+### Beginning a Brownfield Migration
 
 Before getting to work on modernising your legacy system, a few iterations of this process can help you to uncover essential information needed to create a vision for your target architecture.
 
-#### Kicking Off a Major Program of Work
+### Kicking Off a Major Program of Work
 
 When starting a new initiative involves a significant investment across many teams, it is essential to cover the 8 steps in the process. This process can guide you through the first few iterations.
 
-#### Explore Your Domain for New Learning Opportunities
+### Explore Your Domain for New Learning Opportunities
 
 Software development is a learning process. You can apply the DDD Starter Modelling Process at any time to uncover new insights, identify new opportunities, or simply share knowledge around the team.
 
-#### Assess Current State of Your Project
+### Assess Current State of Your Project
 
 This process can be the foundation for assessing how well your current system is aligned to the domain and business model. 
 
-#### Re-organising Teams
+### Re-organising Teams
 
 A loosely-coupled architecture enables teams to work in parallel without being blocked. A loosely-coupled architecture also must be aligned to coupling in the domain. This process will help you to design a software architecture, and a team structure aligned with your domain.
 
-#### Practicing or Learning DDD
+### Practicing or Learning DDD
 
 This process is ideal when you are new to DDD and want to practice, or you want to teach others the different aspects of modelling a domain. It's important to communicate that this linear process is not a realistic process. It's just a starting point to reduce cognitive load until you are confident with DDD. 
 
 If you want to try it out yourself, colleagues at SAP have created a [DDD Kata](https://github.com/SAP/curated-resources-for-domain-driven-design/blob/main/ddd-kata.md) to educate teams, how to apply the DDD Modelling Process in your team. Based upon a set of requirements, you can try out how EventStorming, Domain Message Flow, Bounded Context Canvas and Aggregate Canvas work together and help you to validate your design decisions.
 
-### How to Adapt the Process?
+## How to Adapt the Process?
 
 This process can be customised in many ways. On a real project, you'll be switching between all 8 steps based on the new insights you gain or need to gain.
 
 Below are a few reasons for deciding when to change the order or switch between steps.
 
-#### Start with Collaborative Modelling
+### Start with Collaborative Modelling
 
 If you want to get your whole team collaborating immediately, modelling the domain which they are familiar with might be more comfortable than talking about business models and strategy which they are less comfortable with.
 
-#### Start by Assessing IT Landscape
+### Start by Assessing IT Landscape
 
 Before looking forward to the business vision and going deep into the domain, it might be better to visualise the existing architecture first. Start with step 5 and map out your strategic portfolio to see what the major constraints you will face are.
 
-#### Code Before Confirming Architecture and Team Boundaries
+### Code Before Confirming Architecture and Team Boundaries
 
 On some projects it makes sense to start by writing code sooner. Perhaps you need to deliver an MVP or the domain is so complex that creating a model in code is necessary before you can consider the architecture.
 
-#### Repeat Steps 2 (Discover) - 6 (Organise) Before Moving to 7 (Define)
+### Repeat Steps 2 (Discover) - 6 (Organise) Before Moving to 7 (Define)
 
 Before you dive into the definition of individual bounded contexts, it may be beneficial to model the domain multiple times and look for different ways to decompose your system into sub-domains and teams.
 
-#### Organise Teams Before Designing Contexts
+### Organise Teams Before Designing Contexts
 
 For a great deal of projects there are organisational constraints that we need to take into account. If this is the case, you should consider identifying possible team structures before designing architectures that you will never be able to implement.
 
-#### Blending Definition and Coding
+### Blending Definition and Coding
 
 Steps 7 (Define) and 8 (Code) can occur concurrently. This may happen when you are coding a bounded context, and the insights you get from writing code make you change the high-level design.
 
-### The Process
+## The Process
 
 The modelling process is composed of 8 steps which are introduced below.
 
@@ -166,7 +166,7 @@ A good talk that gives an overview of the process in the context of typical phas
 3. Strategy & Org Design
 4. Tactical Architecture.
 
-#### Understand
+### Understand
 
 Align our focus with the organisation's business model, the needs of its users, and its short, medium, and long-term goals.
 
@@ -178,7 +178,7 @@ As a starting point, we recommend [The Business Model Canvas](https://www.strate
 
 ![The Business Model Canvas](./_assets/ddd-starter-modelling-process/business-model-canvas.png)
 
-##### Tools
+#### Tools
 
 - [Impact Mapping](https://www.impactmapping.org/)
 - [The Business Model Canvas](https://www.strategyzer.com/canvas/business-model-canvas)
@@ -186,14 +186,14 @@ As a starting point, we recommend [The Business Model Canvas](https://www.strate
 - [Wardley Mapping](https://learnwardleymapping.com/)
 - [User Story Mapping](https://www.jpattonassociates.com/user-story-mapping/)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 - People who have domain knowledge
 - People who understand the product and business strategy
 - Real end users, not only their representatives in your organisation
 
-#### Discover
+### Discover
 
 Discover the domain visually and collaboratively.
 
@@ -215,7 +215,7 @@ As a starting point, we recommend [EventStorming](https://www.eventstorming.com/
 
 ![EventStorming](./_assets/ddd-starter-modelling-process/event_storming.jpeg)
 
-##### Tools
+#### Tools
 
 - [Domain Storytelling](https://domainstorytelling.org/)
 - [Example Mapping](https://cucumber.io/blog/bdd/example-mapping-introduction/)
@@ -223,7 +223,7 @@ As a starting point, we recommend [EventStorming](https://www.eventstorming.com/
 - [User Journey Mapping](https://boagworld.com/audio/customer-journey-mapping/)
 - [User Story Mapping](https://www.jpattonassociates.com/user-story-mapping/)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 - People who have domain knowledge
@@ -231,7 +231,7 @@ As a starting point, we recommend [EventStorming](https://www.eventstorming.com/
 - People who understand the customers' needs and problems
 - Real end users
 
-#### Decompose
+### Decompose
 
 Decompose the domain into sub-domains - loosely-coupled parts of the domain.
 
@@ -245,7 +245,7 @@ As a starting point, we recommend carving up your event storm into sub-domains a
 
 ![Sub-domains on an EventStorm](./_assets/ddd-starter-modelling-process/event_storm_sub_domains.png)*Credit: Alberto Brandolini*
 
-##### Tools
+#### Tools
 
 - [Business Capability Modelling](https://www.slideshare.net/trondhr/from-capabilities-to-services-modelling-for-businessit-alignment-v2)
 - [Design Heuristics](https://www.dddheuristics.com/)
@@ -253,12 +253,12 @@ As a starting point, we recommend carving up your event storm into sub-domains a
 - [Independent Service Heuristics](https://github.com/TeamTopologies/Independent-Service-Heuristics)
 - [Visualising Sociotechnical Architecture with Context Maps](https://speakerdeck.com/mploed/visualizing-sociotechnical-architectures-with-context-maps)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 - People who have domain knowledge
 
-#### Strategize
+### Strategize
 
 Strategically map out your sub-domains to identify core domains: the parts of the domain which have the greatest potential for business differentiation or strategic significance.
 
@@ -270,20 +270,20 @@ As a starting point, we recommend [Core Domain Charts](https://github.com/ddd-cr
 
 ![Core Domain Charts](./_assets/ddd-starter-modelling-process/core-domain-chart.jpg)
 
-##### Tools/Resources
+#### Tools/Resources
 
 - [Core Domain Charts](https://github.com/ddd-crew/core-domain-charts)
 - [Purpose Alignment Model](https://web.archive.org/web/20241202160527/https://www.informit.com/articles/article.aspx?p=1384195&seqNum=2)
 - [Wardley Mapping](https://learnwardleymapping.com/)
 - [Revisiting the Basics of Domain-Driven Design](https://vladikk.com/2018/01/26/revisiting-the-basics-of-ddd/)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who understand product and business strategy
 - People who design, build, test software
 - People who have domain knowledge
 
-#### Connect
+### Connect
 
 Connect the sub-domains into a loosely-coupled architecture which fulfills end-to-end business use-cases.
 
@@ -293,19 +293,19 @@ As a starting point, we recommend [Domain Message Flow Modelling](https://github
 
 ![Domain Message Flow Modelling](./_assets/ddd-starter-modelling-process/domain-message-flow.jpg)
 
-##### Tools
+#### Tools
 
 - [Business Process Model and Notation](https://en.wikipedia.org/wiki/Business_Process_Model_and_Notation)
 - [Domain Message Flow Modelling](https://github.com/ddd-crew/domain-message-flow-modelling)
 - [Process Modelling EventStorming](https://www.eventstorming.com/)
 - [Sequence Diagrams](https://en.wikipedia.org/wiki/Sequence_diagram)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 - People who have domain knowledge
 
-#### Organise
+### Organise
 
 Organise autonomous teams that are optimised for fast flow and aligned with context boundaries.
 
@@ -323,20 +323,20 @@ As a starting point, we recommend visualising sociotechnical architecture with t
 
 ![Context Map](./_assets/ddd-starter-modelling-process/context-map-cheat-sheet.png)*Credit: Michael Plöd*
 
-##### Tools
+#### Tools
 
 - [Dynamic Reteaming](https://leanpub.com/dynamicreteaming) 
 - [Explorers, Villagers & Town Planners](https://medium.com/mappingpractice/how-to-organise-yourself-f36f084a611b)
 - [Team Topologies](https://teamtopologies.com/)
 - [Visualising Sociotechnical Architecture with Context Maps](https://speakerdeck.com/mploed/visualizing-sociotechnical-architectures-with-context-maps)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 - People who have domain knowledge
 - People who understand the product and business strategy
 
-#### Define
+### Define
 
 Define the roles and responsibilities of each [bounded context](https://martinfowler.com/bliki/BoundedContext.html).
 
@@ -348,19 +348,19 @@ As a starting point, we recommend the [Bounded Context Canvas](https://github.co
 
 ![Bounded Context Canvas](./_assets/ddd-starter-modelling-process/bounded-context-canvas-v5.jpg)
 
-##### Tools
+#### Tools
 
 - [Bounded Context Canvas](https://github.com/ddd-crew/bounded-context-canvas)
 - [C4 System Context Diagram](https://c4model.com/#SystemContextDiagram)
 - [Quality Storming](https://speakerdeck.com/mploed/quality-storming)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 - People who have domain knowledge
 - People who are responsible for the product
 
-#### Code
+### Code
 
 Code the domain model.
 
@@ -370,7 +370,7 @@ As a starting point, we recommend the [Aggregate Design Canvas](https://github.c
 
 ![Aggregate Design Canvas](./_assets/ddd-starter-modelling-process/aggregate-design-canvas-v1.jpg)
 
-##### Tools
+#### Tools
 
 - [Aggregate Design Canvas](https://github.com/ddd-crew/aggregate-design-canvas)
 - [C4 Component Diagrams](https://c4model.com/#ComponentDiagram)
@@ -382,11 +382,11 @@ As a starting point, we recommend the [Aggregate Design Canvas](https://github.c
 - [Onion Architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)
 - [Unified Modelling Language](https://en.wikipedia.org/wiki/Unified_Modeling_Language)
 
-##### Who to Involve
+#### Who to Involve
 
 - People who design, build, test software
 
-#### How the DDD Starter Modelling Process relates to the Whirlpool Process  
+### How the DDD Starter Modelling Process relates to the Whirlpool Process  
   
 Some of you might have noticed some similarities with Eric Evans' [Whirlpool Process](https://www.domainlanguage.com/ddd/whirlpool/). And indeed, both are guides and not rigid best-practices. They're also both continuous and iterative.  
 But the DDD Starter Modelling Process covers more than the Whirlpool process by aiming at building a socio-technical architecture.  
@@ -396,7 +396,7 @@ The picture below shows a possible overlap between the two processes.
 
 Needless to say that Eric Evan's Whirlpool process remains totally relevant today and gives people highly valuable insights and guidance on how to explore models.
 
-### Contributors
+## Contributors
 
 Thanks to all [existing and future contributors](https://github.com/ddd-crew/ddd-starter-modelling-process/graphs/contributors) and to the following individuals who have all contributed to the DDD Starter Modelling Process:
 
@@ -406,7 +406,7 @@ Thanks to all [existing and future contributors](https://github.com/ddd-crew/ddd
 - [James Morcom](https://twitter.com/morcs)
 - [Maxime Sanglan-Charlier](https://twitter.com/__MaxS__)
 
-### Contributions and Feedback
+## Contributions and Feedback
 
 The Domain-Driven Design Starter Modelling Process is freely available for you to use. In addition, your feedback and ideas are welcome to improve the technique or to create alternative versions.
 

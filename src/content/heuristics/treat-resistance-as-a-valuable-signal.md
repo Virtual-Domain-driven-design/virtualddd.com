@@ -12,7 +12,7 @@ complements: ["focus-valued-organizational-outcomes"]
 
 View resistance not as an obstacle to overcome, but as a resource providing critical information. Instead of pushing back harder, investigate the source of the resistance to understand underlying concerns, threats, or misunderstandings. This exploration is key to finding a viable path forward together.
 
-### Examples
+## Examples
 
 When a team is reluctant to adopt a new technique, do not just insist on its value. Instead, ask why they are pushing back to uncover if they feel threatened, do not understand, or have a valid alternative perspective.
 

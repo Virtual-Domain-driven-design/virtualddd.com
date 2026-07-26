@@ -14,13 +14,16 @@ import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { pages, meta, attr, text, DIST } from './helpers.mjs';
+import { pages, meta, attr, text, markup, countHook, published, DIST } from './helpers.mjs';
 
 let all;
 before(() => {
   assert.ok(existsSync(DIST), 'dist/ missing — run `npm run build` first');
   all = pages();
-  assert.ok(all.length > 300, `expected 300+ pages, found ${all.length}`);
+  // A floor low enough that no editorial change can reach it: this catches a
+  // build that produced almost nothing, and deliberately says nothing about
+  // how big the site is.
+  assert.ok(all.length > 50, `the build produced only ${all.length} pages`);
 });
 
 describe('every page', () => {
@@ -77,7 +80,10 @@ describe('internal links', () => {
     for (const p of all) {
       for (const m of p.html.matchAll(/href="(\/[^"#?]*)"/g)) {
         const href = m[1];
-        if (/\.(xml|txt|ics|md|png|jpg|jpeg|webp|svg|ico|css|js)$/.test(href)) {
+        // Anything with a file extension is a file and must exist on disk;
+        // anything without is a page and must be one we built. Listing the
+        // extensions instead meant adding `.woff2` to a test to preload a font.
+        if (/\.[a-z0-9]{2,5}$/i.test(href)) {
           if (!existsSync(`${DIST}${href}`)) broken.add(`${href} (from ${p.path})`);
           continue;
         }
@@ -117,7 +123,8 @@ describe('structured data', () => {
     // The shape, not the contents — whether a given session filled in its
     // fields is an editorial question (tests/content/).
     const sessions = all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
-    assert.ok(sessions.length > 100, `expected 100+ session pages, got ${sessions.length}`);
+    assert.equal(sessions.length, published('sessions'),
+      'a published session did not get a page');
     for (const p of sessions) {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
       const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
@@ -167,7 +174,8 @@ describe('structured data', () => {
     const terms = all.filter((p) => /^\/heuristics\/[^/]+\/$/.test(p.path))
       .map((p) => [p, nodes(p).find((n) => n['@type'] === 'DefinedTerm')])
       .filter(([, t]) => t); // the three type indexes carry the set, not a term
-    assert.ok(terms.length > 140, `expected 140+ heuristic terms, got ${terms.length}`);
+    assert.equal(terms.length, published('heuristics'),
+      'a published heuristic is missing its DefinedTerm');
 
     for (const [p, term] of terms) {
       assert.ok(term.name, `${p.path} DefinedTerm has no name`);
@@ -194,8 +202,10 @@ describe('structured data', () => {
   test('a session that credits guests names them as performers', () => {
     const sessions = all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
     const withGuests = sessions.filter((p) => p.html.includes('data-test="guest-credit"'));
-    assert.ok(withGuests.length > 20,
-      `expected the guest relation to reach 20+ sessions, got ${withGuests.length}`);
+    // A wiring floor, not a content one: the guest relation reaching only a
+    // handful of sessions means the sync stopped resolving it.
+    assert.ok(withGuests.length > 5,
+      `the guest relation reached only ${withGuests.length} sessions`);
 
     for (const p of withGuests) {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
@@ -243,7 +253,7 @@ describe('the upcoming/past split', () => {
   for (const path of ['/', '/sessions/']) {
     test(`${path} ships every upcoming session, not just the first`, () => {
       const page = all.find((p) => p.path === path);
-      const rendered = (page.html.match(/data-test="next-session"/g) ?? []).length;
+      const rendered = countHook(page.html, 'next-session');
       assert.equal(rendered, upcomingInContent(),
         `${path} rendered ${rendered} upcoming sessions; the sweep can only choose between what ships`);
     });
@@ -253,13 +263,15 @@ describe('the upcoming/past split', () => {
     // Each card carries its date on an inner <time data-iso>, so read the
     // results region in document order rather than guessing from the anchor.
     const page = all.find((p) => p.path === '/sessions/');
+    // Bounded by two hooks, not by a class or an id: the region is whatever
+    // sits between the results and the control that reveals more of them.
     const start = page.html.indexOf('data-test="results"');
-    const end = page.html.indexOf('id="noresults"');
-    assert.ok(start > 0 && end > start, 'could not find the results region on /sessions/');
-    const region = page.html.slice(start, end);
+    const after = page.html.indexOf('data-test="load-more"', start);
+    assert.ok(start > 0, 'could not find the results region on /sessions/');
+    const region = page.html.slice(start, after > start ? after : undefined);
 
     const isos = [...region.matchAll(/data-iso="([^"]+)"/g)].map((m) => +new Date(m[1]));
-    assert.ok(isos.length > 100, `expected the whole archive, read ${isos.length} dates`);
+    assert.ok(isos.length > 10, `read only ${isos.length} dates from the archive`);
     for (let i = 1; i < isos.length; i++) {
       assert.ok(isos[i] <= isos[i - 1],
         `out of order at ${i}: ${new Date(isos[i]).toISOString()} follows ${new Date(isos[i - 1]).toISOString()}`);
@@ -269,10 +281,12 @@ describe('the upcoming/past split', () => {
 
   test('the home page lists its latest sessions newest first', () => {
     const page = all.find((p) => p.path === '/');
-    const start = page.html.indexOf('Latest sessions');
-    const end = page.html.indexOf('Follow us on Bluesky');
-    assert.ok(start > 0 && end > start, 'could not find the latest-sessions region on the home page');
-    const isos = [...page.html.slice(start, end).matchAll(/data-iso="([^"]+)"/g)].map((m) => +new Date(m[1]));
+    // Bounded by a hook, not by the words in a heading: this test is about the
+    // order of the cards, and it should survive rewording the section.
+    const start = page.html.indexOf('data-test="latest-sessions"');
+    assert.ok(start > 0, 'could not find the latest-sessions region on the home page');
+    const region = page.html.slice(start, page.html.indexOf('</section>', start));
+    const isos = [...region.matchAll(/data-iso="([^"]+)"/g)].map((m) => +new Date(m[1]));
     assert.ok(isos.length >= 4, `expected several latest sessions, read ${isos.length}`);
     for (let i = 1; i < isos.length; i++) {
       assert.ok(isos[i] <= isos[i - 1], `latest sessions out of order at ${i}`);
@@ -336,7 +350,7 @@ describe('prev/next navigation', () => {
         `${prev} does not point back to ${p.path} as its next`);
       checked.push(p.path);
     }
-    assert.ok(checked.length > 50, `only ${checked.length} pages have prev/next`);
+    assert.ok(checked.length > 10, `only ${checked.length} pages have prev/next`);
   });
 });
 
@@ -347,13 +361,13 @@ describe('heuristic type pages', () => {
     for (const type of types) {
       const page = all.find((p) => p.path === `/heuristics/${type}/`);
       assert.ok(page, `/heuristics/${type}/ was not built`);
-      const shown = [...page.html.matchAll(/data-test="card"[^>]*data-type="([^"]+)"/g)].map((m) => m[1]);
+      const shown = [...markup(page.html).matchAll(/data-test="card"[^>]*data-type="([^"]+)"/g)].map((m) => m[1]);
       assert.ok(shown.length > 0, `/heuristics/${type}/ lists nothing`);
       assert.deepEqual([...new Set(shown)], [type], `/heuristics/${type}/ lists other types`);
       total += shown.length;
     }
     const index = all.find((p) => p.path === '/heuristics/');
-    const onIndex = (index.html.match(/data-test="card"/g) ?? []).length;
+    const onIndex = countHook(index.html, 'card');
     assert.equal(total, onIndex, `the three type pages hold ${total}, the index holds ${onIndex}`);
   });
 });
@@ -362,7 +376,7 @@ describe('the sitemap', () => {
   test('offers only pages that are indexable and served directly', () => {
     const xml = readFileSync(`${DIST}/sitemap-0.xml`, 'utf8');
     const paths = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
-    assert.ok(paths.length > 250, `sitemap holds only ${paths.length} URLs`);
+    assert.ok(paths.length > 50, `sitemap holds only ${paths.length} URLs`);
 
     const noindex = new Set(all.filter((p) => /content="noindex/.test(p.html)).map((p) => p.path));
     const listed = paths.filter((p) => noindex.has(p));
@@ -409,7 +423,10 @@ describe('feeds and machine-readable files', () => {
   // — a markdown file that has drifted from its page is worse than none.
   test('a page offering markdown has it, and it points back', () => {
     const offered = all.filter((p) => /type="text\/markdown"/.test(p.html));
-    assert.ok(offered.length > 280, `expected 280+ pages with markdown, got ${offered.length}`);
+    const entries = ['sessions', 'stories', 'heuristics', 'open-spaces', 'ddd-crew']
+      .reduce((n, c) => n + published(c), 0);
+    assert.equal(offered.length, entries,
+      'every entry in a content collection should offer its markdown');
     for (const p of offered) {
       const href = attr(p.html, /<link rel="alternate" type="text\/markdown"[^>]*href="([^"]+)"/);
       assert.equal(href, `${p.path}index.md`, `${p.path} advertises ${href}`);
@@ -431,7 +448,8 @@ describe('feeds and machine-readable files', () => {
     // links to a ddd-crew repo in its own body is fine — what must not appear
     // is a ddd-crew page reproduced here as a source.
     const sources = full.split('\n').filter((l) => l.startsWith('Source: '));
-    assert.ok(sources.length > 250, `expected 250+ sources, got ${sources.length}`);
+    const ours = ['sessions', 'stories', 'heuristics', 'open-spaces'].reduce((n, c) => n + published(c), 0);
+    assert.equal(sources.length, ours, 'llms-full.txt should carry every entry we author');
     assert.deepEqual(sources.filter((l) => l.includes('/ddd-crew/')), [],
       'llms-full.txt reproduces republished ddd-crew pages');
     assert.ok(readFileSync(`${DIST}/llms.txt`, 'utf8').includes('/llms-full.txt'),

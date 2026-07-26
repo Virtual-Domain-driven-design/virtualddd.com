@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "F
 
 Recognise that shifting deeply held perspectives, especially when it implies past decisions were suboptimal, requires significant time and patience. Avoid forcing the issue; allow individuals space to process and come to their own conclusions. Stressing people will not accelerate genuine acceptance.
 
-### Examples
+## Examples
 
 After a challenging conversation, give a resistant stakeholder a week or two to reflect on new information rather than demanding immediate agreement or action.
 

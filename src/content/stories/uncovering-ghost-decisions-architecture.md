@@ -20,7 +20,7 @@ Welcome to our ongoing series on facilitating software design and architecture, 
 
 In this episode, Andrew shares a story that will sound familiar to many of us. It’s about the decisions that are made before we even arrive on a project—the ones that cast a long shadow over everything that follows.
 
-### The Invisible Architecture
+## The Invisible Architecture
 
 How often have you joined a project, even a supposed “greenfield” one, only to find that the most fundamental architectural decisions have already been made?
 
@@ -28,7 +28,7 @@ As Andrew described, these choices are rarely documented. They might be implicit
 
 These early decisions become the invisible constraints of our work. They define the landscape, the boundaries, and the rules of the game, yet they often go unacknowledged and unquestioned. They are the ghost decisions that haunt the system. We treat them as unchangeable facts, often without understanding the context in which they were made.
 
-### From Implicit History to Explicit Record
+## From Implicit History to Explicit Record
 
 The problem is that this unwritten history creates ambiguity. As new people join, the original context is lost in a game of telephone, with different people remembering different, often conflicting, versions of the story. Without a clear record, we can’t learn from the past or confidently challenge the present.
 
@@ -50,11 +50,11 @@ This process is a form of architectural archaeology. Someone on the team took on
 
 This last part is the most valuable. The ADRs captured not just *what* was decided, but *why*. Reasons like, "We didn't have enough people to manage a multi-cloud setup," or "Product management prioritised feature X, which influenced this choice," provide essential clarity.
 
-### EventStorming past decisions made
+## EventStorming past decisions made
 
 The reverse-engineering of ADR’s reminded Kenny of an appreciative inquiry workshop he attended, where they first modelled out past culturally significant events of a department. That group then discussed the aspects that have contributed to the good culture we have today and which we want to keep, and examined the ones we no longer want. We could do the same with decisions made in an organisation or project. We can do this with EventStorming, create a timeline of all the events that happened in the past, and what other information and events were relevant leading to those decisions. At the end you could capture these decisions in an ADR, and can also mark the hotspots around those events looking at the future.
 
-### The Power of Knowing Why
+## The Power of Knowing Why
 
 Documenting these historical decisions had a profound effect.
 
@@ -64,7 +64,7 @@ Second, it gave the team permission to revisit and challenge those foundational 
 
 A decision made when the company was a 12-person startup may no longer be the best choice for a 200-person scale-up. A technology chosen because of a missing feature on another platform might be reconsidered once that feature becomes available. By making the context explicit, the "untouchable" decisions become touchable again. The team is empowered to evolve the architecture based on today's reality, not yesterday's constraints.
 
-### The Hard Part: Documenting Conflict
+## The Hard Part: Documenting Conflict
 
 Of course, decisions are not always harmonious. This led our conversation to a more challenging question: how do you document the power dynamics, disagreements, and conflicts that are often part of the decision-making process?
 
@@ -78,7 +78,7 @@ This is a delicate area. Writing down personal conflicts can be counterproductiv
 
 3. **Keep it about the relationship, not the record.** As Andrea suggested, sometimes the best approach is to simply note that there was a conflict and that anyone revisiting the decision should speak with the people involved. The goal of the ADR is to document the decision, not the interpersonal drama.
 
-### Making the Invisible, Visible
+## Making the Invisible, Visible
 
 The core takeaway from our discussion is that decisions made at a point in time are a product of what was known, thought, and felt at that time. As teams and contexts change, these decisions must be open to review.
 
