@@ -170,6 +170,84 @@ export function sessionJsonLd(
   return graph(org, event, video);
 }
 
+/** The heuristics collection, as one entity the individual terms belong to.
+ *
+ * A stable `@id` so every heuristic page can say `inDefinedTermSet` and mean
+ * the same set, and the index page can describe it. */
+export const heuristicSet = (site: URL | undefined) => ({
+  '@type': 'DefinedTermSet',
+  '@id': abs(site, '/heuristics/#set'),
+  name: 'Virtual DDD heuristics',
+  description:
+    'A curated, growing collection of heuristics for systems and software design — rules of thumb that help you decide what to do next.',
+  url: abs(site, '/heuristics/'),
+  publisher: { '@id': abs(site, '/#organization') },
+  inLanguage: 'en-GB',
+});
+
+/** A heuristic: a `DefinedTerm`, and the page that explains it.
+ *
+ * Two nodes, because they are two things. The heuristic itself is a named rule
+ * of thumb — a term in a set — and that is what another system would want to
+ * cite; the page is a `WebPage` about it, and that is what carries the authors,
+ * the tags and the links out. Modelling the page alone would have made 154 of
+ * the most quotable things on the site look like unlabelled prose.
+ *
+ * `subjectOf` on the term is how a session or story that discussed it is
+ * attached: those *are* works about this thing. The heuristic-to-heuristic
+ * graph is `relatedLink` on the page, which is where a link between pages
+ * belongs. */
+export function heuristicJsonLd(
+  site: URL | undefined,
+  heuristic: CollectionEntry<'heuristics'>,
+  opts: {
+    url: string;
+    description: string;
+    image?: string;
+    /** Absolute URLs of the heuristics this one relates to. */
+    related: string[];
+    /** The sessions and stories that discussed it. */
+    discussedIn: { name: string; url: string }[];
+  },
+) {
+  const d = heuristic.data;
+  const org = organization(site);
+  const set = heuristicSet(site);
+  const termId = `${opts.url}#heuristic`;
+
+  const term = {
+    '@type': 'DefinedTerm',
+    '@id': termId,
+    name: d.title,
+    description: opts.description,
+    inDefinedTermSet: { '@id': set['@id'] },
+    ...(opts.image ? { image: [opts.image] } : {}),
+    ...(opts.discussedIn.length
+      ? { subjectOf: opts.discussedIn.map((w) => ({ '@type': 'CreativeWork', name: w.name, url: w.url })) }
+      : {}),
+    url: opts.url,
+  };
+
+  const page = {
+    '@type': 'WebPage',
+    '@id': opts.url,
+    name: d.title,
+    description: opts.description,
+    // The question the heuristic answers — the page's own summary of itself.
+    ...(d.question ? { abstract: d.question } : {}),
+    mainEntity: { '@id': termId },
+    ...(d.authors.length ? { author: d.authors.map((name) => person({ name })) } : {}),
+    ...(d.tags.length ? { keywords: d.tags.join(', ') } : {}),
+    ...(opts.related.length ? { relatedLink: opts.related } : {}),
+    isPartOf: { '@id': abs(site, '/#website') },
+    publisher: { '@id': org['@id'] },
+    inLanguage: 'en-GB',
+    url: opts.url,
+  };
+
+  return graph(org, set, term, page);
+}
+
 /** A story: an Article with its authors. */
 export function storyJsonLd(
   site: URL | undefined,

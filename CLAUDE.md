@@ -151,7 +151,20 @@ Phase 6, not a collection.
   convention. Heuristics keeps its own older names (`Slug`,
   `Meta Description`) plus a matching `SEO Title`.
 - Structured data (JSON-LD) is **generated** from existing properties, never
-  hand-authored in Notion.
+  hand-authored in Notion. It lives in `src/lib/seo.ts` — one helper per kind
+  (`sessionJsonLd`, `storyJsonLd`, `heuristicJsonLd`, `person`,
+  `organization`, `heuristicSet`) so a type is described the same way wherever
+  it appears, and `BaseLayout` emits the single `@graph` it is handed.
+
+  **A heuristic is a `DefinedTerm`, not an article.** It is a named,
+  self-contained rule with an author — the most quotable thing on the site —
+  so each one is a term in the `DefinedTermSet` that `/heuristics/` declares,
+  paired with the `WebPage` that explains it. The pair is the point: the term
+  carries what another system would cite, the page carries the authors, the
+  tags, the `relatedLink` graph to sibling heuristics, and the term's
+  `subjectOf` links to the sessions and stories that discussed it. A test
+  asserts every term's set `@id` is one a page actually declares, and that
+  every URL in the graph is a page that was built.
 - Relations: model as Astro `reference()` and let the build fail on a dangling
   link rather than dropping it silently.
 

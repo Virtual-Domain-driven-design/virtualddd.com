@@ -10,6 +10,7 @@ tags: ["DDDDD", "event sourcing"]
 video: "https://www.youtube.com/embed/uB0SkrElPRo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["alexey-zimarev"]
 seoMetadescription: "Alexey Zimarev on building several production, customer-facing systems with event sourcing at their heart — what drove the choice, and what it cost."
 featuredImage: "./_assets/ddddd-20-panel-event-sourcing-really-with-alexey-featured.png"
 ---

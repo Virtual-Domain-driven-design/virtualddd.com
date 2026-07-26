@@ -10,6 +10,7 @@ tags: ["DDDDD", "sociotechnical system", "bourdieu", "culture"]
 video: "https://www.youtube.com/embed/1PoTCoF9-tY"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["romeu-moura"]
 seoMetadescription: "Bourdieu's social theory applied to tech: the hidden power structures in every workplace, and how we oppress and are oppressed by accident."
 featuredImage: "./_assets/ddddd-20-bourdieus-social-theory-applied-to-tech-featured.jpeg"
 ---

@@ -9,6 +9,7 @@ level: ["Advanced"]
 tags: ["socio-technical", "decision-making"]
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["diana-montalion"]
 seoTitle: "Speaking Truth to Power: Practising Argumentation"
 seoMetadescription: "Diana Montalion on transforming resistance into influence: if you had ten minutes to be heard and trusted, what would you say, and to whom?"
 featuredImage: "./_assets/speaking-truth-to-power-practice-argumentation-with-diana-featured.jpeg"

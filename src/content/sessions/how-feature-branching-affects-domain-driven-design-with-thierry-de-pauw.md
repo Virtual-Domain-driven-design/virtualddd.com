@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/mKaIR-EjoC0"
 podcastPlayer: "https://player.captivate.fm/episode/a8257be0-1ce3-4dec-87d5-84d03ef1762c/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["thierry-de-pauw"]
 seoTitle: "How Feature Branching Affects Domain-Driven Design"
 seoMetadescription: "Thierry de Pauw on the real cost of long-lived branches, and why easy branch creation is not the same as cheap branching."
 featuredImage: "./_assets/how-feature-branching-affects-domain-driven-design-with-thierry-de-pauw-featured.jpeg"

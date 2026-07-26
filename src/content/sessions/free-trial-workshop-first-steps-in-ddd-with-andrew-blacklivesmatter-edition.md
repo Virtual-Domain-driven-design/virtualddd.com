@@ -9,6 +9,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["hands-on", "essential"]
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["andrew-harmel-law"]
 seoTitle: "First Steps in DDD: A Free Workshop with Andrew Harmel-Law"
 seoMetadescription: "Andrew Harmel-Law runs his First Steps in Domain-Driven Design course free for the #BlackLivesMatter community."
 featuredImage: "./_assets/free-trial-workshop-first-steps-in-ddd-with-andrew-blacklivesmatter-edition-featured.jpeg"

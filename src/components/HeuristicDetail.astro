@@ -12,7 +12,7 @@ import DiscussedIn from './DiscussedIn.astro';
 import PrevNext from './PrevNext.astro';
 import { heuristicType, HEURISTIC_TYPES } from '../lib/heuristics';
 import { iso, shortDate } from '../lib/dates';
-import { siblings, type Teaser } from '../lib/collections';
+import { curatesHeuristic, HEURISTIC_RELATIONS, siblings, type Teaser } from '../lib/collections';
 
 type Heuristic = CollectionEntry<'heuristics'>;
 
@@ -26,16 +26,7 @@ const d = heuristic.data;
 const { Content } = await render(heuristic);
 const byId = new Map(all.map((h) => [h.id, h]));
 
-// The five self-relations, in the order they read best.
-const RELATIONS = [
-  ['complements', 'Complements'],
-  ['enables', 'Enables'],
-  ['prerequisites', 'Builds on'],
-  ['competesWith', 'Competes with'],
-  ['specializes', 'Specialises'],
-] as const;
-
-const related = RELATIONS.map(([field, label]) => ({
+const related = HEURISTIC_RELATIONS.map(([field, label]) => ({
   label,
   items: (d[field] ?? [])
     .map((r) => byId.get(r.id))
@@ -47,7 +38,7 @@ const sessions = await getCollection('sessions');
 const stories = await getCollection('stories');
 const discussedIn: Teaser[] = [
   ...sessions
-    .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === heuristic.id))
+    .filter((s) => curatesHeuristic(s, heuristic.id))
     .map((s) => ({
       href: `/sessions/${s.id}/`,
       title: s.data.title,
@@ -57,7 +48,7 @@ const discussedIn: Teaser[] = [
       fallback: shortDate(s.data.datetime),
     })),
   ...stories
-    .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === heuristic.id))
+    .filter((s) => curatesHeuristic(s, heuristic.id))
     .map((s) => ({
       href: `/facilitating-archdes/${s.id}/`,
       title: s.data.title,

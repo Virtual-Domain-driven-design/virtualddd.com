@@ -422,9 +422,16 @@ HTML is already the biggest win here; this phase makes it deliberate.
    exactly (see Phase 1). A mismatch turns every URL into a redirect and
    creates duplicate-content noise.
 3. **Structured data.** Generate JSON-LD from existing properties, not from
-   hand-authored fields: `Event`/`VideoObject` for sessions, `Person` for
-   speakers, `Organization` for the site, `BreadcrumbList` on nested pages.
-   AI surfaces lean on this to understand and cite content.
+   hand-authored fields. AI surfaces lean on this to understand and cite
+   content. State: `Organization` + `WebSite` on the home page,
+   `Event`/`VideoObject` + `Person` performers on 108 sessions, `Article` on
+   24 stories, `Person` on 10 organisers, and `DefinedTerm` in one
+   `DefinedTermSet` on 151 heuristics — the set declared by
+   `/heuristics/`, with the heuristic-to-heuristic graph as `relatedLink` and
+   the sessions and stories that discussed it as `subjectOf`.
+   **Still open:** `BreadcrumbList` on nested pages (`breadcrumbs()` exists in
+   `src/lib/seo.ts` and is called by nothing), the 11 ddd-crew pages, the 5
+   open spaces, and `ItemList` on the remaining index pages.
 4. **Sitemap.** Add `@astrojs/sitemap`. Submit it in Phase 8.
 5. **RSS.** Generate a feed with `@astrojs/rss` and redirect `/feed/` to it
    so existing subscribers are not silently dropped.

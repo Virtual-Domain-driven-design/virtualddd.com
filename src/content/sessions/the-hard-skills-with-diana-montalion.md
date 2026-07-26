@@ -10,6 +10,7 @@ tags: ["systems thinking", "software architecture", "digital transformation"]
 video: "https://www.youtube.com/embed/QwqNdQSgjeM"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["diana-montalion"]
 seoMetadescription: "Diana Montalion on the shift from building software to building information systems — data platforms, decoupled frontends, event streams, all interdependent."
 featuredImage: "./_assets/the-hard-skills-with-diana-montalion-featured.jpg"
 ---

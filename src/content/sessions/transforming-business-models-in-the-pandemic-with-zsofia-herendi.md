@@ -10,6 +10,7 @@ tags: ["business model canvas", "strategic design"]
 video: "https://www.youtube.com/embed/uaRYe_bNsMg"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+guests: ["zsofia-herendi"]
 seoTitle: "Transforming Business Models Under Pressure"
 seoMetadescription: "Zsofia Herendi on business model innovation when the ground moves — running the workshops that get a room to genuinely new ideas."
 featuredImage: "./_assets/transforming-business-models-in-the-pandemic-with-zsofia-herendi-featured.jpeg"

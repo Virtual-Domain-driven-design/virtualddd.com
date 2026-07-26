@@ -130,6 +130,37 @@ describe('structured data', () => {
     }
   });
 
+  // Heuristics are the most quotable thing here — a named rule with an author
+  // and a graph around it — so they are DefinedTerms in one set. The failure
+  // this guards is a silent one: a term pointing at a set `@id` that no page
+  // declares, or a link in the graph to a page that is no longer published.
+  test('heuristics are DefinedTerms in the set the index declares', () => {
+    const nodes = (p) => JSON.parse(attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/))['@graph'];
+    const index = all.find((p) => p.path === '/heuristics/');
+    const set = nodes(index).find((n) => n['@type'] === 'DefinedTermSet');
+    assert.ok(set?.['@id'], '/heuristics/ declares no DefinedTermSet');
+
+    const paths = new Set(all.map((p) => p.path));
+    const terms = all.filter((p) => /^\/heuristics\/[^/]+\/$/.test(p.path))
+      .map((p) => [p, nodes(p).find((n) => n['@type'] === 'DefinedTerm')])
+      .filter(([, t]) => t); // the three type indexes carry the set, not a term
+    assert.ok(terms.length > 140, `expected 140+ heuristic terms, got ${terms.length}`);
+
+    for (const [p, term] of terms) {
+      assert.ok(term.name, `${p.path} DefinedTerm has no name`);
+      assert.equal(term.inDefinedTermSet?.['@id'], set['@id'],
+        `${p.path} belongs to a set nothing declares`);
+      const page = nodes(p).find((n) => n['@type'] === 'WebPage');
+      assert.equal(page?.mainEntity?.['@id'], term['@id'],
+        `${p.path} WebPage does not point at its own term`);
+      // Every URL the graph hands out must be a page that exists.
+      const links = [...(page?.relatedLink ?? []), ...(term.subjectOf ?? []).map((w) => w.url)];
+      for (const href of links) {
+        assert.ok(paths.has(new URL(href).pathname), `${p.path} JSON-LD links to ${href}, which is not built`);
+      }
+    }
+  });
+
   // Who spoke is why the guests database exists: `sameAs` is how an answer
   // engine works out that this Nick Tune is that one. A guest credited on the
   // page but missing from the Event is the failure that would go unnoticed.

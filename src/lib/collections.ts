@@ -85,6 +85,26 @@ export function resolveRefs<T>(refs: { id: string }[], byId: Map<string, T>): T[
     .filter((e): e is T => e !== undefined);
 }
 
+/** True when a session or story curates this heuristic.
+ *
+ * The "discussed in" relation is stored on the session and the story, so the
+ * heuristic side is a scan. One definition, because it is asked twice: once to
+ * render the list, once to put the same works in the heuristic's `subjectOf`. */
+export const curatesHeuristic = (
+  entry: { data: { curatedHeuristics?: { id: string }[] } },
+  heuristicId: string,
+) => (entry.data.curatedHeuristics ?? []).some((r) => r.id === heuristicId);
+
+/** The five relations a heuristic can have to another heuristic, in the order
+ *  they read best on the page. */
+export const HEURISTIC_RELATIONS = [
+  ['complements', 'Complements'],
+  ['enables', 'Enables'],
+  ['prerequisites', 'Builds on'],
+  ['competesWith', 'Competes with'],
+  ['specializes', 'Specialises'],
+] as const;
+
 /** Index of every heuristic by id, for `resolveRefs`. */
 export async function heuristicsById() {
   const heuristics = await getCollection('heuristics');

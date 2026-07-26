@@ -3,15 +3,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeuristicBrowser from '../../components/HeuristicBrowser.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { graph, heuristicSet, organization } from '../../lib/seo';
 import rebecca from '../../assets/rebecca-wirfs-brock.jpg';
 
 const all = (await getCollection('heuristics')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const description =
+  'A curated, growing collection of heuristics for systems and software design — rules of thumb that help you decide what to do next.';
+const url = new URL('/heuristics/', Astro.site).toString();
+// This page *is* the set every heuristic says it belongs to, so it describes
+// it here. `size` rather than 154 links: the terms are one click away and a
+// list of 154 nodes is not what makes this page legible.
+const set = heuristicSet(Astro.site);
+const jsonLd = graph(organization(Astro.site), { ...set, size: all.length }, {
+  '@type': 'CollectionPage',
+  '@id': url,
+  name: 'Heuristics',
+  description,
+  mainEntity: { '@id': set['@id'] },
+  isPartOf: { '@id': new URL('/#website', Astro.site).toString() },
+  inLanguage: 'en-GB',
+  url,
+});
 ---
 
-<BaseLayout
-  title="Heuristics — Virtual DDD"
-  description="A curated, growing collection of heuristics for systems and software design — rules of thumb that help you decide what to do next."
->
+<BaseLayout title="Heuristics — Virtual DDD" description={description} jsonLd={jsonLd}>
   <section class="hero hero-band">
     <Image class="hero-bg" src={rebecca} alt="Rebecca Wirfs-Brock speaking on stage" width={1600} />
     <div class="hero-scrim" aria-hidden="true"></div>
