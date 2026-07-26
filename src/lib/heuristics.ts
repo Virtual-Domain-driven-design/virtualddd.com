@@ -10,6 +10,12 @@ import heurValue from '../assets/heur-value.jpg';
 
 export type HeuristicType = 'design-heuristics' | 'guiding-heuristics' | 'value-based-heuristics';
 
+/** The chip colour each type wears, wherever it is labelled. */
+export const chipTone = (type: HeuristicType | string | undefined): string =>
+  type === 'guiding-heuristics' ? 'chip--accent'
+  : type === 'value-based-heuristics' ? 'chip--value'
+  : 'chip--primary';
+
 export interface HeuristicTypeInfo {
   key: HeuristicType;
   /** Full name, as a heading. */

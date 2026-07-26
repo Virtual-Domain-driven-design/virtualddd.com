@@ -52,6 +52,76 @@
 .btn--sm { font-size: var(--text-sm); padding: var(--space-2) var(--space-4); }
 .btn--block { width: 100%; justify-content: center; }
 
+/* -------------------------------------------------------------------- chips */
+/* One small-label family. There were four: `.badge` and `.badge--type` in
+ * global.css, `.tag` next to them, and `.htype` over here — a session level, a
+ * session type, a content tag and a heuristic type, all "a short word in a
+ * small box", all styled separately.
+ *
+ *   .chip           the shape
+ *   .chip--label    the uppercase heading treatment (levels, types)
+ *   .chip--primary  · --accent · --value   filled, for a type
+ *   .chip--outline  bordered and lower-case, for a content tag
+ */
+.chip {
+  display: inline-block;
+  font-size: var(--text-sm);
+  padding: 0.2em 0.7em;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+.chip--label {
+  font-family: var(--font-heading); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.chip--primary { background: var(--color-primary); color: var(--on-colour); }
+.chip--accent { background: var(--color-accent); color: var(--on-colour); }
+.chip--value { background: var(--color-heur-value); color: var(--on-colour); }
+.chip--outline { background: transparent; border: 1px solid var(--color-border); padding: 0.15em 0.6em; }
+
+/* A row of them. */
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* --------------------------------------------------------------------- lead */
+/* The intro paragraph under an h1. Eight pages had written their own. */
+.lead {
+  color: var(--color-text-muted);
+  max-width: 52rem;
+  line-height: 1.75;
+  margin: 0 0 var(--space-8);
+}
+
+/* --------------------------------------------------------------- hero band */
+/* The full-bleed band at the top of a section index: it sits under the header
+ * (hence the negative top margin), clips whatever it contains, and closes with
+ * a rule. Four pages had written the same four declarations.
+ *
+ * What goes *inside* is deliberately not shared — ddd-crew and open-space use a
+ * `.page-wash` glow, /heuristics/ uses a photograph with a horizontal scrim.
+ * Those are different treatments, not variants of one. The About hero is a
+ * two-column grid and is not this thing at all. */
+.hero-band {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+  margin-top: calc(-1 * var(--space-12));
+}
+/* Default padding; a band that pads its own inner (a photo hero) can drop it. */
+.hero-band--padded { padding-block: var(--space-16) var(--space-12); }
+/* Lifts content above the wash or the scrim. */
+.hero-band-inner { position: relative; }
+
+/* ---------------------------------------------------------------- page wash */
+/* The two-radial glow behind a section hero. Two index pages carried it
+ * byte-identically. Put it on an inset, pointer-events-none child. */
+.page-wash {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 0% 0%, var(--tint-primary), transparent 55%),
+    radial-gradient(90% 80% at 100% 15%, var(--tint-accent), transparent 60%);
+}
+
 /* ---------------------------------------------------------------- eyebrow */
 /* Small uppercase section label with a rule before it. */
 .eyebrow {
@@ -152,16 +222,8 @@ a.card--heuristic:hover { transform: translateY(-3px); border-color: transparent
 .card--heuristic .card-more { color: var(--color-primary-ink); }
 a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
 
-/* Heuristic type badge (also used standalone on detail pages). */
-.htype {
-  align-self: flex-start;
-  font-family: var(--font-heading); font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.7rem;
-  padding: 2px 8px; margin-bottom: var(--space-3); color: #fff;
-}
-.htype.design-heuristics { background: var(--color-primary); }
-.htype.guiding-heuristics { background: var(--color-accent); }
-.htype.value-based-heuristics { background: var(--color-heur-value); }
+/* The heuristic type chip sits at the top of the white index card. */
+.card--heuristic .chip { align-self: flex-start; margin-bottom: var(--space-3); }
 
 /* ------------------------------------------------ heuristic type banners */
 /* The three type tiles: a painting, a dark overlay, a title and a count.
@@ -299,7 +361,9 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
 }
 .filters input { flex: 1 1 20rem; min-width: 0; }
 .filters select { flex: 0 1 auto; }
-.filters input:focus, .filters select:focus { outline: none; border-color: var(--color-primary); }
+/* Border tint as an extra cue; the focus ring itself is in global.css and
+   must not be removed here — it used to be. */
+.filters input:focus, .filters select:focus { border-color: var(--color-primary); }
 .filter-reset {
   font-family: var(--font-heading); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;

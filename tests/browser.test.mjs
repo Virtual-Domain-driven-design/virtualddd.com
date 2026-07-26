@@ -398,6 +398,26 @@ describe('accessibility basics', () => {
     assert.deepEqual(problems, [], problems.join('\n'));
   });
 
+  test('keyboard focus is visible on the controls', async () => {
+    // The filter inputs used to carry `outline: none`, and nothing defined a
+    // replacement — so on a near-black canvas a keyboard visitor could not see
+    // where they were.
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
+    const ring = async (selector) => {
+      await page.focus(selector);
+      return page.$eval(selector, (el) => {
+        const s = getComputedStyle(el);
+        return { width: parseFloat(s.outlineWidth) || 0, style: s.outlineStyle };
+      });
+    };
+    for (const sel of ['[data-test="filter-search"]', '[data-test="filter-tag"]', '[data-test="filter-reset"]']) {
+      const r = await ring(sel);
+      assert.ok(r.width >= 2 && r.style !== 'none', `${sel} has no visible focus ring (${JSON.stringify(r)})`);
+    }
+    await page.close();
+  });
+
   test('the mobile menu opens', async () => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 800 } });
     const page = await ctx.newPage();

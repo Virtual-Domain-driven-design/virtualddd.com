@@ -45,7 +45,7 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 <a class:list={['card', className]} href={href} data-test="card" {...dataAttrs}>
   <div class="card-thumb">
     {img ? <Image src={img} alt="" width={imgWidth} loading={loading} /> : <div class="card-thumb-ph"></div>}
-    {badge && <span class="badge badge--type card-badge">{badge}</span>}
+    {badge && <span class="chip chip--label chip--primary card-badge">{badge}</span>}
   </div>
   <div class="card-body">
     {iso && (

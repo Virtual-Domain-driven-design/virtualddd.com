@@ -2,7 +2,7 @@
 /** The white "index card" for a heuristic — used on the heuristics index and
  *  in the "discussed heuristics" carousel on sessions and stories. */
 import type { CollectionEntry } from 'astro:content';
-import { heuristicType } from '../lib/heuristics';
+import { heuristicType, chipTone } from '../lib/heuristics';
 
 interface Props {
   heuristic: CollectionEntry<'heuristics'>;
@@ -24,7 +24,7 @@ const info = heuristicType(type);
   data-question={(d.question ?? '').toLowerCase()}
   data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
 >
-  {showType && type && <span class:list={['htype', type]}>{info?.label ?? 'Heuristic'}</span>}
+  {showType && type && <span class:list={['chip', 'chip--label', chipTone(type)]}>{info?.label ?? 'Heuristic'}</span>}
   {d.question && <p class="card-q">{d.question}</p>}
   <h3 class="card-title">{d.title}</h3>
   <span class="card-more">More info →</span>

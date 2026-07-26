@@ -135,11 +135,12 @@ shared layer, never copied into a second page — that copying is what made
 "restyle the cards" a sixteen-file edit before.
 
 - **`src/styles/patterns.css`** — the shared UI vocabulary, loaded once by
-  `BaseLayout`: `.btn`, `.card` (+ `--feature`, `--upcoming`, `--heuristic`),
-  `.grid-cards`, `.tbanner` (+ `--compact`), `.eyebrow`, `.section-head`,
-  `.detail` / `-head` / `-body` / `-side`, `.prose-body`, `.prose-muted`,
-  `.prevnext`, `.filters`, `.carousel`, `.solo`, `.panel-cyan`, `.scrim`.
-  Add variants **here**, not in a page's `<style>`.
+  `BaseLayout`: `.btn`, `.chip` / `.chips`, `.card` (+ `--feature`,
+  `--upcoming`, `--heuristic`), `.grid-cards`, `.tbanner` (+ `--compact`),
+  `.hero-band` (+ `--padded`, `-inner`), `.page-wash`, `.lead`, `.eyebrow`,
+  `.section-head`, `.detail` / `-head` / `-body` / `-side`, `.prose-body`,
+  `.prose-muted`, `.prevnext`, `.filters`, `.carousel`, `.solo`,
+  `.panel-cyan`, `.scrim`. Add variants **here**, not in a page's `<style>`.
 
   **Buttons are a closed set** on two axes — intent (default, `--accent`,
   `--ghost`, `--ink`, `--inverse`) and shape (default, `--sm`, `--block`) —
@@ -151,6 +152,21 @@ shared layer, never copied into a second page — that copying is what made
   Same for the three heuristic type tiles: one `.tbanner`, used as links on
   `/ddd-heuristics/`, as filter buttons on `/heuristics/` and compact on the
   home page. They had been written out three times.
+
+  **Chips are one family too.** `.chip` is the shape; `--label` adds the
+  uppercase heading treatment (a session level, a session type, a heuristic
+  type); `--primary` / `--accent` / `--value` fill it; `--outline` is the
+  lower-case bordered form used for content tags. `chipTone()` in
+  `src/lib/heuristics` maps a heuristic type to its fill, so the colour of a
+  type is decided in the same place as its name.
+
+  **What is deliberately *not* shared:** what goes inside a `.hero-band`. The
+  band itself (full-bleed, sits under the header, closes with a rule) is
+  shared by three index pages, but ddd-crew and open-space fill it with a
+  `.page-wash` glow while `/heuristics/` fills it with a photograph and a
+  horizontal scrim. Those are different treatments, not variants of one thing,
+  and the About hero — a two-column grid — is not a band at all. Extracting
+  them together would cost more than the duplication does.
   **Astro does not extend a page's style scope into a child component**, so a
   `.card` override written in a page's scoped `<style>` silently never
   matches. Variants must be global.
@@ -169,8 +185,14 @@ shared layer, never copied into a second page — that copying is what made
   `HeuristicDetail`, `HeuristicTypePage`.
 - Page `<style>` blocks are for what is genuinely local to that page only.
 - Progressive enhancement is a rule, not a preference: every `<time>` ships a
-  server-rendered fallback, filters only hide pre-rendered cards, no page
-  depends on JS to show its content.
+  server-rendered fallback, filters only hide pre-rendered cards, the mobile
+  nav ships open and is collapsed by script, no page depends on JS to show its
+  content or to reach another page.
+- **Never remove a focus ring.** `global.css` defines `:focus-visible` against
+  the brand tokens because the near-black canvas swallows the browser default;
+  the filter inputs carried `outline: none` with no replacement, which left
+  keyboard visitors with nothing. A browser test asserts the ring is still
+  there.
 - `astro check` must stay at **0 errors, 0 warnings, 0 hints**.
 
 ## ddd-crew content

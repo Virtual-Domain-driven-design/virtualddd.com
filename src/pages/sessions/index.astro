@@ -34,9 +34,9 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
                 {f.featuredImage ? <Image src={f.featuredImage} alt="" width={720} /> : <div class="card-thumb-ph"></div>}
               </div>
               <div class="hero-body">
-                <div class="badges">
-                  {f.typeOfSession && <span class="badge badge--type">{f.typeOfSession}</span>}
-                  {f.level?.map((l) => <span class="badge">{l}</span>)}
+                <div class="chips">
+                  {f.typeOfSession && <span class="chip chip--label chip--primary">{f.typeOfSession}</span>}
+                  {f.level?.map((l) => <span class="chip chip--label">{l}</span>)}
                 </div>
                 <h2><a href={`/sessions/${session.id}/`}>{f.title}</a></h2>
                 <p class="hero-date"><time class="js-local" data-format="datetime" datetime={sIso} data-iso={sIso}>{longDateTime(f.datetime)}</time></p>
@@ -110,7 +110,7 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
     .hero-img { aspect-ratio: 16 / 9; background: var(--color-surface); }
     .hero-img :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero-body { padding: var(--space-8); }
-    .hero-body .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
+    .hero-body .chips { margin-bottom: var(--space-3); }
     .hero-body h2 { font-size: var(--text-3xl); margin: 0 0 var(--space-3); }
     .hero-body h2 a { color: var(--color-text); }
     .hero-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }

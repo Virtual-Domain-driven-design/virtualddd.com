@@ -91,7 +91,7 @@ const latest: Teaser[] = [...items]
       {d.tags.length > 0 && (
         <div class="side-block">
           <p class="eyebrow eyebrow--cyan">Tags</p>
-          <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+          <div class="chips">{d.tags.map((t) => <span class="chip chip--outline">{t}</span>)}</div>
         </div>
       )}
 

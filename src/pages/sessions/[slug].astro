@@ -62,9 +62,9 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
   <article class="session detail wrap">
     <div class="detail-head">
       <p class="detail-back"><a href="/sessions/">← All sessions</a></p>
-      <div class="badges">
-        {d.typeOfSession && <span class="badge badge--type">{d.typeOfSession}</span>}
-        {d.level?.map((l) => <span class="badge">{l}</span>)}
+      <div class="chips">
+        {d.typeOfSession && <span class="chip chip--label chip--primary">{d.typeOfSession}</span>}
+        {d.level?.map((l) => <span class="chip chip--label">{l}</span>)}
       </div>
       <h1>{d.title}</h1>
 
@@ -108,7 +108,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
       {d.tags.length > 0 && (
         <div class="side-block">
           <h3>Tags</h3>
-          <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+          <div class="chips">{d.tags.map((t) => <span class="chip chip--outline">{t}</span>)}</div>
         </div>
       )}
 
@@ -149,8 +149,8 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
   </article>
 
   <style>
+    .detail-head .chips { margin-bottom: var(--space-3); }
     /* Layout, media and prose come from patterns.css (.detail, .video, .prose-body). */
-    .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
     .detail-head h1 { margin-bottom: var(--space-6); }
 
     /* Sidebar */

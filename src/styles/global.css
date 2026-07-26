@@ -52,17 +52,22 @@ th { background: var(--color-surface); font-family: var(--font-heading); font-we
 .wrap { width: 100%; max-width: var(--wide-width); margin-inline: auto; padding-inline: var(--space-4); }
 .prose { max-width: var(--content-width); }
 
-/* Badges & tags */
-.badge {
-  display: inline-block; font-family: var(--font-heading); font-weight: 600;
-  font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em;
-  padding: 0.2em 0.7em; border-radius: 0; background: var(--color-surface); color: var(--color-text-muted);
-}
-.badge--type { background: var(--color-primary); color: #fff; }
-.tag {
-  display: inline-block; font-size: var(--text-sm); color: var(--color-text-muted);
-  padding: 0.15em 0.6em; border: 1px solid var(--color-border); border-radius: 0;
-}
+/* Badges and tags are `.chip` in patterns.css. */
 
 /* Ensure the hidden attribute always wins over component display rules. */
 [hidden] { display: none !important; }
+
+/* Focus.
+ *
+ * The near-black canvas swallows the browser's default focus ring, and the
+ * filter inputs used to remove it outright — so a keyboard visitor could not
+ * see where they were. :focus-visible keeps it off mouse clicks. */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+/* Cyan on a light panel is too weak; use the ink instead. */
+.panel-cyan :focus-visible,
+.card--heuristic:focus-visible {
+  outline-color: var(--color-ink);
+}
