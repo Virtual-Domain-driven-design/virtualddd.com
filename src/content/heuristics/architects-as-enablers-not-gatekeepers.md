@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "Software Architecture", "Facilitating Software
 
 The architect's role transitions from being the primary decision-maker to a facilitator and mentor. Their goal is to enable teams to make better decisions by sharing knowledge and context, not to dictate the architecture. This requires unlearning old habits of command.
 
-## Examples
+### Examples
 
 An architect's role changes from handing down decisions on a 'stone tablet' to facilitating conversations. They must adjust their muscle memory from broadcasting solutions to engaging in two-way dialogue.
 

@@ -12,7 +12,7 @@ specializes: ["address-destructive-behavior-privately", "start-small-leadership-
 
 Do not dismiss resistance; instead, seek to understand its underlying causes and perspectives. Most people do not act with ill intent but from a specific viewpoint or concern. Empathy is crucial for uncovering these dimensions.
 
-## Examples
+### Examples
 
 When a senior figure vetoes modernization efforts, engage them directly to uncover their personal history and investment in the existing system, rather than assuming malice.
 

@@ -12,7 +12,7 @@ complements: ["design-as-living-conversation"]
 
 Accountability stems from a culture of ownership, not from rigid enforcement. Empowering teams to make and own their decisions fosters the intrinsic motivation required to see them through to implementation. This culture is the foundation of a decentralized model.
 
-## Examples
+### Examples
 
 Ensuring a decision is implemented relies on the team having a sense of ownership and accountability for what they wrote. This cultural aspect is more important than any enforcement mechanism.
 

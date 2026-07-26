@@ -4,8 +4,12 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   organiser: CollectionEntry<'organisers'>;
+  /** Link the card to the organiser's page. Rendered as a stretched link over
+   *  the name rather than a wrapper, because the card already contains links
+   *  and anchors cannot nest. */
+  href?: string;
 }
-const { organiser } = Astro.props;
+const { organiser, href } = Astro.props;
 const d = organiser.data;
 
 const ICONS = {
@@ -23,7 +27,7 @@ const links = [
     {d.photo ? <Image src={d.photo} alt={d.name} width={320} /> : <div class="org-ph"></div>}
   </div>
   <div class="org-body">
-    <p class="org-name">{d.name}</p>
+    <p class="org-name">{href ? <a class="org-stretch" href={href}>{d.name}</a> : d.name}</p>
     {d.role && <p class="org-role">{d.role}</p>}
     {links.length > 0 && (
       <div class="org-icons">
@@ -38,7 +42,7 @@ const links = [
 </div>
 
 <style>
-  .org-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); height: 100%; }
+  .org-card { position: relative; display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); height: 100%; }
   .org-photo { aspect-ratio: 1 / 1; background: var(--color-surface-2); }
   .org-photo :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .org-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
@@ -46,6 +50,11 @@ const links = [
   .org-name { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0; }
   .org-role { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-1) 0 var(--space-3); }
   .org-icons { display: flex; gap: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--color-border); color: var(--color-primary); }
+  /* The stretched link covers the card; the social icons sit above it. */
+  .org-stretch { color: inherit; }
+  .org-stretch::after { content: ''; position: absolute; inset: 0; }
+  .org-stretch:hover { color: var(--color-primary); text-decoration: none; }
+  .org-icons { position: relative; }
   .org-icons a { color: var(--color-primary); display: inline-flex; }
   .org-icons a:hover { color: var(--color-primary-dark); }
 </style>

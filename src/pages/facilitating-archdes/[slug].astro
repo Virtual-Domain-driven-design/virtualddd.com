@@ -2,8 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
 import DiscussedHeuristics from '../../components/DiscussedHeuristics.astro';
+import PrevNext from '../../components/PrevNext.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
+import { youtubeEmbed } from '../../lib/embeds';
+import { excerpt } from '../../lib/excerpt';
+import { storyJsonLd, socialCard } from '../../lib/seo';
+import { iso as toIso, longDate, shortDate } from '../../lib/dates';
+import { heuristicsById, resolveHeuristics, siblings, type Teaser } from '../../lib/collections';
 
 export async function getStaticPaths() {
   const stories = await getCollection('stories');
@@ -14,34 +20,15 @@ const { story, stories } = Astro.props;
 const { Content } = await render(story);
 const d = story.data;
 
-const shortDate = (dt: Date) =>
-  dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
-// Discussed heuristics — resolve defensively.
-const heuristics = await getCollection('heuristics');
-const heurById = new Map(heuristics.map((h) => [h.id, h]));
-const discussed = d.curatedHeuristics.map((r) => heurById.get(r.id)).filter(Boolean);
-
-function youtubeEmbed(url?: string): string | null {
-  if (!url) return null;
-  let m: RegExpMatchArray | null;
-  let id: string | undefined;
-  if ((m = url.match(/youtube\.com\/embed\/([^?/&]+)/))) id = m[1];
-  else if ((m = url.match(/youtu\.be\/([^?/&]+)/))) id = m[1];
-  else if ((m = url.match(/youtube\.com\/live\/([^?/&]+)/))) id = m[1];
-  else if ((m = url.match(/[?&]v=([^&]+)/))) id = m[1];
-  return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
-}
+const discussed = resolveHeuristics(d.curatedHeuristics, await heuristicsById());
 const videoEmbed = youtubeEmbed(d.youtube);
 
 // Prev / next by episode.
-const ordered = [...stories].sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
-const idx = ordered.findIndex((s) => s.id === story.id);
-const prev = ordered[idx - 1];
-const next = ordered[idx + 1];
+const byEpisode = [...stories].sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
+const { prev, next } = siblings(byEpisode, story.id);
 
 // Latest stories for the sidebar (most recent episodes, excluding this one).
-const latest = [...stories]
+const latest: Teaser[] = [...stories]
   .filter((s) => s.id !== story.id)
   .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
   .slice(0, 3)
@@ -49,20 +36,32 @@ const latest = [...stories]
     href: `/facilitating-archdes/${s.id}/`,
     title: s.data.title,
     img: s.data.featuredImage ?? s.data.featuredImageSquared,
-    iso: s.data.publishedDate ? new Date(s.data.publishedDate).toISOString() : undefined,
-    fallback: s.data.publishedDate ? shortDate(new Date(s.data.publishedDate)) : undefined,
+    iso: s.data.publishedDate ? toIso(s.data.publishedDate) : undefined,
+    fallback: s.data.publishedDate ? shortDate(s.data.publishedDate) : undefined,
   }));
 
-const iso = d.publishedDate ? new Date(d.publishedDate).toISOString() : '';
-const dateStr = d.publishedDate
-  ? new Date(d.publishedDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-  : '';
+const iso = d.publishedDate ? toIso(d.publishedDate) : '';
+const dateStr = d.publishedDate ? longDate(d.publishedDate) : '';
+
+const url = new URL(`/facilitating-archdes/${story.id}/`, Astro.site).toString();
+const image = d.featuredImage ?? d.featuredImageSquared;
+const description = d.seoMetadescription ?? excerpt(story.body ?? '', d.title, 155);
+const jsonLd = storyJsonLd(Astro.site, story, {
+  url,
+  image: image ? await socialCard(Astro.site, image) : undefined,
+});
 ---
 
-<BaseLayout title={`${d.seoTitle ?? d.title} — Virtual DDD`} description={d.seoMetadescription}>
-  <article class="story wrap">
-    <div class="s-head">
-      <p class="back"><a href="/facilitating-archdes/">← All stories</a></p>
+<BaseLayout
+  title={`${d.seoTitle ?? d.title} — Virtual DDD`}
+  description={description}
+  image={image}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <article class="story detail wrap">
+    <div class="detail-head">
+      <p class="detail-back"><a href="/facilitating-archdes/">← All stories</a></p>
       <p class="eyebrow eyebrow--pink">Facilitating Stories</p>
       <h1>{d.title}</h1>
       {d.authors.length > 0 && <p class="byline">by {d.authors.join(', ')}</p>}
@@ -71,7 +70,7 @@ const dateStr = d.publishedDate
           <iframe src={videoEmbed} title={d.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
       ) : d.featuredImage ? (
-        <Image class="hero" src={d.featuredImage} alt={d.title} width={920} />
+        <Image class="media-hero" src={d.featuredImage} alt={d.title} width={920} />
       ) : null}
 
       {d.podcast && (
@@ -79,7 +78,7 @@ const dateStr = d.publishedDate
       )}
     </div>
 
-    <aside class="s-side">
+    <aside class="detail-side">
       <div class="side-card">
         {d.episode != null && <p class="side-ep">Episode {d.episode}</p>}
         {iso && <p class="side-date"><time class="js-local" data-format="date" datetime={iso} data-iso={iso}>{dateStr}</time></p>}
@@ -102,46 +101,23 @@ const dateStr = d.publishedDate
       <SideExtras latest={latest} latestLabel="Latest stories" latestAllHref="/facilitating-archdes/" />
     </aside>
 
-    <div class="s-body">
-      <div class="body"><Content /></div>
+    <div class="detail-body">
+      <div class="prose-body"><Content /></div>
 
-      <DiscussedHeuristics heuristics={discussed as any} />
+      <DiscussedHeuristics heuristics={discussed} />
 
-      <nav class="prevnext">
-        {prev ? (
-          <a class="pn" href={`/facilitating-archdes/${prev.id}/`}>
-            <span class="pn-label">← Previous story</span>
-            <span class="pn-title">{prev.data.title}</span>
-          </a>
-        ) : <span />}
-        {next && (
-          <a class="pn pn-next" href={`/facilitating-archdes/${next.id}/`}>
-            <span class="pn-label">Next story →</span>
-            <span class="pn-title">{next.data.title}</span>
-          </a>
-        )}
-      </nav>
+      <PrevNext
+        noun="story"
+        prev={prev && { href: `/facilitating-archdes/${prev.id}/`, title: prev.data.title }}
+        next={next && { href: `/facilitating-archdes/${next.id}/`, title: next.data.title }}
+      />
     </div>
   </article>
 
   <style>
-    /* Brand eyebrow (shared with the index) */
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
-    .eyebrow--pink { color: var(--color-accent-dark); }
-    .eyebrow--pink::before { background: var(--color-accent); }
-    .eyebrow--cyan { color: var(--color-primary); margin-bottom: var(--space-3); }
-    .eyebrow--cyan::before { background: var(--color-primary); }
-
-    .story { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
-    .back { font-size: var(--text-sm); margin-bottom: var(--space-5); }
-    .s-head h1 { margin: 0 0 var(--space-3); }
+    /* Eyebrow, layout, media and prose come from patterns.css. */
+    .detail-head h1 { margin: 0 0 var(--space-3); }
     .byline { color: var(--color-text-muted); margin: 0 0 var(--space-8); }
-
-    .video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; box-shadow: var(--shadow); background: #000; }
-    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-    .hero { width: 100%; box-shadow: var(--shadow); }
-    .podcast { display: block; width: 100%; border: 0; margin-top: var(--space-4); }
 
     .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
     .side-ep { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-dark); margin: 0 0 var(--space-1); font-size: var(--text-sm); }
@@ -152,40 +128,5 @@ const dateStr = d.publishedDate
 
     .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-    .heur-list { margin: 0; padding-left: var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted); }
-    .heur-list li { margin-bottom: var(--space-2); }
-
-    /* Article body — comfortable reading measure */
-    .body { max-width: 42rem; font-size: 1.05rem; }
-    .body :global(p) { line-height: 1.75; margin: 0 0 var(--space-5); }
-    .body :global(h2) { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
-    .body :global(h3) { margin: var(--space-8) 0 var(--space-3); font-size: var(--text-xl); }
-    .body :global(ul), .body :global(ol) { margin: 0 0 var(--space-5); padding-left: var(--space-6); }
-    .body :global(li) { margin-bottom: var(--space-2); line-height: 1.7; }
-    .body :global(blockquote) { margin: var(--space-6) 0; padding: var(--space-2) 0 var(--space-2) var(--space-6); border-left: 3px solid var(--color-accent); color: var(--color-text-muted); font-style: italic; }
-    .body :global(strong) { color: var(--color-text); }
-    .body :global(img) { margin: var(--space-6) 0; width: 100%; }
-
-    .prevnext { display: flex; justify-content: space-between; gap: var(--space-8); margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--color-border); }
-    .pn { display: flex; flex-direction: column; gap: var(--space-1); max-width: 20rem; color: var(--color-text); }
-    .pn:hover { text-decoration: none; }
-    .pn:hover .pn-title { color: var(--color-primary); }
-    .pn-label { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); }
-    .pn-title { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; transition: color 0.15s; }
-    .pn-next { margin-left: auto; text-align: right; }
-
-    @media (min-width: 900px) {
-      .story {
-        grid-template-columns: minmax(0, 1fr) 19rem;
-        grid-template-areas: "head side" "body side";
-        grid-template-rows: auto 1fr;
-        column-gap: var(--space-12);
-        row-gap: var(--space-8);
-        align-items: start;
-      }
-      .s-head { grid-area: head; }
-      .s-body { grid-area: body; }
-      .s-side { grid-area: side; position: sticky; top: 5.5rem; align-self: start; }
-    }
   </style>
 </BaseLayout>

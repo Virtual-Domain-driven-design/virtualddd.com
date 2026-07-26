@@ -11,7 +11,7 @@ tags: ["EventStorming", "Collaborative modelling", "Example Mapping", "Sociotech
 
 When combining several visual vollaboration tools, like EventStorming and Example Mapping, pay attention to the language. We want to be consistent in the language we use between the visual collaboration tools. For instance using ReserveSeats as an action/command in EventStroming, then we want to reuse it during Example Mapping saying when we reserve two seats.
 
-## Summary of the solution
+### Summary of the solution
 
 > To communicate effectively, the code must be based on the same language used to write the requirements—the same language that the developers speak with each other and with domain experts.”
 ― Eric Evans, Domain-Driven Design: Tackling Complexity in the Heart of Software

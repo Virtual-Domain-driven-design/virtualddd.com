@@ -11,7 +11,7 @@ tags: ["Bounded Context", "Facilitating Software Design and Architecture", "Team
 
 Position strategic models like a context map as enablers for team autonomy and fast flow, not as constraints. When teams see that well-defined boundaries help them work independently, they become invested in the model's accuracy. This shifts perception from a mandate to a shared tool.
 
-## Example
+### Example
 
 Teams embraced the context map once they understood it was for their benefit. It allowed them to work autonomously and make decisions independently, which improved their flow.
 

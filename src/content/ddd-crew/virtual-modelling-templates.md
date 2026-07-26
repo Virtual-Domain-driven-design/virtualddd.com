@@ -16,7 +16,7 @@ contributors:
 ---
 This repo contains a collection of resources for applying DDD collaboratively in remote environments.
 
-## Strategic DDD Miro Template
+### Strategic DDD Miro Template
 
 ![Strategic DDD Miro Template](./_assets/virtual-modelling-templates/strategic-ddd-miro-template.png)
 
@@ -24,20 +24,20 @@ This repo contains a collection of resources for applying DDD collaboratively in
 
 [Download the Miro backup file](https://github.com/ddd-crew/virtual-modelling-templates/blob/master/resources/strategic-ddd-miro-backup.rtb)
 
-## Context Mapping Miro Template
+### Context Mapping Miro Template
 
 ![Context Mapping Starter Kit Template](./_assets/virtual-modelling-templates/Remote-Context-Mapping-Starter-Kit.jpg)
 
 [Download the Miro backup file](https://github.com/ddd-crew/virtual-modelling-templates/blob/master/resources/Remote-Context-Mapping-Starter-Kit.rtb)
 
-## Instructions
+### Instructions
 
 1. Download the Miro backup file
 2. Sign in to your Miro account
 3. Restore the backup file 
 
 
-## Contributions and Feedback
+### Contributions and Feedback
 
 Thanks to all [existing and future contributors](https://github.com/ddd-crew/virtual-modelling-templates/graphs/contributors). These tools are freely available for you to use. In addition, your feedback and ideas are welcome to improve them. 
 

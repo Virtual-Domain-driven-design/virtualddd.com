@@ -20,7 +20,7 @@ While working on the *Automation Patterns* portion of our new book *Effective
 
 We’re happy to share the insights gained and challenges remaining in a conversation with VirtualDDD.      
 
-### About the speakers
+#### About the speakers
 
 **Seb **has been a consultant, coach, designer, author and developer for over 40 years. He has been involved in the full development lifecycle with experience that ranges from architecture to support, from C to Visual Basic.
 

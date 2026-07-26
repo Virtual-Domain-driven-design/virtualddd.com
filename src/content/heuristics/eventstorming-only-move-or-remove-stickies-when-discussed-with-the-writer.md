@@ -11,7 +11,7 @@ tags: ["EventStorming", "Sociotechnical Systems", "Deep Democracy", "Collaborati
 
 We can only remove stickies on the paper roll if the person had a discussion with the one who wrote it. Ask the group: Is it really the same concept as you think it is, what does the orginal writer actually mean? Is it the same Domain Event?
 
-## Examples
+### Examples
 
 1. When you remove an Domain Event stickie in orde to enforce the timeline
 
@@ -19,6 +19,6 @@ We can only remove stickies on the paper roll if the person had a discussion wit
 
 3. When all the stickies are already discussed, a lot has already been removed and the group in converting then everyone can remove stickies.
 
-## Context
+### Context
 
 During an EventStorming after the chaotic exploration we want to enforce the timeline and start moving stuff around. It is very important that people don't take assumptions on the naming of other stickies they didn't write. We want to spark conversation and storming. So we want the group to know this.

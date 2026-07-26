@@ -10,7 +10,7 @@
  *
  * Without --write it reports what it would do (dry run).
  */
-import { writeFileSync, mkdirSync, existsSync, rmSync, readdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, rmSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
@@ -183,7 +183,20 @@ async function processRepo(spec: (typeof REPOS)[number]) {
     '',
   ].filter((l) => l !== null).join('\n');
 
-  const body = fm + md.trim() + '\n';
+  // Demote every heading one level. The README's own `# Title` would otherwise
+  // be a second <h1> on a page that already has one (some READMEs have five),
+  // which is bad for search and for anyone navigating by heading.
+  const demoted = md
+    .split('\n')
+    .map((line, i, lines) => {
+      // Leave fenced code blocks alone.
+      const fences = lines.slice(0, i).filter((l) => /^\s*```/.test(l)).length;
+      if (fences % 2 === 1) return line;
+      return line.replace(/^(#{1,5}) /, '#$1 ');
+    })
+    .join('\n');
+
+  const body = fm + demoted.trim() + '\n';
   if (write) writeFileSync(join(OUT, `${name}.md`), body);
   console.log(`  ✓ ${name} — "${title}" (${images.size} imgs, ${contribs.length} contributors)`);
 }

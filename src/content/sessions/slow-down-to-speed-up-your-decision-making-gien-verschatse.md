@@ -10,7 +10,7 @@ tags: ["decision-making", "architect decisions", "sociotechnical systems"]
 video: "https://youtu.be/I-2TlTJschA"
 podcastPlayer: "https://player.captivate.fm/episode/437d5f84-84d6-45f8-9c74-a0e188cda706/"
 organiser: "Andrea Magnorsky"
-curatedHeuristics: ["generate-multiple-options-to-depersonalise-design-debates", "resolve-conflicts-before-technical-solutions", "use-pro-con-fix-lists-understand-tradeoffs", "separate-decision-quality-outcome-quality", "reframe-problem-statements-avoid-solution-driven", "use-why-chain-broaden-problem-focus", "identify-problems-random-or-indeterminate", "make-three-alternatives-before-choosing", "validate-code-reviews-structure-not-design"]
+curatedHeuristics: ["generate-multiple-options-to-depersonalise-design-debates"]
 featuredImage: "./_assets/slow-down-to-speed-up-your-decision-making-gien-verschatse-featured.png"
 ---
 

@@ -1,0 +1,56 @@
+---
+/** Book club.
+ *
+ * HAND-WRITTEN, not generated — the only page in the rebuild that is. It says
+ * what the live page said (the 2024 edition read Facilitating Software
+ * Architecture) and nothing more, because nothing more was recorded. Kenny:
+ * edit this freely, and when the next edition is scheduled, either update the
+ * dates here or model it as a session/open space and link to it.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const DISCORD = 'https://discord.gg/tRJkcsFDKN';
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+---
+
+<BaseLayout
+  title="Book club — Virtual DDD"
+  description="The Virtual DDD book club — the community reads a book together and discusses it. The 2024 edition read Facilitating Software Architecture by Andrew Harmel-Law."
+  canonical={`${site}/book-club/`}
+>
+  <div class="wrap page">
+    <p class="eyebrow eyebrow--pink">Read together</p>
+    <h1>Book club</h1>
+    <p class="lead">
+      Every so often the community picks a book, reads it together, and meets to talk it through —
+      with the author joining where we can arrange it. It runs on Discord, like everything else here.
+    </p>
+
+    <section class="past panel-cyan">
+      <p class="eyebrow eyebrow--dark">Last edition</p>
+      <h2>Facilitating Software Architecture</h2>
+      <p class="by">Andrew Harmel-Law · started 20 August 2024</p>
+    </section>
+
+    <section class="next">
+      <h2>When's the next one?</h2>
+      <p>
+        There's no edition running at the moment. New ones are announced in Discord first — join
+        there if you want to hear about it, or to suggest the next book.
+      </p>
+      <a class="btn" href={DISCORD}>Join our Discord ↗</a>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page { max-width: 52rem; padding-block: var(--space-8) var(--space-16); }
+  .lead { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-12); }
+
+  .past { margin-bottom: var(--space-12); }
+  .past h2 { margin: 0 0 var(--space-2); font-size: var(--text-2xl); }
+  .by { color: var(--color-ink-muted); margin: 0; font-family: var(--font-heading); font-weight: 600; }
+
+  .next h2 { margin-top: 0; }
+  .next p { color: var(--color-text-muted); line-height: 1.75; max-width: 42rem; }
+</style>

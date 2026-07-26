@@ -13,7 +13,7 @@ metaDescription: "Learn to facilitate decisions effectively when priorities clas
 
 When faced with competing objectives, make the trade-off explicit. Clearly articulate the different paths and their respective benefits and drawbacks, allowing the group to consciously choose their preferred direction.
 
-## Example
+### Example
 
 The team debated between making onboarding easy for new users (speaking names) versus maintaining speed for existing users (numeric codes). The facilitator needed to highlight this as a clear choice point.
 

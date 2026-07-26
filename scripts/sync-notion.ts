@@ -28,6 +28,35 @@ if (!token) {
 }
 const notion = new Client({ auth: token });
 
+// --- API pacing -------------------------------------------------------------
+// Notion allows roughly three requests per second and answers 429 above that.
+// Every call goes through `api()`, which paces requests and retries on 429 or
+// a transient 5xx, so a large sync cannot fail halfway for want of patience.
+
+const MIN_INTERVAL_MS = 340; // ≈ 2.9 req/s
+let nextSlot = 0;
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function api<T>(label: string, fn: () => Promise<T>, attempt = 0): Promise<T> {
+  const wait = Math.max(0, nextSlot - Date.now());
+  if (wait) await sleep(wait);
+  nextSlot = Date.now() + MIN_INTERVAL_MS;
+  try {
+    return await fn();
+  } catch (e: any) {
+    const status = e?.status ?? e?.code;
+    const retriable = status === 429 || status === 502 || status === 503 || status === 504 ||
+      e?.code === 'notionhq_client_request_timeout';
+    if (!retriable || attempt >= 4) throw e;
+    const retryAfter = Number(e?.headers?.['retry-after'] ?? 0);
+    const backoff = retryAfter > 0 ? retryAfter * 1000 : 1000 * 2 ** attempt;
+    console.warn(`  … ${label} got ${status}; retrying in ${Math.round(backoff / 1000)}s (attempt ${attempt + 2}/5)`);
+    await sleep(backoff);
+    return api(label, fn, attempt + 1);
+  }
+}
+
 // --- collection config ------------------------------------------------------
 
 type StatusKind = 'select' | 'status';
@@ -121,11 +150,11 @@ async function queryAll(dataSourceId: string): Promise<any[]> {
   const rows: any[] = [];
   let cursor: string | undefined;
   do {
-    const res = await notion.dataSources.query({
+    const res = await api('query', () => notion.dataSources.query({
       data_source_id: dataSourceId,
       page_size: 100,
       start_cursor: cursor,
-    });
+    }));
     rows.push(...res.results);
     cursor = res.has_more ? (res.next_cursor as string) : undefined;
   } while (cursor);
@@ -143,7 +172,7 @@ interface Match {
   note: string;
 }
 
-async function matchSlugs(name: string, cfg: CollectionCfg): Promise<Match[]> {
+async function matchSlugs(cfg: CollectionCfg): Promise<Match[]> {
   const wp = readCsv(cfg.derivedCsv);
   const byNorm = new Map<string, string[]>(); // norm -> [slug,...]
   for (const r of wp) {
@@ -188,7 +217,7 @@ async function runSlugs(only: string | undefined, write: boolean) {
     const cfg = COLLECTIONS[key];
     if (!cfg) { console.error(`unknown collection: ${key}`); continue; }
 
-    const matches = await matchSlugs(key, cfg);
+    const matches = await matchSlugs(cfg);
     const live = matches.filter((m) => !m.note.startsWith('not live'));
     const ok = live.filter((m) => m.proposed && (m.note === 'ok' || m.note.startsWith('differs')));
     const problems = live.filter((m) => !m.proposed);
@@ -209,10 +238,10 @@ async function runSlugs(only: string | undefined, write: boolean) {
       const toWrite = ok.filter((m) => m.existing !== m.proposed);
       console.log(`\n  --write: updating ${toWrite.length} row(s) in Notion...`);
       for (const m of toWrite) {
-        await notion.pages.update({
+        await api('pages.update', () => notion.pages.update({
           page_id: m.pageId,
           properties: { slug: { rich_text: [{ text: { content: m.proposed! } }] } },
-        });
+        }));
         console.log(`    wrote ${m.proposed}`);
       }
       console.log('  done.');
@@ -229,7 +258,7 @@ async function runSlugs(only: string | undefined, write: boolean) {
 // First slice: sessions. Writes to a preview dir under --dry-run so fidelity
 // can be inspected before anything lands in src/content/.
 
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
 
 const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
@@ -255,7 +284,13 @@ function richText(rts: any[] = []): string {
     if (a.bold) t = `**${t}**`;
     if (a.italic) t = `*${t}*`;
     if (a.strikethrough) t = `~~${t}~~`;
-    const href = rt.href ?? rt.text?.link?.url;
+    let href = rt.href ?? rt.text?.link?.url;
+    // A Notion mention links to a bare page id ("/e342ff0d…"), which is not a
+    // URL on this site. Where the visible text is itself a URL, use that;
+    // otherwise keep the text and drop the dead link.
+    if (href && /^\/?[0-9a-f]{32}$/.test(href.replace(/^\//, ''))) {
+      href = /^https?:\/\//.test(t) ? t : undefined;
+    }
     if (href) t = `[${t}](${href})`;
     return t;
   }).join('');
@@ -317,7 +352,8 @@ async function childrenOf(blockId: string): Promise<any[]> {
   const out: any[] = [];
   let cursor: string | undefined;
   do {
-    const res = await notion.blocks.children.list({ block_id: blockId, page_size: 100, start_cursor: cursor });
+    const res = await api('blocks.children', () =>
+      notion.blocks.children.list({ block_id: blockId, page_size: 100, start_cursor: cursor }));
     out.push(...res.results);
     cursor = res.has_more ? (res.next_cursor as string) : undefined;
   } while (cursor);
@@ -341,9 +377,12 @@ async function blocksToMd(blocks: any[], ctx: AssetCtx | null, indent = ''): Pro
     switch (t) {
       case 'paragraph':
         out.push(indent + richText(data.rich_text) + nested); break;
-      case 'heading_1': out.push(`# ${richText(data.rich_text)}`); break;
-      case 'heading_2': out.push(`## ${richText(data.rich_text)}`); break;
-      case 'heading_3': out.push(`### ${richText(data.rich_text)}`); break;
+      // Headings are demoted one level: the page title is the h1, so a Notion
+      // heading_1 in the body would be a second one. Two heuristics already
+      // shipped with three h1s each because of this.
+      case 'heading_1': out.push(`## ${richText(data.rich_text)}`); break;
+      case 'heading_2': out.push(`### ${richText(data.rich_text)}`); break;
+      case 'heading_3': out.push(`#### ${richText(data.rich_text)}`); break;
       case 'bulleted_list_item': out.push(`${indent}- ${richText(data.rich_text)}${nested}`); break;
       case 'numbered_list_item': out.push(`${indent}${++numIdx}. ${richText(data.rich_text)}${nested}`); break;
       case 'to_do': out.push(`${indent}- [${data.checked ? 'x' : ' '}] ${richText(data.rich_text)}${nested}`); break;
@@ -504,13 +543,42 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   },
 };
 
-async function runContent(key: string, limit: number, outDir: string, write: boolean) {
+async function runContent(key: string, limit: number, outDir: string, write: boolean, strict: boolean) {
   const spec = CONTENT_SPECS[key];
   if (!spec) { console.error(`unknown collection: ${key}`); process.exit(1); }
 
+  /** filename -> file contents, written in one go once every page has rendered. */
+  const rendered = new Map<string, string>();
+
   console.log('building relation lookups...');
-  const heurSlug = await buildLookup(HEURISTICS_DS, 'heuristics', (p) =>
-    (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim());
+  // Only *published* heuristics have a page on the site, so only those may be
+  // referenced. Anything else is reported below rather than silently dropped —
+  // Astro's reference() would fail the build on a slug that has no page.
+  //
+  // Two very different things hide behind "cannot resolve", and they are
+  // reported separately: a heuristic that exists but is still being curated
+  // (expected — it gets published when the curation is done), versus a
+  // relation pointing at a page that is not in the database at all (deleted,
+  // archived, or the wrong database — a real dangling reference).
+  const heurSlug = new Map<string, string>();
+  const heurPending = new Map<string, { title: string; status: string }>();
+  let heurLookupOk = false;
+  try {
+    for (const p of await queryAll(HEURISTICS_DS)) {
+      const id = (p.id as string).replace(/-/g, '');
+      const slug = (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+      if (statusOf(p, 'status') === 'Published' && slug) heurSlug.set(id, slug);
+      else heurPending.set(id, { title: plainTitle(p, 'Title') || slug || id, status: statusOf(p, 'status') ?? 'no status' });
+    }
+    heurLookupOk = true;
+  } catch (e: any) {
+    console.warn(`  ! heuristics not readable (${e.code ?? e.message}); heuristic relations left unresolved.`);
+  }
+
+  /** Relations to heuristics that exist but are not published yet. Expected. */
+  const pending: { slug: string; prop: string; ref: string }[] = [];
+  /** Relations that pointed at nothing renderable, per entry. */
+  const dropped: { slug: string; prop: string; ref: string }[] = [];
   const personName = spec.needsPeople
     ? await buildLookup(PEOPLE_DS, 'people (organisers)', (p) => {
         const tp: any = Object.values(p.properties ?? {}).find((x: any) => x.type === 'title');
@@ -541,7 +609,14 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       date: (n) => get(n)?.date?.start ?? undefined,
       num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
       select: (n) => get(n)?.select?.name ?? undefined,
-      heur: (n) => rel(n).map((id: string) => heurSlug.get(id)).filter(Boolean) as string[],
+      heur: (n) => rel(n).flatMap((id: string) => {
+        const found = heurSlug.get(id);
+        if (found) return [found];
+        const inCuration = heurPending.get(id);
+        if (inCuration) pending.push({ slug, prop: n, ref: `${inCuration.title} (${inCuration.status})` });
+        else if (heurLookupOk) dropped.push({ slug, prop: n, ref: `unknown page ${id.slice(0, 8)}…` });
+        return [];
+      }),
       person: (n) => rel(n).map((id: string) => personName.get(id)).filter(Boolean) as string[],
       img: async (n, label) => {
         const u = fileUrl((get(n)?.files ?? [])[0]);
@@ -561,11 +636,50 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     fm.push('---');
 
     const body = await blocksToMd(await childrenOf(page.id), ctx);
-    writeFileSync(`${outDir}/${slug}.md`, fm.join('\n') + '\n\n' + body + '\n');
+    rendered.set(`${slug}.md`, fm.join('\n') + '\n\n' + body + '\n');
     console.log(`  ✓ ${slug}.md (${body.length}c, ${ctx.count} imgs)`);
   }
 
+  // Write only once every page has rendered. A rate-limit or network failure
+  // half-way through must not leave src/content/ in a state worth committing.
+  for (const [name, content] of rendered) writeFileSync(`${outDir}/${name}`, content);
+
+  // Prune entries this run did not produce — un-published in Notion, or renamed
+  // (which leaves the old slug behind as a live page forever otherwise).
+  // A --limit run only saw part of the collection, so it must never prune.
+  if (!limit) {
+    const stale = readdirSync(outDir).filter((f) => f.endsWith('.md') && !rendered.has(f));
+    for (const f of stale) {
+      unlinkSync(`${outDir}/${f}`);
+      console.log(`  – removed ${f} (no longer published)`);
+    }
+  }
+
   if (seenUnhandled.size) console.log(`\n  unhandled block types seen: ${[...seenUnhandled].join(', ')}`);
+
+  const list = (rows: { slug: string; prop: string; ref: string }[]) => {
+    for (const r of rows.slice(0, 20)) console.log(`      ${r.slug} → ${r.prop}: ${r.ref}`);
+    if (rows.length > 20) console.log(`      … and ${rows.length - 20} more`);
+  };
+
+  // Not an error: the heuristic exists, it is simply not curated yet. The link
+  // appears by itself on the next sync after it is published, so this is
+  // informational and --strict deliberately tolerates it.
+  if (pending.length) {
+    console.log(`\n  i ${pending.length} relation(s) point at heuristics still being curated; the link will appear once they are published:`);
+    list(pending);
+  }
+
+  if (dropped.length) {
+    console.log(`\n  ! ${dropped.length} relation(s) pointed at a page that is not in the heuristics database (deleted or archived) and were dropped:`);
+    list(dropped);
+    console.log('    Remove the relation in Notion, or restore the page.');
+    if (strict) {
+      console.error('\n  --strict: failing because of the dangling relations above.');
+      process.exit(1);
+    }
+  }
+
   if (!write) console.log(`\n  (preview only — files in ${outDir}, nothing under src/content/)`);
 }
 
@@ -629,9 +743,9 @@ async function run() {
     const target = only ?? 'sessions';
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
       ?? (write ? `src/content/${target}` : `migration-source/preview/${target}`);
-    return runContent(target, limit, outDir, write);
+    return runContent(target, limit, outDir, write, args.includes('--strict'));
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write]');
+  console.error('usage:\n  tsx scripts/sync-notion.ts slugs [--dry-run|--write] [--collection=sessions|open-spaces]\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
   process.exit(1);
 }
 

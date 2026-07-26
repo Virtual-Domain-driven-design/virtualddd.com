@@ -27,11 +27,22 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
         <p class="feat-when"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{fallback}</time></p>
         <p class="feat-countdown js-countdown" data-iso={iso}></p>
         <div class="feat-cta">
-          {d.humantix && <a class="btn btn--accent" href={d.humantix}>RSVP</a>}
-          {d.meet && <a class="btn" href={d.meet}>Join Google Meet</a>}
-          {d.video && <a class="btn btn--ghost" href={d.video}>Watch livestream</a>}
-          <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>
+          {d.humantix
+            ? <a class="btn btn--accent" href={d.humantix}>RSVP</a>
+            : <a class="btn btn--accent" href={`/sessions/${session.id}/`}>More info →</a>}
+          {d.humantix && <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>}
         </div>
+
+        {(d.meet || d.video) && (
+          /* Joining is only actionable near the start. Rendered visible so a
+             no-JS visitor still gets the links; the script hides them until
+             two hours before, which is when RSVP stops being the point. */
+          <div class="feat-live js-live" data-iso={iso}>
+            <span class="feat-live-label">Starting soon</span>
+            {d.meet && <a class="btn" href={d.meet}>Join Google Meet</a>}
+            {d.video && <a class="btn btn--ghost" href={d.video}>Watch livestream</a>}
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -60,4 +71,9 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
   .feat-countdown { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-6); letter-spacing: 0.03em; }
   .feat-countdown:empty { display: none; }
   .feat-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .feat-live { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-top: var(--space-4); }
+  .feat-live-label {
+    font-family: var(--font-heading); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: var(--text-sm); color: var(--color-primary);
+  }
 </style>

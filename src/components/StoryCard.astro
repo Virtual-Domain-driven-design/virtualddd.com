@@ -1,40 +1,22 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import TeaserCard from './TeaserCard.astro';
+import { iso, shortDate } from '../lib/dates';
 
 interface Props {
   story: CollectionEntry<'stories'>;
 }
 const { story } = Astro.props;
 const d = story.data;
-const img = d.featuredImage ?? d.featuredImageSquared;
-const iso = d.publishedDate ? new Date(d.publishedDate).toISOString() : '';
-const fallback = d.publishedDate
-  ? new Date(d.publishedDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-  : '';
+const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
 ---
 
-<a class="t-card" href={`/facilitating-archdes/${story.id}/`}>
-  <div class="t-thumb">
-    {img ? <Image src={img} alt="" width={480} loading="lazy" /> : <div class="t-thumb-ph"></div>}
-    {d.episode != null && <span class="badge badge--type t-ep">Ep {d.episode}</span>}
-  </div>
-  <div class="t-info">
-    {iso && <p class="t-date"><time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{fallback}</time></p>}
-    <h3 class="t-title">{d.title}</h3>
-    {d.authors.length > 0 && <p class="t-authors">{d.authors.slice(0, 3).join(', ')}{d.authors.length > 3 ? ' & more' : ''}</p>}
-  </div>
-</a>
-
-<style>
-  .t-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-  .t-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
-  .t-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
-  .t-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .t-thumb-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
-  .t-ep { position: absolute; top: var(--space-2); left: var(--space-2); }
-  .t-info { padding: var(--space-4); }
-  .t-date { font-family: var(--font-heading); font-weight: 600; color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-1); }
-  .t-title { font-size: var(--text-lg); margin: 0; line-height: 1.2; }
-  .t-authors { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-</style>
+<TeaserCard
+  href={`/facilitating-archdes/${story.id}/`}
+  title={d.title}
+  img={d.featuredImage ?? d.featuredImageSquared}
+  badge={d.episode != null ? `Ep ${d.episode}` : undefined}
+  iso={d.publishedDate ? iso(d.publishedDate) : undefined}
+  dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}
+  sub={d.authors.length > 0 ? authors : undefined}
+/>

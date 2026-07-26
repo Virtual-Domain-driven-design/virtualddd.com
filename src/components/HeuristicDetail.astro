@@ -1,0 +1,174 @@
+---
+/** A single heuristic.
+ *
+ * Split out of the `/heuristics/[slug]` route, which serves both heuristic
+ * detail pages and the three type-index pages from one param. Keeping the two
+ * bodies in separate components is what lets each one be properly typed —
+ * the fused version needed six `any`s to compile.
+ */
+import { render, getCollection, type CollectionEntry } from 'astro:content';
+import SideExtras from './SideExtras.astro';
+import DiscussedIn from './DiscussedIn.astro';
+import PrevNext from './PrevNext.astro';
+import { heuristicType, HEURISTIC_TYPES } from '../lib/heuristics';
+import { iso, shortDate } from '../lib/dates';
+import { siblings, type Teaser } from '../lib/collections';
+
+type Heuristic = CollectionEntry<'heuristics'>;
+
+interface Props {
+  heuristic: Heuristic;
+  /** Every heuristic, title-sorted — for relations, prev/next and the sidebar. */
+  all: Heuristic[];
+}
+const { heuristic, all } = Astro.props;
+const d = heuristic.data;
+const { Content } = await render(heuristic);
+const byId = new Map(all.map((h) => [h.id, h]));
+
+// The five self-relations, in the order they read best.
+const RELATIONS = [
+  ['complements', 'Complements'],
+  ['enables', 'Enables'],
+  ['prerequisites', 'Builds on'],
+  ['competesWith', 'Competes with'],
+  ['specializes', 'Specialises'],
+] as const;
+
+const related = RELATIONS.map(([field, label]) => ({
+  label,
+  items: (d[field] ?? [])
+    .map((r) => byId.get(r.id))
+    .filter((h): h is Heuristic => h !== undefined),
+})).filter((g) => g.items.length > 0);
+
+// Sessions and stories that reference this heuristic.
+const sessions = await getCollection('sessions');
+const stories = await getCollection('stories');
+const discussedIn: Teaser[] = [
+  ...sessions
+    .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === heuristic.id))
+    .map((s) => ({
+      href: `/sessions/${s.id}/`,
+      title: s.data.title,
+      kind: 'Session',
+      img: s.data.featuredImage,
+      iso: iso(s.data.datetime),
+      fallback: shortDate(s.data.datetime),
+    })),
+  ...stories
+    .filter((s) => s.data.curatedHeuristics?.some((r) => r.id === heuristic.id))
+    .map((s) => ({
+      href: `/facilitating-archdes/${s.id}/`,
+      title: s.data.title,
+      kind: 'Story',
+      img: s.data.featuredImage ?? s.data.featuredImageSquared,
+      iso: s.data.publishedDate ? iso(s.data.publishedDate) : undefined,
+      fallback: s.data.publishedDate ? shortDate(s.data.publishedDate) : undefined,
+    })),
+];
+
+const { prev, next } = siblings(all, heuristic.id);
+const typeInfo = heuristicType(d.type[0]);
+
+// Sidebar: more heuristics of the same type, illustrated with that type's image.
+const imgForType = (key?: string) =>
+  HEURISTIC_TYPES.find((t) => t.key === key)?.bg ?? HEURISTIC_TYPES[1].bg;
+const latestHeur: Teaser[] = all
+  .filter((x) => x.id !== heuristic.id && x.data.type[0] === d.type[0])
+  .slice(0, 3)
+  .map((x) => ({ href: `/heuristics/${x.id}/`, title: x.data.title, img: imgForType(x.data.type[0]) }));
+---
+
+<article class="hd detail wrap">
+  <div class="detail-head hd-main">
+    <p class="detail-back"><a href="/heuristics/">← All heuristics</a></p>
+    <p class="eyebrow eyebrow--pink">Heuristics</p>
+    <h1>{d.title}</h1>
+    {d.authors.length > 0 && <p class="byline">by {d.authors.join(', ')}</p>}
+
+    {d.question && (
+      <blockquote class="hd-question">
+        <span class="hq-icon" aria-hidden="true">?</span>
+        <span>{d.question}</span>
+      </blockquote>
+    )}
+
+    <div class="prose-body"><Content /></div>
+
+    {related.length > 0 && (
+      <section class="hd-related">
+        <p class="eyebrow eyebrow--cyan">Related heuristics</p>
+        {related.map((g) => (
+          <div class="rel-group">
+            <h3>{g.label}</h3>
+            <ul>
+              {g.items.map((r) => <li><a href={`/heuristics/${r.id}/`}>{r.data.title}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <DiscussedIn items={discussedIn} />
+
+    <PrevNext
+      noun="heuristic"
+      prev={prev && { href: `/heuristics/${prev.id}/`, title: prev.data.title }}
+      next={next && { href: `/heuristics/${next.id}/`, title: next.data.title }}
+    />
+  </div>
+
+  <aside class="detail-side hd-side">
+    <div class="side-card">
+      {typeInfo && <p class="side-type">{typeInfo.title}</p>}
+      {d.authors.length > 0 && (
+        <p class="side-meta"><span class="side-label">Authors</span>{d.authors.join(', ')}</p>
+      )}
+      {d.submitter && (
+        <p class="side-meta"><span class="side-label">Submitter</span>{d.submitter}</p>
+      )}
+    </div>
+
+    {d.tags.length > 0 && (
+      <div class="side-block">
+        <p class="eyebrow eyebrow--cyan">Tags</p>
+        <div class="tags">{d.tags.map((t) => <span class="tag">{t}</span>)}</div>
+      </div>
+    )}
+
+    <SideExtras latest={latestHeur} latestLabel="More heuristics" latestAllHref="/heuristics/" />
+  </aside>
+</article>
+
+<style>
+  /* Layout, eyebrow, prose and prev/next come from patterns.css. */
+  .hd-main h1 { margin: 0 0 var(--space-3); }
+  .byline { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
+
+  /* The heuristic's question, as a posed question. */
+  .hd-question { display: flex; gap: var(--space-4); align-items: flex-start; background: var(--color-surface); border-left: 3px solid var(--color-primary); padding: var(--space-5) var(--space-6); margin: 0 0 var(--space-8); }
+  .hq-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; background: var(--color-primary); color: #04222b; font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg); }
+  .hd-question span:last-child { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); line-height: 1.3; color: var(--color-primary-dark); }
+
+  .hd-related { margin-top: var(--space-12); }
+  .rel-group { margin-bottom: var(--space-5); }
+  .rel-group h3 { font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin: 0 0 var(--space-2); }
+  .rel-group ul { margin: 0; padding-left: var(--space-5); }
+  .rel-group li { margin-bottom: var(--space-1); }
+
+  /* Sidebar */
+  .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+  .side-type { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-accent-dark); font-size: var(--text-sm); margin: 0 0 var(--space-4); }
+  .side-meta { color: var(--color-text); font-size: var(--text-sm); line-height: 1.4; margin: 0 0 var(--space-3); }
+  .side-meta:last-child { margin-bottom: 0; }
+  .side-label { display: block; font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 2px; }
+  .side-block { margin-top: var(--space-8); }
+  .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+  /* This page has no head/body split — one column plus the sidebar. */
+  @media (min-width: 900px) {
+    .hd { grid-template-columns: minmax(0, 1fr) 19rem; grid-template-areas: none; }
+    .hd-main, .hd-side { grid-area: auto; }
+  }
+</style>

@@ -12,7 +12,7 @@ complements: ["global-metadata-creates-global-risk", "distribute-debugging-beyon
 
 Shift focus from attempting to eliminate every bug before deployment to ensuring rapid recovery from failure in production. The cost of a quickly remediated production incident is often lower than the cost of maintaining complex, slow, and brittle pre-production environments. Invest heavily in observability, monitoring, and fast rollback capabilities.
 
-## Example
+### Example
 
 We accept the risk of minor bugs reaching production, provided we can detect and roll back a change in under five minutes. This is more efficient than maintaining a costly and slow system integration test environment.
 

@@ -15,7 +15,7 @@ featuredImage: "./_assets/ddddd-20-its-traverse-featured.jpeg"
 
 The `traverse` function is so pervasive in functional programming that it became a joke:
 — How do I do— It's traverse
-[https://twitter.com/search?q=%22it%27s%20traverse%22&src=typed_query](/e342ff0d7e8c4a3d9ae96de0fb20ea0d)
+[https://twitter.com/search?q=%22it%27s%20traverse%22&src=typed_query](https://twitter.com/search?q=%22it%27s%20traverse%22&src=typed_query)
 
 Since it's a bit abstract until you actually encounter it, let's dig a little and review some case where… well, it was _actually_ `traverse`.
 - async calls - input validation - conditional execution - parsers generation - …

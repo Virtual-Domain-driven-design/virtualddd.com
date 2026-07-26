@@ -11,7 +11,7 @@ tags: ["Quality", "Software Design", "Sociotechnical Systems"]
 
 Define quality as ’value to some person who matters’, forcing prioritisation of whose perspective is most critical. This transforms quality from an abstract concept into a tangible goal tied to the experience of a specific stakeholder or user. This focus clarifies trade-offs and aligns effort with strategic intent.
 
-## Example
+### Example
 
 Instead of aiming to satisfy all requirements, we first identify our primary customer. We then define quality as that which solves their most significant problems, even if it means deprioritising other documented specifications.
 

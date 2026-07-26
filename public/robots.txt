@@ -1,0 +1,33 @@
+# Virtual DDD — a community that wants its sessions read, cited and quoted.
+#
+# AI crawlers are allowed on purpose (MIGRATION.md Phase 6, decided 2026-07-25).
+# The whole point of publishing heuristics and session write-ups is that people
+# find them, and answer engines are now part of how people find things. The
+# content is CC BY-SA where it comes from ddd-crew, and community-authored
+# elsewhere; none of it is behind a paywall.
+
+User-agent: *
+Allow: /
+
+# Named explicitly so the intent survives a future default-deny convention.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Note: ?tag= and ?type= views are deliberately NOT disallowed. The 289 legacy
+# tag URLs 301 onto them, and blocking the destination would throw away the
+# redirect. Every page canonicalises to its clean path instead, so the filtered
+# views consolidate into the index rather than competing with it.
+
+Sitemap: https://virtualddd.com/sitemap-index.xml

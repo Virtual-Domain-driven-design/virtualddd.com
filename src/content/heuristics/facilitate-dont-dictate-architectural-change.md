@@ -11,7 +11,7 @@ tags: ["Decentralised Decision-Making", "Facilitating Software Design and Archit
 
 An architect's role is to facilitate understanding and alignment, not to command. This requires empathy and a deep understanding of diverse perspectives to guide change effectively. Avoid hierarchical power plays in favor of collaborative problem-solving.
 
-## Examples
+### Examples
 
 Instead of declaring 'we will use microservices,' engage stakeholders to explore how new architectures address their specific challenges and concerns.
 

@@ -21,16 +21,22 @@ const siblings = items
   .slice(0, 4);
 ---
 
-<BaseLayout title={`${d.title} — ddd-crew — Virtual DDD`} description={d.description} canonical={d.canonical}>
+<BaseLayout
+  title={`${d.title} — ddd-crew — Virtual DDD`}
+  description={d.description}
+  canonical={d.canonical}
+  image={d.heroImage}
+  ogType="article"
+>
   <article class="dc wrap">
-    <p class="back"><a href="/ddd-crew/">← All ddd-crew tools</a></p>
+    <p class="detail-back"><a href="/ddd-crew/">← All ddd-crew tools</a></p>
     <p class="eyebrow eyebrow--pink">ddd-crew · {d.category}</p>
     <h1>{d.title}</h1>
     {d.description && <p class="lead">{d.description}</p>}
 
     <div class="attribution">
       <p class="attr-line">
-        Republished from the <a href={d.repo}>ddd-crew/{entry.id}</a> repository, licensed
+        Republished from the <a href={d.repo}>ddd-crew/{entry.id}</a> repository, licensed{' '}
         <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The canonical version
         lives at <a href={d.canonical}>ddd-crew.github.io</a>.
       </p>
@@ -67,13 +73,6 @@ const siblings = items
 
   <style>
     .dc { padding-block: var(--space-8) var(--space-16); }
-    .back { font-size: var(--text-sm); margin-bottom: var(--space-4); }
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: var(--text-sm); margin: 0 0 var(--space-4); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
-    .eyebrow--pink { color: var(--color-accent-dark); }
-    .eyebrow--pink::before { background: var(--color-accent); }
-    .eyebrow--cyan { color: var(--color-primary); }
-    .eyebrow--cyan::before { background: var(--color-primary); }
     .dc h1 { margin: 0 0 var(--space-3); }
     .lead { color: var(--color-text-muted); font-size: var(--text-lg); max-width: 46rem; margin: 0 0 var(--space-8); }
 

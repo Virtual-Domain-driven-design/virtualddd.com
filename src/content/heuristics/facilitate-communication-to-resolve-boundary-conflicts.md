@@ -11,7 +11,7 @@ tags: ["Conflict Management", "Facilitating Software Design and Architecture", "
 
 When a decision crosses team boundaries, the primary role is to facilitate communication rather than dictate a solution. The goal is to prevent teams from becoming defensive and to encourage collaborative problem-solving. This helps teams redraw boundaries or find agreements themselves.
 
-## Example
+### Example
 
 When a decision created conflict in the gray areas between teams, the priority was getting people to talk. This prevented defensive 'guard walls' from going up and enabled a collaborative resolution.
 

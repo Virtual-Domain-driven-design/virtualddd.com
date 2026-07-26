@@ -11,6 +11,6 @@ tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-
 
 Do not wait until a decision is fully formed to present it for advice, as this invites criticism rather than collaboration. Engage architects and stakeholders throughout the decision-making process to incorporate their knowledge and context early. This makes the process more efficient and collaborative.
 
-## Examples
+### Examples
 
 Instead of presenting a finished decision, a team now shares high-level diagrams and options with architects early in the process. This allows for advice to be integrated before the team is committed to a path.

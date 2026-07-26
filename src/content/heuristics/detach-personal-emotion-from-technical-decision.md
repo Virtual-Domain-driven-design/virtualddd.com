@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "Decision-Making Process", "Decentralised Decis
 
 Acknowledge emotional attachment to past work, but consciously set it aside to evaluate new decisions on their own merits. The system's forward progress is more important than the preservation of personal contributions. This ensures objectivity and supports necessary evolution.
 
-## Example
+### Example
 
 A team's decision effectively threw out an architect's prior work. The architect had to consciously remove their emotional attachment to recognize it was the right decision for moving forward.
 

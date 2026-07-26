@@ -1,0 +1,280 @@
+/* Shared UI patterns.
+ *
+ * Everything in here was duplicated across pages before — cards were
+ * re-implemented 16 times, the eyebrow 14 times — which meant "change the
+ * cards" was a 13-file edit and the copies had already drifted apart.
+ * These are plain global classes rather than components so that markup can
+ * opt in without a wrapper, and so a restyle is a one-file change.
+ *
+ * Loaded once by BaseLayout, after global.css.
+ */
+
+/* ---------------------------------------------------------------- eyebrow */
+/* Small uppercase section label with a rule before it. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--text-sm);
+  margin: 0 0 var(--space-6);
+  color: var(--color-primary);
+}
+.eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: currentColor; }
+.eyebrow--cyan { color: var(--color-primary); }
+.eyebrow--pink { color: var(--color-accent-dark); }
+.eyebrow--pink::before { background: var(--color-accent); }
+/* On the light (cyan) panels. */
+.eyebrow--dark { color: rgba(13, 14, 18, 0.7); }
+
+/* ------------------------------------------------------------ section head */
+/* Heading on the left, "All →" link on the right. */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.section-head h2 { margin: 0; }
+.section-head a { font-family: var(--font-heading); font-weight: 600; }
+
+/* ------------------------------------------------------------------- cards */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  color: var(--color-text);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+a.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border));
+  text-decoration: none;
+}
+
+.card-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Placeholder when an item has no featured image. One direction everywhere —
+   it used to be reversed at random between sections. */
+.card-thumb-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
+.card-badge { position: absolute; top: var(--space-2); left: var(--space-2); }
+
+.card-body { padding: var(--space-4); }
+.card-meta {
+  font-family: var(--font-heading); font-weight: 600;
+  color: var(--color-text-muted); font-size: var(--text-sm);
+  margin: 0 0 var(--space-1);
+}
+/* Cyan, uppercase variant of the meta line (stories, "discussed in"). */
+.card-meta--accent { text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); }
+.card-title { font-size: var(--text-lg); margin: 0; line-height: 1.2; }
+.card-sub { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+.card-more {
+  margin-top: auto; padding-top: var(--space-4);
+  font-family: var(--font-heading); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm);
+  color: var(--color-text-muted); transition: color 0.15s;
+}
+a.card:hover .card-more { color: var(--color-primary); }
+
+/* Wide feature card: one per row, roomier padding, larger title. Used by the
+   stories archive. (Variants live here rather than in a page's scoped style
+   because Astro does not extend a page's style scope into a child component —
+   a `.card` override written on the page would never match.) */
+.card--feature .card-body { padding: var(--space-6) var(--space-6) var(--space-8); }
+.card--feature .card-title { font-size: var(--text-xl); }
+
+/* An upcoming item, flagged with the accent border. */
+.card--upcoming { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border)); }
+
+/* The white "index card" used for heuristics, wherever a heuristic appears. */
+.card--heuristic {
+  background: #fff;
+  color: var(--color-ink);
+  border: 0;
+  padding: var(--space-6);
+  min-height: 12rem;
+}
+a.card--heuristic:hover { transform: translateY(-3px); border-color: transparent; }
+.card--heuristic .card-title { color: var(--color-ink); }
+.card--heuristic .card-q { color: var(--color-primary-ink); font-size: var(--text-sm); line-height: 1.4; margin: 0 0 var(--space-2); }
+.card--heuristic .card-more { color: var(--color-primary-ink); }
+a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
+
+/* Heuristic type badge (also used standalone on detail pages). */
+.htype {
+  align-self: flex-start;
+  font-family: var(--font-heading); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.7rem;
+  padding: 2px 8px; margin-bottom: var(--space-3); color: #fff;
+}
+.htype.design-heuristics { background: var(--color-primary); }
+.htype.guiding-heuristics { background: var(--color-accent); }
+.htype.value-based-heuristics { background: var(--color-heur-value); }
+
+/* -------------------------------------------------------------- card grids */
+/* `--card-min` tunes the column width per section. */
+.grid-cards {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min, 16rem)), 1fr));
+}
+
+/* ----------------------------------------------------------- detail layout */
+/* Head + body in one column, sticky sidebar alongside from 900px. */
+.detail { display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+/* Grid items default to `min-width: auto`, so one wide child (the discussed-
+   heuristics carousel) used to stretch the track and scroll the whole page
+   sideways on mobile. */
+.detail > * { min-width: 0; }
+.detail-back { font-size: var(--text-sm); margin-bottom: var(--space-3); }
+
+@media (min-width: 900px) {
+  .detail {
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    grid-template-areas: "head side" "body side";
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-12);
+    row-gap: var(--space-8);
+    align-items: start;
+  }
+  .detail-head { grid-area: head; }
+  .detail-body { grid-area: body; }
+  .detail-side { grid-area: side; position: sticky; top: 5.5rem; align-self: start; }
+}
+
+/* ------------------------------------------------------------------- media */
+.video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: #000; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.media-hero { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); }
+.podcast { display: block; width: 100%; border: 0; border-radius: var(--radius-sm); margin-top: var(--space-4); }
+
+/* -------------------------------------------------------------- prose body */
+/* Rendered markdown at a comfortable reading measure. */
+.prose-body { max-width: 42rem; font-size: 1.05rem; }
+.prose-body p { line-height: 1.75; margin: 0 0 var(--space-5); }
+.prose-body h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+.prose-body h3 { margin: var(--space-8) 0 var(--space-3); font-size: var(--text-xl); }
+.prose-body ul, .prose-body ol { margin: 0 0 var(--space-5); padding-left: var(--space-6); }
+.prose-body li { margin-bottom: var(--space-2); line-height: 1.7; }
+.prose-body blockquote {
+  margin: var(--space-6) 0; padding: var(--space-2) 0 var(--space-2) var(--space-6);
+  border-left: 3px solid var(--color-accent); background: none; border-radius: 0;
+  color: var(--color-text-muted); font-style: italic;
+}
+.prose-body strong { color: var(--color-text); }
+/* Bare URLs are common in session notes and would otherwise widen the page. */
+.prose-body a { overflow-wrap: anywhere; }
+.prose-body img { margin: var(--space-6) 0; width: 100%; border-radius: var(--radius-sm); }
+
+/* Hand-written static pages (code of conduct, privacy, AI usage): muted body
+   copy at a reading measure. Pair with `.prose` for the width. */
+.prose-muted h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
+.prose-muted p, .prose-muted ul, .prose-muted ol { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); }
+.prose-muted ul, .prose-muted ol { padding-left: var(--space-6); }
+.prose-muted li { margin-bottom: var(--space-2); }
+.prose-muted strong { color: var(--color-text); font-weight: 600; }
+.prose-muted em { color: var(--color-text); }
+
+/* --------------------------------------------------------------- prev/next */
+.prevnext {
+  display: flex; justify-content: space-between; gap: var(--space-8);
+  margin-top: var(--space-12); padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+.pn { display: flex; flex-direction: column; gap: var(--space-1); max-width: 20rem; color: var(--color-text); }
+.pn:hover { text-decoration: none; }
+.pn:hover .pn-title { color: var(--color-primary); }
+.pn-label {
+  font-family: var(--font-heading); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  font-size: var(--text-sm); color: var(--color-text-muted);
+}
+.pn-title { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; transition: color 0.15s; }
+.pn-next { margin-left: auto; text-align: right; }
+
+/* ----------------------------------------------------------------- filters */
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-6) 0 var(--space-8); }
+.filters input, .filters select {
+  font-family: var(--font-body); font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-surface); color: var(--color-text);
+  /* Selects size themselves to their widest option — a long tag list used to
+     push the page wider than a phone screen. */
+  min-width: 0; max-width: 100%;
+}
+.filters input { flex: 1 1 20rem; min-width: 0; }
+.filters select { flex: 0 1 auto; }
+.filters input:focus, .filters select:focus { outline: none; border-color: var(--color-primary); }
+.filter-reset {
+  font-family: var(--font-heading); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: transparent; color: var(--color-text-muted);
+}
+.filter-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
+.result-count { color: var(--color-text-muted); font-size: var(--text-sm); }
+.no-results { color: var(--color-text-muted); }
+
+/* Vertical rhythm between major blocks inside a page body. */
+.stack-top { margin-top: var(--space-16); }
+
+/* --------------------------------------------------------------- carousels */
+/* Horizontal scroll-snap row with arrows (see Carousel.astro). */
+.carousel-wrap { position: relative; }
+.carousel {
+  display: flex; gap: var(--space-4);
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; padding-bottom: var(--space-2);
+}
+.carousel::-webkit-scrollbar { display: none; }
+.carousel > * { flex: 0 0 clamp(240px, 46%, 320px); scroll-snap-align: start; }
+.carousel-arrow {
+  position: absolute; top: 45%; transform: translateY(-50%); z-index: 2;
+  width: 44px; height: 44px; cursor: pointer; display: none;
+  border: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  color: var(--color-text); font-size: var(--text-2xl); line-height: 1;
+}
+.carousel-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.carousel-prev { left: calc(-1 * var(--space-5)); }
+.carousel-next { right: calc(-1 * var(--space-5)); }
+@media (min-width: 800px) { .carousel-arrow { display: block; } }
+
+/* One-slide-at-a-time carousel with dots (home, stories intro). */
+.solo { overflow: hidden; border-radius: var(--radius); }
+.solo-track { display: flex; transition: transform 0.5s ease; }
+.solo-slide { flex: 0 0 100%; min-width: 0; }
+.solo-dots { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
+.solo-dots button { width: 9px; height: 9px; border-radius: 0; border: 0; background: var(--color-border); cursor: pointer; padding: 0; transition: width 0.2s, background 0.2s; }
+.solo-dots button.on { background: var(--color-primary); width: 24px; }
+
+/* ------------------------------------------------------------ light panels */
+/* The cyan explanation card used on the home page and the stories index. */
+.panel-cyan {
+  background: var(--color-primary); color: var(--color-ink);
+  border-radius: var(--radius); padding: var(--space-8);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.panel-cyan h1, .panel-cyan h2 { color: var(--color-ink); margin-top: 0; }
+.panel-cyan p { color: var(--color-ink-muted); }
+.panel-cyan .btn--ink { background: var(--color-ink); color: #fff; border-color: var(--color-ink); align-self: flex-start; }
+.panel-cyan .btn--ink:hover { background: #000; border-color: #000; color: #fff; }
+
+/* Text over a photographic background needs a scrim to stay legible. */
+.scrim { position: relative; overflow: hidden; background-size: cover; background-position: center; }
+.scrim::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.62) 55%, rgba(0, 0, 0, 0.4) 100%);
+}
+.scrim > * { position: relative; z-index: 1; }

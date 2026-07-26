@@ -13,6 +13,6 @@ metaDescription: "Participants: Learn to constructively guide an unprepared faci
 
 As a participant, voice your own needs or perceived lack of clarity by asking questions. Frame these as personal understanding gaps, such as 'I don't understand the goal yet, can we make that more clear?' to prompt realignment.
 
-## Example
+### Example
 
 If a facilitator seems unprepared, a participant can ask, 'Hey, I don't get it. Can we please realign on the goal? Because then I feel like I didn't get it,' rather than directly criticizing the facilitation.

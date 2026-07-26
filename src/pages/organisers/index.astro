@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrganiserCard from '../../components/OrganiserCard.astro';
+import { getCollection } from 'astro:content';
+
+// Everyone we hold a record for, not just the team-page subset: the WordPress
+// /dipl-team-member/ URLs redirect here and every one of them must land.
+const organisers = (await getCollection('organisers')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name),
+);
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+---
+
+<BaseLayout
+  title="Organisers — Virtual DDD"
+  description="The volunteers who run Virtual DDD — the people who host the sessions, open spaces and Facilitating Stories."
+  canonical={`${site}/organisers/`}
+>
+  <div class="wrap page">
+    <p class="eyebrow eyebrow--pink">The team</p>
+    <h1>Organisers</h1>
+    <p class="lead">
+      Virtual DDD is run by volunteers. These are the people who host the sessions, run the open
+      spaces and record the stories — each page lists what they've been part of.
+    </p>
+
+    <div class="grid">
+      {organisers.map((o) => <OrganiserCard organiser={o} href={`/organisers/${o.id}/`} />)}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-8) var(--space-16); }
+  .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0 0 var(--space-12); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: var(--space-6); }
+  .grid :global(.org-card) { transition: transform 0.15s; }
+  .grid :global(.org-card:hover) { transform: translateY(-4px); }
+</style>

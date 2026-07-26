@@ -1,0 +1,34 @@
+---
+/** One of the three heuristic type indexes (`/heuristics/design-heuristics/` …).
+ *  Shares the `[slug]` route with heuristic detail pages. */
+import type { CollectionEntry } from 'astro:content';
+import HeuristicBrowser from './HeuristicBrowser.astro';
+import type { HeuristicTypeInfo } from '../lib/heuristics';
+
+interface Props {
+  type: HeuristicTypeInfo;
+  items: CollectionEntry<'heuristics'>[];
+}
+const { type, items } = Astro.props;
+---
+
+<section class="t-hero scrim" style={`background-image: url(${type.bg.src})`}>
+  <div class="wrap t-hero-inner">
+    <p class="detail-back"><a href="/heuristics/">← All heuristics</a></p>
+    <h1>{type.title}</h1>
+    <p>{type.text}</p>
+  </div>
+</section>
+<div class="wrap type-list">
+  <HeuristicBrowser items={items} />
+</div>
+
+<style>
+  /* .scrim in patterns.css supplies the dark overlay; this one reads top-down. */
+  .t-hero { margin-top: calc(-1 * var(--space-12)); }
+  .t-hero::before { background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.86)); }
+  .t-hero-inner { padding-block: var(--space-16) var(--space-12); }
+  .t-hero h1 { margin: 0 0 var(--space-3); }
+  .t-hero p { color: rgba(255, 255, 255, 0.9); max-width: 46rem; margin: 0; }
+  .type-list { padding-block: var(--space-12) var(--space-16); }
+</style>

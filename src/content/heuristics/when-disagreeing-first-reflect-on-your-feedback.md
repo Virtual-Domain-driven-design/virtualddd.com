@@ -11,6 +11,6 @@ tags: ["Sociotechnical Systems", "Facilitating Software Design and Architecture"
 
 Before concluding a team is wrong, critically assess your own feedback. Consider if your advice was persuasive or if you provided the necessary context for them to see the bigger picture. This focuses on improving your advisory skill rather than assigning blame.
 
-## Example
+### Example
 
 An architect disagreed with a team's technology choice but first reflected on whether their own feedback was good enough. They concluded a more persuasive argument might have changed the team's mind.

@@ -11,7 +11,7 @@ tags: ["ADR", "Decision-Making Process", "Conflict Management", "Decentralised D
 
 Acknowledging that a decision was contentious provides crucial context for anyone revisiting it later. You do not need to detail personal dynamics, but noting significant disagreement is important. This helps future teams understand the historical forces at play and can investigate further if needed.
 
-## Examples
+### Examples
 
 When two or more people from different teams both have a preferred solution for the same problem, each option has similar trade-offs. One of the two tools is eventually chosen, possibly based on power dynamics, which can cause a personal conflict.
 

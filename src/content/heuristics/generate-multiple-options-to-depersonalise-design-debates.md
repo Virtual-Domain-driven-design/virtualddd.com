@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "Collaborative modelling", "Software Architectu
 
 When exploring solutions, always generate at least three distinct alternatives. Having only two options often leads to an "us versus them" dynamic and a false dichotomy. A third option encourages more creative thinking and helps break stalemates by providing a different perspective.  This reframes the conversation as a collective evaluation of multiple potential solutions on their own merits. It encourages objective analysis rather than defending personal positions.
 
-## Examples
+### Examples
 
 - Instead of arguing over 'my approach versus your approach,' the team agrees to model the problem in three different ways. This allows them to collaboratively compare the options on the table, rather than defending individual ownership of an idea.
 

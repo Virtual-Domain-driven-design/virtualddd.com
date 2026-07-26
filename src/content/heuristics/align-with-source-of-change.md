@@ -10,14 +10,14 @@ tags: ["Strategic design"]
 enables: ["pause-every-ten-minutes-invite-dissent"]
 ---
 
-## Short description
+### Short description
 
 align boundaries with the people asking for changes because those people will care about concepts which are likely to be more closely related.
 
-## Examples
+### Examples
 
 separate business-to-business and business-to-consumer services because both customer segments will have different needs.
 
-## Context
+### Context
 
 We should align boundaries in sociotechnical systems with our business processes to minimise dependencies and promote sustainable development practices.

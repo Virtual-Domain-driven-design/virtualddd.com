@@ -7,10 +7,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="How the Virtual DDD website handles your data, in plain terms."
 >
   <div class="wrap page">
-    <p class="eyebrow">Legal</p>
+    <p class="eyebrow eyebrow--pink">Legal</p>
     <h1>Privacy Policy</h1>
 
-    <div class="prose">
+    <div class="prose prose-muted">
       <p>
         Virtual DDD is a small, volunteer-run community. We try to keep things simple and to collect as
         little as possible. This page explains, in plain terms, how the website handles data.
@@ -41,8 +41,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <h2>Contact</h2>
       <p>
-        If you have any questions about privacy, or a request regarding your data, email us at
-        <a href="mailto:organisers@virtualddd.com">organisers@virtualddd.com</a> or reach out on
+        If you have any questions about privacy, or a request regarding your data, email us at{' '}
+        <a href="mailto:organisers@virtualddd.com">organisers@virtualddd.com</a> or reach out on{' '}
         <a href="https://discord.gg/tRJkcsFDKN">Discord</a>.
       </p>
     </div>
@@ -50,13 +50,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <style>
     .page { max-width: 48rem; padding-block: var(--space-8) var(--space-16); }
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-accent-dark); margin: 0 0 var(--space-4); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-accent); }
     .page h1 { margin: 0 0 var(--space-8); }
-    .prose h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
-    .prose p { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); }
-    .prose ul { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); padding-left: var(--space-6); }
-    .prose li { margin-bottom: var(--space-2); }
-    .prose strong { color: var(--color-text); }
   </style>
 </BaseLayout>

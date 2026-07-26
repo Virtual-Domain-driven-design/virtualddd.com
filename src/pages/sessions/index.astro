@@ -1,30 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SessionCard from '../../components/SessionCard.astro';
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { splitSessions, tagOptions } from '../../lib/collections';
+import { iso, longDateTime } from '../../lib/dates';
 
-const all = await getCollection('sessions');
-const now = Date.now();
-const upcoming = all
-  .filter((s) => s.data.status === 'Published' && +new Date(s.data.datetime) > now)
-  .sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime));
-const past = all
-  .filter((s) => !(s.data.status === 'Published' && +new Date(s.data.datetime) > now))
-  .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime));
+const { upcoming, past } = await splitSessions();
 
 const featured = upcoming[0];
 const f = featured?.data;
-const featuredIso = f ? new Date(f.datetime).toISOString() : '';
-const featuredDate = f
-  ? new Date(f.datetime).toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })
-  : '';
+const featuredIso = f ? iso(f.datetime) : '';
+const featuredDate = f ? longDateTime(f.datetime) : '';
 
-// Tag options for the filter (unique across past sessions).
-const tagSet = new Set<string>();
-for (const s of past) for (const t of s.data.tags) tagSet.add(t.toLowerCase());
-const tags = [...tagSet].sort();
-
+const tags = tagOptions(past);
 const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'];
 ---
 
@@ -37,10 +25,10 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
 
     {featured && (
       <section class="hero" aria-label="Next session">
-        <p class="hero-eyebrow">Next session</p>
+        <p class="eyebrow eyebrow--pink">Next session</p>
         <div class="hero-card">
           <div class="hero-img">
-            {f!.featuredImage ? <Image src={f!.featuredImage} alt="" width={720} /> : <div class="hero-ph"></div>}
+            {f!.featuredImage ? <Image src={f!.featuredImage} alt="" width={720} /> : <div class="card-thumb-ph"></div>}
           </div>
           <div class="hero-body">
             <div class="badges">
@@ -51,14 +39,22 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
             <p class="hero-date"><time class="js-local" data-format="datetime" datetime={featuredIso} data-iso={featuredIso}>{featuredDate}</time></p>
             {f!.organiser && <p class="hero-host">Hosted by {f!.organiser}</p>}
             <div class="hero-cta">
-              {(f!.humantix || f!.meet) && <a class="btn btn--accent" href={f!.humantix ?? f!.meet}>RSVP to attend</a>}
-              {f!.meet && <a class="btn btn--ghost" href={f!.meet}>Google Meet</a>}
-              <a class="btn" href={`/sessions/${featured.id}/`}>More info →</a>
+              {f!.humantix
+                ? <a class="btn btn--accent" href={f!.humantix}>RSVP to attend</a>
+                : <a class="btn btn--accent" href={`/sessions/${featured.id}/`}>More info →</a>}
+              {f!.humantix && <a class="btn btn--ghost" href={`/sessions/${featured.id}/`}>More info →</a>}
             </div>
+            {(f!.meet || f!.video) && (
+              <div class="hero-live js-live" data-iso={featuredIso}>
+                <span class="hero-live-label">Starting soon</span>
+                {f!.meet && <a class="btn" href={f!.meet}>Join Google Meet</a>}
+                {f!.video && <a class="btn btn--ghost" href={f!.video}>Watch livestream</a>}
+              </div>
+            )}
           </div>
         </div>
         {upcoming.length > 1 && (
-          <div class="grid more-upcoming">{upcoming.slice(1).map((s) => <SessionCard session={s} />)}</div>
+          <div class="grid-cards more-upcoming">{upcoming.slice(1).map((s) => <SessionCard session={s} />)}</div>
         )}
       </section>
     )}
@@ -82,11 +78,11 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
           <option value="">All tags</option>
           {tags.map((t) => <option value={t}>{t}</option>)}
         </select>
-        <button id="f-reset" type="button">Reset</button>
+        <button id="f-reset" class="filter-reset" type="button">Reset</button>
         <span class="result-count" id="count"></span>
       </div>
 
-      <div class="grid" id="cards">{past.map((s) => <SessionCard session={s} />)}</div>
+      <div class="grid-cards" id="cards">{past.map((s) => <SessionCard session={s} />)}</div>
       <p class="no-results" id="noresults" hidden>No sessions match your filters.</p>
       <div class="load-wrap"><button id="load-more" type="button" class="btn btn--ghost">Load more</button></div>
     </section>
@@ -97,11 +93,9 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
 
     /* Upcoming hero */
     .hero { margin-bottom: var(--space-16); }
-    .hero-eyebrow { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-dark); margin: 0 0 var(--space-3); }
     .hero-card { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
     .hero-img { aspect-ratio: 16 / 9; background: var(--color-surface); }
     .hero-img :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hero-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
     .hero-body { padding: var(--space-8); }
     .hero-body .badges { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-3); }
     .hero-body h2 { font-size: var(--text-3xl); margin: 0 0 var(--space-3); }
@@ -109,6 +103,8 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
     .hero-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .hero-host { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
     .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .hero-live { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-top: var(--space-4); }
+    .hero-live-label { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--text-sm); color: var(--color-primary); }
     .more-upcoming { margin-top: var(--space-6); }
 
     @media (min-width: 800px) {
@@ -116,24 +112,16 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
       .hero-img { aspect-ratio: auto; }
     }
 
-    /* Filters */
-    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-6) 0 var(--space-8); }
-    .filters input, .filters select {
-      font-family: var(--font-body); font-size: var(--text-base);
-      padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text);
-    }
-    .filters input { flex: 1 1 16rem; }
-    .filters #f-reset { font-family: var(--font-heading); font-weight: 600; cursor: pointer; padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); }
-    .result-count { color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); }
-    .no-results { color: var(--color-text-muted); }
+    /* Filters, cards and the result count come from patterns.css. */
+    .result-count { margin-left: auto; }
+    .grid-cards { --card-min: 16.25rem; }
     .load-wrap { text-align: center; margin-top: var(--space-8); }
   </style>
 
   <script>
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .s-card'));
+    import { applyUrlFilter } from '../../lib/filter-url';
+
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#cards .card'));
     const q = document.getElementById('q') as HTMLInputElement;
     const fLevel = document.getElementById('f-level') as HTMLSelectElement;
     const fType = document.getElementById('f-type') as HTMLSelectElement;
@@ -172,6 +160,9 @@ const types = ['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on'
       apply(true);
     });
     loadMore.addEventListener('click', () => { limit += STEP; apply(false); });
+
+    // Landing from a legacy /sessions_tag/<tag>/ URL.
+    applyUrlFilter(fTag);
     apply(true);
   </script>
 </BaseLayout>

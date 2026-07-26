@@ -11,7 +11,7 @@ tags: ["Team Agency", "Sociotechnical Systems", "Software Architecture", "Decent
 
 Transitioning from implementation to decision-making requires shifting focus from isolated code to the broader system. Consider costs, cross-team impacts, and long-term consequences, not just the immediate technical appeal of a solution. This change in perspective is fundamental to effective autonomy.
 
-## Examples
+### Examples
 
 A team, initially excited to use a new NoSQL database, must first evaluate its operational cost and the impact on other teams' data contracts. This moves their thinking from a single component to the entire system.
 

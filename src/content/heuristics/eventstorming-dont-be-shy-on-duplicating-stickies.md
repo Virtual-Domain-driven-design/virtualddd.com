@@ -11,7 +11,7 @@ tags: ["EventStorming", "Collaborative Software Design", "Collaborative modellin
 
 People, especially developers, usually abhor duplication. But when running an EventStorming workshop, duplicating sticky notes is not necessarily evil, and even recommended.
 
-## Summary of the solution
+### Summary of the solution
 
 The goal of an EventStorming workshop, whether you run a Big Picture, Process Modeling, or Software Design session, is to be as explicit as possible and enforce the timeline. So it is not a problem to see the same *Event* occur twice, three times or even more, on the design surface. It's even recommended in order to gain clarity and avoid going back on the timeline.
 

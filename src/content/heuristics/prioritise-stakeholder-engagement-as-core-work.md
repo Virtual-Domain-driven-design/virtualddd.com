@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "Collaborative modelling", "Facilitating Softwa
 
 View stakeholder management and communication as an integral, non-negotiable part of an architect's core responsibilities, essential for aligning perspectives and ensuring successful change. This time is not discretionary but fundamental to the role. It is as critical as any technical design task.
 
-## Examples
+### Examples
 
 When questioned about time spent in non-technical meetings, an architect asserts that aligning key stakeholders is a primary task for successful architectural change.
 

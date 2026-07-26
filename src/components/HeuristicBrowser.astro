@@ -1,31 +1,29 @@
 ---
 import HeuristicCard from './HeuristicCard.astro';
 import type { CollectionEntry } from 'astro:content';
+import { HEURISTIC_TYPES } from '../lib/heuristics';
+import { tagOptions } from '../lib/collections';
 
-interface Banner {
-  key: string;
-  title: string;
-  text: string;
-  bg: string;
-  count: number;
-}
 interface Props {
   items: CollectionEntry<'heuristics'>[];
-  banners?: Banner[];
+  /** Show the three type banners, which double as the type filter. */
+  showBanners?: boolean;
 }
-const { items, banners = [] } = Astro.props;
+const { items, showBanners = false } = Astro.props;
 
-// Tag options (unique across the given items).
-const tagSet = new Set<string>();
-for (const h of items) for (const t of h.data.tags) tagSet.add(t.toLowerCase());
-const tags = [...tagSet].sort();
+const tags = tagOptions(items);
+
+// Counts come from the items in hand, so a filtered browser stays honest.
+const banners = showBanners
+  ? HEURISTIC_TYPES.map((t) => ({ ...t, count: items.filter((h) => h.data.type[0] === t.key).length }))
+  : [];
 ---
 
 <div class="hb">
   {banners.length > 0 && (
     <div class="hb-banners" id="hb-banners" role="group" aria-label="Filter by heuristic type">
       {banners.map((t) => (
-        <button type="button" class="hb-banner" data-type={t.key} style={`background-image: url(${t.bg})`}>
+        <button type="button" class="hb-banner scrim" data-type={t.key} style={`background-image: url(${t.bg.src})`}>
           <span class="hbn-body">
             <span class="hbn-title">{t.title}</span>
             <span class="hbn-text">{t.text}</span>
@@ -36,20 +34,20 @@ const tags = [...tagSet].sort();
     </div>
   )}
 
-  <div class="hb-filters">
+  <div class="filters hb-filters">
     <input type="search" id="hq" placeholder="Search heuristics…" aria-label="Search heuristics" />
     <select id="hf-tag" aria-label="Filter by tag">
       <option value="">All tags</option>
       {tags.map((t) => <option value={t}>{t}</option>)}
     </select>
-    <button id="hf-reset" type="button">Reset</button>
-    <span class="hb-count" id="hb-count"></span>
+    <button id="hf-reset" class="filter-reset" type="button">Reset</button>
+    <span class="result-count" id="hb-count"></span>
   </div>
 
-  <div class="hb-grid" id="h-cards">
+  <div class="grid-cards" id="h-cards">
     {items.map((h) => <HeuristicCard heuristic={h} />)}
   </div>
-  <p class="hb-none" id="hb-none" hidden>No heuristics match your filters.</p>
+  <p class="no-results" id="hb-none" hidden>No heuristics match your filters.</p>
   <div class="hb-load"><button id="hb-more" type="button" class="btn btn--ghost">Load more</button></div>
 </div>
 
@@ -57,8 +55,10 @@ const tags = [...tagSet].sort();
   /* Type banners double as the type filter */
   .hb-banners { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin-bottom: var(--space-8); }
   @media (min-width: 800px) { .hb-banners { grid-template-columns: repeat(3, 1fr); } }
-  .hb-banner { position: relative; display: flex; min-height: 12rem; padding: var(--space-6); text-align: left; color: #fff; overflow: hidden; background-size: cover; background-position: center; border: 0; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s; }
-  .hb-banner::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.8) 100%); transition: background 0.15s; }
+  /* .scrim (patterns.css) supplies the overlay; these read top-down, and match
+     the same tiles on /ddd-heuristics/ and the home page. */
+  .hb-banner { display: flex; min-height: 12rem; padding: var(--space-6); text-align: left; color: #fff; border: 0; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s; }
+  .hb-banner::before { background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.8) 100%); transition: background 0.15s; }
   .hb-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
   .hbn-body { position: relative; z-index: 1; margin-top: auto; }
   .hbn-title { display: block; font-family: var(--font-heading); font-weight: 700; font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
@@ -68,25 +68,17 @@ const tags = [...tagSet].sort();
   .hb-banner.active::before { background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%); }
   .hb-banners.has-active .hb-banner:not(.active) { opacity: 0.5; }
 
-  .hb-filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-bottom: var(--space-8); }
-  .hb-filters input, .hb-filters select {
-    font-family: var(--font-body); font-size: var(--text-base);
-    padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text);
-  }
-  .hb-filters input { flex: 1 1 18rem; }
-  .hb-filters input:focus, .hb-filters select:focus { outline: none; border-color: var(--color-primary); }
-  .hb-filters #hf-reset { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; padding: var(--space-3) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-muted); }
-  .hb-filters #hf-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
-  .hb-count { color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
-
-  .hb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6); }
-  .hb-none { color: var(--color-text-muted); }
+  /* Filters, the card grid and the result count come from patterns.css. */
+  .hb-filters { margin: 0 0 var(--space-8); }
+  .result-count { margin-left: auto; }
+  .grid-cards { --card-min: 16.25rem; }
   .hb-load { text-align: center; margin-top: var(--space-8); }
 </style>
 
 <script>
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('#h-cards .h-card'));
+  import { applyUrlFilter } from '../lib/filter-url';
+
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('#h-cards .card'));
   const q = document.getElementById('hq') as HTMLInputElement;
   const fTag = document.getElementById('hf-tag') as HTMLSelectElement;
   const reset = document.getElementById('hf-reset') as HTMLButtonElement;
@@ -134,6 +126,9 @@ const tags = [...tagSet].sort();
     apply(true);
   });
   more.addEventListener('click', () => { limit += STEP; apply(false); });
+
+  // Landing from a legacy /heuristics_tag/<tag>/ URL.
+  applyUrlFilter(fTag);
 
   // Activate a type filter from ?type=… (e.g. linked from the info page) and scroll to results.
   const initialType = new URLSearchParams(location.search).get('type') ?? '';

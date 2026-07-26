@@ -11,7 +11,7 @@ tags: ["ADR", "Decentralised Decision-Making", "Facilitating Software Design and
 
 Instead of enforcing strict consistency in how often teams write decision records, focus on the outcome. The critical measure is whether impactful decisions are documented before they cause unforeseen problems. Allow teams to find their own rhythm as long as this core principle is met.
 
-## Example
+### Example
 
 Rather than forcing all teams to write ADRs with the same frequency, the goal was to ensure no undocumented decisions caused problems later. This allowed each team to find their own balance.
 

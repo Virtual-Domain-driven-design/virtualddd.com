@@ -17,21 +17,21 @@ metaDescription: "Recognize when formal techniques intimidate participants and s
 
 When the methodology itself becomes intimidating or creates a power dynamic, abandon it. If event storming, domain storytelling, or any formal technique puts you on a pedestal while participants struggle, switch to whiteboards, boxes, and arrows—whatever helps people contribute. The goal is collaboration, not perfect execution of a named practice.
 
-## Example
+### Example
 
 A DDD evangelist ran an event storming session that struggled. People had difficulty merging timelines, the explicit walkthrough stalled because participants said they didn't have the facilitator's skills, and the board ended up with more questions than clarity. The architect was "too in love with the model" and participants stayed quiet out of respect for the facilitator's passion. When the same architect later worked with the team using freeform whiteboarding instead of formal DDD techniques, it worked far better. Dropping the methodology brought everyone to the same level.
 
-## Context
+### Context
 
 This particularly applies when you're known as an expert in a methodology. Your identity as "the DDD person" or "the event storming facilitator" can trap you into defending the technique rather than serving the collaboration. If you're thinking about producing the outcome you believe the team deserves, your anxiety about that outcome can override your ability to sense what the room actually needs. The moment you lock your mind into one pattern or heuristic, you exclude other possibilities. Sometimes the best way to enable is to let go of being the expert who knows the path.
 
-## When This Might Not Apply
+### When This Might Not Apply
 
 - Teams specifically requesting methodology training— they're there to learn the technique.
 
 - When organizational templates mandate specific formats for audit/compliance.
 
-## Variations
+### Variations
 
 - For technical workshops, switch from formal EventStorming to "gorilla event storming" with simple event naming.
 

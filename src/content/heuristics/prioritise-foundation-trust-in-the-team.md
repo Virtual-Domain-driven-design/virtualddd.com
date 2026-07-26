@@ -14,7 +14,7 @@ prerequisites: ["watch-approval-seeking-safety-signal", "build-safety-through-sm
 
 In a leadership role, consistently choose to support and trust the team, even when it conflicts with hierarchical pressure. This builds psychological safety and empowers the experts closest to the work to make effective decisions. Losing the team's trust is a far greater long-term cost than disagreeing with management.
 
-## Example(s)
+### Example(s)
 
 A project manager consults the team for their expert opinion, even after being given direction from a senior executive. They then use their influence to align the executive with the team's assessment, putting full trust in them.
 

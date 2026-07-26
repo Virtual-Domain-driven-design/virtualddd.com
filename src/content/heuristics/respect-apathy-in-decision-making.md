@@ -13,7 +13,7 @@ complements: ["evaluate-architectural-options-against-team-pain-points", "surfac
 
 Recognise that not all team members want to be involved in every architectural decision, and this is acceptable. Forcing participation can be counterproductive; their silence may indicate a lower psychological safety or a preference to focus elsewhere. The goal is to provide the opportunity to contribute, not to compel it.
 
-## Example
+### Example
 
 A facilitator learned that pushing silent team members to speak was ineffective, realising that it is okay for some to not want to get involved in a particular decision.
 

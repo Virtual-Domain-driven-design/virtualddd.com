@@ -11,6 +11,6 @@ tags: ["Sociotechnical Systems", "Decision-Making Process", "Facilitating Softwa
 
 Be deeply skeptical of solutions for a complex problem chosen purely because they are the fastest to implement, as this often indicates a lack of critical design thinking. The initial implementation speed can hide significant long-term costs in maintenance, correction, and system complexity. True simplicity is achieved through thoughtful design, not by avoiding it.
 
-## Examples
+### Examples
 
 The team chose the easy path of publishing technical events, which took one day to implement. Correcting this simple mistake ultimately required eight months of effort across multiple teams.

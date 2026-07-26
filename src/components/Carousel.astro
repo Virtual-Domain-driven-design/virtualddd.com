@@ -1,0 +1,61 @@
+---
+/** Horizontal scroll-snap carousel with arrows.
+ *
+ * Used by "discussed heuristics", "discussed in" and the organiser row, which
+ * were three copies of the same CSS and script. Degrades to a plain
+ * side-scrolling row without JS; the arrows only appear from 800px.
+ */
+interface Props {
+  /** Optional eyebrow heading above the row. */
+  eyebrow?: string;
+  /** Auto-advance interval in ms; omit for a manual carousel. */
+  autoplayMs?: number;
+  /** Accessible labels for the arrow buttons. */
+  prevLabel?: string;
+  nextLabel?: string;
+  class?: string;
+}
+const { eyebrow, autoplayMs, prevLabel = 'Previous', nextLabel = 'Next', class: className } = Astro.props;
+---
+
+<section class:list={[className]}>
+  {eyebrow && <p class="eyebrow eyebrow--cyan">{eyebrow}</p>}
+  <div class="carousel-wrap" data-autoplay={autoplayMs ?? undefined}>
+    <button class="carousel-arrow carousel-prev" type="button" aria-label={prevLabel}>‹</button>
+    <div class="carousel"><slot /></div>
+    <button class="carousel-arrow carousel-next" type="button" aria-label={nextLabel}>›</button>
+  </div>
+</section>
+
+<script>
+  // One script for every carousel on the page (Astro bundles it once).
+  document.querySelectorAll<HTMLElement>('.carousel-wrap').forEach((wrap) => {
+    const car = wrap.querySelector<HTMLElement>('.carousel');
+    if (!car) return;
+
+    const step = () => {
+      const first = car.firstElementChild as HTMLElement | null;
+      const gap = parseFloat(getComputedStyle(car).columnGap || '16') || 16;
+      return first ? first.getBoundingClientRect().width + gap : 260;
+    };
+    const scrollable = () => car.scrollWidth > car.clientWidth + 6;
+    const next = () => {
+      if (car.scrollLeft + car.clientWidth >= car.scrollWidth - 6) car.scrollTo({ left: 0, behavior: 'smooth' });
+      else car.scrollBy({ left: step(), behavior: 'smooth' });
+    };
+    const prev = () => car.scrollBy({ left: -step(), behavior: 'smooth' });
+
+    const every = Number(wrap.dataset.autoplay ?? 0);
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const start = () => { if (every > 0 && scrollable()) timer = setInterval(next, every); };
+    const stop = () => clearInterval(timer);
+
+    wrap.querySelector('.carousel-next')?.addEventListener('click', () => { stop(); next(); start(); });
+    wrap.querySelector('.carousel-prev')?.addEventListener('click', () => { stop(); prev(); start(); });
+    if (every > 0) {
+      car.addEventListener('mouseenter', stop);
+      car.addEventListener('mouseleave', start);
+      start();
+    }
+  });
+</script>

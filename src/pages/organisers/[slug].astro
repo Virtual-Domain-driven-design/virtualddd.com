@@ -1,0 +1,198 @@
+---
+/** An organiser's page.
+ *
+ * Replaces the eight near-empty WordPress `/dipl-team-member/*` pages, which
+ * carried a name and nothing else. People search names, so these are worth
+ * having; `Person` structured data is generated from the fields we already
+ * hold. Speakers (as opposed to organisers) still can't be modelled — see
+ * MIGRATION.md, the `Organiser` relation is the meetup host, not the speaker.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TeaserCard from '../../components/TeaserCard.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { iso, shortDate } from '../../lib/dates';
+import { byDateDesc } from '../../lib/collections';
+import { anySamePerson, samePerson } from '../../lib/people';
+
+export async function getStaticPaths() {
+  const organisers = await getCollection('organisers');
+  return organisers.map((organiser) => ({ params: { slug: organiser.id }, props: { organiser } }));
+}
+
+const { organiser } = Astro.props;
+const d = organiser.data;
+
+const sessions = (await getCollection('sessions'))
+  .filter((s) => s.data.organiser && samePerson(s.data.organiser, d.name))
+  .sort(byDateDesc);
+const coHosted = (await getCollection('sessions'))
+  .filter((s) => anySamePerson(s.data.coOrganisers, d.name))
+  .sort(byDateDesc);
+const stories = (await getCollection('stories'))
+  .filter((s) => anySamePerson(s.data.authors, d.name))
+  .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0));
+const heuristics = (await getCollection('heuristics'))
+  .filter((h) => anySamePerson(h.data.authors, d.name) || (h.data.submitter && samePerson(h.data.submitter, d.name)))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+// These people are prolific — Kenny hosts 91 sessions and authored 121
+// heuristics — so each section shows a recent slice and links to the archive
+// rather than reprinting it.
+const SHOW = 6;
+const SHOW_LIST = 10;
+
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: d.name,
+  ...(d.role ? { jobTitle: d.role } : {}),
+  ...(d.website ? { url: d.website } : {}),
+  sameAs: [d.website, d.linkedin].filter(Boolean),
+  memberOf: { '@type': 'Organization', name: 'Virtual DDD', url: `${site}/` },
+  mainEntityOfPage: `${site}/organisers/${organiser.id}/`,
+};
+
+const description = d.role
+  ? `${d.name} — ${d.role}. Sessions, stories and heuristics from ${d.name} at Virtual DDD.`
+  : `${d.name} at Virtual DDD — sessions, stories and heuristics.`;
+---
+
+<BaseLayout
+  title={`${d.name} — Virtual DDD`}
+  description={description}
+  canonical={`${site}/organisers/${organiser.id}/`}
+  jsonLd={jsonLd}
+>
+  <article class="org detail wrap">
+    <div class="detail-head">
+      <p class="detail-back"><a href="/organisers/">← All organisers</a></p>
+      <p class="eyebrow eyebrow--pink">Organiser</p>
+      <h1>{d.name}</h1>
+      {d.role && <p class="role">{d.role}</p>}
+    </div>
+
+    <aside class="detail-side">
+      <div class="side-card">
+        {d.photo && <Image class="portrait" src={d.photo} alt={d.name} width={480} />}
+        {(d.website || d.linkedin) && (
+          <div class="side-links">
+            {d.website && <a class="btn btn--ghost side-btn" href={d.website}>Website ↗</a>}
+            {d.linkedin && <a class="btn btn--ghost side-btn" href={d.linkedin}>LinkedIn ↗</a>}
+          </div>
+        )}
+        {d.organises.length > 0 && (
+          <div class="side-block">
+            <p class="eyebrow eyebrow--cyan">Organises</p>
+            <div class="tags">{d.organises.map((o) => <span class="tag">{o}</span>)}</div>
+          </div>
+        )}
+      </div>
+    </aside>
+
+    <div class="detail-body">
+      {sessions.length === 0 && coHosted.length === 0 && stories.length === 0 && heuristics.length === 0 && (
+        <p class="empty">
+          {d.name} helps run Virtual DDD. Nothing is credited to them in the archive yet —
+          see <a href="/about-us/">about us</a> for what the team does.
+        </p>
+      )}
+
+      {sessions.length > 0 && (
+        <section class="block">
+          <h2>Sessions hosted <span class="n">{sessions.length}</span></h2>
+          <div class="grid-cards">
+            {sessions.slice(0, SHOW).map((s) => (
+              <TeaserCard
+                href={`/sessions/${s.id}/`}
+                title={s.data.title}
+                img={s.data.featuredImage}
+                badge={s.data.typeOfSession}
+                iso={iso(s.data.datetime)}
+                dateFallback={shortDate(s.data.datetime)}
+              />
+            ))}
+          </div>
+          {sessions.length > SHOW && (
+            <p class="more"><a href="/sessions/">All {sessions.length} sessions →</a></p>
+          )}
+        </section>
+      )}
+
+      {coHosted.length > 0 && (
+        <section class="block">
+          <h2>Co-hosted <span class="n">{coHosted.length}</span></h2>
+          <div class="grid-cards">
+            {coHosted.slice(0, SHOW).map((s) => (
+              <TeaserCard
+                href={`/sessions/${s.id}/`}
+                title={s.data.title}
+                img={s.data.featuredImage}
+                badge={s.data.typeOfSession}
+                iso={iso(s.data.datetime)}
+                dateFallback={shortDate(s.data.datetime)}
+              />
+            ))}
+          </div>
+          {coHosted.length > SHOW && (
+            <p class="more"><a href="/sessions/">All sessions →</a></p>
+          )}
+        </section>
+      )}
+
+      {stories.length > 0 && (
+        <section class="block">
+          <h2>Facilitating Stories <span class="n">{stories.length}</span></h2>
+          <div class="grid-cards">
+            {stories.slice(0, SHOW).map((s) => (
+              <TeaserCard
+                href={`/facilitating-archdes/${s.id}/`}
+                title={s.data.title}
+                img={s.data.featuredImage ?? s.data.featuredImageSquared}
+                badge={s.data.episode != null ? `Ep ${s.data.episode}` : undefined}
+                iso={s.data.publishedDate ? iso(s.data.publishedDate) : undefined}
+                dateFallback={s.data.publishedDate ? shortDate(s.data.publishedDate) : undefined}
+                accentMeta
+              />
+            ))}
+          </div>
+          {stories.length > SHOW && (
+            <p class="more"><a href="/facilitating-archdes/">All {stories.length} stories →</a></p>
+          )}
+        </section>
+      )}
+
+      {heuristics.length > 0 && (
+        <section class="block">
+          <h2>Heuristics <span class="n">{heuristics.length}</span></h2>
+          <ul class="heur-list">
+            {heuristics.slice(0, SHOW_LIST).map((h) => <li><a href={`/heuristics/${h.id}/`}>{h.data.title}</a></li>)}
+          </ul>
+          {heuristics.length > SHOW_LIST && (
+            <p class="more"><a href="/heuristics/">All {heuristics.length} heuristics →</a></p>
+          )}
+        </section>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .role { color: var(--color-accent-dark); font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0; }
+  .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+  .portrait { width: 100%; height: auto; margin-bottom: var(--space-5); }
+  .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
+  .side-btn { width: 100%; justify-content: center; font-size: var(--text-sm); }
+  .side-block { margin-top: var(--space-6); }
+  .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+  .block { margin-bottom: var(--space-12); }
+  .block h2 { margin-top: 0; display: flex; align-items: baseline; gap: var(--space-3); }
+  .n { font-size: var(--text-base); color: var(--color-text-muted); font-family: var(--font-body); }
+  .grid-cards { --card-min: 15rem; }
+  .heur-list { margin: 0; padding-left: var(--space-5); }
+  .heur-list li { margin-bottom: var(--space-2); }
+  .empty { color: var(--color-text-muted); }
+  .more { margin-top: var(--space-4); font-family: var(--font-heading); font-weight: 600; }
+</style>

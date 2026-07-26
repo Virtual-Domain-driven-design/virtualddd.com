@@ -1,0 +1,150 @@
+---
+/** Every episode we have a player for, generated from existing data.
+ *
+ * Replaces the WordPress /podcasts/ page, which rendered its Captivate
+ * shortcode as visible text and listed nothing. There are two shows — the
+ * meetup recordings and Facilitating Stories — and each episode already lives
+ * on its session or story page, so this is an index, not a second home.
+ *
+ * No new Notion fields: it reads `podcastPlayer` on sessions and `podcast` on
+ * stories and open spaces.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { iso, shortDate } from '../lib/dates';
+import { byDateDesc } from '../lib/collections';
+
+interface Episode {
+  href: string;
+  title: string;
+  player: string;
+  iso: string;
+  fallback: string;
+  sub?: string;
+}
+
+const sessions = (await getCollection('sessions'))
+  .filter((s) => s.data.podcastPlayer)
+  .sort(byDateDesc)
+  .map((s): Episode => ({
+    href: `/sessions/${s.id}/`,
+    title: s.data.title,
+    player: s.data.podcastPlayer!,
+    iso: iso(s.data.datetime),
+    fallback: shortDate(s.data.datetime),
+    sub: s.data.organiser ? `Hosted by ${s.data.organiser}` : undefined,
+  }));
+
+const stories = (await getCollection('stories'))
+  .filter((s) => s.data.podcast)
+  .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
+  .map((s): Episode => ({
+    href: `/facilitating-archdes/${s.id}/`,
+    title: s.data.title,
+    player: s.data.podcast!,
+    iso: s.data.publishedDate ? iso(s.data.publishedDate) : '',
+    fallback: s.data.publishedDate ? shortDate(s.data.publishedDate) : '',
+    sub: s.data.authors.slice(0, 3).join(', ') || undefined,
+  }));
+
+const openSpaces = (await getCollection('openSpaces'))
+  .filter((s) => s.data.podcast?.includes('player.captivate.fm'))
+  .sort((a, b) => +new Date(b.data.date) - +new Date(a.data.date))
+  .map((s): Episode => ({
+    href: `/open-space/${s.id}/`,
+    title: s.data.title,
+    player: s.data.podcast!,
+    iso: iso(s.data.date),
+    fallback: shortDate(s.data.date),
+  }));
+
+const series = [
+  {
+    key: 'stories',
+    title: 'Stories on Facilitating Software Architecture & Design',
+    blurb: 'Real-world experiences from the community — what actually happened, and what it taught us.',
+    href: '/facilitating-archdes/',
+    episodes: stories,
+  },
+  {
+    key: 'sessions',
+    title: 'Online sessions',
+    blurb: 'Audio from the live meetups: talks, debates, panels and fireside chats.',
+    href: '/sessions/',
+    episodes: [...sessions, ...openSpaces].sort((a, b) => +new Date(b.iso) - +new Date(a.iso)),
+  },
+].filter((s) => s.episodes.length > 0);
+
+const total = series.reduce((n, s) => n + s.episodes.length, 0);
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+---
+
+<BaseLayout
+  title="Podcasts — Virtual DDD"
+  description={`Listen to Virtual DDD: ${total} episodes across the online sessions and the Facilitating Stories series.`}
+  canonical={`${site}/podcasts/`}
+>
+  <div class="wrap page">
+    <p class="eyebrow eyebrow--pink">Listen</p>
+    <h1>Podcasts</h1>
+    <p class="lead">
+      Every session and story we've recorded is also an episode — {total} of them. Play one here, or
+      open its page for the video, the notes and the heuristics that came up.
+    </p>
+
+    {series.map((s) => (
+      <section class="series">
+        <div class="section-head">
+          <h2>{s.title}</h2>
+          <a href={s.href}>All →</a>
+        </div>
+        <p class="blurb">{s.blurb}</p>
+
+        <iframe
+          class="podcast latest"
+          src={s.episodes[0].player}
+          title={`Latest episode: ${s.episodes[0].title}`}
+          loading="lazy"
+          width="100%"
+          height="170"
+        ></iframe>
+
+        <ul class="eps">
+          {s.episodes.map((e) => (
+            <li>
+              <a href={e.href}>
+                <span class="ep-title">{e.title}</span>
+                <span class="ep-meta">
+                  {e.iso && <time class="js-local" data-format="shortdate" datetime={e.iso} data-iso={e.iso}>{e.fallback}</time>}
+                  {e.sub && <span class="ep-sub">{e.sub}</span>}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .page { padding-block: var(--space-8) var(--space-16); }
+  .lead { color: var(--color-text-muted); max-width: 52rem; line-height: 1.75; margin: 0 0 var(--space-12); }
+
+  .series { margin-bottom: var(--space-16); }
+  .blurb { color: var(--color-text-muted); margin: 0 0 var(--space-6); max-width: 52rem; }
+  .latest { margin: 0 0 var(--space-8); max-width: 52rem; }
+
+  .eps { list-style: none; margin: 0; padding: 0; max-width: 52rem; border-top: 1px solid var(--color-border); }
+  .eps li { border-bottom: 1px solid var(--color-border); }
+  .eps a {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: var(--space-2) var(--space-6); padding: var(--space-4) 0; color: var(--color-text);
+  }
+  .eps a:hover { text-decoration: none; }
+  .eps a:hover .ep-title { color: var(--color-primary); }
+  .ep-title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: 1.25; transition: color 0.15s; }
+  .ep-meta { display: flex; gap: var(--space-4); align-items: baseline; color: var(--color-text-muted); font-size: var(--text-sm); margin-left: auto; }
+  .ep-sub { display: none; }
+  @media (min-width: 800px) { .ep-sub { display: inline; } }
+</style>

@@ -27,3 +27,6 @@ pnpm-debug.log*
 migration-source/
 local.env
 *.env
+
+# local verification screenshots
+shots-after/

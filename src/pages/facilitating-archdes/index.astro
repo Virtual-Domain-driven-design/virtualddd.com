@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrganiserCard from '../../components/OrganiserCard.astro';
+import TeaserCard from '../../components/TeaserCard.astro';
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
+import { tagOptions } from '../../lib/collections';
+import { iso, shortDate } from '../../lib/dates';
+import { excerpt } from '../../lib/excerpt';
 
 const stories = (await getCollection('stories')).sort(
   (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
@@ -15,28 +18,7 @@ const hosts = ['andrea-magnorsky', 'andrew-harmel-law', 'kenny-baas-schwegler']
   .map((id) => byId.get(id))
   .filter(Boolean) as typeof organisers;
 
-// Tag options for the filter (unique across stories).
-const tagSet = new Set<string>();
-for (const s of stories) for (const t of s.data.tags) tagSet.add(t.toLowerCase());
-const tags = [...tagSet].sort();
-
-const shortDate = (d: Date) =>
-  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
-// A short plain-text preview drawn from the story body (falls back to the SEO summary).
-function excerpt(md: string, fallback = '', max = 190): string {
-  let text = (md ?? '')
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/^\s*#{1,6}\s+.*$/gm, ' ')
-    .replace(/[#>*_`~]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  if (!text) text = fallback;
-  if (text.length <= max) return text;
-  return text.slice(0, max).replace(/\s+\S*$/, '') + '…';
-}
+const tags = tagOptions(stories);
 ---
 
 <BaseLayout
@@ -60,7 +42,7 @@ function excerpt(md: string, fallback = '', max = 190): string {
         </div>
       </div>
 
-      <aside class="si-about">
+      <aside class="si-about panel-cyan">
         <p class="eyebrow eyebrow--dark">Facilitating Stories</p>
         <h1>Stories on Facilitating Software Design &amp; Architecture</h1>
         <p>
@@ -92,42 +74,33 @@ function excerpt(md: string, fallback = '', max = 190): string {
           <option value="">All tags</option>
           {tags.map((t) => <option value={t}>{t}</option>)}
         </select>
-        <button id="f-reset" type="button">Reset</button>
+        <button id="f-reset" class="filter-reset" type="button">Reset</button>
       </div>
 
-      <div class="story-list" id="cards">
+      <div class="grid-cards story-list" id="cards">
         {stories.map((s) => {
           const d = s.data;
-          const img = d.featuredImage ?? d.featuredImageSquared;
-          const iso = d.publishedDate ? new Date(d.publishedDate).toISOString() : '';
-          const fallback = d.publishedDate ? shortDate(new Date(d.publishedDate)) : '';
-          const preview = excerpt(s.body ?? '', d.seoMetadescription ?? '');
+          const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
           return (
-            <a
+            <TeaserCard
               class="story-card"
               href={`/facilitating-archdes/${s.id}/`}
-              data-title={d.title.toLowerCase()}
-              data-authors={d.authors.join(' ').toLowerCase()}
-              data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
-            >
-              <div class="sc-thumb">
-                {img ? <Image src={img} alt="" width={720} loading="lazy" /> : <div class="sc-ph"></div>}
-                {d.episode != null && <span class="badge badge--type sc-ep">Ep {d.episode}</span>}
-              </div>
-              <div class="sc-body">
-                {iso && (
-                  <p class="sc-date">
-                    <time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{fallback}</time>
-                  </p>
-                )}
-                <h3 class="sc-title">{d.title}</h3>
-                {d.authors.length > 0 && (
-                  <p class="sc-authors">by {d.authors.slice(0, 3).join(', ')}{d.authors.length > 3 ? ' & more' : ''}</p>
-                )}
-                {preview && <p class="sc-excerpt">{preview}</p>}
-                <span class="sc-more">Read more →</span>
-              </div>
-            </a>
+              title={d.title}
+              img={d.featuredImage ?? d.featuredImageSquared}
+              imgWidth={720}
+              badge={d.episode != null ? `Ep ${d.episode}` : undefined}
+              iso={d.publishedDate ? iso(d.publishedDate) : undefined}
+              dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}
+              accentMeta
+              sub={d.authors.length > 0 ? `by ${authors}` : undefined}
+              excerpt={excerpt(s.body ?? '', d.seoMetadescription ?? '')}
+              more="Read more →"
+              data={{
+                title: d.title.toLowerCase(),
+                authors: d.authors.join(' ').toLowerCase(),
+                tags: d.tags.map((t) => t.toLowerCase()).join('|'),
+              }}
+            />
           );
         })}
       </div>
@@ -136,14 +109,6 @@ function excerpt(md: string, fallback = '', max = 190): string {
   </section>
 
   <style>
-    /* Shared brand section label */
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
-    .eyebrow--cyan { color: var(--color-primary); }
-    .eyebrow--cyan::before { background: var(--color-primary); }
-    .eyebrow--dark { color: rgba(13, 14, 18, 0.7); }
-    .eyebrow--dark::before { background: rgba(13, 14, 18, 0.7); }
-
     /* Two-column intro: rotating hosts (left) + cyan explanation card (right) */
     .stories-intro { display: grid; grid-template-columns: 1fr; gap: var(--space-8); align-items: stretch; margin-bottom: var(--space-16); }
     .stories-intro > * { min-width: 0; }
@@ -156,57 +121,30 @@ function excerpt(md: string, fallback = '', max = 190): string {
     .si-hosts :global(.org-card) { height: 100%; }
     .si-hosts :global(.org-photo) { aspect-ratio: auto; flex: 1; min-height: 12rem; }
 
-    /* Cyan explanation card (mirrors home .ns-about) */
-    .si-about { background: var(--color-primary); color: #0d0e12; border-radius: var(--radius); padding: var(--space-8); display: flex; flex-direction: column; justify-content: center; }
-    .si-about h1 { margin: 0 0 var(--space-4); font-size: var(--text-3xl); color: #0d0e12; }
-    .si-about p { color: rgba(13, 14, 18, 0.82); margin: 0 0 var(--space-4); }
+    /* Cyan explanation card — .panel-cyan in patterns.css does the rest. */
+    .si-about h1 { margin: 0 0 var(--space-4); font-size: var(--text-3xl); }
+    .si-about p { margin: 0 0 var(--space-4); }
     .si-about p:last-child { margin-bottom: 0; }
     .si-btn { align-self: flex-start; margin-top: var(--space-6); }
 
-    /* Solo carousel (reused from home page) */
-    .solo { overflow: hidden; border-radius: var(--radius); }
-    .solo-track { display: flex; transition: transform 0.5s ease; height: 100%; }
-    .solo-slide { flex: 0 0 100%; min-width: 0; }
-    .solo-dots { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
-    .solo-dots button { width: 9px; height: 9px; border-radius: 0; border: 0; background: var(--color-border); cursor: pointer; padding: 0; transition: width 0.2s, background 0.2s; }
-    .solo-dots button.on { background: var(--color-primary); width: 24px; }
+    /* The solo carousel stretches to the height of the cyan card beside it. */
+    .solo-track { height: 100%; }
 
     /* Archive */
     .archive { padding-bottom: var(--space-16); }
-    .archive-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; max-width: 52rem; margin-inline: auto; }
-    .result-count { color: var(--color-text-muted); font-size: var(--text-sm); }
+    .archive-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
 
-    .filters { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: 0 auto var(--space-8); max-width: 52rem; }
-    .filters input, .filters select {
-      font-family: var(--font-body); font-size: var(--text-base);
-      padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text);
-    }
-    .filters input { flex: 1 1 20rem; }
-    .filters input:focus, .filters select:focus { outline: none; border-color: var(--color-primary); }
-    .filters #f-reset { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; padding: var(--space-3) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: transparent; color: var(--color-text-muted); }
-    .filters #f-reset:hover { color: var(--color-text); border-color: var(--color-primary); }
+    /* Filters and cards come from patterns.css. */
+    .filters { margin: 0 0 var(--space-8); }
 
-    /* Story cards — image on top, title + excerpt beneath (single column) */
-    .story-list { display: flex; flex-direction: column; gap: var(--space-8); max-width: 52rem; margin-inline: auto; }
-
-    .story-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-    .story-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
-    .story-card:hover .sc-more { color: var(--color-primary); }
-    .sc-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
-    .sc-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .sc-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
-    .sc-ep { position: absolute; top: var(--space-3); left: var(--space-3); }
-    .sc-body { padding: var(--space-6) var(--space-6) var(--space-8); display: flex; flex-direction: column; flex: 1; }
-    .sc-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
-    .sc-title { font-size: var(--text-xl); margin: 0; line-height: 1.2; }
-    .sc-authors { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-    .sc-excerpt { color: var(--color-text-muted); margin: var(--space-3) 0 0; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .sc-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-4); transition: color 0.15s; }
-    .no-results { color: var(--color-text-muted); }
+    /* A three-up grid rather than a stack: 24 full-width cards made this page
+       19,887px tall, which is not an archive anyone scrolls to the end of. */
+    .story-list { --card-min: 20rem; }
   </style>
 
   <script>
+    import { applyUrlFilter } from '../../lib/filter-url';
+
     // Rotating host carousel — shuffle order each load, then auto-advance.
     document.querySelectorAll<HTMLElement>('.solo-carousel').forEach((car) => {
       const track = car.querySelector<HTMLElement>('.solo-track');
@@ -274,6 +212,9 @@ function excerpt(md: string, fallback = '', max = 190): string {
       fTag.value = '';
       apply();
     });
+
+    // Landing from a legacy /facilitating-archdes_tag/<tag>/ URL.
+    applyUrlFilter(fTag);
     apply();
   </script>
 </BaseLayout>

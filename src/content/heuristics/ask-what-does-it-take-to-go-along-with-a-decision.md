@@ -11,7 +11,7 @@ tags: ["Deep Democracy", "Facilitating Software Design and Architecture", "Confl
 
 After a decision is taken, immediately ask the group: “What do you need to go along with this?” This shifts the focus from debate to constructive action and identifies necessary support. A decision’s success depends on the team’s ability to execute it.
 
-## Example
+### Example
 
 After deciding on React, the architect asked the team what they needed to proceed. They identified a need for training, which was then arranged for all developers.
 

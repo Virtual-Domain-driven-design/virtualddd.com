@@ -11,7 +11,7 @@ tags: ["Decision-Making Process", "Decentralised Decision-Making", "Facilitating
 
 Leaders should facilitate and enable team decision-making rather than intervening to solve the problem themselves, if there even is a problem, because often the team doesn’t experience one themselves. Taking over decisions, even with good intentions, creates a cycle of dependency and disempowerment. The goal is to build the team's capacity to make better decisions in the future. 
 
-## 
+### 
 
 A manager, seeing a team is stuck, asks "How can I help you make this decision?" instead of declaring what the decision will be and solve it for them. They actively refuse to make the decision for the team to break a pattern of learned helplessness.
 

@@ -11,7 +11,7 @@ tags: ["EventStorming", "Collaborative Software Design", "Collaborative modellin
 
 If we visualise a policy (Lilac sticky) during an EventStorming based on 'whenever this Domain Event happens we will do this action/command', always ask the question: Is this what we always do?
 
-## Summary of the solution
+### Summary of the solution
 
 > It is impossible for a person to learn
 what they think they already know.

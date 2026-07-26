@@ -11,6 +11,6 @@ tags: ["Sociotechnical Systems", "Software Architecture", "Facilitating Software
 
 When a team’s decision optimises for their immediate convenience at the cost of system-wide integrity, the architectural perspective must prevail. The architect’s role is to advocate for the long-term health of the system, even if it means more work for a team in the short term. This prevents the accumulation of technical debt across service boundaries.
 
-## Example
+### Example
 
 A team wanted to model a feature within their service because their libraries made it easier, but the architect advised against it because the feature clearly belonged in a different system.

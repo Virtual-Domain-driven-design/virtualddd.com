@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TeaserCard from '../../components/TeaserCard.astro';
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
+import { iso, shortDate } from '../../lib/dates';
+import { excerpt } from '../../lib/excerpt';
 
 const all = (await getCollection('openSpaces')).sort(
   (a, b) => +new Date(b.data.date) - +new Date(a.data.date),
@@ -11,30 +13,6 @@ const upcoming = all
   .filter((s) => s.data.status === 'Published' && +new Date(s.data.date) > now)
   .sort((a, b) => +new Date(a.data.date) - +new Date(b.data.date));
 const past = all.filter((s) => !(s.data.status === 'Published' && +new Date(s.data.date) > now));
-
-const shortDate = (d: Date) =>
-  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
-function excerpt(md: string, fallback = '', max = 190): string {
-  let text = (md ?? '')
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/^\s*#{1,6}\s+.*$/gm, ' ')
-    .replace(/[#>*_`~]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  if (!text) text = fallback;
-  if (text.length <= max) return text;
-  return text.slice(0, max).replace(/\s+\S*$/, '') + '…';
-}
-
-const cards = past.map((s) => ({
-  entry: s,
-  iso: new Date(s.data.date).toISOString(),
-  fallback: shortDate(new Date(s.data.date)),
-  preview: excerpt(s.body ?? '', s.data.seoMetadescription ?? ''),
-}));
 ---
 
 <BaseLayout
@@ -59,22 +37,20 @@ const cards = past.map((s) => ({
       <section class="up">
         <p class="eyebrow eyebrow--cyan">Upcoming</p>
         <div class="grid">
-          {upcoming.map((s) => {
-            const d = s.data;
-            const iso = new Date(d.date).toISOString();
-            return (
-              <a class="os-card is-up" href={`/open-space/${s.id}/`}>
-                <div class="os-thumb">
-                  {d.featuredImage ? <Image src={d.featuredImage} alt="" width={640} /> : <div class="os-ph"></div>}
-                </div>
-                <div class="os-body">
-                  <p class="os-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{shortDate(new Date(d.date))}</time></p>
-                  <h3 class="os-title">{d.title}</h3>
-                  <span class="os-more">RSVP &amp; details →</span>
-                </div>
-              </a>
-            );
-          })}
+          {upcoming.map((s) => (
+            <TeaserCard
+              class="card--feature card--upcoming"
+              href={`/open-space/${s.id}/`}
+              title={s.data.title}
+              img={s.data.featuredImage}
+              imgWidth={640}
+              loading="eager"
+              iso={iso(s.data.date)}
+              dateFallback={shortDate(s.data.date)}
+              accentMeta
+              more="RSVP & details →"
+            />
+          ))}
         </div>
       </section>
     )}
@@ -82,34 +58,25 @@ const cards = past.map((s) => ({
     <section class="archive">
       <p class="eyebrow eyebrow--cyan">Past open spaces</p>
       <div class="grid">
-        {cards.map(({ entry, iso, fallback, preview }) => {
-          const d = entry.data;
-          return (
-            <a class="os-card" href={`/open-space/${entry.id}/`}>
-              <div class="os-thumb">
-                {d.featuredImage ? <Image src={d.featuredImage} alt="" width={640} loading="lazy" /> : <div class="os-ph"></div>}
-              </div>
-              <div class="os-body">
-                <p class="os-date"><time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{fallback}</time></p>
-                <h3 class="os-title">{d.title}</h3>
-                {preview && <p class="os-excerpt">{preview}</p>}
-                <span class="os-more">Read more →</span>
-              </div>
-            </a>
-          );
-        })}
+        {past.map((s) => (
+          <TeaserCard
+            class="card--feature"
+            href={`/open-space/${s.id}/`}
+            title={s.data.title}
+            img={s.data.featuredImage}
+            imgWidth={640}
+            iso={iso(s.data.date)}
+            dateFallback={shortDate(s.data.date)}
+            accentMeta
+            excerpt={excerpt(s.body ?? '', s.data.seoMetadescription ?? '')}
+            more="Read more →"
+          />
+        ))}
       </div>
     </section>
   </div>
 
   <style>
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); margin: 0 0 var(--space-5); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; }
-    .eyebrow--pink { color: var(--color-accent-dark); }
-    .eyebrow--pink::before { background: var(--color-accent); }
-    .eyebrow--cyan { color: var(--color-primary); }
-    .eyebrow--cyan::before { background: var(--color-primary); }
-
     .hero { position: relative; overflow: hidden; padding-block: var(--space-16) var(--space-12); border-bottom: 1px solid var(--color-border); margin-top: calc(-1 * var(--space-12)); }
     .hero-glow { position: absolute; inset: 0; pointer-events: none; background:
       radial-gradient(120% 90% at 0% 0%, rgba(22, 189, 232, 0.16), transparent 55%),
@@ -120,21 +87,9 @@ const cards = past.map((s) => ({
 
     .up { margin-top: var(--space-16); }
     .archive { margin-block: var(--space-16); }
+    /* Cards come from patterns.css; the grid is 1 / 2 / 3 columns. */
     .grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
     @media (min-width: 620px) { .grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-
-    .os-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-    .os-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
-    .os-card:hover .os-more { color: var(--color-primary); }
-    .os-card.is-up { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border)); }
-    .os-thumb { aspect-ratio: 16 / 9; background: var(--color-surface); }
-    .os-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .os-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-accent), var(--color-primary)); }
-    .os-body { padding: var(--space-5) var(--space-6) var(--space-6); display: flex; flex-direction: column; flex: 1; }
-    .os-date { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-primary); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
-    .os-title { font-size: var(--text-xl); margin: 0; line-height: 1.2; }
-    .os-excerpt { color: var(--color-text-muted); margin: var(--space-3) 0 0; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .os-more { font-family: var(--font-heading); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-4); transition: color 0.15s; }
   </style>
 </BaseLayout>

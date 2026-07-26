@@ -1,46 +1,32 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import TeaserCard from './TeaserCard.astro';
+import { iso, shortDate } from '../lib/dates';
 
 interface Props {
   session: CollectionEntry<'sessions'>;
 }
 const { session } = Astro.props;
 const d = session.data;
-const iso = new Date(d.datetime).toISOString();
-const dateStr = new Date(d.datetime).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+// All three levels means "come as you are" — say that rather than listing them.
+const LEVELS = 3;
+const level = d.level.length === LEVELS ? 'All levels' : d.level.join(', ');
 ---
 
-<a
-  class="s-card"
+<TeaserCard
   href={`/sessions/${session.id}/`}
-  data-title={d.title.toLowerCase()}
-  data-tags={d.tags.map((t) => t.toLowerCase()).join('|')}
-  data-level={(d.level ?? []).join(' ')}
-  data-type={d.typeOfSession ?? ''}
->
-  <div class="s-thumb">
-    {d.featuredImage
-      ? <Image src={d.featuredImage} alt="" width={480} loading="lazy" />
-      : <div class="s-thumb-ph"></div>}
-    {d.typeOfSession && <span class="badge badge--type s-type">{d.typeOfSession}</span>}
-  </div>
-  <div class="s-info">
-    <p class="s-date"><time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{dateStr}</time></p>
-    <h3 class="s-title">{d.title}</h3>
-    {d.organiser && <p class="s-host">Hosted by {d.organiser}</p>}
-  </div>
-</a>
-
-<style>
-  .s-card { display: flex; flex-direction: column; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; color: var(--color-text); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
-  .s-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border)); text-decoration: none; }
-  .s-thumb { position: relative; aspect-ratio: 16 / 9; background: var(--color-surface); }
-  .s-thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .s-thumb-ph { width: 100%; height: 100%; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
-  .s-type { position: absolute; top: var(--space-2); left: var(--space-2); }
-  .s-info { padding: var(--space-4); }
-  .s-date { font-family: var(--font-heading); font-weight: 600; color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-1); }
-  .s-title { font-size: var(--text-lg); margin: 0; line-height: 1.2; }
-  .s-host { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-</style>
+  title={d.title}
+  img={d.featuredImage}
+  badge={d.typeOfSession}
+  iso={iso(d.datetime)}
+  dateFallback={shortDate(d.datetime)}
+  metaSuffix={level || undefined}
+  sub={d.organiser ? `Hosted by ${d.organiser}` : undefined}
+  data={{
+    title: d.title.toLowerCase(),
+    tags: d.tags.map((t) => t.toLowerCase()).join('|'),
+    level: (d.level ?? []).join(' '),
+    type: d.typeOfSession ?? '',
+  }}
+/>

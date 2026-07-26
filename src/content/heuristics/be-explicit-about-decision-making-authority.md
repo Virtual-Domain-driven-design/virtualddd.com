@@ -13,6 +13,6 @@ Clearly communicate the decision-making process being used for any given choice.
 
 ![From Collaborative Software Design: How to Facilitate domain modelling decisions.](./_assets/be-explicit-about-decision-making-authority-body-1.png)
 
-## Example(s)
+### Example(s)
 
 A CTO, having decided to adopt a new technology, informs the team of the decision and its rationale. This is preferable to asking for their opinion on the matter as if the choice were still open.

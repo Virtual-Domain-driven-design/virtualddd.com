@@ -13,7 +13,7 @@ meet: "https://meet.google.com/wqd-wiox-dbt"
 humantix: "https://events.humanitix.com/critically-engaging-with-models-a-conversation-with-rebecca-and-mathias"
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Krisztina Hirth", "Kenny Baas-Schwegler"]
-curatedHeuristics: ["identify-value-conflicts-group-practices", "ask-what-people-value", "adapt-models-incrementally-team-experimentation", "separate-ideation-from-evaluation", "frame-alternatives-as-options", "compare-models-reveal-tradeoffs", "study-models-extract-building-blocks-values", "respect-questions-new-models"]
+curatedHeuristics: ["study-models-extract-building-blocks-values"]
 featuredImage: "./_assets/critically-engaging-with-models-a-conversation-with-rebecca-and-mathias-featured.png"
 ---
 

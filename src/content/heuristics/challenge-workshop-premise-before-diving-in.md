@@ -16,21 +16,21 @@ metaDescription: "Test if participants agree with the workshop purpose upfront t
 
 Before running a collaborative session, explicitly challenge the stated purpose with participants. Ask who agrees and who doesn't agree with why they're there. When someone asks you to run a workshop because "the team really needs this," treat that claim with healthy skepticism. People often won't volunteer their doubts or disagreements unless you create explicit space for it.
 
-## Example
+### Example
 
 In one architecture workshop, everyone appeared aligned on the entry and exit events that domain architects had pre-decided. The facilitator proceeded with eventstorming, but the whiteboard ended up with more red hotspot sticky notes than orange events. In the retrospective, participants revealed they'd never agreed with the boundary decisions. They stayed quiet because nobody created space to challenge the premise. Four weeks of action items went unfinished because the foundational agreement was theater, not actual alignment.
 
-## Context
+### Context
 
 This applies especially when someone in authority has already made decisions about scope, boundaries, or direction. The higher the stakes of the gathering, the more important it becomes to surface disagreement early. If people don't want to be there, or don't agree with the framing, deal with that fact before investing in the collaborative work. Start by asking in small groups of three where it feels safer to speak up, then invite sharing with the larger group. Remember that resistance isn't opposition to overcome—it's creative energy pointing toward something the system needs to address.
 
-## When This Might Not Apply
+### When This Might Not Apply
 
 - When participants are already highly aligned through prior conversations—pre-challenge can feel redundant and erode momentum. 
 
 - In mandated compliance training where attendance is non-negotiable—the focus shifts to making the best of forced participation.
 
-## Variations
+### Variations
 
 - For remote sessions, use breakout rooms of 3 for premise check before main room sharing.
 

@@ -11,6 +11,6 @@ tags: ["Sociotechnical Systems", "Collaborative modelling", "Strategic design", 
 
 Adapt communication style and content to the specific audience, understanding their perspective and level of detail required. Avoid using technical jargon with business leaders or overly abstract concepts with engineers. Effective communication aligns understanding across all levels.
 
-## Examples
+### Examples
 
 Presenting a high-level strategic overview of a new system to the C-suite, while providing detailed technical diagrams and implementation considerations to the development team.

@@ -11,7 +11,7 @@ tags: ["EventStorming", "Collaborative modelling", "Sociotechnical Systems", "Co
 
 When there is a story to tell, for instance a business process or a customer journey or even doing a planning session, then start your visual collaboration with EventStorming.
 
-## Examples
+### Examples
 
 1. Designing for a new product with customer journey and business process
 
@@ -21,6 +21,6 @@ When there is a story to tell, for instance a business process or a customer jou
 
 4. Setting up a planning
 
-## Summary of the solution
+### Summary of the solution
 
 EventStorming is a collaborative modelling tool, and with every tool it is not a silver bullet. So the question is, when should I use EventStorming?

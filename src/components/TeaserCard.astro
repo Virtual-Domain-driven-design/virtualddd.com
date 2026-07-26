@@ -1,0 +1,78 @@
+---
+/** The standard teaser card: image, date, title, subtitle.
+ *
+ * One implementation behind sessions, stories, open spaces and the
+ * "discussed in" carousel. Styling lives in `patterns.css` (`.card`), so a
+ * restyle is a one-file change rather than a sweep through every section.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  href: string;
+  title: string;
+  img?: ImageMetadata;
+  /** Rendered width of the thumbnail; pick per layout (cards 480, wide 720). */
+  imgWidth?: number;
+  /** Corner badge — session type, episode number, content kind. */
+  badge?: string;
+  /** Date line. `iso` drives the client-side local-time swap. */
+  iso?: string;
+  dateFallback?: string;
+  /** Cyan uppercase date instead of the muted default. */
+  accentMeta?: boolean;
+  /** Appended to the date line, e.g. the session level. Worth showing when it
+   *  is worth filtering on. */
+  metaSuffix?: string;
+  /** Line under the title — host, authors. */
+  sub?: string;
+  excerpt?: string;
+  /** Read-more affordance, e.g. "Read more →". */
+  more?: string;
+  /** `data-*` attributes the client-side filters read. */
+  data?: Record<string, string>;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  href, title, img, imgWidth = 480, badge, iso, dateFallback, accentMeta = false,
+  metaSuffix, sub, excerpt, more, data = {}, class: className, loading = 'lazy',
+} = Astro.props;
+
+const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
+---
+
+<a class:list={['card', className]} href={href} {...dataAttrs}>
+  <div class="card-thumb">
+    {img ? <Image src={img} alt="" width={imgWidth} loading={loading} /> : <div class="card-thumb-ph"></div>}
+    {badge && <span class="badge badge--type card-badge">{badge}</span>}
+  </div>
+  <div class="card-body">
+    {iso && (
+      <p class:list={['card-meta', { 'card-meta--accent': accentMeta }]}>
+        <time class="js-local" data-format="shortdate" datetime={iso} data-iso={iso}>{dateFallback}</time>
+        {metaSuffix && <span class="card-meta-suffix">· {metaSuffix}</span>}
+      </p>
+    )}
+    <h3 class="card-title">{title}</h3>
+    {sub && <p class="card-sub">{sub}</p>}
+    {excerpt && <p class="card-excerpt">{excerpt}</p>}
+    {more && <span class="card-more">{more}</span>}
+  </div>
+</a>
+
+<style>
+  /* Only what is specific to this card: the clamped excerpt. Everything else
+     comes from .card in patterns.css. */
+  .card-excerpt {
+    color: var(--color-text-muted);
+    margin: var(--space-3) 0 0;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-body { display: flex; flex-direction: column; flex: 1; }
+  .card-meta-suffix { font-weight: 500; opacity: 0.85; margin-left: 0.35em; }
+</style>

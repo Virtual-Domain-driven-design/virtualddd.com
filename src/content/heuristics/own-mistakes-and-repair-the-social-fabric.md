@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "Technical Leadership", "Facilitating Software 
 
 When you make a mistake, take direct ownership instead of defending your intentions. Offer a genuine apology ('I was wrong') rather than a conditional one ('I'm sorry you feel that way'). Assess the social 'blast radius' and apologize to everyone affected to repair trust with the entire team.
 
-## Examples
+### Examples
 
 After realizing his public code critique caused a developer to quit, the lead apologized directly to the individual. He then apologized to the entire team for misusing his authority and creating a negative environment.
 

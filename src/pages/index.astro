@@ -4,43 +4,35 @@ import FeaturedSession from '../components/FeaturedSession.astro';
 import SessionCard from '../components/SessionCard.astro';
 import StoryCard from '../components/StoryCard.astro';
 import OrganiserCard from '../components/OrganiserCard.astro';
+import Carousel from '../components/Carousel.astro';
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-import heurDesign from '../assets/heur-design.jpg';
-import heurGuiding from '../assets/heur-guiding.jpg';
-import heurValue from '../assets/heur-value.jpg';
+import { splitSessions } from '../lib/collections';
+import { HEURISTIC_TYPES } from '../lib/heuristics';
+import { graph, organization, SITE_NAME, SITE_TAGLINE } from '../lib/seo';
 
-const now = Date.now();
-const allSessions = await getCollection('sessions');
-const upcoming = allSessions
-  .filter((s) => s.data.status === 'Published' && +new Date(s.data.datetime) > now)
-  .sort((a, b) => +new Date(a.data.datetime) - +new Date(b.data.datetime))[0];
-// Past sessions only (exclude the upcoming / not-yet-held one), newest first.
-const latest = allSessions
-  .filter((s) => !(s.data.status === 'Published' && +new Date(s.data.datetime) > now))
-  .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
-  .slice(0, 8);
+const { upcoming: upcomingSessions, past } = await splitSessions();
+const upcoming = upcomingSessions[0];
+const latest = past.slice(0, 8);
 const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
 
 const stories = (await getCollection('stories'))
   .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
   .slice(0, 8);
 
-const heurTypes = [
-  { href: '/heuristics/design-heuristics/', bg: heurDesign.src, title: 'Design heuristics', text: 'Heuristics we use to solve a specific problem.' },
-  { href: '/heuristics/guiding-heuristics/', bg: heurGuiding.src, title: 'Guiding heuristics', text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.' },
-  { href: '/heuristics/value-based-heuristics/', bg: heurValue.src, title: 'Value-based heuristics', text: 'Heuristics that shape our attitude and behaviour towards design, the world and the way we work.' },
-];
 const DISCORD = 'https://discord.gg/tRJkcsFDKN';
 const BSKY_HANDLE = 'virtualddd.com';
 
 // Bluesky feed, fetched at build time from the public API (no auth, no client JS).
+// The build must not hang or fail on it: time the request out and warn loudly,
+// because a silent failure looks identical to "they haven't posted lately".
 interface Post { text: string; date: string; url: string; media?: string; isVideo?: boolean }
 let posts: Post[] = [];
 try {
   const res = await fetch(
     `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${BSKY_HANDLE}&limit=20&filter=posts_no_replies`,
+    { signal: AbortSignal.timeout(5000) },
   );
+  if (!res.ok) console.warn(`[home] Bluesky feed returned ${res.status}; rendering the follow button instead.`);
   if (res.ok) {
     const data = await res.json();
     posts = (data.feed ?? [])
@@ -69,7 +61,8 @@ try {
       .filter((p: Post) => p.text)
       .slice(0, 12);
   }
-} catch {
+} catch (err) {
+  console.warn(`[home] Bluesky feed unavailable (${err instanceof Error ? err.message : err}); rendering the follow button instead.`);
   posts = [];
 }
 ---
@@ -77,13 +70,22 @@ try {
 <BaseLayout
   title="Virtual DDD — a community for Domain-Driven Design"
   description="A community-driven platform for deeper knowledge of Domain-Driven Design, software architecture and resilient systems design."
+  jsonLd={graph(organization(Astro.site), {
+    '@type': 'WebSite',
+    '@id': new URL('/#website', Astro.site).toString(),
+    name: SITE_NAME,
+    description: SITE_TAGLINE,
+    url: new URL('/', Astro.site).toString(),
+    publisher: { '@id': new URL('/#organization', Astro.site).toString() },
+    inLanguage: 'en-GB',
+  })}
 >
   <div class="wrap">
     <section class="next-section">
       {upcoming && (
         <div class="ns-session"><FeaturedSession session={upcoming} eyebrow="Upcoming session" /></div>
       )}
-      <aside class="ns-about">
+      <aside class="ns-about panel-cyan">
         <h1>Learn software &amp; systems design, together.</h1>
         <p>
           A community-driven platform for people who want deeper knowledge of systems and software
@@ -91,7 +93,7 @@ try {
           explore a wider range of topics for designing and building resilient systems — sharing
           knowledge in a decentralised way, so every member can contribute and learn.
         </p>
-        <a class="btn ns-btn" href="/about-us/">More about us →</a>
+        <a class="btn btn--ink ns-btn" href="/about-us/">More about us →</a>
       </aside>
     </section>
 
@@ -153,10 +155,10 @@ try {
       <div class="hs-col">
         <div class="section-head"><h2>Heuristics</h2><a href="/heuristics/">All →</a></div>
         <div class="heur-links">
-          {heurTypes.map((h) => (
-            <a class="heur-card" href={h.href} style={`background-image: url(${h.bg})`}>
-              <h3>{h.title} ››</h3>
-              <p>{h.text}</p>
+          {HEURISTIC_TYPES.map((t) => (
+            <a class="heur-card scrim" href={`/heuristics/${t.key}/`} style={`background-image: url(${t.bg.src})`}>
+              <h3>{t.title} ››</h3>
+              <p>{t.text}</p>
             </a>
           ))}
         </div>
@@ -179,13 +181,9 @@ try {
     {team.length > 0 && (
       <section class="home-section">
         <div class="section-head"><h2>Organisers</h2></div>
-        <div class="org-carousel-wrap">
-          <button class="org-arrow org-prev" type="button" aria-label="Previous organisers">‹</button>
-          <div class="org-carousel">
-            {team.map((o) => <OrganiserCard organiser={o} />)}
-          </div>
-          <button class="org-arrow org-next" type="button" aria-label="More organisers">›</button>
-        </div>
+        <Carousel class="org-carousel" autoplayMs={4000} prevLabel="Previous organisers" nextLabel="More organisers">
+          {team.map((o) => <OrganiserCard organiser={o} />)}
+        </Carousel>
       </section>
     )}
   </div>
@@ -200,27 +198,14 @@ try {
     .ns-session { display: flex; flex-direction: column; }
     .ns-session :global(.feat) { flex: 1; margin-bottom: 0; display: flex; }
     .ns-session :global(.feat-card) { flex: 1; }
-    .ns-about { background: var(--color-primary); color: #0d0e12; border-radius: var(--radius); padding: var(--space-8); display: flex; flex-direction: column; justify-content: center; }
-    .ns-about h1 { margin-top: 0; font-size: var(--text-3xl); color: #0d0e12; }
-    .ns-about p { color: rgba(13, 14, 18, 0.82); margin-bottom: var(--space-6); }
-    .ns-btn { background: #0d0e12; color: #fff; border-color: #0d0e12; align-self: flex-start; }
-    .ns-btn:hover { background: #000; border-color: #000; color: #fff; }
-
-    .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
-    .section-head h2 { margin: 0; }
-    .section-head a { font-family: var(--font-heading); font-weight: 600; }
+    /* .panel-cyan / .section-head / .solo-* live in patterns.css. */
+    .ns-about h1 { font-size: var(--text-3xl); }
+    .ns-about p { margin-bottom: var(--space-6); }
 
     /* Latest sessions (rotating single card) + Bluesky feed, side by side */
     .latest-social { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-16); align-items: start; }
     .ls-col { min-width: 0; }
     @media (min-width: 900px) { .latest-social { grid-template-columns: 1.1fr 0.9fr; gap: var(--space-12); } }
-
-    .solo { overflow: hidden; border-radius: var(--radius); }
-    .solo-track { display: flex; transition: transform 0.5s ease; }
-    .solo-slide { flex: 0 0 100%; min-width: 0; }
-    .solo-dots { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
-    .solo-dots button { width: 9px; height: 9px; border-radius: 0; border: 0; background: var(--color-border); cursor: pointer; padding: 0; transition: width 0.2s, background 0.2s; }
-    .solo-dots button.on { background: var(--color-primary); width: 24px; }
 
     .bfeed { display: flex; flex-direction: column; gap: var(--space-3); max-height: 30rem; overflow-y: auto; padding-right: var(--space-2); }
     .bpost { display: block; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-4); color: var(--color-text); transition: border-color 0.15s; }
@@ -236,30 +221,21 @@ try {
     .hs-col { min-width: 0; display: flex; flex-direction: column; }
     @media (min-width: 900px) { .heur-stories { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
     .heur-links { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
-    .heur-card { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; padding: var(--space-6); min-height: 5rem; color: #fff; overflow: hidden; background-size: cover; background-position: center; transition: transform 0.15s, box-shadow 0.15s; }
-    .heur-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 55%, rgba(0, 0, 0, 0.25) 100%); }
-    .heur-card > * { position: relative; z-index: 1; }
+    /* .scrim in patterns.css supplies the legibility overlay. */
+    .heur-card { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: var(--space-6); min-height: 5rem; color: #fff; transition: transform 0.15s, box-shadow 0.15s; }
     .heur-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); text-decoration: none; }
     .heur-card h3 { color: #fff; margin: 0 0 var(--space-1); font-size: var(--text-xl); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
     .heur-card p { color: rgba(255, 255, 255, 0.92); margin: 0; font-size: var(--text-sm); }
 
-    /* Organisers carousel */
-    .org-carousel-wrap { position: relative; }
-    .org-carousel { display: flex; gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; padding-bottom: var(--space-2); }
-    .org-carousel::-webkit-scrollbar { display: none; }
-    .org-carousel :global(.org-card) { flex: 0 0 clamp(200px, 42%, 250px); scroll-snap-align: start; }
-    .org-arrow { position: absolute; top: 38%; z-index: 2; width: 44px; height: 44px; border: 1px solid var(--color-border); background: color-mix(in srgb, var(--color-surface) 88%, transparent); color: var(--color-text); font-size: var(--text-2xl); line-height: 1; cursor: pointer; display: none; }
-    .org-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
-    .org-prev { left: calc(-1 * var(--space-4)); }
-    .org-next { right: calc(-1 * var(--space-4)); }
-    @media (min-width: 800px) { .org-arrow { display: block; } }
+    /* Organiser cards sit a little narrower than the carousel default. */
+    .org-carousel :global(.carousel > *) { flex: 0 0 clamp(200px, 42%, 250px); }
 
     .discord-card { display: flex; align-items: center; gap: var(--space-6); background: var(--color-accent); color: #fff; border-radius: var(--radius); padding: var(--space-6) var(--space-8); margin-block: var(--space-16); }
     .dc-icon { flex: none; display: inline-flex; }
     .dc-text { flex: 1 1 auto; }
     .dc-text h2 { color: #fff; margin: 0 0 var(--space-1); }
     .dc-text p { margin: 0; opacity: 0.95; }
-    .discord-btn { flex: none; background: #fff; color: #c53d84; border-color: #fff; }
+    .discord-btn { flex: none; background: #fff; color: var(--color-accent-ink); border-color: #fff; }
     .discord-btn:hover { background: rgba(255, 255, 255, 0.9); border-color: rgba(255, 255, 255, 0.9); color: #b83b7f; }
     @media (max-width: 640px) { .discord-card { flex-wrap: wrap; text-align: center; justify-content: center; } .dc-text { flex-basis: 100%; } }
   </style>
@@ -287,33 +263,15 @@ try {
       start();
     });
 
-    // Organisers carousel — horizontal scroll with arrows + auto-advance.
-    const oc = document.querySelector<HTMLElement>('.org-carousel');
+    // The organiser carousel shuffles on every load so no one is always first.
+    const oc = document.querySelector<HTMLElement>('.org-carousel .carousel');
     if (oc) {
-      // Randomise organiser order on every load.
       const cards = Array.from(oc.children);
       for (let k = cards.length - 1; k > 0; k--) {
         const j = Math.floor(Math.random() * (k + 1));
         [cards[k], cards[j]] = [cards[j], cards[k]];
       }
       cards.forEach((c) => oc.appendChild(c));
-
-      const step = () => {
-        const card = oc.querySelector<HTMLElement>('.org-card');
-        return card ? card.getBoundingClientRect().width + 16 : 240;
-      };
-      const next = () => {
-        if (oc.scrollLeft + oc.clientWidth >= oc.scrollWidth - 6) oc.scrollTo({ left: 0, behavior: 'smooth' });
-        else oc.scrollBy({ left: step(), behavior: 'smooth' });
-      };
-      let timer: ReturnType<typeof setInterval>;
-      const start = () => { timer = setInterval(next, 4000); };
-      const stop = () => clearInterval(timer);
-      document.querySelector('.org-next')?.addEventListener('click', () => { stop(); next(); start(); });
-      document.querySelector('.org-prev')?.addEventListener('click', () => { stop(); oc.scrollBy({ left: -step(), behavior: 'smooth' }); start(); });
-      oc.addEventListener('mouseenter', stop);
-      oc.addEventListener('mouseleave', start);
-      start();
     }
   </script>
 </BaseLayout>

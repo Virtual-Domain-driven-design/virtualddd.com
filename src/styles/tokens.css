@@ -8,6 +8,14 @@
   --color-accent: #ec5fa6;
   --color-accent-dark: #f59ac9; /* lighter pink — text / emphasis on dark */
 
+  /* Ink — text and surfaces on the *light* panels (cyan cards, white heuristic
+     cards), where the dark-theme text colours would be unreadable. */
+  --color-ink: #0d0e12;
+  --color-ink-muted: rgba(13, 14, 18, 0.82);
+  --color-primary-ink: #0b7f9e; /* cyan, darkened to read on white */
+  --color-accent-ink: #c53d84; /* pink, darkened to read on white */
+  --color-heur-value: #7b61ff; /* third heuristic type; no dark-theme twin */
+
   /* Neutrals (dark theme) */
   --color-text: #eef1f4;
   --color-text-muted: #a3a9b5;
@@ -34,8 +42,10 @@
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
 

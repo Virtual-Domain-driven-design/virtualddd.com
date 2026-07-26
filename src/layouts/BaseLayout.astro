@@ -8,34 +8,65 @@ import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
+import '../styles/patterns.css';
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import logo from '../assets/logo-virtualddd.png';
 import Socials from '../components/Socials.astro';
+import ogDefault from '../assets/logo-virtualddd.png';
+import { splitSessions } from '../lib/collections';
+import { SITE_NAME, TWITTER, socialCard } from '../lib/seo';
 
 interface Props {
   title: string;
   description?: string;
+  /** Absolute canonical URL. Defaults to this page's own URL. */
   canonical?: string;
+  /** Structured data, generated from properties we already hold — never
+   *  hand-authored in Notion. Emitted as a JSON-LD script (Phase 6). */
+  jsonLd?: Record<string, unknown>;
+  /** Social card image. Pass the imported asset, not its `.src`: referencing
+   *  the original would keep every unoptimised source file in the deploy. */
+  image?: ImageMetadata;
+  /** `article` for a single piece of content, `website` for an index. */
+  ogType?: 'website' | 'article';
+  /** Keep a page out of the index (thin or duplicate views). */
+  noindex?: boolean;
 }
-const { title, description, canonical } = Astro.props;
+const {
+  title, description, canonical, jsonLd, image, ogType = 'website', noindex = false,
+} = Astro.props;
 
+// Canonical defaults to the page's own URL, so every page has one rather than
+// the eleven that did before. Astro.site is set in astro.config.mjs.
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const canonicalUrl = canonical ?? pageUrl;
+
+const ogImage = await socialCard(Astro.site, image ?? ogDefault);
+
+// Single source for the navigation. `section: true` lists it under "Explore"
+// in the footer, which used to be a hand-maintained second copy; `nav: false`
+// keeps a page out of the main bar while still giving it a home in the footer
+// (the WordPress nav had nine items and was already crowded).
 const nav = [
   { href: '/', label: 'Home' },
-  { href: '/sessions/', label: 'Online sessions' },
-  { href: '/facilitating-archdes/', label: 'Facilitating Stories' },
-  { href: '/open-space/', label: 'Open Space' },
-  { href: '/heuristics/', label: 'Heuristics' },
-  { href: '/ddd-crew/', label: 'ddd crew' },
+  { href: '/sessions/', label: 'Online sessions', section: true },
+  { href: '/facilitating-archdes/', label: 'Facilitating Stories', section: true },
+  { href: '/open-space/', label: 'Open Space', section: true },
+  { href: '/heuristics/', label: 'Heuristics', section: true },
+  { href: '/ddd-crew/', label: 'ddd crew', section: true },
+  { href: '/podcasts/', label: 'Podcasts', section: true, nav: false },
+  { href: '/organisers/', label: 'Organisers', section: true, nav: false },
+  { href: '/book-club/', label: 'Book club', section: true, nav: false },
   { href: '/about-us/', label: 'About us' },
 ];
+const mainNav = nav.filter((n) => n.nav !== false);
+const sections = nav.filter((n) => n.section);
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 
-// Latest sessions for the footer.
-const latest = (await getCollection('sessions'))
-  .sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime))
-  .slice(0, 3);
+// Latest sessions for the footer (most recent first, upcoming included).
+const { all } = await splitSessions();
+const latest = [...all].sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime)).slice(0, 3);
 const year = new Date().getFullYear();
 ---
 
@@ -50,7 +81,25 @@ const year = new Date().getFullYear();
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={TWITTER} />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} — sessions and stories`} href="/rss.xml" />
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <header class="site-header" id="site-header">
@@ -63,7 +112,7 @@ const year = new Date().getFullYear();
           <span></span><span></span><span></span>
         </button>
         <nav class="site-nav" id="site-nav">
-          {nav.map((n) => <a href={n.href} class:list={[{ current: isCurrent(n.href) }]}>{n.label}</a>)}
+          {mainNav.map((n) => <a href={n.href} class:list={[{ current: isCurrent(n.href) }]}>{n.label}</a>)}
         </nav>
       </div>
     </header>
@@ -90,11 +139,7 @@ const year = new Date().getFullYear();
         <div class="footer-explore">
           <h3>Explore</h3>
           <ul>
-            <li><a href="/sessions/">Online sessions</a></li>
-            <li><a href="/open-space/">Open Space</a></li>
-            <li><a href="/facilitating-archdes/">Facilitating Stories</a></li>
-            <li><a href="/heuristics/">Heuristics</a></li>
-            <li><a href="/ddd-crew/">ddd crew</a></li>
+            {sections.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
           </ul>
         </div>
         <div class="footer-about">
@@ -196,6 +241,23 @@ const year = new Date().getFullYear();
         if (!iso) return;
         const f = el.dataset.format === 'datetime' ? dtFmt : el.dataset.format === 'shortdate' ? shortFmt : dateFmt;
         el.textContent = new Date(iso).toLocaleString(undefined, f);
+      });
+
+      // Join links (.js-live) are only useful close to the start. They ship
+      // visible so the page still works without JS; this hides them until two
+      // hours before, and again once the session is well over.
+      const LIVE_BEFORE = 2 * 60 * 60 * 1000;
+      const LIVE_AFTER = 3 * 60 * 60 * 1000;
+      document.querySelectorAll<HTMLElement>('.js-live').forEach((el) => {
+        const iso = el.dataset.iso;
+        if (!iso) return;
+        const start = new Date(iso).getTime();
+        const sync = () => {
+          const now = Date.now();
+          el.hidden = now < start - LIVE_BEFORE || now > start + LIVE_AFTER;
+        };
+        sync();
+        setInterval(sync, 60000);
       });
 
       // Live countdown for any <* class="js-countdown" data-iso>.

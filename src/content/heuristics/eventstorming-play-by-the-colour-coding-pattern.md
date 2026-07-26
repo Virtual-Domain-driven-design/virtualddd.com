@@ -17,7 +17,7 @@ We can start a process or design EventStorming is two ways:
 
 ![](./_assets/eventstorming-play-by-the-colour-coding-pattern-body-1.jpg)
 
-# Examples
+## Examples
 
 1. When there is not enough concepts popping up during enforcing the timeline, we can enforce more exploration and discussion by converting towards the colour coding pattern.
 
@@ -25,6 +25,6 @@ We can start a process or design EventStorming is two ways:
 
 3. When we explored the story in a previous EventStorming session we can start straight away with the pattern but with different starts and ending.
 
-# Context
+## Context
 
 Use it during a process or design level EventStorming, when we need to be more explicit.

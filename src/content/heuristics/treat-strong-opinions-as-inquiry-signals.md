@@ -11,7 +11,7 @@ tags: ["Sociotechnical Systems", "ADR", "Decision-Making Process", "Decentralise
 
 Do not dismiss strong opinions, even if they seem confrontational, as they may hide valid concerns or unstated assumptions. Use questioning to unravel the reasoning behind the opinion, transforming it from a potential blocker into valuable input. This ensures all perspectives are properly considered.
 
-## Examples
+### Examples
 
 When a participant offers a strong opinion, the facilitator asks questions to understand the experience behind it. This helps to validate the decision against hidden risks.
 

@@ -13,6 +13,6 @@ metaDescription: "Learn how to effectively shift design discussions from technic
 
 Deliberately remove the legacy system from the immediate scope of discussion. Redirect the conversation to the underlying business problems the system is meant to solve, fostering a solution-agnostic perspective.
 
-## Example
+### Example
 
 To move beyond discussions of 'message three versus message seven,' the facilitator could explicitly state, 'We are not talking about this legacy system here. Let's focus on the problem this system solves.'

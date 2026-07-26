@@ -7,10 +7,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="How Virtual DDD uses — and doesn't use — AI across our recordings, stories, heuristics and design."
 >
   <div class="wrap page">
-    <p class="eyebrow">Transparency</p>
+    <p class="eyebrow eyebrow--pink">Transparency</p>
     <h1>AI Usage on this site</h1>
 
-    <div class="prose">
+    <div class="prose prose-muted">
       <p>
         We are a community-driven platform for people who want to get more in-depth knowledge of systems
         and software design for solving complex business problems. As such, the recorded video content on
@@ -40,11 +40,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <style>
     .page { max-width: 48rem; padding-block: var(--space-8) var(--space-16); }
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-accent-dark); margin: 0 0 var(--space-4); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-accent); }
     .page h1 { margin: 0 0 var(--space-8); }
-    .prose p { color: var(--color-text-muted); margin: 0 0 var(--space-6); line-height: 1.7; }
-    .prose strong { color: var(--color-text); font-weight: 600; }
-    .prose em { color: var(--color-text); font-style: italic; }
   </style>
 </BaseLayout>

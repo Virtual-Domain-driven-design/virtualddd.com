@@ -11,7 +11,7 @@ tags: ["Decision-Making Process", "Deep Democracy", "ADR", "Conflict Management"
 
 After a decision is made, allow dissenting members to express their concerns freely without becoming defensive. Then, shift the conversation by asking, “What do you need to go along with this decision?” This validates their perspective while focusing on a constructive path forward, turning disagreement into a plan for support.
 
-## Example
+### Example
 
 When developers disagreed with a move to trunk-based development, they were asked what they needed. They explained their concerns and requested an investigation into feature flagging, which was added to the plan.
 

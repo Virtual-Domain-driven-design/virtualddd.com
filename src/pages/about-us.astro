@@ -99,7 +99,7 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
           Our focus is now on decentralising how knowledge is shared and making it easier to have more
           sessions on a broader range of topics, while still centred on systems and software design for
           solving complex business problems. We are always happy if active community members join us and
-          help us organise in any way. Feel free to
+          help us organise in any way. Feel free to{' '}
           <a href="https://discord.gg/tRJkcsFDKN">contact us in Discord</a>, and see you online in our
           community and events!
         </p>
@@ -131,8 +131,14 @@ import decentral2 from '../assets/about/decentralising_knowledge_02.webp';
     .about-hero { display: grid; grid-template-columns: 1fr; gap: var(--space-6); margin-bottom: var(--space-16); align-items: stretch; }
     @media (min-width: 860px) { .about-hero { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
     .ah-img { position: relative; min-height: 16rem; }
-    .ah-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.05) 45%); }
-    .ah-img h1 { position: absolute; top: var(--space-6); left: var(--space-6); z-index: 1; margin: 0; color: var(--color-primary); text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+    .ah-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.72), rgba(0,0,0,0.1) 55%); }
+    /* The painting is bright in places, so the title sits on its own plate
+       rather than relying on a text shadow to carry the contrast. */
+    .ah-img h1 {
+      position: absolute; top: var(--space-6); left: var(--space-6); z-index: 1; margin: 0;
+      color: var(--color-primary); background: rgba(0, 0, 0, 0.55);
+      padding: var(--space-2) var(--space-4); backdrop-filter: blur(2px);
+    }
     .ah-goal { background: var(--color-primary); color: #0d0e12; padding: var(--space-8); display: flex; flex-direction: column; justify-content: center; }
     .ah-goal h2 { color: #0d0e12; }
     .ah-goal p { color: rgba(13, 14, 18, 0.85); }

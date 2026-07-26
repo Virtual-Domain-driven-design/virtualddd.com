@@ -7,10 +7,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="Our community and events are dedicated to a harassment-free experience for everyone. Read the Virtual DDD code of conduct."
 >
   <div class="wrap page">
-    <p class="eyebrow">Community</p>
+    <p class="eyebrow eyebrow--pink">Community</p>
     <h1>Code of Conduct</h1>
 
-    <div class="prose">
+    <div class="prose prose-muted">
       <p>
         All attendees, speakers, sponsors and volunteers at our events are required to agree with the
         following code of conduct. Organisers will enforce this code throughout the event. We expect
@@ -65,11 +65,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <style>
     .page { max-width: 48rem; padding-block: var(--space-8) var(--space-16); }
-    .eyebrow { display: inline-flex; align-items: center; gap: var(--space-3); font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; font-size: var(--text-sm); color: var(--color-accent-dark); margin: 0 0 var(--space-4); }
-    .eyebrow::before { content: ''; width: 1.75rem; height: 2px; background: var(--color-accent); }
     .page h1 { margin: 0 0 var(--space-8); }
-    .prose h2 { margin: var(--space-10) 0 var(--space-3); font-size: var(--text-2xl); }
-    .prose p { color: var(--color-text-muted); line-height: 1.75; margin: 0 0 var(--space-5); }
-    .prose strong { color: var(--color-text); }
   </style>
 </BaseLayout>

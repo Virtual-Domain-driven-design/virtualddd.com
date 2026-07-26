@@ -13,6 +13,6 @@ metaDescription: "Detecting workshop goal disagreement during a session? Learn h
 
 If significant goal misalignment becomes apparent during a session, pause the primary activity. Dedicate a short, focused segment to explicitly check in and realign on the workshop's purpose with all key participants present.
 
-## Example
+### Example
 
 The facilitator realized the manager's goal differed from the product owner's. An option would have been to call a 20-minute session to explicitly re-align on the workshop's goal with the manager present.

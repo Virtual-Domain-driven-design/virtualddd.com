@@ -11,6 +11,6 @@ tags: ["Ranking", "Facilitating Software Design and Architecture", "Conflict Man
 
 Instead of providing direct answers, guide teams by asking probing questions and suggesting alternative perspectives. This fosters their decision-making skills and ownership without undermining their autonomy. The goal is to enable, not to command.
 
-## Examples
+### Examples
 
 When a team asks 'Is this the best way?', the architect responds by asking 'What will happen if you choose another way?'. This prompts the team to explore the trade-offs themselves.

@@ -11,7 +11,7 @@ tags: ["Quality", "Sociotechnical Systems", "Cognitive Bias", "Psychological Saf
 
 Acknowledge that different functions perceive quality differently: product values ‘building the right thing’, engineering values ‘building the thing right’, and operations values ‘supporting the thing well’. Make these perspectives explicit through a formal discussion or a social contract. This prevents misalignment and fosters a holistic view of quality.
 
-## Example
+### Example
 
 We held a workshop with product, engineering, and support to create a social contract. This document explicitly defines our shared quality goals, balancing feature discovery with implementation correctness and operational stability.
 
