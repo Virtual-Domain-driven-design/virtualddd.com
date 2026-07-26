@@ -29,7 +29,8 @@
     "sync:guests": "tsx scripts/sync-notion.ts guests --write",
     "sync:ddd-crew": "tsx scripts/sync-ddd-crew.ts --write",
     "sync:slugs": "tsx scripts/sync-notion.ts slugs",
-    "seo": "node scripts/write-seo.mjs"
+    "seo": "node scripts/write-seo.mjs",
+    "guests:profiles": "node scripts/write-guest-profiles.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

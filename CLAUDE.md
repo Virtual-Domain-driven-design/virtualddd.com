@@ -75,12 +75,24 @@ carry the profile links that become `sameAs`. The `Slug` column is what the
 relation resolves to; a guest row without one produces no entry and the
 sessions sync reports it.
 
-Guests render on the session page and are `performer` on its `Event`. The
-section adapts: while a guest has nothing but a name — which is true of all 54
-after the backfill — it is a roster of names, and it becomes portrait-and-bio
-rows as soon as anyone fills the fields in. **Speaker pages are not built.**
-Fifty-four pages carrying one name each would be thin; revisit when the rows
-have bios.
+Guests are `performer` on a session's `Event` and are named in the sidebar
+credit ("With …") on every session that had them. The **Guests section itself
+is gated on a `Bio`**: a panel of bare names says no more than the credit
+already does, so the section appears only once someone has been introduced, and
+appears by itself on the next sync after a Bio is written. `npm run test:content`
+reports guests on *upcoming* sessions who still have none.
+
+`data/guest-profiles.csv` is the one-time harvest of what the session
+descriptions already said about their speakers — 8 bios, 19 roles, 4 links —
+pushed into Notion by `npm run guests:profiles`. It only ever fills an **empty**
+field, so anyone editing their own bio in Notion wins over a re-run. The copy
+was read and written by hand: a sentence about a real person is not something
+to assemble with a regex. `data/guest-bio-removals.md` lists the source blocks
+still duplicated in a session description, for a human to approve before
+anything is deleted from Notion.
+
+**Speaker pages are not built.** Fifty-four pages carrying one name each would
+be thin; revisit when more rows have bios.
 
 **Videos are out of scope.** The Notion Videos database and its ~536 live URLs
 are not authored here; they get a redirect/archive decision in `MIGRATION.md`
@@ -287,6 +299,11 @@ since `ddd-crew.github.io` already publishes these.
   everything else, but ~290 of them were authored at once, and a CSV is
   reviewable in a way that editing 290 Notion rows is not. Re-running is safe:
   it only writes a field whose value actually differs.
+- `npm run guests:profiles` — push `data/guest-profiles.csv` (speaker roles,
+  bios and links harvested from the session descriptions) into the Session
+  Guests database. Dry run by default; `--write` applies. It fills **empty**
+  fields only, so it can never overwrite what someone typed in Notion —
+  `--force` if you mean to.
 - `npm run check:urls` — assert that every one of the 967 indexed WordPress
   URLs is served, redirected to a page that exists, or Gone. Run after
   `npm run build`; it fails the build rather than letting a URL 404.

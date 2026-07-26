@@ -133,9 +133,13 @@ describe('structured data', () => {
   // Who spoke is why the guests database exists: `sameAs` is how an answer
   // engine works out that this Nick Tune is that one. A guest credited on the
   // page but missing from the Event is the failure that would go unnoticed.
+  //
+  // The credit line is the check, not the Guests section: the section only
+  // appears once someone has a bio, while the credit — and the structured
+  // data — name every guest the session had.
   test('a session that credits guests names them as performers', () => {
     const sessions = all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
-    const withGuests = sessions.filter((p) => p.html.includes('data-test="guest"'));
+    const withGuests = sessions.filter((p) => p.html.includes('data-test="guest-credit"'));
     assert.ok(withGuests.length > 20,
       `expected the guest relation to reach 20+ sessions, got ${withGuests.length}`);
 
@@ -143,13 +147,26 @@ describe('structured data', () => {
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
       const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
       const performers = [].concat(event.performer ?? []);
-      const credited = [...p.html.matchAll(/data-test="guest"[\s\S]*?data-test="person-name"[^>]*>(?:<a[^>]*>)?([^<]+)/g)]
-        .map((m) => text(m[1]));
-      assert.ok(credited.length, `${p.path} has a guest row with no name`);
+      const credit = attr(p.html, /data-test="guest-credit"[^>]*>[\s\S]*?<strong[^>]*>([^<]+)/);
+      const credited = text(credit ?? '').split(', ').filter(Boolean);
+      assert.ok(credited.length, `${p.path} has a guest credit with no name`);
       for (const name of credited) {
         assert.ok(performers.some((x) => x['@type'] === 'Person' && x.name === name),
           `${p.path} credits ${name} on the page but not in the Event`);
       }
+    }
+  });
+
+  // The section is gated on a bio, so a rendered guest row must carry one —
+  // otherwise the gate has drifted from what it lets through.
+  test('a rendered guest row introduces the person', () => {
+    for (const p of all.filter((x) => /^\/sessions\/[^/]+\/$/.test(x.path))) {
+      if (!p.html.includes('data-test="guest"')) continue;
+      const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
+      const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
+      const performers = [].concat(event.performer ?? []);
+      assert.ok(performers.some((x) => x.description),
+        `${p.path} renders a Guests section but nobody in it has a bio`);
     }
   });
 });

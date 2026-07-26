@@ -1,5 +1,9 @@
 {
   "name": "Seb Rose",
   "slug": "seb-rose",
+  "role": "Independent software consultant and author",
+  "bio": "Seb has been a consultant, coach, designer, author and developer for over 40 years, at companies large and small. He is co-author of Effective Behaviour-Driven Development and lead author of The Cucumber for Java Book.",
+  "website": "http://claysnow.co.uk/",
+  "mastodon": "https://mastodon.scot/@sebrose",
   "alsoAnOrganiser": false
 }

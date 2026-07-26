@@ -3,9 +3,8 @@
  *
  * Shared because a session page shows two kinds of people — the host it is
  * organised by, and the guests who spoke — and they should not drift apart.
- * Most guests carry nothing but a name for now (the Notion rows were created
- * from the session titles), so every field below is optional and the row has
- * to look deliberate with only the first one filled in.
+ * Every field but the name is optional: a guest often has a role and no
+ * portrait, and the row has to look deliberate either way.
  */
 import { Image } from 'astro:assets';
 
@@ -17,12 +16,8 @@ interface Props {
   /** A page on this site for this person, e.g. their organiser page. */
   href?: string;
   links?: { label: string; href: string }[];
-  /** Name only, no portrait: for a list of people we know nothing else about.
-   *  Three tall rows holding a name each look like a page with fields
-   *  missing; a roster looks like a roster. */
-  compact?: boolean;
 }
-const { name, role, bio, photo, href, links = [], compact = false } = Astro.props;
+const { name, role, bio, photo, href, links = [] } = Astro.props;
 
 /** Initials stand in for a missing portrait, so a list of people keeps its
  *  rhythm instead of collapsing to ragged text. */
@@ -34,8 +29,8 @@ const initials = name
   .join('');
 ---
 
-<div class:list={['person', { 'person--compact': compact }]}>
-  {compact ? null : photo
+<div class="person">
+  {photo
     ? <Image class="person-photo" src={photo} alt={name} width={176} />
     : <span class="person-photo person-ph" aria-hidden="true">{initials}</span>}
   <div class="person-info">
@@ -55,7 +50,6 @@ const initials = name
   /* A bio makes the text column tall; a centred portrait then floats beside
      its middle instead of introducing the person. */
   .person:has(.person-bio) { align-items: flex-start; }
-  .person--compact { display: block; }
   .person-photo { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow); }
   .person-ph {
     display: grid; place-items: center;

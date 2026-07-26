@@ -53,11 +53,13 @@ const guests = resolveRefs(d.guests, await guestsById())
   // would say it twice.
   .filter((g) => !d.organiser || !samePerson(g.name, d.organiser));
 
-// The guest rows are worth their size once there is something in them. Until a
-// guest has been given a portrait, a role, a bio or a link, the section renders
-// as a roster of names — which is what we actually know. It upgrades itself as
-// the Notion rows are filled in.
-const guestsIntroduced = guests.some((g) => g.photo || g.role || g.bio || g.links.length);
+// The section earns its place once a guest has actually been introduced. A
+// bio is the test, because that is the sentence the section exists to carry —
+// a panel of names alone says no more than the sidebar credit already does.
+// Nothing is lost meanwhile: the credit still names them, and the structured
+// data still says who performed. Write a Bio in Notion and the section appears
+// on the next sync.
+const guestsIntroduced = guests.some((g) => g.bio);
 
 const hostLinks = profileLinks(host?.data ?? {});
 // One Person node per human on the session, guests first: they are what the
@@ -144,7 +146,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
         <p class="side-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
         {guests.length > 0 && (
-          <p class="side-guests">With <strong>{guests.map((g) => g.name).join(', ')}</strong></p>
+          <p class="side-guests" data-test="guest-credit">With <strong>{guests.map((g) => g.name).join(', ')}</strong></p>
         )}
         {isUpcoming && (d.humantix || d.meet) && (
           <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>
@@ -173,16 +175,13 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     <div class="detail-body">
       <div class="prose-body"><Content /></div>
 
-      {guests.length > 0 && (
+      {guestsIntroduced && (
         <section class="people-card">
           <h2>{guests.length === 1 ? 'Guest' : 'Guests'}</h2>
-          <ul class:list={['people', { 'people--names': !guestsIntroduced }]}>
+          <ul class="people">
             {guests.map((g) => (
               <li data-test="guest">
-                <PersonRow
-                  name={g.name} role={g.role} bio={g.bio} photo={g.photo}
-                  href={g.href} links={g.links} compact={!guestsIntroduced}
-                />
+                <PersonRow name={g.name} role={g.role} bio={g.bio} photo={g.photo} href={g.href} links={g.links} />
               </li>
             ))}
           </ul>
@@ -239,8 +238,6 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     .people-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
     .people-card h2 { margin-top: 0; }
     .people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
-    /* Names only: a wrapped roster rather than a column of near-empty rows. */
-    .people--names { flex-direction: row; flex-wrap: wrap; column-gap: var(--space-6); row-gap: var(--space-2); }
     .org-co { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-4) 0 0; }
   </style>
 </BaseLayout>

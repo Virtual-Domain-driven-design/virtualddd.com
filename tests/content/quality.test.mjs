@@ -65,25 +65,21 @@ describe('what the editors control', () => {
     assert.deepEqual(anonymous, [], `stories with no author in Notion: ${anonymous.join(', ')}`);
   });
 
-  test('guests on an upcoming session are introduced', () => {
+  test('guests on an upcoming session have a bio', () => {
     // A speaker row created from a session title holds a name and nothing
-    // else. That is fine for the archive — the fields exist to make a `Person`
-    // worth citing, and the ones people are about to see are the ones worth
-    // filling in first. Add a Role, Bio or a link in the Session Guests
-    // database and the page upgrades itself from a roster to a proper
-    // introduction on the next sync.
+    // else, and the Guests section stays hidden until someone has a Bio. That
+    // is fine for the archive; the session about to happen is the one worth
+    // filling in. Write a Bio in the Session Guests database — a role or a
+    // link alone will not open the section — and it appears on the next sync.
     const bare = [];
     for (const p of all.filter((x) => /^\/sessions\/[^/]+\/$/.test(x.path))) {
       if (!p.html.includes('data-test="add-to-calendar"')) continue; // upcoming only
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
       const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
-      const names = [...p.html.matchAll(/data-test="guest"[\s\S]*?data-test="person-name"[^>]*>(?:<a[^>]*>)?([^<]+)/g)]
-        .map((m) => text(m[1]));
-      for (const name of names) {
+      const credit = attr(p.html, /data-test="guest-credit"[^>]*>[\s\S]*?<strong[^>]*>([^<]+)/);
+      for (const name of text(credit ?? '').split(', ').filter(Boolean)) {
         const node = [].concat(event?.performer ?? []).find((x) => x.name === name);
-        if (!node?.jobTitle && !node?.description && !node?.sameAs?.length) {
-          bare.push(`${p.path}: ${name} has no role, bio or link`);
-        }
+        if (!node?.description) bare.push(`${p.path}: ${name} has no bio`);
       }
     }
     assert.deepEqual(bare, [], bare.join('\n'));
