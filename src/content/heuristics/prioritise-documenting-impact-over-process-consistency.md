@@ -14,5 +14,3 @@ Instead of enforcing strict consistency in how often teams write decision record
 ## Example
 
 Rather than forcing all teams to write ADRs with the same frequency, the goal was to ensure no undocumented decisions caused problems later. This allowed each team to find their own balance.
-
-

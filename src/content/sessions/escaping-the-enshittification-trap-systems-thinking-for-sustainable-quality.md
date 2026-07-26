@@ -28,7 +28,3 @@ We’ll introduce practical ways to think about quality through attributes like 
 ## **About Anne-Marie Charrett**
 
 I’m an electronic engineer by trade, but software testing found me while I was working on Layer 4 protocols—and I’ve been hooked ever since. In the past, I taught software testing as an adjunct professor at UTS. These days, I work in engineering leadership, consult with teams on quality I bring a systems thinking lens to building quality in products, shaped by years working across startups, enterprises, and tech companies. I also wrote [*The Quality Coach’s Handbook*](https://leanpub.com/qc), which you can find on Amazon or Leanpub.
-
-
-
-

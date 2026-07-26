@@ -21,5 +21,3 @@ During Process or Design level EventStorming we can get stuck in talking about i
 ## Summary of the solution
 
 EventStorming is really effective for telling stories in a timeline. It can be less effective when we start discussing use cases or examples that can all happen at one point in time. What can happen is that people move the discussion from the paper roll and stickies towards each other. Now we are discussing invisible things.
-
-

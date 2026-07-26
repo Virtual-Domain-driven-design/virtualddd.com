@@ -14,5 +14,3 @@ Recognise that shifting deeply held perspectives, especially when it implies pas
 ## Examples
 
 After a challenging conversation, give a resistant stakeholder a week or two to reflect on new information rather than demanding immediate agreement or action.
-
-

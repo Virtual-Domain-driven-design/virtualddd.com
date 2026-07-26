@@ -14,5 +14,3 @@ When you make a mistake, take direct ownership instead of defending your intenti
 ## Examples
 
 After realizing his public code critique caused a developer to quit, the lead apologized directly to the individual. He then apologized to the entire team for misusing his authority and creating a negative environment.
-
-

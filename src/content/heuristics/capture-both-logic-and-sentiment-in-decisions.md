@@ -18,5 +18,3 @@ Augment formal decision records, like ADRs, with qualitative data about the huma
 - We can add a sense-making that states: On a scale of 1-10, how happy are you with this decision?
 
 ![](./_assets/capture-both-logic-and-sentiment-in-decisions-body-1.png)
-
-

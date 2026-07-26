@@ -14,5 +14,3 @@ When applying DDD to a legacy system, accept that the initial boundaries will be
 ## Example
 
 To move away from a legacy application, the architecture was 'chopped up' into a context map. The team accepted that the initial boundaries were not good, but they were a necessary first step.
-
-

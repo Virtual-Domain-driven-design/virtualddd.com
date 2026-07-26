@@ -16,5 +16,3 @@ Prepare a concise, evidence-based summary of observations, outcomes, and recomme
 ## Example
 
 After the manager left the workshop, the facilitators debriefed him with a 'McKinsey-style' presentation, detailing observed insights (e.g., technical vs. business edge cases) and offering recommendations, even if they challenged his initial assumptions.
-
-

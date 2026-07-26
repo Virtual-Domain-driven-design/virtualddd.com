@@ -17,5 +17,3 @@ Before a collaborative workshop, conduct dedicated 'setting the stage' sessions 
 ## Example
 
 The facilitator assumed alignment between a product owner and their manager, only to discover two days prior that the manager sought documentation while the product owner aimed for a complete rethink. This misalignment led to an exhausting workshop focused on 'as-is' processes rather than future design.
-
-

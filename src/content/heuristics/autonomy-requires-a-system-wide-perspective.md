@@ -14,5 +14,3 @@ Transitioning from implementation to decision-making requires shifting focus fro
 ## Examples
 
 A team, initially excited to use a new NoSQL database, must first evaluate its operational cost and the impact on other teams' data contracts. This moves their thinking from a single component to the entire system.
-
-

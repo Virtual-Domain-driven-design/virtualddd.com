@@ -24,5 +24,3 @@ This quantitative data can reveal pathologies that are not obvious from individu
 ## Example(s)
 
 A team notices that decision lead times are increasing and the same decisions are being revisited repeatedly. By tracking these metrics, they can make a case that the process is creating paralysis, rather than just complaining about individual instances.
-
-

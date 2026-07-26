@@ -16,5 +16,3 @@ If a clear, aligned goal exists, use it as a reference point to guide the discus
 ## Example
 
 When the workshop started drifting towards detailed documentation, the facilitator could have referred back to the agreed-upon goal of 'rethinking the process' to prompt a course correction.
-
-

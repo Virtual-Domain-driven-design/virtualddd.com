@@ -14,5 +14,3 @@ Acknowledge emotional attachment to past work, but consciously set it aside to e
 ## Example
 
 A team's decision effectively threw out an architect's prior work. The architect had to consciously remove their emotional attachment to recognize it was the right decision for moving forward.
-
-

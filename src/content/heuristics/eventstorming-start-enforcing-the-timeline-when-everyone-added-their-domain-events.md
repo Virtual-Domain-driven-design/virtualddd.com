@@ -21,5 +21,3 @@ During the start of an EventStorming we ask everyone in the group to write down 
 ## Context
 
 The biggest value from EventStorming is the storming part, and the first step is chaotic exploration. When we do a chaotic exploration first, instead of enforcing the colour coding pattern we need to wait until everyone added their domain events.
-
-

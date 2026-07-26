@@ -16,5 +16,3 @@ Recognise that not all team members want to be involved in every architectural d
 ## Example
 
 A facilitator learned that pushing silent team members to speak was ineffective, realising that it is okay for some to not want to get involved in a particular decision.
-
-

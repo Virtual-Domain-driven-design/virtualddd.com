@@ -524,14 +524,68 @@ link checking of external URLs (they rot for reasons outside this repo).
 
 ---
 
-## Deploy
+## From Notion to the site
 
-- Build in **CI only**, never on the host.
-- The pipeline (Notion → n8n → GitHub Actions → rsync, with a post-deploy
-  webhook for the social posts) is **automation over a manual process**. Running
-  the sync script and `git push` by hand must always produce a correct deploy.
-  If the automation breaks, publishing degrades to a script and a commit — never
-  an outage. Keep it that way.
+Build in **CI only**, never on the host. And the whole pipeline is *automation
+over a manual process*: running the sync and `git push` by hand must always
+produce a correct deploy. If every automated part breaks, publishing degrades
+to a script and a commit — never an outage. Keep it that way.
+
+```
+Notion ──► n8n ──► repository_dispatch ──► sync.yml ──► deploy.yml ──► n8n
+        (publish: at once)              (~20s)        build, test,   Discord
+        (edits: batched hourly)                       rsync
+```
+
+**n8n decides when, because only n8n knows whether anything changed.** A
+publish fires immediately; ordinary edits are collected and fired once an hour.
+A blind schedule would spend ten minutes discovering nothing had happened —
+which is also why the nightly run (`--full`, 03:17 UTC) is a reconciliation
+safety net rather than the main path.
+
+**Nothing deploys unless the sync produced a diff.** The generated markdown is
+committed, so `git diff --quiet` is the whole test.
+
+### The sync is incremental
+
+`data/sync-state.json` records, per page, the slug and Notion's
+`last_edited_time` at the last render.
+
+- **Front matter is rebuilt every run**, because properties arrive free with
+  the list query — and because a relation can go stale without the page being
+  touched: publishing a heuristic should add a link to the sessions that
+  reference it.
+- **A body is re-fetched only when Notion says that page changed.** Bodies are
+  the expensive part, about two seconds each.
+
+A full sync is ~10 minutes; a routine one is ~20 seconds. `--full` ignores the
+state and re-fetches everything.
+
+Trailing blank lines are normalised where the file is written, not in either
+branch, so a fetched body and a reused body are byte-identical. Without that a
+changed page would flip-flop between syncs and "no diff, no deploy" would ship
+whitespace.
+
+### When an editorial change breaks a URL
+
+A URL is a promise. Two ordinary actions in Notion break one, and the sync
+handles both rather than leaving them for someone to notice.
+
+- **A renamed slug** is not ambiguous: the same page id under a new slug is a
+  fact. The sync writes the `301` itself into `data/retired-urls.csv`, which
+  `build-redirects.mjs` reads.
+- **A page that stops being published** is ambiguous, so the editor says which
+  they meant with the **`Retire URL`** checkbox:
+  - **ticked** → they mean it. The page goes, and the address answers `410 Gone`.
+  - **not ticked** → **quarantine**. The page keeps being served, everything
+    else deploys, and `data/sync-alerts.json` tells the workflow to raise it
+    with a human. An accidental unpublish must not silently 404 an address
+    other people have linked to — and must not block everyone else's publishing
+    either.
+  - **never had a public URL** → just removed; there is no promise to keep.
+
+Never resolve one of these by deleting the URL from `data/live-urls.txt`. That
+file is the promise, not a record of what happens to be built.
 
 ## Commands
 

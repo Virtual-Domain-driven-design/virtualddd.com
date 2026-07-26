@@ -17,5 +17,3 @@ In a leadership role, consistently choose to support and trust the team, even wh
 ## Example(s)
 
 A project manager consults the team for their expert opinion, even after being given direction from a senior executive. They then use their influence to align the executive with the team's assessment, putting full trust in them.
-
-

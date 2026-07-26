@@ -35,10 +35,27 @@ const REPOS: { name: string; category: string; order: number }[] = [
 
 const yamlStr = (s: string) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 
+/** GitHub's unauthenticated limit is 60 requests an hour **per IP**, and CI
+ *  runners share IPs — so an unauthenticated sync fails intermittently for
+ *  reasons that have nothing to do with us. A token raises it to 5,000, and the
+ *  workflow's own GITHUB_TOKEN is enough: everything here is public. */
+const GH_TOKEN = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN;
+
 async function api(path: string): Promise<any> {
   const res = await fetch(`https://api.github.com/${path}`, {
-    headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'virtualddd-sync' },
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'virtualddd-sync',
+      ...(GH_TOKEN ? { Authorization: `Bearer ${GH_TOKEN}` } : {}),
+    },
   });
+  if (res.status === 403 && res.headers.get('x-ratelimit-remaining') === '0') {
+    const reset = Number(res.headers.get('x-ratelimit-reset') ?? 0) * 1000;
+    throw new Error(
+      `GitHub rate limit reached${GH_TOKEN ? '' : ' (unauthenticated — set GITHUB_TOKEN)'}` +
+      `; resets ${reset ? new Date(reset).toISOString() : 'shortly'}`,
+    );
+  }
   if (!res.ok) throw new Error(`GitHub API ${res.status} for ${path}`);
   return res.json();
 }

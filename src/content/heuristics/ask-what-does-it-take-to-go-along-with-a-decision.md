@@ -14,5 +14,3 @@ After a decision is taken, immediately ask the group: “What do you need to go 
 ## Example
 
 After deciding on React, the architect asked the team what they needed to proceed. They identified a need for training, which was then arranged for all developers.
-
-

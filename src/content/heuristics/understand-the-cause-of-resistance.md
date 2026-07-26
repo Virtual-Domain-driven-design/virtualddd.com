@@ -15,5 +15,3 @@ Do not dismiss resistance; instead, seek to understand its underlying causes and
 ## Examples
 
 When a senior figure vetoes modernization efforts, engage them directly to uncover their personal history and investment in the existing system, rather than assuming malice.
-
-

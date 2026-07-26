@@ -15,5 +15,3 @@ View resistance not as an obstacle to overcome, but as a resource providing crit
 ## Examples
 
 When a team is reluctant to adopt a new technique, do not just insist on its value. Instead, ask why they are pushing back to uncover if they feel threatened, do not understand, or have a valid alternative perspective.
-
-

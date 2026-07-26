@@ -16,5 +16,3 @@ One useful approach is to conduct an EventStorming and focus on domain events th
 ## Example
 
 An architect offered to write down past decisions, like why a technology was chosen, creating ADRs to fill in the project’s history. This gave clarity on original constraints, such as not having enough people at the time.
-
-

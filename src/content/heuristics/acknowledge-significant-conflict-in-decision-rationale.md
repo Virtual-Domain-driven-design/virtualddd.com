@@ -14,5 +14,3 @@ Acknowledging that a decision was contentious provides crucial context for anyon
 ## Examples
 
 When two or more people from different teams both have a preferred solution for the same problem, each option has similar trade-offs. One of the two tools is eventually chosen, possibly based on power dynamics, which can cause a personal conflict.
-
-

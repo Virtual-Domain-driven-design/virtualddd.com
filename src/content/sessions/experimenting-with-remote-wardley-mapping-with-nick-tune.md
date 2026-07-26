@@ -18,5 +18,3 @@ featuredImage: "./_assets/experimenting-with-remote-wardley-mapping-with-nick-tu
 In this session, we’ll learn the basic theory behind Wardley Maps and then jump into hands-on exercises.
 It is recommended that you read Ben Mosior’s excellent article before attending this session: Wardley Mapping with Miro.
 [https://miro.com/blog/wardley-maps-whiteboard-canvas/](https://miro.com/blog/wardley-maps-whiteboard-canvas/)
-
-

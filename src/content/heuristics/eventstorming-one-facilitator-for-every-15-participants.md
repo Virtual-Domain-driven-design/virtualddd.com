@@ -23,5 +23,3 @@ For a Big Picture EventStorming, we can have around 20-30+ people per wall - but
 ## Context
 
 Setting up for a Big Picture EventStorming session
-
-

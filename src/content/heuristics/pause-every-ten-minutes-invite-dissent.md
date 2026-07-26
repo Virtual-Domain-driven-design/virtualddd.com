@@ -35,5 +35,3 @@ This becomes critical when you're in an authority position as an architect or wh
 - For technical workshops, ask "What assumptions here break in production?"
 
 - For remote sessions, use timed polls or reactions before verbal sharing.
-
-

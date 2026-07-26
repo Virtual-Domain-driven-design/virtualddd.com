@@ -14,5 +14,3 @@ Use your organisational, political, or social capital to amplify and support a d
 ## Example(s)
 
 A manager supports a team's decision to halt a feature by presenting data to stakeholders on how much time is lost to related incidents. They frame it as the team's correct decision, which is supported by this financial data.
-
-

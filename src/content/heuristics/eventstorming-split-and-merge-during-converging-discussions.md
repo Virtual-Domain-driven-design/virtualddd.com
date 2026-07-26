@@ -20,5 +20,3 @@ When there are competing ideas during an eventstorming, we want to visualise bot
 ## Context
 
 Especially during a software design eventstorming, different ideas can pop up when we already started to use the colour coding. So people have the feeling that they want to leave there current ideas intact and not touch it. So then conversation start to move to invisible things.
-
-

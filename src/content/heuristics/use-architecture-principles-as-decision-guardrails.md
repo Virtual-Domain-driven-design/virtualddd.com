@@ -14,5 +14,3 @@ Establish clear, shared architecture principles that teams must consult during t
 ## Example
 
 To prevent teams from treating technology like a 'candy shop,' they were required to evaluate choices against architecture principles. This forced them to consider factors like cost, leading to more responsible decisions.
-
-

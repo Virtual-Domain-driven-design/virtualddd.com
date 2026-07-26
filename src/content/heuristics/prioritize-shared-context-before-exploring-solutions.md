@@ -14,5 +14,3 @@ Resist the urge to immediately jump into solutioning, as this often leads to sol
 ## Examples
 
 Before brainstorming architectural options, the team spends a session focused only on defining the problem and current constraints. They explicitly avoid discussing solutions until everyone agrees on the context.
-
-

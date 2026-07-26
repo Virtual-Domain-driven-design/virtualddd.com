@@ -32,5 +32,3 @@ In this session:
 - Outcome mapping outcomes :] 
 
 - I'll also share similar and complimentary techniques to provide many options for future exploration.
-
-

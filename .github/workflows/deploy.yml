@@ -1,0 +1,84 @@
+# Build the site and put it on the host.
+#
+# This never talks to Notion: the content is committed, so a deploy is
+# reproducible from the repository alone. `sync.yml` is what fetches content,
+# and it calls this once it has committed something.
+#
+# The tests gate the deploy on purpose. If they fail the previous release stays
+# live — a stale site is better than a broken one.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', 'LICENSE*', '.github/ISSUE_TEMPLATE/**']
+  workflow_call:
+    inputs:
+      changes:
+        description: A short human summary of what changed, for the notification.
+        type: string
+        required: false
+  workflow_dispatch:
+
+# One deploy at a time. Two rsyncs into the same directory would interleave.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Types
+        run: npx astro check
+
+      - name: Build
+        run: npm run build
+
+      - name: Contracts, redirects and browser behaviour
+        run: |
+          npx playwright install --with-deps chromium
+          node --import tsx --test "tests/unit/*.test.mjs"
+          node --test "tests/*.test.mjs"
+
+      # Reports rather than blocks: these fail because of what someone wrote in
+      # Notion, and publishing must never be hostage to an editorial typo.
+      - name: Content report
+        continue-on-error: true
+        run: npm run test:content
+
+      - name: Deploy to the host
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: --archive --compress --delete --delay-updates --checksum
+          path: dist/
+          remote_path: ${{ secrets.KUALO_PATH }}
+          remote_host: ${{ secrets.KUALO_HOST }}
+          remote_user: ${{ secrets.KUALO_USER }}
+          remote_key: ${{ secrets.KUALO_SSH_KEY }}
+
+      # Only after the site is actually live, so a post never links to a page
+      # that has not shipped.
+      - name: Tell n8n what shipped
+        if: success()
+        env:
+          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
+        run: |
+          [ -n "$HOOK" ] || { echo "no deploy webhook configured, skipping"; exit 0; }
+          jq -n \
+            --arg commit "${{ github.sha }}" \
+            --arg url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
+            --arg changes "${{ inputs.changes }}" \
+            --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{event:"deployed", site:"https://virtualddd.com", commit:$commit, commitUrl:$url, changes:$changes, run:$run}' \
+            | curl -sS -X POST -H 'Content-Type: application/json' -d @- "$HOOK"

@@ -14,5 +14,3 @@ Acknowledge that different functions perceive quality differently: product value
 ## Example
 
 We held a workshop with product, engineering, and support to create a social contract. This document explicitly defines our shared quality goals, balancing feature discovery with implementation correctness and operational stability.
-
-

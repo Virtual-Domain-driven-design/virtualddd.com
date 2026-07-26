@@ -15,5 +15,3 @@ Shift focus from attempting to eliminate every bug before deployment to ensuring
 ## Example
 
 We accept the risk of minor bugs reaching production, provided we can detect and roll back a change in under five minutes. This is more efficient than maintaining a costly and slow system integration test environment.
-
-

@@ -1,0 +1,108 @@
+# Pull content from Notion, and deploy if anything actually changed.
+#
+# Two triggers, deliberately:
+#
+#   repository_dispatch  n8n fires this the moment something is published, and
+#                        once an hour if edits have piled up. n8n is the only
+#                        part of the system that knows whether anything changed
+#                        — a schedule would spend ten minutes finding out.
+#
+#   schedule             a nightly full sync. It ignores the incremental state
+#                        (`--full`) and re-pulls the ddd-crew repositories, so
+#                        any drift — a missed webhook, an upstream README —
+#                        heals within a day without anyone noticing it.
+#
+# Nothing is deployed unless the sync produced a diff.
+name: Sync from Notion
+
+on:
+  repository_dispatch:
+    types: [content-published, content-edited]
+  schedule:
+    - cron: '17 3 * * *'   # 03:17 UTC, nightly
+  workflow_dispatch:
+    inputs:
+      full:
+        description: Re-fetch every page, ignoring the incremental state
+        type: boolean
+        default: false
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+      summary: ${{ steps.diff.outputs.summary }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pull Notion and ddd-crew
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          # Raises GitHub's 60/hour unauthenticated limit, which CI runners
+          # share across tenants and would otherwise hit at random.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FULL: ${{ (github.event_name == 'schedule' || inputs.full) && '--full' || '' }}
+        run: |
+          npx tsx scripts/sync-notion.ts guests --write
+          for c in sessions open-spaces stories heuristics; do
+            npx tsx scripts/sync-notion.ts content --collection=$c --write $FULL
+          done
+          npx tsx scripts/sync-notion.ts organisers --write
+          # Someone else's repositories, so there is nothing to be incremental
+          # about — but it is cheap, and only the nightly run needs it.
+          if [ -n "$FULL" ]; then npx tsx scripts/sync-ddd-crew.ts --write; fi
+          npm run redirects
+
+      - name: What changed?
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing changed in Notion since the last sync." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Content changes"
+            echo
+            git diff --name-status -- src/content data/retired-urls.csv | sed 's/^/    /'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # A one-line summary for the Discord post, e.g. "3 changed, 1 new".
+          added=$(git diff --diff-filter=A --name-only -- src/content | wc -l)
+          modified=$(git diff --diff-filter=M --name-only -- src/content | wc -l)
+          removed=$(git diff --diff-filter=D --name-only -- src/content | wc -l)
+          echo "summary=${added} new, ${modified} updated, ${removed} removed" >> "$GITHUB_OUTPUT"
+
+      - name: Commit
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name  "virtualddd-sync"
+          git config user.email "noreply@virtualddd.com"
+          git add -A
+          git commit -m "Content: ${{ steps.diff.outputs.summary }}" \
+                     -m "Synced from Notion by ${{ github.event_name }}."
+          git push
+
+  deploy:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      changes: ${{ needs.sync.outputs.summary }}

@@ -14,5 +14,3 @@ Recognize that challenging someone's methods can feel like an attack on their pr
 ## Examples
 
 If a team is committed to UML, start by using their existing diagrams collaboratively before introducing a completely different technique. This respects their current model while gently evolving the collaborative practice.
-
-

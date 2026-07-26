@@ -39,5 +39,3 @@ Gáspár Nagy, the creator of SpecFlow & Reqnroll, bringing over 20 years of exp
 
 
  
-
-

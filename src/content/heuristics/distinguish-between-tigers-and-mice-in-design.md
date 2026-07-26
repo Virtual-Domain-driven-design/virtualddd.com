@@ -16,5 +16,3 @@ Focus architectural oversight on decisions with long-lasting, severe impact ('ti
 ## Examples
 
 The team's poor event design was a 'mouse' because it created waste but did not threaten the entire system's viability. Therefore, it was an acceptable area for the team to make a mistake and learn from it.
-
-

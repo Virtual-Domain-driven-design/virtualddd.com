@@ -24,11 +24,3 @@ In this session, we are joined by Rebecca Wirfs-Brock, who will first present a 
 Models, whether for a software system, a development process, diseases, political systems, or otherwise, are a way to look at (a part of) the world. They make a choice about what is important, what categories we classify things in, what we see, what’s invisible, what’s valued, or even what’s valid. They are reductionist, that is, they only show a selection of the subject they’re describing. And they are biased: They implicitly reflect the assumptions, constraints, and values of the model’s author.
 Most of the time, when you adopt a model created by someone else, you assimilate it into your world view without much thought. You acquire a new way of seeing something. But when you do that, you may not understand the model’s limitations.
 However, you *can* choose to look at someone’s model more intentionally. We will share and discuss some tools for critically evaluating any models that come your way. You can assess whether this model fits your needs. If you’re looking at a model for the first time, you can use that fresh perspective to see what the model includes and what it leaves out. Models are a powerful lens for perceiving a subject, and you should be deliberate when wielding them. 
-
-
-
-
-
-
-
-

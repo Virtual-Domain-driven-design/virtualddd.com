@@ -26,5 +26,3 @@ This talk is a call to slow down to speed up your decision-making. Whether you'r
 
 Gien Verschatse is an experienced consultant and software engineer that specialises in domain modelling and software architecture. She has experience in many domains such as the biotech industry, where she
 specialised in DNA building. She's fluent in both object-oriented and functional programming, mostly in .NET. As a Domain-Driven Design practitioner, she always looks to bridge the gaps between experts, users, and engineers.Gien is studying Computer Science at the OU  in the Netherlands. As a side interest, she's researching the science of decision-making strategies, to help teams improve how they make technical and organisational decisions. She shares her knowledge by speaking at international conferences.And when she is not doing all that, you'll find her on the sofa, reading a book and sipping coffee. 
-
-

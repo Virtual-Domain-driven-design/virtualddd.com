@@ -65,5 +65,3 @@ This wasn't a simple exercise, especially when applied to a legacy application r
 Ultimately, handling disagreement in a decentralised environment is less about winning an argument and more about fostering a resilient system of decision-making. It requires architects to become better advisors, teams to be equipped with principles and support, and a shared commitment to open communication when boundaries are crossed.
 
 It’s a process of letting go of direct control, trusting your teams, and, most importantly, looking at your own role first when things don't go the way you expect.
-
-

@@ -16,5 +16,3 @@ Make internalised mental models tangible, explicit and externalised using collab
 ## Examples
 
 The team uses sticky notes to map out a business process, making everyone's assumptions visible. This allows them to point at specific parts of the external model and discuss disagreements concretely, rather than abstractly debating their internal views.
-
-

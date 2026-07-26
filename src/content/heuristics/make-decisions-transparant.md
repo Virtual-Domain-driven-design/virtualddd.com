@@ -18,7 +18,3 @@ Transparency is a crucial starting point for any organisation looking to improve
 ## Examples
 
 Instead of an architect or a small group making decisions behind closed doors, a team starts documenting their decision-making process for everyone to see. This provides a memory of what happened and why, making it easier for others to understand and contribute.
-
-
-
-

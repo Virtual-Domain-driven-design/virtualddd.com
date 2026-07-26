@@ -14,5 +14,3 @@ After a decision is made, allow dissenting members to express their concerns fre
 ## Example
 
 When developers disagreed with a move to trunk-based development, they were asked what they needed. They explained their concerns and requested an investigation into feature flagging, which was added to the plan.
-
-

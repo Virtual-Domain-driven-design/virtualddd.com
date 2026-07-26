@@ -14,5 +14,3 @@ An architect's role is to facilitate understanding and alignment, not to command
 ## Examples
 
 Instead of declaring 'we will use microservices,' engage stakeholders to explore how new architectures address their specific challenges and concerns.
-
-

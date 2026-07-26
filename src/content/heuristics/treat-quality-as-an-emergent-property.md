@@ -14,5 +14,3 @@ View quality not as a final gate but as an emergent property of the entire devel
 ## Example
 
 Instead of relying solely on a final testing phase, we invest in improving our requirements communication process. We know that clear, shared understanding prevents entire classes of defects from ever being created.
-
-

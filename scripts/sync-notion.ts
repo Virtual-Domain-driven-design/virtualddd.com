@@ -82,11 +82,126 @@ async function queryAll(dataSourceId: string): Promise<any[]> {
 // directory so fidelity can be inspected before anything lands in
 // src/content/.
 
-import { mkdirSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
 
 const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
 const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (speakers, panellists)
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
+
+// --- what the last sync saw -------------------------------------------------
+//
+// Fetching a page's blocks costs about two seconds; reading its properties is
+// nearly free, because they arrive with the list query. So a sync re-renders
+// every entry's front matter every time — a relation can go stale without the
+// page itself being touched, e.g. publishing a heuristic should add a link to
+// the sessions that reference it — and re-fetches a *body* only when Notion
+// says that page changed.
+//
+// The state is committed rather than cached: it makes a rename visible as a
+// fact (the same page id under a new slug) instead of a guess, and it keeps
+// the "a script and a commit" fallback working from a clean checkout.
+
+const STATE_FILE = 'data/sync-state.json';
+
+interface EntryState {
+  slug: string;
+  /** Notion's `last_edited_time` when we last rendered this body. */
+  edited: string;
+}
+type SyncState = Record<string, Record<string, EntryState>>;
+
+function loadState(): SyncState {
+  try { return JSON.parse(readFileSync(STATE_FILE, 'utf8')); } catch { return {}; }
+}
+
+function saveState(state: SyncState) {
+  mkdirSync('data', { recursive: true });
+  const ordered = Object.fromEntries(Object.keys(state).sort().map((k) => [k, state[k]]));
+  writeFileSync(STATE_FILE, JSON.stringify(ordered, null, 2) + '\n');
+}
+
+// --- the redirect ledger ----------------------------------------------------
+//
+// A URL is a promise, and two ordinary editorial actions break one: renaming a
+// slug, and taking a page down. Both are recorded here rather than left for a
+// person to notice — `scripts/build-redirects.mjs` reads this file, so the
+// promise is kept by the same run that broke it.
+//
+// A CSV because it is meant to be read in a diff: each line is one address and
+// what happened to it.
+
+/** Every address the site has promised to answer. */
+function liveUrlSet(): Set<string> {
+  try {
+    return new Set(readFileSync('data/live-urls.txt', 'utf8').trim().split('\n').map((l) => l.trim()));
+  } catch { return new Set(); }
+}
+
+/** What the run wants a human to look at, for the workflow to hand to n8n.
+ *
+ * A file rather than a webhook call: the sync stays offline-friendly and
+ * testable, and the pipeline decides where the message goes. Discord today,
+ * a Notion comment when that integration is allowed to write them. */
+function writeAlert(items: { url: string; title: string }[]) {
+  mkdirSync('data', { recursive: true });
+  writeFileSync('data/sync-alerts.json', JSON.stringify({
+    kind: 'unpublished-but-live',
+    generated: new Date().toISOString(),
+    items,
+  }, null, 2) + '\n');
+}
+
+const REDIRECTS_FILE = 'data/retired-urls.csv';
+
+interface RedirectRule {
+  from: string;
+  /** Where it goes, for a 301. Empty for a 410. */
+  to?: string;
+  kind: '301' | '410';
+}
+
+export function recordRedirects(rules: RedirectRule[]) {
+  if (!rules.length) return;
+  const existing = new Map<string, string>();
+  try {
+    for (const line of readFileSync(REDIRECTS_FILE, 'utf8').trim().split('\n').slice(1)) {
+      const [from] = line.split(',');
+      if (from) existing.set(from, line);
+    }
+  } catch { /* first write */ }
+
+  const today = new Date().toISOString().slice(0, 10);
+  for (const r of rules) {
+    // A later rename wins: /a/ → /b/ → /c/ should send /a/ to /c/, not to a
+    // page that has itself moved on.
+    existing.set(r.from, `${r.from},${r.kind},${r.to ?? ''},${today}`);
+  }
+  // And collapse any chain the new rule just created.
+  for (const [from, line] of existing) {
+    const [, kind, to] = line.split(',');
+    if (kind !== '301' || !to) continue;
+    const onward = existing.get(to);
+    if (onward) {
+      const [, k2, t2] = onward.split(',');
+      if (k2 === '301' && t2) existing.set(from, `${from},301,${t2},${today}`);
+    }
+  }
+
+  mkdirSync('data', { recursive: true });
+  writeFileSync(REDIRECTS_FILE,
+    'from,kind,to,recorded\n' + [...existing.keys()].sort().map((k) => existing.get(k)).join('\n') + '\n');
+}
+
+/** The featured image and body of an entry already on disk, so an unchanged
+ *  page costs no API calls at all. Null when there is nothing to reuse. */
+function readExisting(path: string): { featured?: string; body: string } | null {
+  try {
+    const raw = readFileSync(path, 'utf8');
+    const m = raw.match(/^---\n([\s\S]*?)\n---\n\n?([\s\S]*)$/);
+    if (!m) return null;
+    return { featured: m[1].match(/^featuredImage: "(.*)"$/m)?.[1], body: m[2].replace(/\n+$/, '') };
+  } catch { return null; }
+}
 
 /** id -> value maps for relation resolution (page IDs are stored dashless-agnostic). */
 async function buildLookup<T>(dataSourceId: string, label: string, valueOf: (page: any) => T) {
@@ -182,6 +297,8 @@ interface Helpers {
 
 interface ContentSpec {
   dataSourceId: string;
+  /** URL section, so a rename can be turned into a redirect. */
+  section: string;
   titleProp: string;
   slugProp: string;
   statusKind: StatusKind;
@@ -195,6 +312,7 @@ interface ContentSpec {
 const CONTENT_SPECS: Record<string, ContentSpec> = {
   sessions: {
     dataSourceId: '33e9db0a-1418-4a3e-a053-33fa384e5e93',
+    section: '/sessions/',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'select',
     liveStatuses: ['Done', 'Published'], featuredImageProp: 'Featured image',
     needsPeople: true, needsGuests: true,
@@ -218,6 +336,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   },
   'open-spaces': {
     dataSourceId: '0cfb73c7-a638-4948-a4df-5fe06dcd2dd1',
+    section: '/open-space/',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'status',
     liveStatuses: ['Published', 'Done'], featuredImageProp: 'Featured image',
     extra: async (h) => {
@@ -234,6 +353,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   },
   stories: {
     dataSourceId: '25aa485a-fafc-8047-94b7-000b3bbb228c',
+    section: '/facilitating-archdes/',
     titleProp: 'Title', slugProp: 'slug', statusKind: 'status',
     liveStatuses: ['Published'], featuredImageProp: 'Featured image',
     extra: async (h) => {
@@ -255,6 +375,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   },
   heuristics: {
     dataSourceId: HEURISTICS_DS,
+    section: '/heuristics/',
     titleProp: 'Title', slugProp: 'Slug', statusKind: 'status',
     liveStatuses: ['Published'], // rendered as components for now — no featured image, no route
     extra: async (h) => {
@@ -275,7 +396,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   },
 };
 
-async function runContent(key: string, limit: number, outDir: string, write: boolean, strict: boolean) {
+async function runContent(key: string, limit: number, outDir: string, write: boolean, strict: boolean, full: boolean) {
   const spec = CONTENT_SPECS[key];
   if (!spec) { console.error(`unknown collection: ${key}`); process.exit(1); }
 
@@ -328,7 +449,26 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   /** Guest relations pointing at a row that produced no entry. */
   const guestless: { slug: string; ref: string }[] = [];
 
-  const pages = (await queryAll(spec.dataSourceId)).filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
+  const state = loadState();
+  const was = state[key] ?? {};
+  const now: Record<string, EntryState> = {};
+  /** Slug changes, which are URL changes and therefore need a redirect. */
+  const renamed: { from: string; to: string }[] = [];
+  /** Addresses the editor asked to take down. */
+  const retired: string[] = [];
+  /** Pages that vanished without anyone saying they meant it. */
+  const quarantined: { url: string; title: string }[] = [];
+  let reused = 0;
+
+  const allRows = await queryAll(spec.dataSourceId);
+  const pages = allRows.filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
+  /** Rows that are no longer published, by page id, so pruning can ask *why*. */
+  const withdrawn = new Map<string, { title: string; retire: boolean }>(
+    allRows.filter((p) => !pages.includes(p)).map((p) => [
+      (p.id as string).replace(/-/g, ''),
+      { title: plainTitle(p, spec.titleProp), retire: p.properties?.['Retire URL']?.checkbox === true },
+    ]),
+  );
   const targets = limit ? pages.slice(0, limit) : pages;
   const assetDir = `${outDir}/_assets`;
   mkdirSync(outDir, { recursive: true });
@@ -372,20 +512,37 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       },
     };
 
+    // Has this page's *content* changed? Its properties are already in hand
+    // either way, so front matter is always rebuilt; only the body and the
+    // downloaded image are worth skipping.
+    const id = (page.id as string).replace(/-/g, '');
+    const before = was[id];
+    const editedAt = page.last_edited_time as string;
+    const previous = before && !full ? readExisting(`${outDir}/${before.slug}.md`) : null;
+    const unchanged = !!previous && before!.edited === editedAt;
+
+    if (before && before.slug !== slug) renamed.push({ from: before.slug, to: slug });
+    now[id] = { slug, edited: editedAt };
+
     const fm: string[] = ['---'];
     fm.push(`title: ${yamlStr(title)}`);
     fm.push(`slug: ${yamlStr(slug)}`);
     fm.push(`status: ${yamlStr(statusOf(page, spec.statusKind))}`);
     fm.push(...(await spec.extra(h)));
     if (spec.featuredImageProp) {
-      const featuredRel = await h.img(spec.featuredImageProp, 'featured');
+      const featuredRel = unchanged ? previous!.featured : await h.img(spec.featuredImageProp, 'featured');
       if (featuredRel) fm.push(`featuredImage: ${yamlStr(featuredRel)}`);
     }
     fm.push('---');
 
-    const body = await blocksToMd(await childrenOf(page.id), ctx);
-    rendered.set(`${slug}.md`, fm.join('\n') + '\n\n' + body + '\n');
-    console.log(`  ✓ ${slug}.md (${body.length}c, ${ctx.count} imgs)`);
+    const body = unchanged ? previous!.body : await blocksToMd(await childrenOf(page.id), ctx);
+    if (unchanged) reused++;
+    // Trailing blank lines are normalised here rather than in either branch,
+    // so a body that was fetched and a body that was reused are byte-identical.
+    // Without this a changed page would flip-flop on alternate syncs, and
+    // "no diff, no deploy" would deploy nothing but whitespace.
+    rendered.set(`${slug}.md`, `${fm.join('\n')}\n\n${body.replace(/\n+$/, '')}\n`);
+    if (!unchanged) console.log(`  ✓ ${slug}.md (${body.length}c, ${ctx.count} imgs)`);
   }
 
   // Write only once every page has rendered. A rate-limit or network failure
@@ -395,13 +552,73 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   // Prune entries this run did not produce — un-published in Notion, or renamed
   // (which leaves the old slug behind as a live page forever otherwise).
   // A --limit run only saw part of the collection, so it must never prune.
+  //
+  // A page that stops being published is three different situations, and only
+  // the editor knows which. `Retire URL` is where they say so.
+  //
+  //   ticked      → they mean it. Delete the page and answer 410 Gone.
+  //   not ticked  → keep serving it and tell somebody. An accidental
+  //                 unpublish must not quietly 404 an address other people
+  //                 have linked to, and it must not block everyone else's
+  //                 publishing either.
+  //   never live  → nothing to protect; just remove the file.
+  //
+  // A --limit run only saw part of the collection, so it must never prune.
   if (!limit) {
+    const contract = liveUrlSet();
     const stale = readdirSync(outDir).filter((f) => f.endsWith('.md') && !rendered.has(f));
     for (const f of stale) {
-      unlinkSync(`${outDir}/${f}`);
-      console.log(`  – removed ${f} (no longer published)`);
+      const gone = f.replace(/\.md$/, '');
+      const url = `${spec.section}${gone}/`;
+      const id = Object.keys(was).find((k) => was[k].slug === gone);
+      const row = id ? withdrawn.get(id) : undefined;
+
+      if (row?.retire || !contract.has(url)) {
+        unlinkSync(`${outDir}/${f}`);
+        if (contract.has(url)) {
+          retired.push(url);
+          console.log(`  – removed ${f} — retired on purpose, will answer 410`);
+        } else {
+          console.log(`  – removed ${f} (never had a public URL)`);
+        }
+        continue;
+      }
+
+      // Quarantined: keep the file, keep the page, raise it with a human.
+      quarantined.push({ url, title: row?.title ?? gone });
+      rendered.set(f, readFileSync(`${outDir}/${f}`, 'utf8'));
+      if (id) now[id] = was[id];
+      console.log(`  ! ${f} is no longer published in Notion but ${url} is a live URL — still serving it`);
     }
   }
+
+  if (reused) console.log(`  · ${reused} unchanged, body reused (no fetch)`);
+
+  if (renamed.length) {
+    console.log(`\n  ! ${renamed.length} slug(s) changed, which changes a URL:`);
+    for (const r of renamed) console.log(`      ${spec.section}${r.from}/ → ${spec.section}${r.to}/`);
+    if (write) {
+      recordRedirects(renamed.map((r) => ({
+        from: `${spec.section}${r.from}/`, to: `${spec.section}${r.to}/`, kind: '301' as const,
+      })));
+      console.log('    Recorded in data/retired-urls.csv; the old address will 301 to the new one.');
+    }
+  }
+
+  if (retired.length && write) {
+    recordRedirects(retired.map((from) => ({ from, kind: '410' as const })));
+    console.log(`\n  ${retired.length} address(es) retired; recorded as Gone in data/retired-urls.csv.`);
+  }
+
+  if (quarantined.length) {
+    console.log(`\n  ! ${quarantined.length} page(s) unpublished in Notion without "Retire URL" ticked.`);
+    console.log('    They are still being served, and nothing is blocked. Either republish them,');
+    console.log('    or tick Retire URL to take the address down properly:');
+    for (const q of quarantined) console.log(`      ${q.url}  (${q.title})`);
+    writeAlert(quarantined);
+  }
+
+  if (write && !limit) { state[key] = now; saveState(state); }
 
   if (seenUnhandled.size) console.log(`\n  unhandled block types seen: ${[...seenUnhandled].join(', ')}`);
 
@@ -574,9 +791,9 @@ async function run() {
     const target = only ?? 'sessions';
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
       ?? (write ? `src/content/${target}` : `preview/${target}`);
-    return runContent(target, limit, outDir, write, args.includes('--strict'));
+    return runContent(target, limit, outDir, write, args.includes('--strict'), args.includes('--full'));
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
+  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict] [--full]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --full    re-fetch every body, ignoring data/sync-state.json\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
   process.exit(1);
 }
 

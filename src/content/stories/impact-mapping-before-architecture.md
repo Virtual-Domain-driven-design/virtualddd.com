@@ -86,5 +86,3 @@ The question this raises for anyone doing similar work: when a client or colleag
 - *Escaping the Build Trap* by Melissa Perri — Explores how organisations get stuck optimising for output rather than outcomes, which maps closely to the dynamic Kim encountered with a client focused on a solution before understanding the problem.
 
 - *The Squiggly Line: Facilitating Groups to Think Creatively and Act Collaboratively* aside, a more grounded option: *Facilitating Breakthrough* by Adam Kahane — Practical guidance on how to help groups in conflict or confusion work toward shared understanding, relevant to the cross-functional facilitation Kim describes.
-
-

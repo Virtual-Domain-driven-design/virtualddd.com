@@ -12,5 +12,3 @@ enables: ["pause-every-ten-minutes-invite-dissent"]
 ---
 
 Use these at a strategic level when defining bounded context. When you want to separate core domains from supporting and generic subdomains
-
-

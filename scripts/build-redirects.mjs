@@ -99,6 +99,18 @@ const RETIRED = {
     '/heuristics/eventstorming-split-and-merge-above-7-people/',
 };
 
+/** Rules the sync recorded for itself: a slug renamed in Notion, or a page
+ *  deliberately retired there. See `recordRedirects` in sync-notion.ts — the
+ *  run that breaks a URL is the run that keeps the promise. */
+function recordedRules() {
+  let text = '';
+  try { text = readFileSync('data/retired-urls.csv', 'utf8'); } catch { return []; }
+  return text.trim().split('\n').slice(1).filter(Boolean).map((line) => {
+    const [from, kind, to] = line.split(',');
+    return { from, kind, to };
+  });
+}
+
 const esc = (p) => p.replace(/[.?*+^$[\]\\(){}|]/g, '\\$&');
 const L = [];
 const section = (title) => { L.push('', `# --- ${title} ${'-'.repeat(Math.max(0, 62 - title.length))}`); };
@@ -192,9 +204,16 @@ for (const p of GONE_PAGES) {
 
 section('11. Retired slugs (editorial merges and renames)');
 L.push('# Content that moved after the URL inventory was taken: the old address');
-L.push('# keeps working.');
+L.push('# keeps working. The hand-written ones first, then whatever the sync');
+L.push('# recorded when a slug changed or a page was retired in Notion.');
 for (const [from, to] of Object.entries(RETIRED)) {
   L.push(`RewriteRule ^${esc(from.slice(1))}?$ ${to} [R=301,L]`);
+}
+for (const r of recordedRules()) {
+  if (Object.hasOwn(RETIRED, r.from)) continue; // a hand-written rule wins
+  L.push(r.kind === '410'
+    ? `RewriteRule ^${esc(r.from.slice(1))}?$ - [G,L]`
+    : `RewriteRule ^${esc(r.from.slice(1))}?$ ${r.to} [R=301,L]`);
 }
 
 section('12. Pending: reading list and book club');

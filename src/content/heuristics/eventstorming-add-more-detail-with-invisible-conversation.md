@@ -21,5 +21,3 @@ During a EventStorming we want to add more detail when the conversation is not v
 ## Context
 
 During an EventStorming session on any level, we want to make our conversations visible on the paper roll with stickies. During the whole durtion of the EventStorming we need to have enough detail so that there is a common understanding.
-
-

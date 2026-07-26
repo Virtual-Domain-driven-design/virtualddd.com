@@ -14,5 +14,3 @@ An architectural decision is not a document or a declaration; it is the implemen
 ## Examples
 
 An architect can decide on a design, but if the team is not convinced, they will not implement it. The decision is only real once the team says 'yes, we want to do it like this' and builds it.
-
-

@@ -1,0 +1,1162 @@
+{
+  "heuristics": {
+    "303a485afafc81fbbbe8d92b36cf5ab7": {
+      "slug": "build-safety-through-small-failures",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "303a485afafc81398de2e319cb6762b7": {
+      "slug": "global-metadata-creates-global-risk",
+      "edited": "2026-03-27T10:40:00.000Z"
+    },
+    "303a485afafc819cb1cdf41dec36912b": {
+      "slug": "distribute-debugging-beyond-war-room",
+      "edited": "2026-03-27T10:40:00.000Z"
+    },
+    "303a485afafc8178b86bfee2bd5c05ae": {
+      "slug": "design-as-living-conversation",
+      "edited": "2026-03-27T10:40:00.000Z"
+    },
+    "303a485afafc81b09475fb4a95c5cc19": {
+      "slug": "executives-provide-resources-not-pressure",
+      "edited": "2026-03-27T10:40:00.000Z"
+    },
+    "303a485afafc81139160ebf03a66a2a0": {
+      "slug": "default-rollback-over-fix-forward",
+      "edited": "2026-03-27T10:40:00.000Z"
+    },
+    "2f7a485afafc81b89064dcfebc85e6d5": {
+      "slug": "study-models-extract-building-blocks-values",
+      "edited": "2026-01-30T07:36:00.000Z"
+    },
+    "2f4a485afafc8193bd24feb6eac8e632": {
+      "slug": "focus-valued-organizational-outcomes",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc8153a0b4e717bf3c94c6": {
+      "slug": "design-experiences-not-explanations",
+      "edited": "2026-03-13T12:39:00.000Z"
+    },
+    "2f4a485afafc81e6b224df9169625eb6": {
+      "slug": "interrupt-patterns-stay-with-flock",
+      "edited": "2026-03-13T12:40:00.000Z"
+    },
+    "2f4a485afafc810aa2acf53bc702b384": {
+      "slug": "watch-approval-seeking-safety-signal",
+      "edited": "2026-02-13T13:36:00.000Z"
+    },
+    "2f4a485afafc81d191f4cef2fd1d88f8": {
+      "slug": "check-problem-hinders-you-or-group",
+      "edited": "2026-02-13T13:36:00.000Z"
+    },
+    "2f4a485afafc81a0bf01f724a5a24b93": {
+      "slug": "start-small-leadership-resists",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc813c8e24ca9a97347cb2": {
+      "slug": "step-back-observe-losing-control",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc818380a1c60b48569aad": {
+      "slug": "address-destructive-behavior-privately",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc81e0bb82fb911ee527ad": {
+      "slug": "notice-working-too-hard-facilitator",
+      "edited": "2026-02-13T13:36:00.000Z"
+    },
+    "2f4a485afafc8110bd3efff877d36fdf": {
+      "slug": "make-explicit-feelings-group-stuck",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc819aa981e21d80488dec": {
+      "slug": "consider-downstream-teams-architectural-patterns",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2f4a485afafc81faa953d3c2536d0041": {
+      "slug": "evaluate-options-against-team-frustrations",
+      "edited": "2026-03-01T18:11:00.000Z"
+    },
+    "2f4a485afafc81d4a182ececb748f9c7": {
+      "slug": "surface-value-preferences-before-technical-solutions",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2f4a485afafc8105be53cd5a5ce652e0": {
+      "slug": "challenge-workshop-premise-before-diving-in",
+      "edited": "2026-01-27T08:41:00.000Z"
+    },
+    "2f4a485afafc81c1bc1dfde9157c5be2": {
+      "slug": "notice-anxiety-signal-missing-something",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc815aab5fd57afba1a270": {
+      "slug": "drop-methodology-when-barrier",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2f4a485afafc8177b3a7d0893c249411": {
+      "slug": "build-connection-before-content",
+      "edited": "2026-01-27T08:42:00.000Z"
+    },
+    "2f4a485afafc81dda5a9da2a19e0835f": {
+      "slug": "pause-every-ten-minutes-invite-dissent",
+      "edited": "2026-01-27T08:42:00.000Z"
+    },
+    "2eda485afafc815bb442dff218cbc214": {
+      "slug": "evaluate-architectural-options-against-team-pain-points",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2cba485afafc8187b48de7d2a365e513": {
+      "slug": "deliver-difficult-conversations",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc81b3ba07e12334a20efc": {
+      "slug": "approach-struggling-facilitator",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc8179b3cec4d58bd5a969": {
+      "slug": "guide-unprepared-facilitator",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc812d9fb1fb7df92d0218": {
+      "slug": "communicate-critical-workshop-insights",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc811b85cec71f7b2169ca": {
+      "slug": "realign-workshop-goals",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc8100a50bc4a921b503f8": {
+      "slug": "steer-workshop-discussions",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc8150955cccca13dc8da9": {
+      "slug": "facilitate-conflicting-decisions",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc81998af7cc579af4f74b": {
+      "slug": "shift-design-focus-business-problems",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc81558233e3e235f8997f": {
+      "slug": "workshop-stakeholder-alignment",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2cba485afafc819db9dbc4ca0f50aad6": {
+      "slug": "prioritise-stakeholder-engagement-as-core-work",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc81c5b3a4c9171bf3d86a": {
+      "slug": "detach-self-from-ideas",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc815ba451f39b4747ed33": {
+      "slug": "tailor-communication-to-stakeholder-context",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc81748012cc323122207a": {
+      "slug": "allow-time-for-perspective-shifts",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc81cfb667c8fa7ed21218": {
+      "slug": "calculated-interpersonal-risk-taking",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc818c93bbe5f27d1ee76c": {
+      "slug": "facilitate-dont-dictate-architectural-change",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc81f1b023e7cf73b328b0": {
+      "slug": "understand-the-cause-of-resistance",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2cba485afafc81e2957ecba681a17b67": {
+      "slug": "respect-legacy-systems-history",
+      "edited": "2025-12-29T14:01:00.000Z"
+    },
+    "2bea485afafc80199db4d91dbfcdd64b": {
+      "slug": "eventstorming-when-there-is-a-story-to-tell-start-with-eventstorming",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80af96d6c311d399e543": {
+      "slug": "eventstorming-use-to-be-process-modelling-when-exploring-a-brown-field-problem-space",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc8094ac3bf698d9ea06a1": {
+      "slug": "eventstorming-use-standing-tables",
+      "edited": "2025-12-03T08:13:00.000Z"
+    },
+    "2bea485afafc80408429f139db140aed": {
+      "slug": "eventstorming-use-consistent-language-between-visual-collaboration-tools",
+      "edited": "2025-12-03T08:13:00.000Z"
+    },
+    "2bea485afafc803f82b2f033212655e5": {
+      "slug": "eventstorming-use-as-is-process-modelling-when-exploring-a-green-field-problem-space",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80cb9f0cc944c927350b": {
+      "slug": "eventstorming-switch-to-example-mapping-when-discussing-examples-of-a-rule",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80c48c41f700802cc077": {
+      "slug": "eventstorming-start-enforcing-the-timeline-when-everyone-added-their-domain-events",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80d0b982c889a2955652": {
+      "slug": "eventstorming-split-and-merge-during-converging-discussions",
+      "edited": "2025-12-03T08:13:00.000Z"
+    },
+    "2bea485afafc8048a0b3fc7e3d8202ad": {
+      "slug": "eventstorming-split-and-merge-above-7-people",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc806d9c17eafb41290ee4": {
+      "slug": "eventstorming-remove-stickies-when-group-feels-sunk-cost",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80abb4b8c83787cc43b1": {
+      "slug": "eventstorming-play-by-the-colour-coding-pattern",
+      "edited": "2025-12-03T08:01:00.000Z"
+    },
+    "2bea485afafc809f8877db5fd8bbac61": {
+      "slug": "eventstorming-only-move-or-remove-stickies-when-discussed-with-the-writer",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80d8a66ae9ef3f419967": {
+      "slug": "eventstorming-one-facilitator-for-every-15-participants",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80ed970bd3e8dab59e7a": {
+      "slug": "eventstorming-make-a-ceremony-of-throwing-stickies-away",
+      "edited": "2025-12-03T08:01:00.000Z"
+    },
+    "2bea485afafc801a82afcea304e6cd4e": {
+      "slug": "eventstorming-let-the-domain-expert-talk-and-the-rest-write-down-domain-events",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc8014b01defef5b98326f": {
+      "slug": "eventstorming-let-every-pitch-for-hotspots-opportunities",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc80a68291ed3e5f692890": {
+      "slug": "eventstorming-introduce-new-colours-iteratively",
+      "edited": "2025-12-03T07:51:00.000Z"
+    },
+    "2bea485afafc80388521c8caaa4e0536": {
+      "slug": "eventstorming-explore-what-if-scenarios",
+      "edited": "2025-12-03T07:51:00.000Z"
+    },
+    "2bea485afafc80a98085fb26e32783d6": {
+      "slug": "eventstorming-dont-fill-in-the-gaps",
+      "edited": "2025-12-03T07:51:00.000Z"
+    },
+    "2bea485afafc80bbb477edb7ad72d10d": {
+      "slug": "eventstorming-dont-be-shy-on-duplicating-stickies",
+      "edited": "2025-12-03T07:51:00.000Z"
+    },
+    "2bea485afafc807e91cdca680c063336": {
+      "slug": "eventstorming-do-big-picture-eventstorming-on-a-single-paper-roll",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bea485afafc8057964ac66f2e10c7ac": {
+      "slug": "eventstorming-ask-is-this-always-the-case-on-policy",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "2bea485afafc8088b243f2cfc310c02b": {
+      "slug": "eventstorming-add-more-detail-with-invisible-conversation",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2bda485afafc80f1a8e9dd5d42161bfd": {
+      "slug": "eventstorming-add-minority-wisdom-to-decision",
+      "edited": "2026-07-26T06:35:00.000Z"
+    },
+    "2bda485afafc80c5a5e4d45f6605a48f": {
+      "slug": "always-write-gherking",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "2b0a485afafc816d90a2f0db56bae4f4": {
+      "slug": "a-decision-is-what-gets-implemented",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "2b0a485afafc816db62fcd468a9a2a4a": {
+      "slug": "mistrust-simplicity-achieved-without-thought",
+      "edited": "2025-12-03T07:27:00.000Z"
+    },
+    "2b0a485afafc8151a497ef67456ef0e5": {
+      "slug": "the-goal-is-the-right-outcome-not-being-right",
+      "edited": "2025-12-03T07:27:00.000Z"
+    },
+    "2b0a485afafc815598b7e50110ae563c": {
+      "slug": "domain-events-must-carry-their-own-context",
+      "edited": "2025-12-03T07:27:00.000Z"
+    },
+    "2b0a485afafc8140aecbfa6719f810f1": {
+      "slug": "distinguish-between-tigers-and-mice-in-design",
+      "edited": "2025-12-03T09:49:00.000Z"
+    },
+    "2b0a485afafc81509bedec12ede3facf": {
+      "slug": "permit-contained-failure-to-foster-learning",
+      "edited": "2025-12-03T07:27:00.000Z"
+    },
+    "2aba485afafc81118321db65d09de627": {
+      "slug": "introduce-change-as-an-evolution-not-revolution",
+      "edited": "2025-12-16T12:15:00.000Z"
+    },
+    "2aba485afafc81c9855bfb7ffb8e2d22": {
+      "slug": "prioritize-shared-context-before-exploring-solutions",
+      "edited": "2025-12-15T13:47:00.000Z"
+    },
+    "2aba485afafc8185a86df2b4976f930f": {
+      "slug": "make-the-implicit-mental-models-explicit-for-objective-collaboration",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2aba485afafc81e0ad28ca814cfccbb7": {
+      "slug": "own-mistakes-and-repair-the-social-fabric",
+      "edited": "2025-12-15T13:47:00.000Z"
+    },
+    "2aba485afafc81018b19d52a683828e4": {
+      "slug": "generate-multiple-options-to-depersonalise-design-debates",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2aba485afafc81e68656c8b18a99afc3": {
+      "slug": "treat-resistance-as-a-valuable-signal",
+      "edited": "2026-01-18T13:00:00.000Z"
+    },
+    "2aba485afafc8159ad92db4dae9206d6": {
+      "slug": "acknowledge-power-dynamics-in-public-code-critique",
+      "edited": "2026-01-18T13:00:00.000Z"
+    },
+    "2a8a485afafc8046b3faec71a361d908": {
+      "slug": "eventstorming-emerging-pivotal-events-for-a-big-picture",
+      "edited": "2025-12-03T07:50:00.000Z"
+    },
+    "28fa485afafc81a08a96f5375934e7e6": {
+      "slug": "accept-imperfect-boundaries-in-legacy-decomposition",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc81889fd3df77b038308a": {
+      "slug": "prioritise-documenting-impact-over-process-consistency",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc812aa455f07953c58918": {
+      "slug": "frame-boundary-models-for-autonomy-and-flow",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc81aea96efd645bd27b07": {
+      "slug": "facilitate-communication-to-resolve-boundary-conflicts",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc81ccb3aafdbedfe5797a": {
+      "slug": "use-architecture-principles-as-decision-guardrails",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc81b399b4dd7740ce6097": {
+      "slug": "detach-personal-emotion-from-technical-decision",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc81f29000d8abc7475e9d": {
+      "slug": "when-disagreeing-first-reflect-on-your-feedback",
+      "edited": "2025-11-21T08:59:00.000Z"
+    },
+    "28fa485afafc81939651e5140f2988de": {
+      "slug": "capture-both-logic-and-sentiment-in-decisions",
+      "edited": "2025-10-23T08:29:00.000Z"
+    },
+    "28fa485afafc8144bc2eece925705896": {
+      "slug": "measure-the-flow-of-decision-making",
+      "edited": "2025-10-23T08:29:00.000Z"
+    },
+    "28fa485afafc811c90cbeabbfc974bb1": {
+      "slug": "be-explicit-about-decision-making-authority",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "28fa485afafc8145bc05d6a3b13ad638": {
+      "slug": "prioritise-foundation-trust-in-the-team",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "28fa485afafc81f5bbcded513d6d0f1c": {
+      "slug": "amplify-team-decisions-with-organisational-capital",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "28fa485afafc813ab68cd1da6b29d0cb": {
+      "slug": "value-team-autonomy-over-rescuing",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "28fa485afafc815d9f80c8ece68874c4": {
+      "slug": "treat-decisions-as-immutable-histrorical-records",
+      "edited": "2025-10-23T08:29:00.000Z"
+    },
+    "28ea485afafc81978294c7872c93e6f3": {
+      "slug": "autonomy-requires-a-system-wide-perspective",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "28ea485afafc81179569facf4f6c2e82": {
+      "slug": "formalize-architectural-advice-forums-for-cross-context-awareness",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "28ea485afafc81df9dfcd6f074d7dae5": {
+      "slug": "cultivate-ownership-for-decision-accountability",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "28ea485afafc81ac9cc5ecd97c148774": {
+      "slug": "engage-advisors-during-not-after-deliberation",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "28ea485afafc8112a672f0a1e1515706": {
+      "slug": "use-adrs-for-thinking-not-just-recording",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "28ea485afafc8116a366cd1314251396": {
+      "slug": "architects-as-enablers-not-gatekeepers",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "28ea485afafc81bb996ce7bb64d4a240": {
+      "slug": "treat-strong-opinions-as-inquiry-signals",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "28ea485afafc811291bffc02057eb244": {
+      "slug": "guide-decisions-do-not-dictate-solutions",
+      "edited": "2025-11-07T15:42:00.000Z"
+    },
+    "27da485afafc81b98439c18fe081c676": {
+      "slug": "modulate-quality-investment-by-domain-importance",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc81108f81f49b625407e8": {
+      "slug": "frame-testing-as-an-information-gathering-activity",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc817b8a9adabb13a4047f": {
+      "slug": "design-for-modern-quality-attributes",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc8131b5b1f7167a086c03": {
+      "slug": "prioritise-recoverability-over-flawless-deployment",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc81a19eede96da915f9fa": {
+      "slug": "treat-quality-as-an-emergent-property",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc8180b32ec34b79fcfe95": {
+      "slug": "align-quality-strategy-with-product-lifecycle-phase",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc81bca730c8afcc917bcd": {
+      "slug": "make-implicit-quality-perspectives-explicit",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc8158a62ef1ebfdf5c93d": {
+      "slug": "define-quality-as-value-to-a-prioritised-persona",
+      "edited": "2025-12-03T08:26:00.000Z"
+    },
+    "27da485afafc8107947add95180bc12c": {
+      "slug": "generate-experience-through-practical-experimentation",
+      "edited": "2025-12-03T07:50:00.000Z"
+    },
+    "27da485afafc817b9281ecd0f7b715fa": {
+      "slug": "address-dissent-by-enabling-commitment",
+      "edited": "2025-12-03T07:50:00.000Z"
+    },
+    "27da485afafc8115b2dbfe3835df143e": {
+      "slug": "value-lived-experience-over-theoretical-principles",
+      "edited": "2025-10-13T11:13:00.000Z"
+    },
+    "27da485afafc8108b1c4cb1fa97da97e": {
+      "slug": "prioritise-system-integrity-over-local-convenience",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "27da485afafc81e9a8defc30fbb5fd79": {
+      "slug": "respect-apathy-in-decision-making",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "27da485afafc81a0a0f6e15cef163d3d": {
+      "slug": "ask-what-does-it-take-to-go-along-with-a-decision",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "27da485afafc8156a4ebefd92c49d87f": {
+      "slug": "proxy-accountability-to-unblock-decisions",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "27da485afafc811798c6eac65a604faa": {
+      "slug": "acknowledge-significant-conflict-in-decision-rationale",
+      "edited": "2025-10-13T11:10:00.000Z"
+    },
+    "27da485afafc819c9a80cc4056d44a7c": {
+      "slug": "decompose-large-decisions-into-smaller-ones",
+      "edited": "2025-11-07T15:41:00.000Z"
+    },
+    "27da485afafc81d19cc1f5ab6199ce98": {
+      "slug": "acknowledge-downsides-and-dissent-in-decisions",
+      "edited": "2026-01-19T08:58:00.000Z"
+    },
+    "27da485afafc817290c8c462f254c323": {
+      "slug": "retroactively-document-foundational-decisions",
+      "edited": "2025-10-13T11:10:00.000Z"
+    },
+    "27da485afafc817c81b0e0648ead624b": {
+      "slug": "revisit-decisions-when-context-changes",
+      "edited": "2025-10-13T11:10:00.000Z"
+    },
+    "270a485afafc8013abaddad65b69551e": {
+      "slug": "make-decisions-transparant",
+      "edited": "2025-12-03T07:50:00.000Z"
+    },
+    "270a485afafc805b89cfd2c78e718292": {
+      "slug": "write-down-decisions-early-and-often",
+      "edited": "2025-12-03T07:50:00.000Z"
+    },
+    "965a2ef41f644332b05327025aa487be": {
+      "slug": "use-orm-in-your-domain-model-when-rate-of-change-is-low",
+      "edited": "2025-12-03T07:49:00.000Z"
+    },
+    "2319392c4ed34a578017a2598681965f": {
+      "slug": "separate-engagement-and-revenue",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "c17f332d203e4225864d7b9149248d3c": {
+      "slug": "outsource-generic-subdomains",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "d808cd38cac142d9a8765e8e0dc05b3a": {
+      "slug": "organise-for-responsiveness-in-differentiator-capabilities",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "bf843e9fc40c4f7fbefaed688932d3ea": {
+      "slug": "optimise-for-future-potential",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "b5510492b8f048279d218c730e67d0fd": {
+      "slug": "keep-your-domain-model-decoupled-from-frameworks",
+      "edited": "2025-12-03T07:49:00.000Z"
+    },
+    "09a7009752314f348e77a1b83a36dbf0": {
+      "slug": "isolate-high-leverage-shared-capabilities",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "dbafe3b67b0a4651bd1d7d24dcf50238": {
+      "slug": "design-for-replayability",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "f9084b7407f84678af888a4ef1f1def1": {
+      "slug": "design-bounded-contexts-by-looking-at-the-one-way-flow-of-orange-sticky-notes-during-a-big-picture-eventstorming",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "44863820c347478d9c3d2aadc90bffd3": {
+      "slug": "design-bounded-contexts-by-looking-at-the-humans-during-a-big-picture-eventstorming",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "182653b87e9344c1a2e3a2a9a789ca57": {
+      "slug": "design-bounded-contexts-around-eventstorming-policies",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "6cb50d79ccb249a2be71cf4db205a4a1": {
+      "slug": "build-software-for-disruptive-generic-subdomains-yourself",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "a5bd88f6e1394a31a4beed6921689a6d": {
+      "slug": "align-with-transactional-boundaries",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "fca28701ba0146458ba6e9c582907b01": {
+      "slug": "align-with-source-of-change",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "55a0a9e4ca23463d97fccecc96673fb9": {
+      "slug": "align-with-rate-of-change",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "52069a77999d4cfc9df4ea0888502dac": {
+      "slug": "align-with-key-revenue-streams",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "49c2a37ce75f488682d0a784fcf93d57": {
+      "slug": "align-with-investment-strategy",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "a60fde9829bf43569d7945b35b800e91": {
+      "slug": "align-with-historical-domain-boundaries",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "8151c9d97ef24fc68881c1e3eccda284": {
+      "slug": "align-with-growth-strategy",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "06a324cb9ef74eb6903444941d072edd": {
+      "slug": "align-with-evolutionary-stage-the-simon-wardley-heuristic",
+      "edited": "2025-09-23T11:20:00.000Z"
+    },
+    "2434c478c4a44e0cb41da5b8118d8aed": {
+      "slug": "a-bounded-context-should-keep-its-internal-details-private",
+      "edited": "2025-12-03T07:47:00.000Z"
+    },
+    "3705f79d60d9400d9860cc51c8a5d482": {
+      "slug": "deep-democracy-no-one-has-the-monopoly-to-the-truth",
+      "edited": "2025-12-03T07:49:00.000Z"
+    },
+    "e472282935954b2e8bc720293bc8549c": {
+      "slug": "remote-eventstorming-switch-driver-every-5-minutes-during-enforcing-the-timeline",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "105ce090624c4c2abe274e035b3a18d3": {
+      "slug": "align-bounded-context-with-the-value-stream",
+      "edited": "2026-01-19T16:27:00.000Z"
+    },
+    "fe1c02bd3d284f92991dfc795281ea3e": {
+      "slug": "align-with-domain-experts",
+      "edited": "2025-10-13T11:12:00.000Z"
+    }
+  },
+  "open-spaces": {
+    "cd7cba73e0bb49f28dcd9feaf4f9cc5d": {
+      "slug": "global-domain-driven-days-2024",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "11383b55d7bf43718bcfb3e89e6ad27d": {
+      "slug": "improving-your-software-design-by-nourishing-diversity",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "6d969fc53b4e4837bcbea27d38ae4c01": {
+      "slug": "systems-thinking-and-skillful-interaction",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "151ec381195643fb8bcf7f1d7b2fb6f1": {
+      "slug": "exploring-integrative-leadership-in-complex-systems",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "4450985964544e05bcd5469ccd24fd90": {
+      "slug": "architectural-decision-making-gathering",
+      "edited": "2026-07-26T09:06:00.000Z"
+    }
+  },
+  "sessions": {
+    "395a485afafc8007a86dca201f1a4423": {
+      "slug": "surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "352a485afafc806f8c13c79a2a926c11": {
+      "slug": "rethinking-software-development-insights-from-20-years-in-the-field",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "305a485afafc8089b377d8424e60cd80": {
+      "slug": "its-like-10000-streams-when-what-you-need-is-a-queue-chris-simon",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "2aaa485afafc80679d41c44a4fedd737": {
+      "slug": "critically-engaging-with-models-a-conversation-with-rebecca-and-mathias",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "28da485afafc809daa75c4672226b73c": {
+      "slug": "patterns-of-bdd-automation-a-fireside-chat-with-seb-rose-and-gaspar-nagy",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "282a485afafc80949dbaea206be2e006": {
+      "slug": "see-the-forest-for-the-trees-trond-hjorteland",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "254a485afafc80259b23c19b35c41fe6": {
+      "slug": "the-paradox-or-polarity-between-decentralised-and-centralised-decision-making",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "23da485afafc80f58464fd8c10b5a629": {
+      "slug": "escaping-the-enshittification-trap-systems-thinking-for-sustainable-quality",
+      "edited": "2026-07-26T11:22:00.000Z"
+    },
+    "225a485afafc8083aa7bd8f1f8e488ba": {
+      "slug": "slow-down-to-speed-up-your-decision-making-gien-verschatse",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "201a485afafc801c8912e20706f94d23": {
+      "slug": "impact-mapping-the-secret-sauce",
+      "edited": "2026-07-26T09:12:00.000Z"
+    },
+    "1ffa485afafc80dba3d6c0370cd066eb": {
+      "slug": "the-innovation-of-cumulative-cultures-and-developer-problem-solving",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "1d1a485afafc80d29ba5db10ab3e7950": {
+      "slug": "how-autonomy-saved-one-of-spotifys-most-loved-features-from-being-killed",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "7591c90fa6444ff7b3d96b723bb8f835": {
+      "slug": "team-topologies-workshop-with-luke-and-andy",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "6aad68c63cb84e48987515b128935afa": {
+      "slug": "abstractions-as-bridges-with-hazel-weakly",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "a09d8ee856a74a66beeabf6a64710f77": {
+      "slug": "introduction-to-domain-driven-design-and-collaborative-software-design-kenny-baas-schwegler",
+      "edited": "2026-07-26T11:21:00.000Z"
+    },
+    "721f36f266e5443d9ef054853d1ae4ea": {
+      "slug": "decoding-paradoxes-why-are-many-good-ideas-in-software-delivery-counter-intuitive",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "bfe4cfdfa95045a58256b27f6e205ea9": {
+      "slug": "systems-thinking-intro-with-lorraine-steyn",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "884f23408b7149bf91fac7e73738e8b3": {
+      "slug": "managing-domain-knowledge-with-chris-simon",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "0314bc1384624cd9b06135c1d24f878d": {
+      "slug": "beyond-the-hexagonal-architecture-functional-core",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "0b1777f847fb44b88ef9affbb690a0ef": {
+      "slug": "tdd-as-a-design-tool-with-dave-farley",
+      "edited": "2026-07-26T09:53:00.000Z"
+    },
+    "0dd9843f92ac402cb2ac5c95638c4f35": {
+      "slug": "how-epistemic-injustice-impacts-domain-crunching-with-cat-swetel",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "11fb0bb696474b38b0e5cc4d2356609c": {
+      "slug": "does-a-domain-driven-design-approach-need-an-agile-business",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "159c886a104e42d4b08482968e1df2c2": {
+      "slug": "virtual-lean-coffee-fishbowl-ux-ddd-and-bdd-take-2",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "16cac639a956418a9d8494e182370004": {
+      "slug": "ddd-london-ddd-lite-independent-service-heuristics-with-matthew-skelton",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "177da772c09949db834ef36f9f7686b1": {
+      "slug": "what-is-an-aggregate-with-thomas-ploch",
+      "edited": "2026-07-26T09:53:00.000Z"
+    },
+    "1ac5764d4b5a44268e790519fc15f0a1": {
+      "slug": "free-trial-workshop-first-steps-in-ddd-with-andrew-blacklivesmatter-edition",
+      "edited": "2026-07-26T11:19:00.000Z"
+    },
+    "1c6e7a78b000467da7b841dfed29ff84": {
+      "slug": "lost-in-bounded-context-translations-with-julie-indu-michael-and-nick",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "226bc139bc794bdc97de6efcd3d069bf": {
+      "slug": "sharing-your-systems-knowledge-with-bytesize-architecture-sessions-with-andrea-magnorsky",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "2d429adbcd0d4a65b43b0cc820088479": {
+      "slug": "ddddd-20-natural-boundaries-how-to-read-the-signs-and-benefit-from-the-problems",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "2e8079ab84f24e1d9c1f2dcb677e87cb": {
+      "slug": "when-to-invest-in-strategic-design-and-when-in-tactical-design",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "309f464e17ad49febf0edac4ecea9aa8": {
+      "slug": "craftconf-meetup-with-nick-tune-and-helin-akgul",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "32f131b429454625a345bed5cb919a29": {
+      "slug": "make-your-tests-tell-the-story-of-your-domain-with-anne-and-mads",
+      "edited": "2026-07-26T09:12:00.000Z"
+    },
+    "3471743a58314c0ca88000c1f86646c9": {
+      "slug": "ddddd-20-aggregate-canvas-by-kim-kao",
+      "edited": "2026-07-26T11:17:00.000Z"
+    },
+    "35a7497d9e8c41738d59698118e31d1b": {
+      "slug": "sunddday-discussion-cqrs-event-sourcing-systems-with-alexey-and-marco",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "3653d16e683d470ebdb931081bdde744": {
+      "slug": "eventstorming-types-and-heuristics-with-rebecca-paul-and-alberto",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "387ef031dbe443a6998f4352436f6bf5": {
+      "slug": "how-to-improve-modelling-with-behaviour-driven-development",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "390a1c4546f24485b8504e690c6ad933": {
+      "slug": "case-study-context-mapping-with-michael-plod",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "39962125e448463db129c1f65655f141": {
+      "slug": "ddddd-20-panel-experimentation-in-design-with-rebecca-woody-paul-and-julie",
+      "edited": "2026-07-26T11:19:00.000Z"
+    },
+    "3c1d3fbdf5e34203994723e4cee15a14": {
+      "slug": "ddddd-20-functional-domain-modelling-in-practice",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "400cab1f57a94354a22d5eb7af6f18a3": {
+      "slug": "ddddd-20-bourdieus-social-theory-applied-to-tech",
+      "edited": "2026-07-26T11:17:00.000Z"
+    },
+    "41a4d64137ad4157954dd913420e5f05": {
+      "slug": "splitting-systems-towards-bounded-contexts-and-microservices",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "47ac419c61684d16a1091ab30f67f31b": {
+      "slug": "relationships-between-problem-and-solution-space",
+      "edited": "2026-07-26T09:12:00.000Z"
+    },
+    "485405296aa045759f355c09da825a02": {
+      "slug": "live-coding-legacy-live-coding-with-dr-carola-lilienthal",
+      "edited": "2026-07-26T11:19:00.000Z"
+    },
+    "4aee90a109b34072aa726e5f9fcbf98f": {
+      "slug": "introducing-ddd-to-your-company-with-barry-o-sullivan",
+      "edited": "2026-07-26T11:17:00.000Z"
+    },
+    "50ed16cc746d45028959f66d78ed85b3": {
+      "slug": "from-the-problem-to-software-a-walkthrough-with-krisztina-hirth",
+      "edited": "2026-07-26T11:20:00.000Z"
+    },
+    "547271add9684e41a699d4480cb5a4d8": {
+      "slug": "orchestration-and-choreography-with-laila-bougria-udi-dahan",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "588ccf99a34e4a8a8684ecb9e74563ab": {
+      "slug": "domain-driven-frontend-with-francesco-strazzullo",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "5e38bcfb59a847689f53e711e942d46d": {
+      "slug": "collaborating-and-communicating-with-wardley-maps",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "5f5dafadd6824253a0becd4ae38ec1da": {
+      "slug": "hands-on-exploring-techniques-for-modelling-bounded-context-collaboration",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "67f811c86f094a53a10b2d79ca6461ab": {
+      "slug": "secure-by-domain-driven-design-with-jessica-dan-bergh-and-daniel",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "68e7526f9d184cd9886536d8bbb16ef8": {
+      "slug": "collaborating-and-communicating-with-wardley-maps-part-2",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "6a60899d0951461fa3f5848254ae4900": {
+      "slug": "ddddd-20-panelremote-related-trainings-with-michael-gien-zsofia-stefan-kacper",
+      "edited": "2026-07-26T11:18:00.000Z"
+    },
+    "6a6e4a4d839a4eacb511d8b67d0a2866": {
+      "slug": "design-better-products-with-real-cross-functional-teams-jutta-maryse",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "6c87cec4484a4526a21637428ef51b4c": {
+      "slug": "transforming-business-models-in-the-pandemic-with-zsofia-herendi",
+      "edited": "2026-07-26T11:19:00.000Z"
+    },
+    "6ca8744be64842ae97a31b3e6aa50eeb": {
+      "slug": "ddddd-20-speaking-truth-to-power-a-foundational-skillset",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "7283a44e1c4a41448a1db0b7b0fede43": {
+      "slug": "remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "7334a0a3304540a89d690fff5b3a1da4": {
+      "slug": "the-power-of-personal-engagement-by-rozemarijn-evelien",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "76892186c34b43249754df94f0d65f48": {
+      "slug": "virtual-lean-coffee-fishbowl-ux-ddd-and-bdd",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "7e71eb2a2102423089c3d45577f26b81": {
+      "slug": "domain-drinking-dialogues-2nd-edition-2021-lean-coffee",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "7f6e6d962d084ec0ab4ce5c976dd4111": {
+      "slug": "combatting-the-near-enemies-of-domain-driven-design-at-scale",
+      "edited": "2026-07-26T09:09:00.000Z"
+    },
+    "8192a430230044c7b2e91bbeee57c230": {
+      "slug": "ddddd-20-context-maps-practically-applied",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "8301ce4c19134477b65b56832ad699d2": {
+      "slug": "udi-dahan-ask-me-anything",
+      "edited": "2026-07-26T09:53:00.000Z"
+    },
+    "852844e663234a9aae52114f4d46be5e": {
+      "slug": "domain-experiments-with-mike-wojtyna",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "860dc9f7776d4db6884fec6c089dafa6": {
+      "slug": "ddddd-20-build-a-bounded-context-mob-firedrill",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "87a5188cd0ac4ddaa0bb5c01c7a0e773": {
+      "slug": "the-hard-skills-with-diana-montalion",
+      "edited": "2026-07-26T11:20:00.000Z"
+    },
+    "88c1aa8753bd4fb48bb2f77533c756d9": {
+      "slug": "ddddd-20-from-capabilities-to-services-modelling-for-business-it-alignment",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "8a70cc3425be4af9aaeae06c50c3d099": {
+      "slug": "experimenting-with-remote-wardley-mapping-with-nick-tune",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "8af99757fc414adfac4a3a6232f68284": {
+      "slug": "impact-mapping-to-manage-change-and-strategic-design",
+      "edited": "2026-07-26T09:12:00.000Z"
+    },
+    "907aceabbf2e447ab5ed8696cb95a1d1": {
+      "slug": "balancing-upfront-design-versus-iterative-design",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "949c2fe8c51047f8adacb83c8512d4f9": {
+      "slug": "what-can-we-learn-from-open-source-with-matteo-collina",
+      "edited": "2026-07-26T09:53:00.000Z"
+    },
+    "97612c5f9d7e49e1aa2d051b59507e90": {
+      "slug": "can-business-capabilities-be-useful-in-ddd-with-trond-hjorteland",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "978b487988ac49bd956589f61039296e": {
+      "slug": "what-makes-you-a-ddder",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "9b2653d4d3a34650abeb9a7273083946": {
+      "slug": "what-writing-a-book-taught-us-about-collaborative-modeling",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "9de1c316cff6448eb970ba7f728e9984": {
+      "slug": "ddddd-20-extreme-context-mapping",
+      "edited": "2026-07-26T11:18:00.000Z"
+    },
+    "9f9c7bcef041497c86e4b8a4eee16ae3": {
+      "slug": "how-cognitive-biases-and-ranking-kills-your-modelling-sessions",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "a0aa61fe62fa4db1b90a8a286767889c": {
+      "slug": "ddddd-20-bounded-contexts-microservices-and-everything-in-between",
+      "edited": "2026-07-26T11:17:00.000Z"
+    },
+    "a5474a85d9b44f1091d57d82f14b1ac8": {
+      "slug": "domain-drinking-dialogues-2020-ending-ask-us-anything-party",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "a6bbd7c91a784cb4a89a50024842c164": {
+      "slug": "socio-technical-architecture-with-ora-egozi-barzilai-and-evelyn-van-kelle",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "aeb3d67781c6466b918210cdc1cb7fca": {
+      "slug": "fostering-autonomous-teams-with-proper-leadership-culture",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "aed6d3e9d2de4ad29f2f4e6d36f11947": {
+      "slug": "an-introduction-to-domain-storytelling",
+      "edited": "2026-07-26T09:09:00.000Z"
+    },
+    "b211fc7414ac4ebd800ebeb57790a35b": {
+      "slug": "long-term-impact-of-architectural-design-decision",
+      "edited": "2026-07-26T09:12:00.000Z"
+    },
+    "b296fbe291c143949dabd6876e6aaec5": {
+      "slug": "how-feature-branching-affects-domain-driven-design-with-thierry-de-pauw",
+      "edited": "2026-07-26T11:17:00.000Z"
+    },
+    "b542fe8aad0c4a138971657da0dcee68": {
+      "slug": "one-user-to-bind-them-all-products-teams-and-bounded-contexts",
+      "edited": "2026-07-26T09:12:00.000Z"
+    },
+    "b6fb2809fde94f49b3fd80e7fb581a8c": {
+      "slug": "ddddd-20-ddd-for-small-organizations",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "b9b882ca88fd4c1994fea514f62e6de3": {
+      "slug": "creating-a-playbook-for-ddd-for-the-inside-of-your-team-with-julie-lerman",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "bca91d0065c64381a7ab7ac9c5703344": {
+      "slug": "patterns-for-the-people-kevlin-henney",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "bf5107644cfb48ce8bde57baf33043dc": {
+      "slug": "ddddd-20-live-coding-expressive-projections",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "c06b0f0969b54e9e97123ffd4f518fff": {
+      "slug": "fifty-ways-to-scale-your-agile-with-grady-booch",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "c3c5120a3aad4de4b483577eae609460": {
+      "slug": "effective-team-collaboration-and-why-we-need-it-for-modern-product-experiences",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "c6c96857b31945ec8afcff8bdd4d3e59": {
+      "slug": "do-we-need-software-architects",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "c77cb1c1b35741dabd27b2467e046db0": {
+      "slug": "ddd-london-creating-a-playbook-for-ddd-newcomers",
+      "edited": "2026-07-26T09:09:00.000Z"
+    },
+    "c97793168bc340aea08ceee88e9073a4": {
+      "slug": "design-reality-with-mathias-verraes",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "c9fdf5a2a560415b8d0b36770d745a32": {
+      "slug": "speaking-truth-to-power-practice-argumentation-with-diana",
+      "edited": "2026-07-26T11:19:00.000Z"
+    },
+    "cc72d688f7184a13816cd6c842b16682": {
+      "slug": "how-to-read-the-blue-book-strategic-design-with-mathias-verraes",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "d2cb3c6e96ac41c3a25343ced0d666f8": {
+      "slug": "experimenting-with-remote-big-picture-eventstorming",
+      "edited": "2026-07-26T09:11:00.000Z"
+    },
+    "d92e615952434621adf6e37fb5423ead": {
+      "slug": "practical-residuality-by-barry-m-oreilly",
+      "edited": "2026-07-26T11:22:00.000Z"
+    },
+    "defe0f76157340bab57cde94869f49bc": {
+      "slug": "open-sociotechnical-systems-thinking-with-trond-hjorteland",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "e07dbf8b437b46fb8c4e94a516f9bac2": {
+      "slug": "outcome-mapping-for-flow-engineering-with-steve-pereira",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "e342ff0d7e8c4a3d9ae96de0fb20ea0d": {
+      "slug": "ddddd-20-its-traverse",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "eac02f9c5cd041d2a90f7e8ca95e2520": {
+      "slug": "sunddday-discussion-eventstorming-and-user-story-mapping-for-domain-discovery",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "eed86274b3d24e69b1935f2a404aab23": {
+      "slug": "an-introduction-to-residuality-theory-by-barry-m-oreilly",
+      "edited": "2026-07-26T11:20:00.000Z"
+    },
+    "f43545c3db8f4e749d430a0f4d02bdcf": {
+      "slug": "ddddd-20-panel-event-sourcing-really-with-alexey",
+      "edited": "2026-07-26T11:18:00.000Z"
+    },
+    "f4cf140a822f4747b1af323d0fb7072c": {
+      "slug": "trying-out-online-eventstorming",
+      "edited": "2026-07-26T09:53:00.000Z"
+    },
+    "f7b17e45e27b4095a5c738829ed09494": {
+      "slug": "sunddday-discussion-growing-your-local-ddd-community",
+      "edited": "2026-07-26T09:13:00.000Z"
+    },
+    "fc65411601a647feb46acf5cd8000829": {
+      "slug": "ddddd-20-remote-bounded-context-modelling",
+      "edited": "2026-07-26T09:10:00.000Z"
+    },
+    "ff0a38633acc4f4b93508ddd6b182f87": {
+      "slug": "psychologic-safety-in-remote-collaboration-with-gitte-klitgaard",
+      "edited": "2026-07-26T09:52:00.000Z"
+    },
+    "648f1231836d4a4491f3fd8eacdfeeb7": {
+      "slug": "ddd-domain-modeling-using-ai-to-accelerate-design-with-staffan-palopaa",
+      "edited": "2026-07-26T11:22:00.000Z"
+    },
+    "8c02ebe318be4e489358ea4888c7f2c5": {
+      "slug": "soft-skills-for-technical-professionals-by-jacqui-read",
+      "edited": "2026-07-26T09:52:00.000Z"
+    }
+  },
+  "stories": {
+    "367a485afafc8083b7f9c08967c8ad21": {
+      "slug": "problem-isnt-technical-ddd-europe",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "353a485afafc80b6a464cd294adccb23": {
+      "slug": "externalising-decisions-not-alignment",
+      "edited": "2026-07-17T14:14:00.000Z"
+    },
+    "350a485afafc80ffbaebfcfefdfda010": {
+      "slug": "the-reluctant-architect",
+      "edited": "2026-07-07T06:47:00.000Z"
+    },
+    "314a485afafc800ba59fd51a57cf8aa9": {
+      "slug": "impact-mapping-before-architecture",
+      "edited": "2026-06-08T14:31:00.000Z"
+    },
+    "302a485afafc80da9c74f651c36fc821": {
+      "slug": "turning-architecture-conflict-into-collaboration",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2e7a485afafc801abe1ce35873fa2263": {
+      "slug": "psychological-safety-incident-response",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2cba485afafc8007aa70efa924f6464e": {
+      "slug": "method-wars-hide-real-problem",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2caa485afafc807f83acd0ad9454dcb0": {
+      "slug": "legacy-system-modernization-empathy",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "2b5a485afafc80e28557c904e5f5faf4": {
+      "slug": "workshop-agreement-without-action",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "2aaa485afafc80f8a728d4d6eb93de51": {
+      "slug": "cultural-resistance-collaborative-modeling",
+      "edited": "2026-05-25T13:40:00.000Z"
+    },
+    "28fa485afafc8057967dfba5f1da6c57": {
+      "slug": "true-cost-simplest-thing-to-do",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "28ea485afafc808cb7baf12a28182a17": {
+      "slug": "hidden-weight-rank-improvement-sessions",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "278a485afafc809899dce7584b083b59": {
+      "slug": "when-explaining-more-isnt-the-answer",
+      "edited": "2026-03-13T12:40:00.000Z"
+    },
+    "278a485afafc807d87f8e58df9fa3a1a": {
+      "slug": "drawing-same-system-different-architectures",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "278a485afafc802abf52cc7e2666584e": {
+      "slug": "slow-clap-hierarchy-kills-workshop",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "278a485afafc8075a642ea096246f304": {
+      "slug": "loudest-voice-architectural-decisions",
+      "edited": "2026-03-01T18:16:00.000Z"
+    },
+    "278a485afafc80b58a07fdead3f99562": {
+      "slug": "architects-disagreement-team-decision",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "278a485afafc80f49d39d3370577823b": {
+      "slug": "team-led-architecture-advice-process",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "278a485afafc80bd903ef978de92f29c": {
+      "slug": "governance-after-incident-decision-reversal",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "278a485afafc8042be49e087c046bc74": {
+      "slug": "architectural-indecision",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "278a485afafc80e382e9d1212e87fc1d": {
+      "slug": "uncovering-ghost-decisions-architecture",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "271a485afafc806ba089fad63d1d6dbd": {
+      "slug": "misaligned-expectations-goals-dont-align",
+      "edited": "2026-07-26T09:06:00.000Z"
+    },
+    "261a485afafc80ce8cd3d7859609d45a": {
+      "slug": "systems-change-transparency",
+      "edited": "2026-07-26T09:22:00.000Z"
+    },
+    "25aa485afafc808ba57de935666712b9": {
+      "slug": "stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it",
+      "edited": "2026-07-26T09:22:00.000Z"
+    }
+  }
+}

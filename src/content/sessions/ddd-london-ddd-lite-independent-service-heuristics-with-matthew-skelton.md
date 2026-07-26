@@ -23,5 +23,3 @@ This session explores the Independent Service Heuristics, a kind of â€œDDD-Liteâ
 The Independent Service Heuristics have proven useful for various organizations improving flow. In this session, we would really welcome feedback and critique of the approach. Where might the approach not work? What pitfalls might there be? Are there questions or material missing?
 
 See the Independent Service Heuristics on GitHub at [https://github.com/TeamTopologies/Independent-Service-Heuristics](https://github.com/TeamTopologies/Independent-Service-Heuristics) - send a Pull Request! The material is Creative Commons CC BY-SA.
-
-

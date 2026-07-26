@@ -15,5 +15,3 @@ If a team remains unconvinced by arguments and the potential failure is containe
 ## Examples
 
 The team insisted on publishing technical events despite advice and were allowed to proceed. They learned the consequences directly when their implementation generated massive, useless system traffic, a lesson more powerful than any initial warning.
-
-

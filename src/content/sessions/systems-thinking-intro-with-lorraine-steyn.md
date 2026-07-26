@@ -25,5 +25,3 @@ This is an introductory talk to the world of Systems Thinking, condensed into 45
 Slides are on Slideshare: 
 
 [https://www.slideshare.net/slideshow/systems-thinking-introduction-a-quick-overview-for-software-practitioners/269942756](https://www.slideshare.net/slideshow/systems-thinking-introduction-a-quick-overview-for-software-practitioners/269942756)
-
-

@@ -23,5 +23,3 @@ A popular phrase in EventStorming is: You can see by the amount of stickies remo
 ## Context
 
 During an EventStorming at any time from enforcing the timeline you can see ducplicated stickies.
-
-

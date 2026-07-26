@@ -21,5 +21,3 @@ Have a maximum of 7 people for a process or a design leven EventStoming. We want
 ## Context
 
 Setting up for a process or design level EventStorming.
-
-

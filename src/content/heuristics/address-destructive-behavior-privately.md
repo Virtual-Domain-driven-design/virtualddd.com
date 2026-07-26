@@ -35,5 +35,3 @@ If the person is defensive and won't engage in genuine dialogue, you may get onl
 - **When you don't have ongoing access**: Focus the conversation on understanding their goals for the session rather than analyzing their behavior, which gives them a face-saving way to engage
 
 - **If they never engage fully**: Accept partial understanding—even learning that they felt pressure from their team (as Evelyn did) is valuable context that shifts how you interpret future behavior
-
-

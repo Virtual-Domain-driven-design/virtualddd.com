@@ -14,5 +14,3 @@ Do not dismiss strong opinions, even if they seem confrontational, as they may h
 ## Examples
 
 When a participant offers a strong opinion, the facilitator asks questions to understand the experience behind it. This helps to validate the decision against hidden risks.
-
-

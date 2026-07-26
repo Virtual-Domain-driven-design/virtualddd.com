@@ -24,5 +24,3 @@ Since it's a bit abstract until you actually encounter it, let's dig a little an
 In addition to making an elated crowd shout 'it's traverse', it will be a good occasion to learn more about what's an applicative functor and how it can be used.
 
 Examples will mostly be haskell, but we'll start with JS to ease into it more easily (someone once said that 67% of the NPM ecosystem could be replaced with `traverse`).
-
-

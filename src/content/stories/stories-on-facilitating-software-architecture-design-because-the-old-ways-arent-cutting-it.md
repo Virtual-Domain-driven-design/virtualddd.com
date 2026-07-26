@@ -74,5 +74,3 @@ So, stay tuned for more "Stories on Facilitating Software Architecture." We're j
 - Architecting for Flow: Adaptive Systems with Domain-Driven Design, Wardley Mapping, and Team Topologies by Susanne Kaiser
 
 - [ ](https://thepaulrayner.com/eventstorming-team-flow/)**EventStorming Team Flow - Paul Rayner**
-
-

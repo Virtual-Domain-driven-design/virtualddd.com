@@ -16,5 +16,3 @@ When faced with competing objectives, make the trade-off explicit. Clearly artic
 ## Example
 
 The team debated between making onboarding easy for new users (speaking names) versus maintaining speed for existing users (numeric codes). The facilitator needed to highlight this as a clear choice point.
-
-

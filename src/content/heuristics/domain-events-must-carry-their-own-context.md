@@ -14,5 +14,3 @@ A true Domain Event communicates a significant business occurrence and must cont
 ## Examples
 
 The team published technical events that were like log entries, forcing consumers to ask for more information. A proper domain event would embed the business reason and context, making it independently useful.
-
-

@@ -38,5 +38,3 @@ This approach requires consent—you cannot force experiential learning on unwil
 
 - Eric Evans, *Domain-Driven Design* - Experiential modeling aligns with Distilling the Ubiquitous Language through shared discovery.
 - Corporate Tribe, *The Corporate Tribe* - Shaman role creates ritual experiences to shift organizational mental models.
-
-

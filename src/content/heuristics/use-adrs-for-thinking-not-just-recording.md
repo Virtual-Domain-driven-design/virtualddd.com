@@ -14,5 +14,3 @@ Begin writing the ADR at the start of the decision-making process, not as an aft
 ## Examples
 
 A team now starts by creating a draft ADR together. They use it to frame the context, list options, and decide on any spikes needed for investigation.
-
-

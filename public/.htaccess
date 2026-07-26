@@ -222,7 +222,8 @@ RewriteRule ^submit-community/?$ - [G,L]
 
 # --- 11. Retired slugs (editorial merges and renames) --------------
 # Content that moved after the URL inventory was taken: the old address
-# keeps working.
+# keeps working. The hand-written ones first, then whatever the sync
+# recorded when a slug changed or a page was retired in Notion.
 RewriteRule ^heuristics/eventstorming-split-and-merge-above-7-people-on-process-and-design-level/?$ /heuristics/eventstorming-split-and-merge-above-7-people/ [R=301,L]
 
 # --- 12. Pending: reading list and book club -----------------------

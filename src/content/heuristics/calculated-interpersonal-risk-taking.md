@@ -14,5 +14,3 @@ Sometimes, direct and empathetic engagement carries interpersonal risk but can y
 ## Examples
 
 Initiating a direct conversation with a highly resistant stakeholder, knowing they might react negatively, but having a strategy to remain professional and detached from the outcome.
-
-

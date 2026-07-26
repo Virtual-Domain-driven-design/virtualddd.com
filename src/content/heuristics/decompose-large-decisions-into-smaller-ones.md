@@ -16,5 +16,3 @@ Break large, multifaceted decisions into a series of smaller, more focused ones.
 - Instead of one large ADR, break it into twenty small decisions. This allows the team to agree on eighteen and focus discussion only on the two that are contentious.
 
 - Instead of waiting for a complete system-wide strategy, a team decides on an implementation for a single component. This decision is documented with the understanding that it can be superseded later as more is learned.
-
-

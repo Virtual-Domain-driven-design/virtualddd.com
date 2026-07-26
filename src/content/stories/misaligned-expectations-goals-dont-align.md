@@ -68,5 +68,3 @@ The insight: your gut knows when something's off. The question is whether you ha
 
 
 This story reminds us that facilitation isn't just about managing sticky notes; it's about navigating human dynamics and organisational power structures. Sometimes, the most valuable outcome of a workshop isn't the solution it generates, but the uncomfortable truth it uncovers, paving the way for more effective conversations down the line. Getting everyone on the same page, with explicit agreement on the "why" and "what," is not a luxury, but a prerequisite for any truly productive collaborative effort.
-
-

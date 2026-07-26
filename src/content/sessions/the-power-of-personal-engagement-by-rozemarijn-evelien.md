@@ -20,5 +20,3 @@ We will be combining brain science principles from ‘Training From the Back of 
 Learning outcomes:
 Apply brain science principles in your daily work Recognize and adjust non-verbal signs to better connect your team Activate your teams through personal engagement
 ** This is a hands-on session, were you require Pen and Paper for ** 
-
-

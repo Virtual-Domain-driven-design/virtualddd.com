@@ -14,5 +14,3 @@ Position strategic models like a context map as enablers for team autonomy and f
 ## Example
 
 Teams embraced the context map once they understood it was for their benefit. It allowed them to work autonomously and make decisions independently, which improved their flow.
-
-

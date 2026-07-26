@@ -18,5 +18,3 @@ what they think they already know.
 – Epictetus
 
 We can make many assumptions during an EventStorming at the process or design level. Policies, as Alberto says, are great lie detectors. We can ask a lot of questions about them, and there is almost always more to discover.
-
-

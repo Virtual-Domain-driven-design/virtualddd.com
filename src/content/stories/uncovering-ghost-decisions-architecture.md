@@ -85,9 +85,3 @@ The core takeaway from our discussion is that decisions made at a point in time 
 By taking the time to uncover and document the ghost decisions in our architecture, we give ourselves the clarity and agency to build better systems. We honour the past by understanding it, and we empower the future by being free to change it.
 
 What are the unwritten rules governing your project? Perhaps it's time to do a little architectural archaeology of your own.
-
-
-
-
-
-

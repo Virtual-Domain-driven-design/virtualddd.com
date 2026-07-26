@@ -14,5 +14,3 @@ View stakeholder management and communication as an integral, non-negotiable par
 ## Examples
 
 When questioned about time spent in non-technical meetings, an architect asserts that aligning key stakeholders is a primary task for successful architectural change.
-
-

@@ -14,5 +14,3 @@ Document each decision as a distinct, immutable record, such as an Architectural
 ## Example(s)
 
 An engineer makes a decision during an incident and documents it in an ADR. When this is later reversed, a new ADR is created to supersede the first one, rather than editing or deleting the original record.
-
-

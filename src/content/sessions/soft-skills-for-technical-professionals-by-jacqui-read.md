@@ -28,5 +28,3 @@ You’ll learn how to:
 - Explore visual, nonverbal, written, knowledge, and remote communication skills
 
 - Integrate communication soft skills into your everyday workflow for transformative results
-
-

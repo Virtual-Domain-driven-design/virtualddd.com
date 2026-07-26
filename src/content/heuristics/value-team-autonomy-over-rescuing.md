@@ -14,5 +14,3 @@ Leaders should facilitate and enable team decision-making rather than intervenin
 ## 
 
 A manager, seeing a team is stuck, asks "How can I help you make this decision?" instead of declaring what the decision will be and solve it for them. They actively refuse to make the decision for the team to break a pattern of learned helplessness.
-
-

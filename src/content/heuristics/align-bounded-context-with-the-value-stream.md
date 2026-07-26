@@ -59,5 +59,3 @@ For instance, we can see here the same forces in place that we have seen in Cohe
 > “You have to choose where to pay the price of complexity. Because DDD is about reducing complexity in the software, the outcome is that you pay a price with respect to maintaining duplicate models and possibly duplicate data.” - Eric Evans
 
 ![](./_assets/align-bounded-context-with-the-value-stream-body-4.png)
-
-

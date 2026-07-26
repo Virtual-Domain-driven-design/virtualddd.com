@@ -67,5 +67,3 @@ In our next episode, we’ll dive deeper into the process of decision-making its
 - How can we use writing as a tool for thinking?
 
 Stay tuned! We would love to hear about your experiences. Feel free to join the conversation on Discord and tell us how you've used transparency and ADRs in your own teams.
-
-

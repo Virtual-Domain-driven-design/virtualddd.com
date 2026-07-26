@@ -14,5 +14,3 @@ Define the primary purpose of testing as gathering information about the state o
 ## Example
 
 Before adding a new automated test, we ask, “What new information will this provide that our existing tests do not?“ If the information is redundant or of low value, we reconsider the effort.
-
-

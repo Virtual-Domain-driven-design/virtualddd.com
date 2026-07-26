@@ -1,0 +1,31 @@
+# Content licence
+
+The **code** in this repository is MIT — see `LICENSE`.
+
+The **content** is not. Everything under `src/content/` is licensed
+**Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**:
+
+    https://creativecommons.org/licenses/by-sa/4.0/
+
+That covers the sessions, the Facilitating Stories, the heuristics and the open
+spaces, all of which are community-authored and generated from Notion. Reuse
+them, adapt them, build on them — including commercially — as long as you
+credit Virtual DDD and the named authors, and license what you make from them
+under the same terms.
+
+## src/content/ddd-crew/ is somebody else's
+
+Those pages are **republished** from the repositories of the ddd-crew
+(https://github.com/ddd-crew) under CC BY-SA 4.0. They are not ours. Each page
+names its source repository and its contributors, links the licence, and sets
+`rel=canonical` to the upstream publication; every generated `.md` carries the
+same. If you reuse them, credit the ddd-crew and its contributors — not us.
+
+Share-alike is why the site's own content carries the same licence: adaptations
+of CC BY-SA material have to.
+
+## Images
+
+Photographs of people, session artwork and the brand assets under `src/assets/`
+are **not** covered by either licence. They belong to the people and events
+they depict. Ask before reusing them.

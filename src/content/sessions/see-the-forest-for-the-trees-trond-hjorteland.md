@@ -33,5 +33,3 @@ Senior IT Consultant and sociotechnical practitioner.
 
 
 Trond is an IT architect and open sociotechnical systems practitioner with extensive experience working with large, complex, and business-critical systems in industries such as telecom, media, TV, and the public sector. His main interests are service-orientation, domain-driven design, event-driven architectures, and open sociotechnical systems. His mantra: Great solutions emerge from collaborative sense-making and design.
-
-

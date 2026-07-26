@@ -14,5 +14,3 @@ The architect's role transitions from being the primary decision-maker to a faci
 ## Examples
 
 An architect's role changes from handing down decisions on a 'stone tablet' to facilitating conversations. They must adjust their muscle memory from broadcasting solutions to engaging in two-way dialogue.
-
-

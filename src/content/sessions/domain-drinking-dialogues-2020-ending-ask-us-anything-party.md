@@ -46,5 +46,3 @@ With us will be:
 - Kenny Baas-Schwegler 
 
 - DDD Borat (Not the real Borat) 
-
-

@@ -14,5 +14,3 @@ Avoid emotional attachment to specific ideas or initiatives by framing them as c
 ## Examples
 
 Presenting a proposed architectural change as 'an idea for improving scalability' rather than 'my solution to the scaling problem,' to encourage broader input.
-
-

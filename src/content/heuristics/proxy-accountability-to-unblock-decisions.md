@@ -14,5 +14,3 @@ A facilitator can offer to formally make the decision and take on the accountabi
 ## Example
 
 A junior developer was uncomfortable signing off on the framework choice, so the architect asked for consent to make the decision and then formally made the choice on their behalf.
-
-

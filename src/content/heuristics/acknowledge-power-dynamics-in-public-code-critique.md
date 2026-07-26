@@ -15,5 +15,3 @@ Be mindful of your authority and the power dynamics within the team, such as emp
 ## Examples
 
 A tech lead publicly refactored a contractor's code to demonstrate better practices to the whole team. The contractor felt shamed and quit, forcing the lead to apologize and reconsider his approach to mentorship.
-
-

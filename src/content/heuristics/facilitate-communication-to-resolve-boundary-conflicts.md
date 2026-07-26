@@ -14,5 +14,3 @@ When a decision crosses team boundaries, the primary role is to facilitate commu
 ## Example
 
 When a decision created conflict in the gray areas between teams, the priority was getting people to talk. This prevented defensive 'guard walls' from going up and enabled a collaborative resolution.
-
-
