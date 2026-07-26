@@ -438,100 +438,118 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   if (!write) console.log(`\n  (preview only — files in ${outDir}, nothing under src/content/)`);
 }
 
-// --- organisers command: Notion -> JSON data collection ---------------------
+// --- people: Notion -> JSON data collections --------------------------------
+//
+// Two databases, one shape: a row with no body, a portrait, and some links.
+// They were two hand-written functions duplicating the image download, the
+// write loop and the pruning, because the table above only modelled
+// collections with a markdown body. One table entry each now says what is
+// different, which is all that ever was.
+//
+// The split itself is deliberate, and explained in AGENTS.md: organisers is an
+// operational database (who runs what), guests exists to make a good `Person`.
 
-async function runOrganisers(outDir: string, write: boolean) {
-  const pages = await queryAll(PEOPLE_DS); // the "Virtual DDD Organisers" data source
-  const assetDir = `${outDir}/_assets`;
-  mkdirSync(outDir, { recursive: true });
-  console.log(`organisers: ${pages.length} -> ${outDir}\n`);
-
-  for (const page of pages) {
-    const P = page.properties;
-    const get = (n: string) => P[n];
-    const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
-    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
-    if (!name) continue;
-    const slug = kebab(name);
-    const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
-    const photoUrl = fileUrl((get('Photo')?.files ?? [])[0]);
-    const photo = photoUrl ? await downloadImage(photoUrl, ctx, 'photo') : null;
-
-    const data: Record<string, unknown> = {
-      name,
-      slug,
-      role: (get('Role')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim() || undefined,
-      website: get('URL')?.url ?? undefined,
-      linkedin: get('LinkedIn')?.url ?? undefined,
-      area: get('Area')?.select?.name ?? undefined,
-      organises: (get('Organises')?.multi_select ?? []).map((o: any) => o.name),
-      showOnTeam: get('Show on team')?.checkbox ?? false,
-      photo: photo ?? undefined,
-    };
-    Object.keys(data).forEach((k) => data[k] === undefined && delete data[k]);
-    writeFileSync(`${outDir}/${slug}.json`, JSON.stringify(data, null, 2) + '\n');
-    console.log(`  ✓ ${slug}.json${photo ? ' (photo)' : ''}${data.showOnTeam ? ' [team]' : ''}`);
-  }
-  if (!write) console.log(`\n  (preview only — files in ${outDir})`);
+interface PeopleSpec {
+  dataSourceId: string;
+  /** What to call this in the log. */
+  label: string;
+  /** The entry's file name — never a URL for guests, a URL for organisers. */
+  slugOf: (name: string, h: PeopleHelpers) => string;
+  fields: (name: string, h: PeopleHelpers) => Record<string, unknown>;
 }
 
-// --- guests command: Notion -> JSON data collection -------------------------
-//
-// Session guests are the speakers and panellists, kept apart from the
-// organisers database on purpose (see AGENTS.md): none of the operational
-// fields — Discord, virtualddd.com mail — apply to an external speaker. The
-// fields here exist to make a good `Person`, and the links become `sameAs`.
-//
-// A guest has **no slug and no page** — the entry exists to hold the bio and
-// the links that become `sameAs`, and its file name is derived from the name
-// purely so a session's `Guests` relation has something to resolve to. Nothing
-// here is ever a URL, so a guest renamed in Notion just renames the entry.
+interface PeopleHelpers {
+  text: (n: string) => string;
+  url: (n: string) => string | undefined;
+  select: (n: string) => string | undefined;
+  multi: (n: string) => string[];
+  checkbox: (n: string) => boolean;
+}
 
-async function runGuests(outDir: string, write: boolean) {
-  const pages = await queryAll(GUESTS_DS);
+const PEOPLE_SPECS: Record<string, PeopleSpec> = {
+  organisers: {
+    dataSourceId: PEOPLE_DS,
+    label: 'organisers',
+    // An organiser has a page, so this slug *is* a URL: changing a name
+    // changes an address and needs a redirect.
+    slugOf: (name) => kebab(name),
+    fields: (name, h) => ({
+      name,
+      slug: kebab(name),
+      role: h.text('Role') || undefined,
+      website: h.url('URL'),
+      linkedin: h.url('LinkedIn'),
+      area: h.select('Area'),
+      organises: h.multi('Organises'),
+      showOnTeam: h.checkbox('Show on team'),
+    }),
+  },
+  guests: {
+    dataSourceId: GUESTS_DS,
+    label: 'session guests',
+    // A guest has no page: the file name exists only so a session's `guests`
+    // relation resolves, so renaming one in Notion costs nothing.
+    slugOf: (name) => kebab(name),
+    fields: (name, h) => ({
+      name,
+      bio: h.text('Bio') || undefined,
+      website: h.url('Website'),
+      linkedin: h.url('LinkedIn'),
+      mastodon: h.url('Mastodon'),
+      bluesky: h.url('Bluesky'),
+      alsoAnOrganiser: h.checkbox('Also an organiser'),
+    }),
+  },
+};
+
+async function runPeople(key: string, outDir: string, write: boolean) {
+  const spec = PEOPLE_SPECS[key];
+  if (!spec) { console.error(`unknown people collection: ${key}`); process.exit(1); }
+
+  const pages = await queryAll(spec.dataSourceId);
   const assetDir = `${outDir}/_assets`;
   mkdirSync(outDir, { recursive: true });
-  console.log(`session guests: ${pages.length} -> ${outDir}\n`);
+  console.log(`${spec.label}: ${pages.length} -> ${outDir}\n`);
 
   const written = new Set<string>();
   for (const page of pages) {
     const P = page.properties;
     const get = (n: string) => P[n];
-    const text = (n: string) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-    const name = plainTitle(page, 'Name');
-    if (!name) { console.log('  ! a guest row has no name, skipping'); continue; }
-    const slug = kebab(name);
-    if (written.has(`${slug}.json`)) {
-      console.log(`  ! two guests are both named "${name}"; keeping the first. Rename one in Notion.`);
+    const h: PeopleHelpers = {
+      text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      url: (n) => get(n)?.url ?? undefined,
+      select: (n) => get(n)?.select?.name ?? undefined,
+      multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
+      checkbox: (n) => get(n)?.checkbox ?? false,
+    };
+    const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
+    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
+    if (!name) { console.log(`  ! a ${spec.label} row has no name, skipping`); continue; }
+
+    const slug = spec.slugOf(name, h);
+    const file = `${slug}.json`;
+    if (written.has(file)) {
+      console.log(`  ! two rows are both named "${name}"; keeping the first. Rename one in Notion.`);
       continue;
     }
+
     const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
     const photoUrl = fileUrl((get('Photo')?.files ?? [])[0]);
     const photo = photoUrl ? await downloadImage(photoUrl, ctx, 'photo') : null;
 
-    const data: Record<string, unknown> = {
-      name,
-      bio: text('Bio') || undefined,
-      website: get('Website')?.url ?? undefined,
-      linkedin: get('LinkedIn')?.url ?? undefined,
-      mastodon: get('Mastodon')?.url ?? undefined,
-      bluesky: get('Bluesky')?.url ?? undefined,
-      alsoAnOrganiser: get('Also an organiser')?.checkbox ?? false,
-      photo: photo ?? undefined,
-    };
+    const data: Record<string, unknown> = { ...spec.fields(name, h), photo: photo ?? undefined };
     Object.keys(data).forEach((k) => data[k] === undefined && delete data[k]);
-    const file = `${slug}.json`;
+
     written.add(file);
     writeFileSync(`${outDir}/${file}`, JSON.stringify(data, null, 2) + '\n');
-    console.log(`  ✓ ${file}${photo ? ' (photo)' : ''}${data.alsoAnOrganiser ? ' [organiser too]' : ''}`);
+    console.log(`  ✓ ${file}${photo ? ' (photo)' : ''}`);
   }
 
-  // A guest deleted or re-slugged in Notion must not leave an entry behind: a
-  // session relation resolves to the new slug, and the old file would linger
-  // as a person nobody can reach.
+  // A row deleted or renamed in Notion must not leave an entry behind: a
+  // session relation resolves to the new name, and the old file would linger.
   for (const f of readdirSync(outDir).filter((f) => f.endsWith('.json') && !written.has(f))) {
     unlinkSync(`${outDir}/${f}`);
-    console.log(`  – removed ${f} (no longer in the guests database)`);
+    console.log(`  – removed ${f} (no longer in the database)`);
   }
 
   if (!write) console.log(`\n  (preview only — files in ${outDir})`);
@@ -546,20 +564,16 @@ async function run() {
   const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
   const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
 
-  if (cmd === 'organisers') {
+  if (cmd === 'organisers' || cmd === 'guests') {
+    const dir = cmd === 'guests' ? 'session-guests' : 'organisers';
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
-      ?? (write ? 'src/content/organisers' : 'migration-source/preview/organisers');
-    return runOrganisers(outDir, write);
-  }
-  if (cmd === 'guests') {
-    const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
-      ?? (write ? 'src/content/session-guests' : 'migration-source/preview/session-guests');
-    return runGuests(outDir, write);
+      ?? (write ? `src/content/${dir}` : `preview/${dir}`);
+    return runPeople(cmd, outDir, write);
   }
   if (cmd === 'content') {
     const target = only ?? 'sessions';
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
-      ?? (write ? `src/content/${target}` : `migration-source/preview/${target}`);
+      ?? (write ? `src/content/${target}` : `preview/${target}`);
     return runContent(target, limit, outDir, write, args.includes('--strict'));
   }
   console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');

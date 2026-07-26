@@ -13,6 +13,15 @@ interface Props {
   img?: ImageMetadata;
   /** Rendered width of the thumbnail; pick per layout (cards 480, wide 720). */
   imgWidth?: number;
+  /** Opt in to a responsive `srcset` by describing the box the image fills,
+   *  e.g. `(min-width: 900px) 52rem, 100vw`.
+   *
+   *  Deliberately not the default: a card in the shared grid is 260–400px
+   *  wide at every breakpoint, so one 480px file already serves it, and every
+   *  extra width is another derivative in every deploy. It earns its place
+   *  where the box really changes size — a single-column list that is 832px on
+   *  a desktop and 350px on a phone was sending the desktop file to both. */
+  imgSizes?: string;
   /** Corner badge — session type, episode number, content kind. */
   badge?: string;
   /** Date line. `iso` drives the client-side local-time swap. */
@@ -35,7 +44,7 @@ interface Props {
 }
 
 const {
-  href, title, img, imgWidth = 480, badge, iso, dateFallback, accentMeta = false,
+  href, title, img, imgWidth = 480, imgSizes, badge, iso, dateFallback, accentMeta = false,
   metaSuffix, sub, excerpt, more, data = {}, class: className, loading = 'lazy',
 } = Astro.props;
 
@@ -44,7 +53,11 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
 
 <a class:list={['card', className]} href={href} data-test="card" {...dataAttrs}>
   <div class="card-thumb">
-    {img ? <Image src={img} alt="" width={imgWidth} loading={loading} /> : <div class="card-thumb-ph"></div>}
+    {img ? (
+      imgSizes
+        ? <Image src={img} alt="" width={imgWidth} widths={[Math.round(imgWidth / 2), imgWidth]} sizes={imgSizes} loading={loading} />
+        : <Image src={img} alt="" width={imgWidth} loading={loading} />
+    ) : <div class="card-thumb-ph"></div>}
     {badge && <span class="chip chip--label chip--primary card-badge">{badge}</span>}
   </div>
   <div class="card-body">

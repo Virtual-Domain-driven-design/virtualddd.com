@@ -95,7 +95,8 @@ const jsonLd = collectionPage(Astro.site, {
                 href={`/facilitating-archdes/${s.id}/`}
                 title={d.title}
                 img={d.featuredImage ?? d.featuredImageSquared}
-                imgWidth={720}
+                imgWidth={832}
+                imgSizes="(min-width: 900px) 52rem, 100vw"
                 badge={d.episode != null ? `Ep ${d.episode}` : undefined}
                 iso={d.publishedDate ? iso(d.publishedDate) : undefined}
                 dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}

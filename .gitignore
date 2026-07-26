@@ -23,10 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# local migration inputs (WP export, redirects) — never commit
-migration-source/
+# secrets
 local.env
 *.env
 
-# local verification screenshots
-shots-after/
+# sync --dry-run output, for inspecting before it lands in src/content/
+preview/

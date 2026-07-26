@@ -354,7 +354,23 @@ shared layer, never copied into a second page. Copying is what once made
   what every generated page says.
 - **`src/components/`** — `TeaserCard` is *the* card; `SessionCard` and
   `StoryCard` are thin wrappers. `PersonRow` is *the* person — portrait, name,
-  role, bio, links — used for a session's host and its guests.
+  role, bio, links — used for a session's host and its guests. `CardFilter` is
+  *the* filter: search, facets, result count, empty state and "load more" over
+  any grid of cards carrying the `data-search` / `data-<facet>` contract.
+- **`src/scripts/`** — the client-side behaviour, one module per concern
+  (`header`, `local-time`, `session-timing`), imported by `BaseLayout`'s single
+  script. Anything a page needs on the client goes here, not into a page's
+  `<script>`, so it can be read on its own.
+- **The shared card grid is a default, not an obligation.** `.grid-cards` suits
+  cards you scan; the stories archive is a single 52rem column because a story
+  is a long read with an excerpt under it, and three narrow columns turn that
+  into a wall of thumbnails. Consolidating markup must not flatten a layout
+  that was chosen.
+- **Responsive images are opt-in.** `TeaserCard` serves one width, which is
+  right for a card that is 260–400px wide at every breakpoint. Pass `imgSizes`
+  where the box genuinely changes size — the single-column stories list is
+  832px on a desktop and 350px on a phone, and that one prop halved what a
+  phone downloads.
 - Page `<style>` blocks are for what is genuinely local to that page.
 - **Progressive enhancement is a rule, not a preference.** Every `<time>` ships
   a server-rendered fallback, filters only hide pre-rendered cards, the mobile
@@ -381,8 +397,10 @@ order; each step is small.
 
 1. **`src/content.config.ts`** — a `defineCollection` with a Zod schema
    mirroring the Notion properties. Relations become `reference()`.
-2. **`scripts/sync-notion.ts`** — add a `CONTENT_SPECS` entry (for a collection
-   with a body) or a `run…` function (for structured data with no body).
+2. **`scripts/sync-notion.ts`** — add a `CONTENT_SPECS` entry (a collection with
+   a markdown body) or a `PEOPLE_SPECS` entry (structured data, no body). Both
+   are tables: say what is different about the new collection, not how to fetch
+   it.
 3. **`package.json`** — a `sync:<name>` script, and add it to `sync:notion`. If
    another collection references it, sync it **first**.
 4. **Routes** — `src/pages/<section>/index.astro` and `[slug].astro`.

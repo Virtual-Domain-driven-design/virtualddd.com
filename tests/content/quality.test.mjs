@@ -14,7 +14,7 @@
 import { test, describe, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
-import { pages, meta, attr, text, DIST } from '../helpers.mjs';
+import { pages, meta, attr, text, markup, DIST } from '../helpers.mjs';
 
 let all;
 before(() => {
@@ -102,6 +102,51 @@ describe('what the editors control', () => {
       if (jumps.length) skipped.push(`${p.path}: ${[...new Set(jumps)].join(', ')}`);
     }
     assert.deepEqual(skipped, [], skipped.join('\n'));
+  });
+
+  test('a card has a picture to show', () => {
+    // A featured image is what a card, a search result and a social share all
+    // lean on. Missing one is not broken, it is unfinished — and the fix is one
+    // upload in Notion.
+    const missing = [];
+    for (const p of all) {
+      if (!/^\/(sessions|facilitating-archdes|open-space)\/[^/]+\/$/.test(p.path)) continue;
+      const og = meta(p.html, 'og:image') ?? '';
+      // The site card is the fallback; anything else means the entry has one.
+      if (/logo-virtualddd/.test(og)) missing.push(p.path);
+    }
+    assert.deepEqual(missing, [], `entries with no featured image:\n${missing.join('\n')}`);
+  });
+
+  test('every heuristic says which kind it is', () => {
+    // The type drives the card's colour, the three type pages and the filter.
+    // A heuristic with none is reachable only by search — and the browser puts
+    // its type on the card, so the index is where they are all visible at once.
+    const index = all.find((p) => p.path === '/heuristics/');
+    // Read whole tags, then pull the attributes out of each: the order they
+    // are written in is the component's business, not this test's.
+    const cards = [...markup(index.html).matchAll(/<a[^>]*data-test="card"[^>]*>/g)].map((m) => m[0]);
+    assert.ok(cards.length > 10, `read only ${cards.length} heuristic cards`);
+    const untyped = cards
+      .filter((tag) => !(tag.match(/data-type="([^"]*)"/)?.[1] ?? '').trim())
+      .map((tag) => tag.match(/href="([^"]*)"/)?.[1] ?? tag.slice(0, 60));
+    assert.deepEqual(untyped, [], `heuristics with no type: ${untyped.join(', ')}`);
+  });
+
+  test('a session that has been has something to show for it', () => {
+    // A past session with neither a recording nor a write-up is a dead end for
+    // anyone who missed it. Add the video in Notion, or notes.
+    const empty = [];
+    for (const p of all.filter((x) => /^\/sessions\/[^/]+\/$/.test(x.path))) {
+      if (p.html.includes('data-test="add-to-calendar"')) continue; // still upcoming
+      const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
+      const graph = JSON.parse(raw)['@graph'];
+      const hasVideo = graph.some((n) => n['@type'] === 'VideoObject');
+      const body = markup(p.html).match(/class="prose-body"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
+      const words = body.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+      if (!hasVideo && words < 40) empty.push(`${p.path} (${words} words, no recording)`);
+    }
+    assert.deepEqual(empty, [], `past sessions with nothing to watch or read:\n${empty.join('\n')}`);
   });
 
   test('sessions carry a start time and an online location', () => {

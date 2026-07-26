@@ -260,91 +260,15 @@ const year = new Date().getFullYear();
     </style>
 
     <script>
-      import { nextUpcomingIndex, hasFinished } from '../lib/upcoming';
+      // Every behaviour on this page is a module, so each can be read, changed
+      // and reasoned about on its own. See src/scripts/.
+      import { initHeader } from '../scripts/header';
+      import { initLocalTime } from '../scripts/local-time';
+      import { initSessionTiming } from '../scripts/session-timing';
 
-      const header = document.getElementById('site-header');
-      if (header) {
-        const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 60);
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        const toggle = header.querySelector('.nav-toggle');
-        toggle?.addEventListener('click', () => {
-          const open = header.classList.toggle('nav-open');
-          toggle.setAttribute('aria-expanded', String(open));
-        });
-      }
-
-      // Render every <time class="js-local"> in the visitor's local timezone.
-      const dtFmt: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
-      const dateFmt: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-      const shortFmt: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
-      document.querySelectorAll<HTMLElement>('.js-local').forEach((el) => {
-        const iso = el.dataset.iso;
-        if (!iso) return;
-        const f = el.dataset.format === 'datetime' ? dtFmt : el.dataset.format === 'shortdate' ? shortFmt : dateFmt;
-        el.textContent = new Date(iso).toLocaleString(undefined, f);
-      });
-
-      // Join links (.js-live) are only useful close to the start. They ship
-      // visible so the page still works without JS; this hides them until two
-      // hours before, and again once the session is well over.
-      const LIVE_BEFORE = 2 * 60 * 60 * 1000;
-      const LIVE_AFTER = 3 * 60 * 60 * 1000;
-      document.querySelectorAll<HTMLElement>('.js-live').forEach((el) => {
-        const iso = el.dataset.iso;
-        if (!iso) return;
-        const start = new Date(iso).getTime();
-        const sync = () => {
-          const now = Date.now();
-          el.hidden = now < start - LIVE_BEFORE || now > start + LIVE_AFTER;
-        };
-        sync();
-        setInterval(sync, 60000);
-      });
-
-      // Which upcoming session is "next" — decided here, not at build time.
-      //
-      // Pages that lead with a session render every upcoming one (.js-next,
-      // soonest first) and every companion card (.js-next-item). Without this
-      // sweep the choice freezes at whatever was next when the site was last
-      // built, so a session that has been and gone keeps its RSVP hero and a
-      // countdown stuck at "Happening now" until someone rebuilds.
-      const heroes = [...document.querySelectorAll<HTMLElement>('.js-next')];
-      if (heroes.length) {
-        const starts = heroes.map((el) => new Date(el.dataset.iso ?? '').getTime());
-        const empty = document.querySelector<HTMLElement>('[data-next-empty]');
-        const sweep = () => {
-          const now = Date.now();
-          const i = nextUpcomingIndex(starts, now);
-          heroes.forEach((el, n) => { el.hidden = n !== i; });
-          // A companion card shows unless it has been, or is the hero itself.
-          document.querySelectorAll<HTMLElement>('.js-next-item').forEach((el) => {
-            const start = new Date(el.dataset.iso ?? '').getTime();
-            el.hidden = hasFinished(start, now) || (i >= 0 && start === starts[i]);
-          });
-          if (empty) empty.hidden = i >= 0;
-        };
-        sweep();
-        setInterval(sweep, 60000);
-      }
-
-      // Live countdown for any <* class="js-countdown" data-iso>.
-      document.querySelectorAll<HTMLElement>('.js-countdown').forEach((el) => {
-        const iso = el.dataset.iso;
-        if (!iso) return;
-        const target = new Date(iso).getTime();
-        const tick = () => {
-          const diff = target - Date.now();
-          if (diff <= 0) { el.textContent = 'Happening now'; return; }
-          const d = Math.floor(diff / 86400000);
-          const h = Math.floor((diff % 86400000) / 3600000);
-          const m = Math.floor((diff % 3600000) / 60000);
-          const s = Math.floor((diff % 60000) / 1000);
-          el.textContent = `Starts in ${d}d ${h}h ${m}m ${s}s`;
-        };
-        tick();
-        setInterval(tick, 1000);
-      });
+      initHeader();
+      initLocalTime();
+      initSessionTiming();
     </script>
   </body>
 </html>

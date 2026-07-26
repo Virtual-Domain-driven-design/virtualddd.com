@@ -434,3 +434,41 @@ evidence is this pass — replacing three filter implementations with one change
 markup, ids, attributes and script structure across three pages, and every test
 that broke was a test that had been reaching past the agreed surface. The rules
 that prevent a recurrence are in AGENTS.md, "The test surface".
+
+
+---
+
+## 7. Follow-up: the layout audit, and "later, or never"
+
+### Was anything else flattened?
+
+The stories column was the only one. Diffing every index and detail page
+against the state before the card consolidation:
+
+- `.lead` (52rem) and `.prose-body` (42rem) both **survived into the shared
+  layer at the same values** — they read as "lost" in a page diff only because
+  they moved to `patterns.css`.
+- What else disappeared from the pages was card *internals* — `.os-card`,
+  `.story-card`, their thumbnails and bodies — replaced by the shared `.card`.
+  That is the consolidation working.
+- Open Space and ddd-crew kept their responsive 1 → 2 → 3 grids exactly.
+- `/organisers/` had no page-local layout before; it was written in that commit.
+
+So: one regression, now fixed, and the lesson is written into AGENTS.md — the
+shared grid is a default, not an obligation.
+
+### The last four items
+
+| # | Item | Result |
+|---|---|---|
+| F2 | Split the `BaseLayout` script | 219 lines in a layout → three modules in `src/scripts/`, imported by a 6-line block. The layout is 274 lines, down from 332 |
+| A2 | Fold organisers and guests into the sync table | Two hand-written functions duplicating the download, write and prune loops → one `PEOPLE_SPECS` table. **The output is byte-identical**, which is the proof it was a refactor |
+| F5 | `srcset` | Opt-in, applied where the box really changes size: the stories index now sends a phone **0.28 MB instead of 0.68 MB**, for +1 MB in the deploy |
+| T4 | Reporting checks | Three added: entries with no featured image, heuristics with no type, and past sessions with neither a recording nor a write-up |
+
+Each new reporting check was verified against the built site to confirm it
+measures something — the shortest past-session body is 32 words, so the
+"nothing to show for it" check is live rather than vacuous, and the heuristic
+check reads all 151 cards rather than passing by accident on a bad selector.
+
+The build is 19 seconds and `dist` is 40 MB against a 50 MB ceiling.
