@@ -1,0 +1,109 @@
+slug,confidence,guests,organiser,title,other_names_in_body
+abstractions-as-bridges-with-hazel-weakly,OK,Hazel Weakly,Andrea Magnorsky,Abstractions as bridges with Hazel Weakly,
+an-introduction-to-domain-storytelling,NONE,,Kenny Baas-Schwegler,An Introduction to Domain Storytelling,Domain Storytelling
+an-introduction-to-residuality-theory-by-barry-m-oreilly,OK,Barry M O'Reilly,Kenny Baas-Schwegler,An Introduction to Residuality Theory by Barry M O'Reilly,
+balancing-upfront-design-versus-iterative-design,NONE,,Kenny Baas-Schwegler,Balancing upfront design versus iterative design,Dawn Ahukanna; Front-End Architect; Rebecca Wirfs-Brock; Agile Practices
+beyond-the-hexagonal-architecture-functional-core,NONE,,Kenny Baas-Schwegler,Beyond the hexagonal architecture: Functional Core & ...,Hexagonal Architecture; Functional Core; Imperative Shell; Alistair Cockburn
+can-business-capabilities-be-useful-in-ddd-with-trond-hjorteland,OK,Trond Hjorteland,Kenny Baas-Schwegler,Can business capabilities be useful in DDD with Trond Hjorteland,
+case-study-context-mapping-with-michael-plod,OK,Michael Plöd,Kenny Baas-Schwegler,Case-study context mapping with Michael Plöd,Context Maps; This VDDD
+collaborating-and-communicating-with-wardley-maps-part-2,NONE,,Kenny Baas-Schwegler,Collaborating and Communicating with Wardley Maps Part 2,Ben Mosior
+collaborating-and-communicating-with-wardley-maps,NONE,,Kenny Baas-Schwegler,Collaborating and Communicating with Wardley Maps,Ben Mosior
+combatting-the-near-enemies-of-domain-driven-design-at-scale,NONE,,Kenny Baas-Schwegler,Combatting the Near Enemies of Domain Driven Design at Scale,Domain-Driven Design
+craftconf-meetup-with-nick-tune-and-helin-akgul,OK,Nick Tune; Helin Akgul,Kenny Baas-Schwegler,CraftConf meetup with Nick Tune and Helin Akgul,Craft Conference; Strategic Microservice; DO NOT; MISS IT
+creating-a-playbook-for-ddd-for-the-inside-of-your-team-with-julie-lerman,OK,Julie Lerman,Kenny Baas-Schwegler,Creating a Playbook for DDD for the inside of your team with Julie Lerman,Introducing DDD; Domain-Driven Design; Starter Modelling
+critically-engaging-with-models-a-conversation-with-rebecca-and-mathias,NONE,,Andrea Magnorsky,Critically Engaging with Models a conversation with Rebecca,Rebecca Wirfs-Brock; Critically Engaging; With Models
+ddd-domain-modeling-using-ai-to-accelerate-design-with-staffan-palopaa,OK,Staffan Palopää,Zsofia Herendi,DDD & Domain Modeling: Using AI to Accelerate Design - with Staffan Palopää,Domain Modeling
+ddd-london-creating-a-playbook-for-ddd-newcomers,NONE,,Kenny Baas-Schwegler,[DDD London] Creating a Playbook for DDD Newcomers,Introducing DDD; Domain-Driven Design
+ddd-london-ddd-lite-independent-service-heuristics-with-matthew-skelton,OK,Matthew Skelton,Kenny Baas-Schwegler,[DDD London] DDD-Lite: Independent Service Heuristics with Matthew Skelton,Domain-Driven Design; Independent Service; Team Topologies; Manuel Pais
+ddddd-20-aggregate-canvas-by-kim-kao,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Aggregate Canvas by Kim Kao,Aggregate Canvas; As DDD; This Aggregate; KuoChao Chang
+ddddd-20-bounded-contexts-microservices-and-everything-in-between,NONE,,Kenny Baas-Schwegler,"[DDDDD-20] Bounded Contexts, Microservices, and Everything In Between",Bounded Contexts
+ddddd-20-bourdieus-social-theory-applied-to-tech,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Bourdieu's social theory applied to tech,
+ddddd-20-build-a-bounded-context-mob-firedrill,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Build a Bounded Context Mob Firedrill,Web BC
+ddddd-20-context-maps-practically-applied,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Context Maps - practically applied,Context Maps; Context Map's
+ddddd-20-ddd-for-small-organizations,NONE,,Kenny Baas-Schwegler,[DDDDD-20] DDD For Small Organizations,Most DDD; Does DDD
+ddddd-20-extreme-context-mapping,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Extreme Context Mapping,
+ddddd-20-from-capabilities-to-services-modelling-for-business-it-alignment,NONE,,Kenny Baas-Schwegler,[DDDDD-20] From Capabilities to Services: Modelling for business-IT alignment,From Capabilities
+ddddd-20-functional-domain-modelling-in-practice,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Functional Domain Modelling in Practice,Functional Programming
+ddddd-20-its-traverse,NONE,,Kenny Baas-Schwegler,[DDDDD-20]  « it's traverse »,
+ddddd-20-live-coding-expressive-projections,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Live coding: Expressive Projections,Dogged Determination
+ddddd-20-natural-boundaries-how-to-read-the-signs-and-benefit-from-the-problems,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Natural Boundaries - how to read the signs and benefit from the problems,
+ddddd-20-panel-event-sourcing-really-with-alexey,PARTIAL,Alexey,Kenny Baas-Schwegler,"[DDDDD-20] Panel: Event Sourcing, Really with Alexey",Event Sourcing; Domain-Driven Design
+ddddd-20-panel-experimentation-in-design-with-rebecca-woody-paul-and-julie,PARTIAL,Rebecca; Woody; Paul; Julie,Kenny Baas-Schwegler,"[DDDDD-20] Panel: experimentation in design with Rebecca, Woody, Paul and Julie",
+ddddd-20-panelremote-related-trainings-with-michael-gien-zsofia-stefan-kacper,PARTIAL,Michael; Gien; Zsofia; Stefan; Kacper,Kenny Baas-Schwegler,"[DDDDD-20] Panel:Remote related trainings with Michael, Gien, Zsofia, Stefan & Kacper",Domain-driven Design
+ddddd-20-remote-bounded-context-modelling,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Remote Bounded Context Modelling,Bounded Contexts; Product Managers; DDD Bounded; Eric Evan's
+ddddd-20-speaking-truth-to-power-a-foundational-skillset,NONE,,Kenny Baas-Schwegler,[DDDDD-20] Speaking truth to power: a foundational skillset,Fred Brooks
+decoding-paradoxes-why-are-many-good-ideas-in-software-delivery-counter-intuitive,NONE,,Kenny Baas-Schwegler,Decoding Paradoxes: Why are many good ideas in Software Delivery counter-intuitive,
+design-better-products-with-real-cross-functional-teams-jutta-maryse,OK,Maryse Meinen; Jutta Eckstein,Kenny Baas-Schwegler,Design better products with real cross-functional teams - Jutta & Maryse,Product Owner
+design-reality-with-mathias-verraes,OK,Mathias Verraes,Kenny Baas-Schwegler,Design & Reality with Mathias Verraes,
+do-we-need-software-architects,NONE,,Kenny Baas-Schwegler,Do we need software architects?,Do Software
+does-a-domain-driven-design-approach-need-an-agile-business,NONE,,Kenny Baas-Schwegler,Does a Domain-driven design approach need an agile business?,VirtualDDD Meetup
+domain-drinking-dialogues-2020-ending-ask-us-anything-party,NONE,,Kenny Baas-Schwegler,Domain-Drinking Dialogues - 2020 ending Ask us anything party,Alberto Brandolini; Romeu Moura; Evelyn van Kelle; Trond Hjorteland
+domain-drinking-dialogues-2nd-edition-2021-lean-coffee,NONE,,Kenny Baas-Schwegler,Domain-Drinking Dialogues 2nd edition - 2021 Lean coffee,
+domain-driven-frontend-with-francesco-strazzullo,OK,Francesco Strazzullo,Kenny Baas-Schwegler,Domain-Driven Frontend with Francesco Strazzullo,Bounded Contexts; Anticorruption Layers
+domain-experiments-with-mike-wojtyna,OK,Mike Wojtyna,Kenny Baas-Schwegler,Domain Experiments with Mike Wojtyna,
+effective-team-collaboration-and-why-we-need-it-for-modern-product-experiences,NONE,,Kenny Baas-Schwegler,Effective team collaboration and why we need it for modern product experiences?,Dawn Ahukanna; Nivia Henry; Jessica Kerr; Ruth Malan
+escaping-the-enshittification-trap-systems-thinking-for-sustainable-quality,NONE,,Andrea Magnorsky,Escaping the Enshittification Trap: Systems Thinking for Sustainable Quality,New Zealand; Cory Doctorow; About Anne-Marie; Coach’s Handbook
+eventstorming-types-and-heuristics-with-rebecca-paul-and-alberto,OK,Rebecca Wirfs-Brock; Paul Rayner; Alberto Brandolini,Kenny Baas-Schwegler,"EventStorming Types and Heuristics with Rebecca, Paul and Alberto",
+experimenting-with-remote-big-picture-eventstorming,NONE,,Kenny Baas-Schwegler,Experimenting with remote Big Picture EventStorming,Big Picture
+experimenting-with-remote-wardley-mapping-with-nick-tune,NONE,,Kenny Baas-Schwegler,Experimenting with Remote Wardley Mapping with Nick Tune,Ben Mosior’s
+fifty-ways-to-scale-your-agile-with-grady-booch,OK,Grady Booch,Kenny Baas-Schwegler,Fifty Ways to Scale Your Agile with Grady Booch,
+fostering-autonomous-teams-with-proper-leadership-culture,NONE,,Kenny Baas-Schwegler,Fostering autonomous teams with proper leadership culture,Domain-Driven Design; Ellis de Haan; Marc Burgauer; Trond Hjorteland
+free-trial-workshop-first-steps-in-ddd-with-andrew-blacklivesmatter-edition,NONE,,Kenny Baas-Schwegler,Free Trial Workshop: First Steps in DDD with Andrew (#BlackLivesMatter edition),First Steps; Domain-Driven Design'online; Business Analysts
+from-the-problem-to-software-a-walkthrough-with-krisztina-hirth,NONE,,Kenny Baas-Schwegler,From The Problem To Software - a Walkthrough with Krisztina Hirth,Alberto Brandolini
+hands-on-exploring-techniques-for-modelling-bounded-context-collaboration,NONE,,Kenny Baas-Schwegler,[Hands-on] Exploring Techniques For Modelling Bounded Context Collaboration,As Vladik; In DDD; UML Sequence; Domain Storytelling
+how-autonomy-saved-one-of-spotifys-most-loved-features-from-being-killed,NONE,,Andrea Magnorsky,How Autonomy Saved One of Spotify’s Most Loved Features From Being Killed,CEO Daniel; Discover Weekly; Joakim Sundén; Better Product
+how-cognitive-biases-and-ranking-kills-your-modelling-sessions,NONE,,Kenny Baas-Schwegler,How cognitive biases and ranking kills your modelling sessions,Evelyn van Kelle; Romeu Moura
+how-epistemic-injustice-impacts-domain-crunching-with-cat-swetel,OK,Cat Swetel,Kenny Baas-Schwegler,How Epistemic injustice impacts Domain Crunching with Cat Swetel,Technologist's Introduction; Epistemic Injustice
+how-feature-branching-affects-domain-driven-design-with-thierry-de-pauw,OK,Thierry de Pauw,Kenny Baas-Schwegler,How feature branching affects domain-driven design with Thierry de Pauw,Virtual DDD
+how-to-improve-modelling-with-behaviour-driven-development,NONE,,Kenny Baas-Schwegler,How to improve modelling with Behaviour-driven development,Behaviour Driven; Dan North; Eric Evan’s; Domain-Driven Design
+how-to-read-the-blue-book-strategic-design-with-mathias-verraes,OK,Mathias Verraes,Kenny Baas-Schwegler,How To Read the Blue Book: Strategic Design with Mathias Verraes,Eric Evans; Domain-Driven Design; As Paul
+impact-mapping-the-secret-sauce,NONE,,Andrea Magnorsky,Impact Mapping - The Secret Sauce,About Krisztina
+impact-mapping-to-manage-change-and-strategic-design,NONE,,Kenny Baas-Schwegler,Impact Mapping to manage change and strategic design,João Rosa
+introducing-ddd-to-your-company-with-barry-o-sullivan,OK,Barry O'Sullivan,Kenny Baas-Schwegler,Introducing DDD to your Company with Barry O Sullivan,
+introduction-to-domain-driven-design-and-collaborative-software-design-kenny-baas-schwegler,NONE,,Andrea Magnorsky,Introduction to Domain-Driven Design and Collaborative software design - Kenny Baas-Schwegler,Domain-Driven Design
+its-like-10000-streams-when-what-you-need-is-a-queue-chris-simon,OK,Chris Simon,Andrea Magnorsky,"It's like 10,000 streams when what you need is a queue - Chris Simon",Event-Driven Architecture; Azure Service; AWS SNS; About Chris
+live-coding-legacy-live-coding-with-dr-carola-lilienthal,OK,Dr. Carola Lilienthal,Kenny Baas-Schwegler,Live coding - Legacy live coding with Dr. Carola Lilienthal,
+long-term-impact-of-architectural-design-decision,NONE,,Kenny Baas-Schwegler,Long term impact of architectural design decision,Ruth Malan; Grady Booch; About D-EDGE
+lost-in-bounded-context-translations-with-julie-indu-michael-and-nick,OK,Julie Lerman; Indu Alagarsamy; Michael Plöd; Nick Tune,Kenny Baas-Schwegler,"Lost in bounded context translations with Julie, Indu, Michael and Nick",Domain-Driven Design; From Anti-corruption
+make-your-tests-tell-the-story-of-your-domain-with-anne-and-mads,PARTIAL,Anne; Mads,Kenny Baas-Schwegler,Make your tests tell the story of your domain with Anne and Mads,
+managing-domain-knowledge-with-chris-simon,OK,Chris Simon,Andrea Magnorsky,Managing Domain Knowledge with Chris Simon,
+one-user-to-bind-them-all-products-teams-and-bounded-contexts,NONE,,Kenny Baas-Schwegler,"One user to bind them all? Products, teams and bounded contexts",Bounded Contexts
+open-sociotechnical-systems-thinking-with-trond-hjorteland,OK,Trond Hjorteland,Kenny Baas-Schwegler,Open Sociotechnical Systems Thinking with Trond Hjorteland,DDD Europe; Open Space; Emery's Open
+orchestration-and-choreography-with-laila-bougria-udi-dahan,OK,Laila Bougria; Udi Dahan,Kenny Baas-Schwegler,Orchestration and choreography with Laila Bougria & Udi Dahan,
+outcome-mapping-for-flow-engineering-with-steve-pereira,OK,Steve Pereira,Kenny Baas-Schwegler,Outcome Mapping for Flow engineering with Steve Pereira,Stephen Covey; Outcome Mapping; Flow Engineering
+patterns-for-the-people-kevlin-henney,OK,Kevlin Henney,Kenny Baas-Schwegler,Patterns for the People - Kevlin Henney,
+patterns-of-bdd-automation-a-fireside-chat-with-seb-rose-and-gaspar-nagy,OK,Seb Rose; Gáspár Nagy,Kenny Baas-Schwegler,Patterns of BDD Automation - a Fireside chat with Seb Rose and Gáspár Nagy,Automation Patterns; Effective Behavior-Driven; Visual Basic; Effective Behaviour
+practical-residuality-by-barry-m-oreilly,OK,Barry M O'Reilly,Kenny Baas-Schwegler,Practical Residuality by Barry M O'Reilly,
+psychologic-safety-in-remote-collaboration-with-gitte-klitgaard,OK,Gitte Klitgaard,Kenny Baas-Schwegler,Psychologic safety in remote collaboration with Gitte Klitgaard,German Agile; Coach Camp
+relationships-between-problem-and-solution-space,NONE,,Kenny Baas-Schwegler,Relationship(s) between problem and solution space,Domain-Driven Desing; Ahukanna Jabe; Bloom Indi; Young Nick
+remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold,OK,Kirsten Clacey; Jay-Allen Morris; Jo Perold,Kenny Baas-Schwegler,"Remote facilitation with Kirsten Clacey, Jay-Allen Morris and Jo Perold",Facilitator’s Pocket
+rethinking-software-development-insights-from-20-years-in-the-field,NONE,,Zsofia Herendi,Rethinking software development: insights from 20+ years in the field,Matthias Claudius; Hype Driven; Alexander Thurow; Clean Code
+secure-by-domain-driven-design-with-jessica-dan-bergh-and-daniel,OK,Dan Bergh Johnsson; Daniel Deogun,Kenny Baas-Schwegler,"Secure by Domain-driven design with Jessica, Dan Bergh and Daniel",Jessica Kerr; Secure By; Virtual DDD
+see-the-forest-for-the-trees-trond-hjorteland,OK,Trond Hjorteland,Andrea Magnorsky,See the Forest for the Trees - Trond Hjorteland,About Trond; Senior IT
+sharing-your-systems-knowledge-with-bytesize-architecture-sessions-with-andrea-magnorsky,NONE,,Kenny Baas-Schwegler,Sharing your (Systems) knowledge with Bytesize Architecture Sessions with Andrea Magnorsky,Introducing Bytesize; Bytesize Sessions; Bermuda Triangles
+slow-down-to-speed-up-your-decision-making-gien-verschatse,OK,Gien Verschatse,Andrea Magnorsky,Slow down to speed up your decision-making - Gien Verschatse,But Kubernetes; About Gien; Domain-Driven Design; Computer Science
+socio-technical-architecture-with-ora-egozi-barzilai-and-evelyn-van-kelle,OK,Ora Egozi-Barzilai; Evelyn van Kelle,Kenny Baas-Schwegler,Socio-technical architecture with Ora Egozi-Barzilai and Evelyn van Kelle,
+soft-skills-for-technical-professionals-by-jacqui-read,OK,Jacqui Read,Andrea Magnorsky,Soft Skills for Technical Professionals by Jacqui Read,Communication Patterns
+speaking-truth-to-power-practice-argumentation-with-diana,PARTIAL,Diana,Kenny Baas-Schwegler,Speaking truth to power: practice argumentation with Diana,
+splitting-systems-towards-bounded-contexts-and-microservices,NONE,,Kenny Baas-Schwegler,Splitting systems towards bounded contexts and microservices,Rebecca Wirfs-brock; Chris Richardson; Alberto Brandolini; Nick Tune
+sunddday-discussion-cqrs-event-sourcing-systems-with-alexey-and-marco,OK,Alexey Zimarev,Kenny Baas-Schwegler,SunDDDay discussion: CQRS & Event Sourcing systems with Alexey and Marco,Event Sourcing
+sunddday-discussion-eventstorming-and-user-story-mapping-for-domain-discovery,NONE,,Kenny Baas-Schwegler,SunDDDay discussion: EventStorming and User story mapping for domain discovery,Central European; Amsterdam GMT; Zsófia Herendi; Trond Hjorteland
+sunddday-discussion-growing-your-local-ddd-community,NONE,,Kenny Baas-Schwegler,SunDDDay Discussion: Growing your local DDD community,Domain-Driven Design; Virtual DDD
+surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion,OK,Emilio Carrión,Andrea Magnorsky,Surviving a National Blackout with Offline-First Architecture | Emilio Carrión,Mercadona Online; Staff Engineer; Mercadona Tech
+systems-thinking-intro-with-lorraine-steyn,OK,Lorraine Steyn,Kenny Baas-Schwegler,Systems Thinking Intro with Lorraine Steyn,
+tdd-as-a-design-tool-with-dave-farley,OK,Dave Farley,Kenny Baas-Schwegler,TDD as a design tool with Dave Farley,
+team-topologies-workshop-with-luke-and-andy,OK,Luke McManus; Andy Spamer,Andrea Magnorsky,Team Topologies Workshop with Luke and Andy,New Zealand; Central Europe; Team Topologies; Team Interaction
+the-hard-skills-with-diana-montalion,NONE,,Kenny Baas-Schwegler,The hard skills? with Diana Montalion,
+the-innovation-of-cumulative-cultures-and-developer-problem-solving,NONE,,Andrea Magnorsky,The Innovation of Cumulative Cultures and Developer Problem-Solving,Dr Cat; Cat Hicks; Developer Thriving; AI Skill
+the-paradox-or-polarity-between-decentralised-and-centralised-decision-making,NONE,,Andrea Magnorsky,The paradox or polarity between decentralised and centralised decision-making,
+the-power-of-personal-engagement-by-rozemarijn-evelien,PARTIAL,Rozemarijn; Evelien,Kenny Baas-Schwegler,The power of personal engagement by Rozemarijn & Evelien,Training From
+transforming-business-models-in-the-pandemic-with-zsofia-herendi,NONE,,Kenny Baas-Schwegler,Transforming business models in the pandemic with Zsofia Herendi,
+trying-out-online-eventstorming,NONE,,Kenny Baas-Schwegler,Trying out online EventStorming,Indu Alagarsamy; Maxime Sanglan-Charlier
+udi-dahan-ask-me-anything,OK,Udi Dahan,Kenny Baas-Schwegler,Udi Dahan - Ask me Anything,Domain-Driven Design; Saga Patterns
+virtual-lean-coffee-fishbowl-ux-ddd-and-bdd-take-2,NONE,,Kenny Baas-Schwegler,"Virtual Lean Coffee Fishbowl: UX, DDD and BDD - take 2",John Cutler; Virtual Lean
+virtual-lean-coffee-fishbowl-ux-ddd-and-bdd,NONE,,Kenny Baas-Schwegler,"Virtual Lean Coffee Fishbowl: UX, DDD and BDD",John Cutler; Virtual Lean; Dawn Ahukanna; Indi Young
+what-can-we-learn-from-open-source-with-matteo-collina,OK,Matteo Collina,Kenny Baas-Schwegler,What can we learn from open-source with Matteo Collina,In OSS; Ubiquitous Language
+what-is-an-aggregate-with-thomas-ploch,OK,Thomas Ploch,Kenny Baas-Schwegler,What is an aggregate with Thomas Ploch,From Eric
+what-makes-you-a-ddder,NONE,,Kenny Baas-Schwegler,What makes you a DDD'er?,Emanuela Damiani; Mathias Verraes; Jessica White; Nick Tune
+what-writing-a-book-taught-us-about-collaborative-modeling,NONE,,Kenny Baas-Schwegler,What writing a book taught us about collaborative modeling,Domain Storytelling
+when-to-invest-in-strategic-design-and-when-in-tactical-design,NONE,,Kenny Baas-Schwegler,When to invest in Strategic design and when in Tactical design,Domain-Driven Design
