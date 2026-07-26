@@ -10,6 +10,8 @@ tags: ["strategic design", "software architecture", "tactical design", "polarity
 video: "https://www.youtube.com/embed/6hvuLjQpfx4"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Strategic Design or Tactical Design: When to Invest"
+seoMetadescription: "Most people meet DDD as a programming discipline and find strategic design later. On knowing which one the problem in front of you actually needs."
 featuredImage: "./_assets/when-to-invest-in-strategic-design-and-when-in-tactical-design-featured.jpg"
 ---
 

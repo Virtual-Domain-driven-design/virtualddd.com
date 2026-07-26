@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Marco Heimeshoff", "Paul Rayner", "Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design", "Strategic design"]
+seoTitle: "EventStorming: To-Be Modelling for Green Field"
 ---
 
 When working in a greenfield problem space, start by exploring with to-be process modelling.

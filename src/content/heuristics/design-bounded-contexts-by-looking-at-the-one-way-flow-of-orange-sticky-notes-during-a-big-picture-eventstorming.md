@@ -7,6 +7,7 @@ type: ["design-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Bounded Context"]
+seoTitle: "Design Bounded Contexts by One-Way Sticky Flow"
 ---
 
 ### Short description

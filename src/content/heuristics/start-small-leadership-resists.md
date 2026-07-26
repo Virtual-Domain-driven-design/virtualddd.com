@@ -10,7 +10,7 @@ tags: ["event-storming", "organizational-change", "leadership", "collaborative-m
 complements: ["workshop-stakeholder-alignment"]
 specializes: ["understand-the-cause-of-resistance"]
 focusKeyphrase: "introducing collaborative modeling"
-metaDescription: "When leadership resists big collaborative sessions, embed modeling into regular work rather than making it a special event."
+metaDescription: "When leadership resists big collaborative sessions, embed modelling into regular work rather than making it a special event."
 ---
 
 When leadership views collaborative modeling sessions as wasted time rather than real work, don't try to convince them with a big event. Instead, embed collaborative modeling into regular working sessions in small ways. Make it part of business as usual rather than something that requires special approval or takes people away from their "real" work.

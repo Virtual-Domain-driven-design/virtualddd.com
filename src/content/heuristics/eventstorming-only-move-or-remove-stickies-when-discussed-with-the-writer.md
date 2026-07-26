@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "Collaborative Software Design", "Ranking", "Psychological Safety"]
+seoTitle: "EventStorming: Never Remove Someone Else's Sticky"
 ---
 
 We can only remove stickies on the paper roll if the person had a discussion with the one who wrote it. Ask the group: Is it really the same concept as you think it is, what does the orginal writer actually mean? Is it the same Domain Event?

@@ -6,6 +6,8 @@ date: 2023-01-02T17:00:00.000+00:00
 tags: ["decision-making", "software design", "software architecture"]
 video: "https://www.youtube.com/embed/H2xI8QMYfJg"
 podcast: "https://oembed.libsyn.com/embed?item_id=25491942"
+seoTitle: "Architectural Decision Making: An Open Space"
+seoMetadescription: "A four-hour online unconference on how teams actually structure architectural decision-making — no fixed agenda, participants set the sessions."
 featuredImage: "./_assets/architectural-decision-making-gathering-featured.jpg"
 ---
 

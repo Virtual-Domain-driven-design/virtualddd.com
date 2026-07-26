@@ -10,6 +10,8 @@ tags: ["DDDDD", "functional programming", "haskell"]
 video: "https://www.youtube.com/embed/sIJr3SCKhjo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "« It's traverse »: Functional Programming Patterns"
+seoMetadescription: "The `traverse` function is so pervasive in functional programming it became a joke. A session on why it answers so many questions."
 featuredImage: "./_assets/ddddd-20-its-traverse-featured.jpeg"
 ---
 

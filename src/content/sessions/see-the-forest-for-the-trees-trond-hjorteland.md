@@ -10,6 +10,7 @@ tags: ["systems thinking"]
 video: "https://youtu.be/_B7A5UbIkTw"
 podcastPlayer: "https://player.captivate.fm/episode/4d6a7cb2-b3f2-4b88-97e1-fdf3d51a138a/"
 organiser: "Andrea Magnorsky"
+seoMetadescription: "Trond Hjorteland asks whether you understand what the rest of the system is doing — coding, testing, UX, product — or only your own part of it."
 featuredImage: "./_assets/see-the-forest-for-the-trees-trond-hjorteland-featured.png"
 ---
 

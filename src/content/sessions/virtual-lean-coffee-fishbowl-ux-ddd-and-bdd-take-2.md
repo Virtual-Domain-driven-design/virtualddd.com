@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/wF0OHhVELyo"
 podcastPlayer: "https://player.captivate.fm/episode/9b3b2cc4-d684-4960-a106-5e537352601f/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "A second fishbowl on what UX research, DDD and BDD have been learning separately — and how much of it turns out to be the same work."
 featuredImage: "./_assets/virtual-lean-coffee-fishbowl-ux-ddd-and-bdd-take-2-featured.jpeg"
 ---
 

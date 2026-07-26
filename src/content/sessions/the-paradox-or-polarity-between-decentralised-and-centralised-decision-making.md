@@ -12,6 +12,8 @@ podcastPlayer: "https://player.captivate.fm/episode/b3d6c70c-247f-4be4-944e-276c
 miro: "https://miro.com/app/board/uXjVJEDc9ZI=/"
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Kenny Baas-Schwegler"]
+seoTitle: "Decentralised or Centralised Decision-Making?"
+seoMetadescription: "Team autonomy asks for trust, and trust gets delicate when a team's decisions land on everyone else. Treating the tension as a polarity rather than a problem."
 featuredImage: "./_assets/the-paradox-or-polarity-between-decentralised-and-centralised-decision-making-featured.png"
 ---
 

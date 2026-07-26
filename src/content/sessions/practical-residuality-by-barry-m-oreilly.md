@@ -9,6 +9,7 @@ level: ["Advanced"]
 tags: ["software design", "software architecture", "complexity theory", "event-driven architecture"]
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Barry M O'Reilly on residuality theory in practice — hands-on work with matrices to stress-test the architectures participants are building now."
 featuredImage: "./_assets/practical-residuality-by-barry-m-oreilly-featured.jpg"
 ---
 

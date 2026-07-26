@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/KMvEt18aO5c"
 podcastPlayer: "https://player.captivate.fm/episode/2ad696c2-a045-4c92-bbe6-cfe720b97a01/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Psychological Safety in Remote Collaboration"
+seoMetadescription: "Gitte Klitgaard on what remote collaborative modelling asks of a group, and why people only share what they know when they feel safe enough to."
 featuredImage: "./_assets/psychologic-safety-in-remote-collaboration-with-gitte-klitgaard-featured.jpeg"
 ---
 

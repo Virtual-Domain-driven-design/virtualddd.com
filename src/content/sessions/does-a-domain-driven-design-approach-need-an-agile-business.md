@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/hKBSmQCMEqQ"
 podcastPlayer: "https://player.captivate.fm/episode/167741d4-0147-49b2-b64c-fdb5fe386707/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Trond Hjorteland, Anton Stöckl and Krisztina Hirth on whether DDD works in product development without a clear business goal."
 featuredImage: "./_assets/does-a-domain-driven-design-approach-need-an-agile-business-featured.jpeg"
 ---
 

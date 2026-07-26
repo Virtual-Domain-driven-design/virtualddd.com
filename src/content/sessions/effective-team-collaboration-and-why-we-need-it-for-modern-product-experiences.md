@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/WNQ3ZLcW4Mw"
 podcastPlayer: "https://player.captivate.fm/episode/975db4f3-d3f7-4a72-b7fb-ef5907782097/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Team Collaboration for Modern Product Experiences"
+seoMetadescription: "Modern products are networked, distributed and used by thousands. Why an intuitive experience depends on how well the teams behind it actually collaborate."
 featuredImage: "./_assets/effective-team-collaboration-and-why-we-need-it-for-modern-product-experiences-featured.jpg"
 ---
 

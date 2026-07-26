@@ -9,7 +9,7 @@ submitter: "Beija Nigl"
 tags: ["workshop facilitation", "stakeholder alignment", "meeting planning", "collaboration"]
 complements: ["start-small-leadership-resists"]
 focusKeyphrase: "workshop stakeholder alignment"
-metaDescription: "Ensure your workshops succeed by aligning all stakeholders on purpose and outcomes. Learn how to prevent misalignment and avoid costly misdirection in collaborative sessions."
+metaDescription: "Align every stakeholder on the purpose and the intended outcome before the workshop starts — misalignment discovered on the day is expensive to repair."
 ---
 
 Before a collaborative workshop, conduct dedicated 'setting the stage' sessions with all stakeholder groups, especially those in positions of power. Explicitly discuss and align on the workshop's goals and expected outcomes to prevent misdirection.

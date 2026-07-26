@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/zPvYqrASCRA"
 podcastPlayer: "https://player.captivate.fm/episode/caefcc93-c791-43f4-9310-6e4a5497655a/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "When you can see the icebergs ahead but cannot convince anyone to steer: speaking truth to power as a foundational skill for architects."
 featuredImage: "./_assets/ddddd-20-speaking-truth-to-power-a-foundational-skillset-featured.jpeg"
 ---
 

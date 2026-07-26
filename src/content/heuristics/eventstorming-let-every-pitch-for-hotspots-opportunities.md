@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "EventStorming", "Deep Democracy", "Collaborative modelling", "Collaborative Software Design", "Conflict Management", "Cognitive Bias"]
+seoTitle: "EventStorming: Let Everyone Pitch a Constraint"
 ---
 
 

@@ -10,6 +10,8 @@ tags: ["DDDDD", "remote facilitation"]
 video: "https://www.youtube.com/embed/q3Oh9zVKHKo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Panel: Remote Training in the DDD Community"
+seoMetadescription: "In-person training disappeared overnight. Michael Plöd, Gien Verschatse, Zsofia Herendi, Stefan Hofer and Kacper Gunia on what remote teaching made possible."
 featuredImage: "./_assets/ddddd-20-panelremote-related-trainings-with-michael-gien-zsofia-stefan-kacper-featured.jpeg"
 ---
 

@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/u-5sKvh48-g"
 podcastPlayer: "https://player.captivate.fm/episode/e2a78f6d-cbd4-47e0-bf7a-ebd4523767e9/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Lost in Bounded Context Translation"
+seoMetadescription: "Julie Lerman, Indu Alagarsamy, Michael Plöd and Nick Tune on the cost of many ubiquitous languages: everything that gets lost translating between them."
 featuredImage: "./_assets/lost-in-bounded-context-translations-with-julie-indu-michael-and-nick-featured.jpeg"
 ---
 

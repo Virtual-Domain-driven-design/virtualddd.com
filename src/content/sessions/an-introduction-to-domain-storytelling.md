@@ -10,6 +10,7 @@ tags: ["collaborative modelling", "domain storytelling", "remote work"]
 video: "https://www.youtube.com/embed/d9k9Szkdprk"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "An introduction to Domain Storytelling: a collaborative modelling method for finding bounded contexts and building a ubiquitous language with domain experts."
 featuredImage: "./_assets/an-introduction-to-domain-storytelling-featured.png"
 ---
 

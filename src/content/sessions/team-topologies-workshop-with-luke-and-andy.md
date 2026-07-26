@@ -8,6 +8,7 @@ typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["team topologies", "teams and organizations", "sociotechnical systems"]
 organiser: "Andrea Magnorsky"
+seoMetadescription: "A hands-on workshop on the key ideas from Team Topologies, and how to apply the four team types and three interaction modes to your own organisation."
 featuredImage: "./_assets/team-topologies-workshop-with-luke-and-andy-featured.jpg"
 ---
 

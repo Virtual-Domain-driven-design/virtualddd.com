@@ -13,6 +13,7 @@ prerequisites: ["prioritise-foundation-trust-in-the-team", "distribute-debugging
 specializes: ["watch-approval-seeking-safety-signal"]
 focusKeyphrase: "psychological safety incidents"
 metaDescription: "Psychological safety during major incidents is built by how you respond to small failures, missed deadlines, and basic questions every day."
+seoTitle: "Build Psychological Safety Through Small Failures"
 ---
 
 You can't create psychological safety in the middle of a crisis. The engineer who calls into an incident bridge to say "this was my change" only does that if they've already learned the organization won't punish them. That learning happens through how you handle everyday mistakes and uncertainties.

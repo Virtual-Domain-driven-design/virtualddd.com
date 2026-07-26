@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/Z0RgR9xIQE4"
 podcastPlayer: "https://player.captivate.fm/episode/2a705aac-63ab-4d24-8f9b-cb3eaec65568/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Bounded Contexts, Microservices and Everything Between"
+seoMetadescription: "Forty years on from Glenford Myers, we still extol modularity without saying how to achieve it. On bounded contexts, microservices and what sits between."
 featuredImage: "./_assets/ddddd-20-bounded-contexts-microservices-and-everything-in-between-featured.jpeg"
 ---
 

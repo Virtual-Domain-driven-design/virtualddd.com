@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/dcSup2me344"
 podcastPlayer: "https://player.captivate.fm/episode/9ca7d66d-2ead-43a3-897f-5598acd2ba32/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Architecture is the set of significant decisions that shape a system — and shaping takes years. On seeing the long-term impact of a decision."
 featuredImage: "./_assets/long-term-impact-of-architectural-design-decision-featured.jpg"
 ---
 

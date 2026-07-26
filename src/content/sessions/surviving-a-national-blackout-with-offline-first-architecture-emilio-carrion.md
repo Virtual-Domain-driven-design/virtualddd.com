@@ -11,6 +11,8 @@ video: "https://youtube.com/live/3MHn4rRjuJ8"
 meet: "https://meet.google.com/koo-vzyo-yoq"
 humantix: "https://events.humanitix.com/surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"
 organiser: "Andrea Magnorsky"
+seoTitle: "Offline-First Architecture: Surviving a National Blackout"
+seoMetadescription: "Emilio Carrión on what happens when a nationwide power cut leaves warehouses dark and the cloud unreachable — and designing for that from the start."
 featuredImage: "./_assets/surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion-featured.png"
 ---
 

@@ -9,6 +9,8 @@ level: ["Intermediate"]
 video: "https://youtu.be/aulGzLoCwJk"
 podcastPlayer: "https://player.captivate.fm/episode/bc523e05-8be0-4d0a-acad-8d2dfc57181d/"
 organiser: "Andrea Magnorsky"
+seoTitle: "How Autonomy Saved Spotify's Discover Weekly"
+seoMetadescription: "Daniel Ek would have killed Discover Weekly himself. The story of how team autonomy saved one of Spotify's most loved features."
 featuredImage: "./_assets/how-autonomy-saved-one-of-spotifys-most-loved-features-from-being-killed-featured.png"
 ---
 

@@ -10,6 +10,8 @@ tags: ["ai", "software architecture", "software modelling"]
 video: "https://www.youtube.com/watch?v=fyN8yGtlIjs"
 organiser: "Zsofia Herendi"
 coOrganisers: ["Kenny Baas-Schwegler"]
+seoTitle: "Using AI to Accelerate Domain Modelling"
+seoMetadescription: "Staffan Palopää on using AI to shorten the learning curve for DDD and domain modelling, and where the machine helps rather than hinders the design."
 featuredImage: "./_assets/ddd-domain-modeling-using-ai-to-accelerate-design-with-staffan-palopaa-featured.jpeg"
 ---
 

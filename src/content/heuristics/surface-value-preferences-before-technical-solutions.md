@@ -12,6 +12,7 @@ enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["evaluate-architectural-options-against-team-pain-points"]
 focusKeyphrase: "value-based preferences"
 metaDescription: "Dig into why people have strong technical preferences by uncovering the values and concerns driving them."
+seoTitle: "Surface Value Preferences Before Solutions"
 ---
 
 When someone pushes hard for a specific technical solution, they're usually operating from an underlying value or concern that they haven't made explicit. Before evaluating technical options, dig into what's driving the strong preference. Is it fear of skills becoming outdated? Concern about maintainability? A need for career growth? Making these value-based motivations visible helps the team have a real conversation instead of just picking whoever argues loudest.

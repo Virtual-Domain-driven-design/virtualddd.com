@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Stakeholder Communication", "Workshop Debrief", "Difficult Feedback", "Business Insights", "Management Communication"]
 focusKeyphrase: "Communicating critical insights"
-metaDescription: "Master post-workshop communication! Deliver critical, uncomfortable insights to absent or misaligned stakeholders with concise, evidence-based summaries and actionable recommendations."
+metaDescription: "Get the uncomfortable findings to the people who were not in the room: a short, evidence-based summary with a clear recommendation beats a full write-up."
 ---
 
 Prepare a concise, evidence-based summary of observations, outcomes, and recommendations. Present this 'ground truth' to key stakeholders, especially those who were not fully present, framing it as a path to their ultimate success.

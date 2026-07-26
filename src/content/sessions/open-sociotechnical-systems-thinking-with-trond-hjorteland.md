@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/f9ywr8Mo9k4"
 podcastPlayer: "https://player.captivate.fm/episode/cf46640a-95c2-4c60-9971-18abbb843552/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Trond Hjorteland on the renaissance of sociotechnical thinking, and the effect it has had on organisations and the people working in them."
 featuredImage: "./_assets/open-sociotechnical-systems-thinking-with-trond-hjorteland-featured.jpg"
 ---
 

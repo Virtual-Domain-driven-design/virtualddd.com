@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/BpMzn9AxNcw"
 podcastPlayer: "https://player.captivate.fm/episode/43ddc27f-c3ca-42aa-8180-88f1ca8ece75/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Secure by Domain-Driven Design"
+seoMetadescription: "Jessica Kerr, Dan Bergh Johnsson and Daniel Deogun on where DDD meets security: understanding the domain well enough to stop what you do not want."
 featuredImage: "./_assets/secure-by-domain-driven-design-with-jessica-dan-bergh-and-daniel-featured.jpeg"
 ---
 

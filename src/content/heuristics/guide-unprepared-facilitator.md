@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["constructive feedback", "meeting facilitation", "communication skills", "team collaboration", "professional development"]
 focusKeyphrase: "Help unprepared facilitator"
-metaDescription: "Participants: Learn to constructively guide an unprepared facilitator. Ask empathetic questions to realign goals without overstepping boundaries. Improve meeting effectiveness."
+metaDescription: "As a participant with an unprepared facilitator, ask empathetic questions that realign the group on its goal without taking the session away from them."
 ---
 
 As a participant, voice your own needs or perceived lack of clarity by asking questions. Frame these as personal understanding gaps, such as 'I don't understand the goal yet, can we make that more clear?' to prompt realignment.

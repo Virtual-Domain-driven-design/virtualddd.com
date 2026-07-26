@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["workshop facilitation", "Meeting management", "Discussion control", "Goal alignment"]
 focusKeyphrase: "workshop on track"
-metaDescription: "Learn how to steer your workshop back on track when discussions diverge. Use clear goals to refocus participants & achieve intended outcomes efficiently."
+metaDescription: "When a workshop discussion drifts, return to the goal everyone agreed on and use it to refocus the group rather than cutting people off."
 ---
 
 If a clear, aligned goal exists, use it as a reference point to guide the discussion. Periodically, 'zoom out' to remind participants of the shared objective and evaluate if the current path serves that goal.

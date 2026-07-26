@@ -10,6 +10,8 @@ tags: ["behavioral science", "team building", "software development", "agile coa
 video: "https://www.youtube.com/embed/Xof9iz2uOms"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "The Power of Personal Engagement"
+seoMetadescription: "Rozemarijn Bergevoet and Evelien Roos on what makes a team thrive, and how personal engagement changes what a team is able to do together."
 featuredImage: "./_assets/the-power-of-personal-engagement-by-rozemarijn-evelien-featured.jpg"
 ---
 

@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/ArK5Ckid-sY"
 podcastPlayer: "https://player.captivate.fm/episode/91d30b89-fc6c-4e92-84bf-6a10a87191bb/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "What Makes You a DDD'er? Beyond EventStorming"
+seoMetadescription: "An open discussion on what actually makes someone a DDD practitioner — collaborative modelling and shared understanding, or the patterns and practices."
 featuredImage: "./_assets/what-makes-you-a-ddder-featured.jpeg"
 ---
 

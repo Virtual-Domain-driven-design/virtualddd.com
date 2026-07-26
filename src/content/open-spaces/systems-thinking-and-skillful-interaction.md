@@ -4,6 +4,8 @@ slug: "systems-thinking-and-skillful-interaction"
 status: "Done"
 date: 2023-09-20T16:00:00.000+00:00
 tags: ["software design", "software architecture", "complexity theory", "systems thinking", "observability"]
+seoTitle: "Systems Thinking and Skillful Interaction"
+seoMetadescription: "An open space on the shift from 'keep it simple' to working in genuine complexity, and the skills needed to deliver reliably at scale."
 featuredImage: "./_assets/systems-thinking-and-skillful-interaction-featured.jpg"
 ---
 

@@ -10,6 +10,8 @@ tags: ["DDDDD", "experimentation", "essential", "design"]
 video: "https://www.youtube.com/embed/GimWdjmJGek"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Panel: Experimentation in Software Design"
+seoMetadescription: "Rebecca Wirfs-Brock, Woody Zuill, Paul Rayner and Julie Lerman on experimentation as the route to a sustainable, flexible design rather than cranking out product."
 featuredImage: "./_assets/ddddd-20-panel-experimentation-in-design-with-rebecca-woody-paul-and-julie-featured.jpeg"
 ---
 

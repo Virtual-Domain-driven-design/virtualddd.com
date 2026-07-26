@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/UcCifzd-xzk"
 podcastPlayer: "https://player.captivate.fm/episode/adcdf3fc-1679-4e9f-bf62-ce05c64b7392/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Grady Booch on scaling agile beyond a single team, between those who say do not try and those who say it cannot be done."
 featuredImage: "./_assets/fifty-ways-to-scale-your-agile-with-grady-booch-featured.jpg"
 ---
 

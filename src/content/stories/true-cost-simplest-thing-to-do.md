@@ -11,7 +11,7 @@ podcast: "https://player.captivate.fm/episode/b9001bb9-070a-4c03-89e4-faf221c377
 curatedHeuristics: ["permit-contained-failure-to-foster-learning", "distinguish-between-tigers-and-mice-in-design", "domain-events-must-carry-their-own-context", "the-goal-is-the-right-outcome-not-being-right", "mistrust-simplicity-achieved-without-thought", "a-decision-is-what-gets-implemented"]
 focusKeyphrase: "Domain Events vs Technical Events"
 seoTitle: "The True Cost of \"The Simplest Thing to Do”"
-seoMetadescription: "Krisztina Hirth shares how choosing \"simple\" technical events over proper Domain Events led to 90% noise and an 8-month cleanup. Learn why going fast is often just wrong."
+seoMetadescription: "Krisztina Hirth on how choosing 'simple' technical events over real domain events produced 90% noise and an eight-month cleanup."
 featuredImageSquared: "./_assets/true-cost-simplest-thing-to-do-featured-squared.png"
 featuredImage: "./_assets/true-cost-simplest-thing-to-do-featured.png"
 ---
@@ -20,7 +20,7 @@ As architects and senior engineers, we often face a difficult choice: when do we
 
 Krisztina Hirth shared a story with us from the beginning of her journey at PayFit, during a company-wide initiative to modernise the architecture. It’s a story about a one-day implementation that took eight months to fix, and why, in the end, it was one of the best things that could have happened.
 
-## The Stalemate Over "Domain" Events
+### The Stalemate Over "Domain" Events
 
 We have decided to move towards an event-driven architecture to improve scalability and flexibility. I was working with one of the first teams to adopt this new paradigm. They were a small, fast-moving team, very proud of the software they had built.
 
@@ -30,7 +30,7 @@ For over an hour, I tried to explain the difference. I could see that their prop
 
 I was speechless. After an hour of trying every angle—explaining nicely, showing potential problems—I realised we were not making any progress. I couldn't make the decision for them. Even if I had forced my solution, would they have implemented it with any real understanding or commitment? Probably not.
 
-## A Deliberate Step Back
+### A Deliberate Step Back
 
 At that moment, I had to decide what was truly important. My goal wasn't to be right or to create the "perfect" event on day one. This was the very beginning of our transformation. My goal was to give the team the opportunity to start learning. And what is the most effective way to learn? By failing.
 
@@ -38,7 +38,7 @@ I often think of a quote from statistician George Box: "It is inappropriate to b
 
 So, I gave up trying to convince them. I decided to let them proceed.
 
-## The Spectacular Failure
+### The Spectacular Failure
 
 I didn't expect them to fail so spectacularly, but they did.
 
@@ -50,7 +50,7 @@ About a month later, a member of the team contacted me. He shared the logs, show
 
 Two months after our initial meeting, he came back. "I'm so sorry we didn't listen to you," he said. They finally understood. They had the proof.
 
-## The Eight-Month Fix and the Real Success
+### The Eight-Month Fix and the Real Success
 
 The team now owned the problem. They triggered the solution, came to me, and asked, "How should we fix it?"
 

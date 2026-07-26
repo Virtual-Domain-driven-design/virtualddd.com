@@ -10,6 +10,7 @@ tags: ["DDDDD", "functional programming", "functional domain modelling"]
 video: "https://www.youtube.com/embed/3JECDkZ2_6Q"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "A hands-on workshop on functional domain modelling: using a type system to make invalid states unrepresentable and get feedback straight from the code."
 featuredImage: "./_assets/ddddd-20-functional-domain-modelling-in-practice-featured.jpeg"
 ---
 

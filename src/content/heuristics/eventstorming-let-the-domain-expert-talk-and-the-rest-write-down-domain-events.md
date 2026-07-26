@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
 tags: ["Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design", "EventStorming"]
+seoTitle: "EventStorming: Expert Talks, Everyone Else Writes"
 ---
 
 Let the domain expert tell the story and the rest of the group write down the domain events.

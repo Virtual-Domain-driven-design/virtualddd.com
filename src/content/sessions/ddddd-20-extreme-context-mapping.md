@@ -10,6 +10,7 @@ tags: ["DDDDD", "context mapping", "strategic design", "eventstorming"]
 video: "https://www.youtube.com/embed/yaiDzBLi1-A"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Context mapping used in unconventional ways: multiple business lines, a fragmented technology stack, and what the format reveals under strain."
 featuredImage: "./_assets/ddddd-20-extreme-context-mapping-featured.jpg"
 ---
 

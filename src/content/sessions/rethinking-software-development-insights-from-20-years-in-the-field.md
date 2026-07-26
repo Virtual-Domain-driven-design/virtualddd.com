@@ -11,6 +11,8 @@ video: "https://youtu.be/Ist6GO-LHb8"
 meet: "https://meet.google.com/mqa-okdi-ifi"
 humantix: "https://events.humanitix.com/rethinking-software-development-insights-from-20-years-in-the-field"
 organiser: "Zsofia Herendi"
+seoTitle: "Rethinking Software Development: 20 Years On"
+seoMetadescription: "Twenty years in the field, told as a journey: what holds up, what does not, and what the profession keeps having to relearn."
 featuredImage: "./_assets/rethinking-software-development-insights-from-20-years-in-the-field-featured.png"
 ---
 

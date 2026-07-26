@@ -107,6 +107,7 @@ const heuristics = defineCollection({
       specializes: z.array(reference('heuristics')).default([]),
       focusKeyphrase: z.string().optional(),
       metaDescription: z.string().optional(),
+      seoTitle: z.string().optional(),
     }),
 });
 

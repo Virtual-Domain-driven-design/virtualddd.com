@@ -10,6 +10,7 @@ tags: ["DDDDD", "visual collaboration", "bounded context"]
 video: "https://www.youtube.com/embed/QoGvpbkzZTQ"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "A remote workshop on bounded context modelling, open to anyone — developers, testers, product managers and architects — whether or not you have met DDD before."
 featuredImage: "./_assets/ddddd-20-remote-bounded-context-modelling-featured.jpeg"
 ---
 

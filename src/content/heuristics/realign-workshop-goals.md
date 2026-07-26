@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["workshop facilitation", "Goal alignment", "Meeting management", "Facilitator tips"]
 focusKeyphrase: "realign workshop goals"
-metaDescription: "Detecting workshop goal disagreement during a session? Learn how to effectively pause, check in, and realign the workshop's purpose with all key participants."
+metaDescription: "When it becomes clear mid-session that people disagree about the purpose, stop and realign with everyone present before spending more of the room's time."
 ---
 
 If significant goal misalignment becomes apparent during a session, pause the primary activity. Dedicate a short, focused segment to explicitly check in and realign on the workshop's purpose with all key participants present.

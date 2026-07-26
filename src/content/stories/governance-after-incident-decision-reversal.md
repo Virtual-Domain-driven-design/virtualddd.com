@@ -10,8 +10,8 @@ youtube: "https://youtu.be/GXz-zzNyL38"
 podcast: "https://player.captivate.fm/episode/47be4840-e08e-42b6-8319-7936a9914dae/"
 curatedHeuristics: ["treat-decisions-as-immutable-histrorical-records", "value-team-autonomy-over-rescuing", "amplify-team-decisions-with-organisational-capital", "prioritise-foundation-trust-in-the-team", "be-explicit-about-decision-making-authority", "measure-the-flow-of-decision-making", "capture-both-logic-and-sentiment-in-decisions", "decompose-large-decisions-into-smaller-ones"]
 focusKeyphrase: "governance after incident"
-seoTitle: "Software Governance After an Incident: Navigating Decision Reversal"
-seoMetadescription: "A high-pressure incident decision is reversed. We discuss why clear governance after an incident, supportive leadership, and decision documentation (like ADRs) are crucial to prevent frustration and burnout in software teams."
+seoTitle: "Software Governance After an Incident"
+seoMetadescription: "A decision made under incident pressure gets reversed afterwards. Why governance, supportive leadership and written decisions prevent the frustration."
 featuredImageSquared: "./_assets/governance-after-incident-decision-reversal-featured-squared.png"
 featuredImage: "./_assets/governance-after-incident-decision-reversal-featured.png"
 ---
@@ -20,7 +20,7 @@ Welcome back to our series of conversations on facilitating software architectur
 
 In this conversation, Andrea shared a story that will feel familiar to many. It’s a story about what happens *after* the immediate fire of a production incident is put out, and it raises crucial questions about decision-making, governance, and the human cost of our technical systems.
 
-### The Scenario: A Familiar Story
+#### The Scenario: A Familiar Story
 
 Imagine you’ve just arrived at work. A high-priority incident alert pings. One of your colleagues dives in, investigates, and makes a decisive call to stop a specific client function to stabilise the system. It's a tough decision made under pressure.
 
@@ -30,7 +30,7 @@ Soon after, the original decision is officially reverted. The only thing that ha
 
 This feeling comes from a deeper place—a frustration with systemic issues that are never truly fixed. It’s the exhaustion of constantly applying plasters to broken bones, only to be told the plaster was the wrong colour. This scenario isn't just about a single technical choice; it’s about the entire system of governance around it.
 
-### The First Principle: Document the Journey
+#### The First Principle: Document the Journey
 
 When a decision is overturned, it can feel like the original choice was erased. This is where the discipline of recording decisions becomes critical. As Andrew pointed out, every significant decision should be documented, perhaps as an Architecture Decision Record (ADR).
 
@@ -38,7 +38,7 @@ A decision made during an incident, based on the information available at the ti
 
 If that decision is later revisited, it shouldn’t be a case of editing the old record. Instead, a *new* decision should be made that explicitly supersedes the previous one. This creates a clear, auditable trail. It shows the evolution of understanding and prevents the paralysis that comes from endlessly re-litigating the past. It respects the context of the original decision while allowing the system to move forward.
 
-### The Role of Leadership: Ally or Autocrat?
+#### The Role of Leadership: Ally or Autocrat?
 
 The story highlights a critical junction for anyone in a leadership position. When a team member makes a call, what is your role?
 
@@ -48,7 +48,7 @@ An alternative is to act as an ally. The management team could have instead lent
 
 We recalled a story of a project manager who, instead of dictating a solution, asked the team what they needed. He then used his influence to secure those resources and trusted the experts to do their work. The project was a success because he chose to be on the side of the team, not the side of the hierarchy. That is a choice every leader has to make.
 
-### Making Governance Tangible
+#### Making Governance Tangible
 
 When trust is low, even well-intentioned processes can be weaponised. Documentation can be used to create noise and slow things down. To counter this, we need to make our governance tangible and transparent.
 

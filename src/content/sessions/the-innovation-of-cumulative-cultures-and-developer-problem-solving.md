@@ -9,6 +9,8 @@ level: ["Intermediate"]
 video: "https://youtu.be/wYhX3QxskxQ"
 podcastPlayer: "https://player.captivate.fm/episode/cd58e534-2d19-491f-9834-033a99d4b55c/"
 organiser: "Andrea Magnorsky"
+seoTitle: "Cumulative Culture and Developer Problem-Solving"
+seoMetadescription: "Crows out-perform toddlers at generating novel solutions. What cumulative culture explains about how developers actually solve problems."
 featuredImage: "./_assets/the-innovation-of-cumulative-cultures-and-developer-problem-solving-featured.png"
 ---
 

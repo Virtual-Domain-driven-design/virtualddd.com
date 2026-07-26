@@ -16,6 +16,20 @@ export const TWITTER = '@virtualddd';
 export const abs = (site: URL | undefined, path: string) =>
   new URL(path, site ?? 'https://virtualddd.com').toString();
 
+/** The `<title>` for a piece of content.
+ *
+ * **No brand suffix on detail pages.** Search results truncate around 60
+ * characters and "— Virtual DDD" costs 15 of them; appending it pushed 82 of
+ * 108 sessions, 21 of 24 stories and 75 of 154 heuristics past the cut, so the
+ * end of the actual topic was the part being thrown away. The domain already
+ * appears in the result, so the brand is not lost.
+ *
+ * Indexes and landing pages keep it (`brand: true`): they are short, and there
+ * the brand is doing real work — "Heuristics" alone says nothing.
+ */
+export const pageTitle = (text: string, { brand = false } = {}) =>
+  brand ? `${text} — ${SITE_NAME}` : text;
+
 /** The social card for an image: one 1200px JPEG, used by both the OG tags and
  *  the JSON-LD so they agree and only one derivative is emitted.
  *

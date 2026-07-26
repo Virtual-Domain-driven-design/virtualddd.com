@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/nGdlw7bbaaY"
 podcastPlayer: "https://player.captivate.fm/episode/e456c6c7-31fa-4c8e-9aff-81b1d6e12aea/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Do We Need Software Architects? A Community Debate"
+seoMetadescription: "Do architects have a bad name, and why? An open debate on the ivory tower, architects inside teams versus between them, and what teams are grateful for."
 featuredImage: "./_assets/do-we-need-software-architects-featured.jpg"
 ---
 

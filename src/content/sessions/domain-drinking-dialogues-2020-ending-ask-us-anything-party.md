@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/QSZnrkMMZ6c"
 podcastPlayer: "https://player.captivate.fm/episode/4ee7c4f9-368a-49f7-af97-e9e00199ff3b/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Domain-Drinking Dialogues: Ask Us Anything"
+seoMetadescription: "Our end-of-2020 meetup: bring a drink and ask the community anything about Domain-Driven Design, modelling or the year we all just had."
 featuredImage: "./_assets/domain-drinking-dialogues-2020-ending-ask-us-anything-party-featured.jpeg"
 ---
 

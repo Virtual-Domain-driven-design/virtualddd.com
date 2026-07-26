@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Facilitation", "Participant Feedback", "Constructive Communication", "Team Dynamics"]
 focusKeyphrase: "Approach struggling facilitator"
-metaDescription: "Learn how to constructively approach a struggling facilitator. Offer support, not challenge, by assuming positive intent and providing gentle prompts."
+metaDescription: "When a facilitator is visibly struggling, offer support rather than challenge: assume positive intent and give gentle prompts instead of taking over."
 ---
 
 Assume positive intent and acknowledge that facilitators, like anyone, can be busy or momentarily forget things. Offer support by gently raising concerns or asking clarifying questions, recognising they might be grateful for the assistance.

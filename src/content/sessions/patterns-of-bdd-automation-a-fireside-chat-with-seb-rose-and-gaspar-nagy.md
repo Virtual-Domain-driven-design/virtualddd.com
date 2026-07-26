@@ -11,6 +11,8 @@ video: "https://youtu.be/TP-qyFnN13s"
 podcastPlayer: "https://player.captivate.fm/episode/d2283fab-51bb-40bb-be23-c2cd868011f2/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Patterns of BDD Automation: Seb Rose and Gáspár Nagy"
+seoMetadescription: "Seb Rose and Gáspár Nagy on what happens when two long-running community conversations meet: automation and patterns."
 featuredImage: "./_assets/patterns-of-bdd-automation-a-fireside-chat-with-seb-rose-and-gaspar-nagy-featured.png"
 ---
 

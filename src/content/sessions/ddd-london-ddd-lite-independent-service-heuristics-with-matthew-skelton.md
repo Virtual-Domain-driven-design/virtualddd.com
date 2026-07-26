@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/UQq-Ayml0iI"
 podcastPlayer: "https://player.captivate.fm/episode/1679d2d4-444e-419f-9f8b-6a959ea07d4c/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "DDD-Lite: Independent Service Heuristics, Matthew Skelton"
+seoMetadescription: "Matthew Skelton on Independent Service Heuristics — a lighter way to find effective boundaries between streams of change when full DDD is too involved."
 featuredImage: "./_assets/ddd-london-ddd-lite-independent-service-heuristics-with-matthew-skelton-featured.jpg"
 ---
 

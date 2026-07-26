@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+seoTitle: "EventStorming: When to Enforce the Timeline"
 ---
 
 During the start of an EventStorming we ask everyone in the group to write down their domain events they can think of. Then we ask them to stick these to the brownpaper in an ordered timeline. The timeline is what they have in their mind. Once everyone added their events will we start to structure and enforce the timeline. We want to postpone structuring as much as possible, because we can loose valuable insights. So once someone added their own events we need to wait on the rest. However people can start reading other people their events already and start discussing.

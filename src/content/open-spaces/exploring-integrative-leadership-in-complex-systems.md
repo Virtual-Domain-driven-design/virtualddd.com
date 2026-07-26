@@ -6,6 +6,8 @@ date: 2023-04-21T16:00:00.000+00:00
 tags: ["software design", "software architecture", "decision-making", "leadership", "complexity"]
 video: "https://www.youtube.com/embed/npEMhjMY3ks"
 podcast: "https://oembed.libsyn.com/embed?item_id=27362913"
+seoTitle: "Integrative Leadership in Complex Systems"
+seoMetadescription: "An open space on technical leadership when good decisions depend on collective, cross-functional thinking — and modelling together as a form of it."
 featuredImage: "./_assets/exploring-integrative-leadership-in-complex-systems-featured.jpg"
 ---
 

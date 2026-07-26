@@ -4,6 +4,8 @@ slug: "improving-your-software-design-by-nourishing-diversity"
 status: "Done"
 date: 2023-12-06T18:00:00.000+01:00
 tags: ["software design", "software architecture", "complexity theory", "systems thinking", "observability"]
+seoTitle: "Nourishing Diversity in Software Design"
+seoMetadescription: "An open space on why every perspective in the room changes the model you end up with, and how equality in design conversations improves the software itself."
 featuredImage: "./_assets/improving-your-software-design-by-nourishing-diversity-featured.jpg"
 ---
 

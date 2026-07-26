@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Alberto brandolini"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+seoTitle: "EventStorming: As-Is Modelling for Brown Field"
 ---
 
 When working in a brownfield problem space, harvest current knowledge by exploring with as-is process modelling.

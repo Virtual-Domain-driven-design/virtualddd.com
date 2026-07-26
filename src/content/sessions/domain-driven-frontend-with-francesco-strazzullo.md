@@ -10,6 +10,7 @@ tags: ["frontend", "software architecture", "tactical patterns"]
 video: "https://www.youtube.com/embed/gX_Nx1vqeBQ"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Francesco Strazzullo on applying bounded contexts and DDD thinking to the frontend, which is now as much of the architecture as anything behind it."
 featuredImage: "./_assets/domain-driven-frontend-with-francesco-strazzullo-featured.jpg"
 ---
 

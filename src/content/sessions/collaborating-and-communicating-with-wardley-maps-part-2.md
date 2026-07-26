@@ -10,6 +10,7 @@ tags: ["collaborative modelling", "wardley mapping", "facilitation"]
 video: "https://www.youtube.com/embed/Qu03U8s0kC8"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Part two of Wardley Mapping for DDD practitioners: more approaches to exploring domains, comparing strategic options and designing team topologies."
 featuredImage: "./_assets/collaborating-and-communicating-with-wardley-maps-part-2-featured.jpg"
 ---
 

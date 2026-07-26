@@ -10,6 +10,7 @@ tags: ["DDDDD", "aggregate", "aggregate canvas"]
 video: "https://www.youtube.com/embed/AF880t1RUU4"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Kim Kao on the Aggregate Canvas: a fluent route from strategic modelling to tactical design, for teams stuck between domain concepts and code."
 featuredImage: "./_assets/ddddd-20-aggregate-canvas-by-kim-kao-featured.jpeg"
 ---
 

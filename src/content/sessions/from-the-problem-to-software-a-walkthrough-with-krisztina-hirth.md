@@ -10,6 +10,8 @@ tags: ["continuous improvement", "walktrough", "product development", "teams and
 video: "https://www.youtube.com/embed/zI31Dh-lU8o"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "From Problem to Software: A Walkthrough"
+seoMetadescription: "Krisztina Hirth walks a problem all the way to software, against Alberto Brandolini's warning that it is the developers' assumptions that reach production."
 featuredImage: "./_assets/from-the-problem-to-software-a-walkthrough-with-krisztina-hirth-featured.jpg"
 ---
 

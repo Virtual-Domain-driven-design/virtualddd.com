@@ -10,8 +10,7 @@ youtube: "https://youtu.be/P67pgiGSWfU"
 podcast: "https://player.captivate.fm/episode/c328974e-e58f-4054-87e4-7945ca286668/"
 curatedHeuristics: ["deliver-difficult-conversations", "approach-struggling-facilitator", "guide-unprepared-facilitator", "communicate-critical-workshop-insights", "realign-workshop-goals", "steer-workshop-discussions", "facilitate-conflicting-decisions", "shift-design-focus-business-problems", "workshop-stakeholder-alignment"]
 focusKeyphrase: "Misaligned Expectations"
-seoTitle: "Misaligned Expectations: When Goals Don't Align"
-seoMetadescription: "What happens when the sponsor's goal contradicts the team's just 48 hours before kickoff? Beija Nigl joins us to discuss navigating misaligned expectations in legacy modernization."
+seoMetadescription: "Beija Nigl on what to do when the sponsor's goal contradicts the team's — discovered 48 hours before a legacy modernisation kicks off."
 featuredImageSquared: "./_assets/misaligned-expectations-goals-dont-align-featured-squared.png"
 featuredImage: "./_assets/misaligned-expectations-goals-dont-align-featured.png"
 ---
@@ -20,29 +19,29 @@ We often assume that once we get everyone in a room for a design workshop, the h
 
 That is the challenge Beija Nigl shared with us in this instalment of Stories on Facilitating Software Architecture and Design. This is a story about misaligned expectations, the weight of legacy, and the facilitator’s tightrope walk.
 
-## The Legacy Challenge
+### The Legacy Challenge
 
 Beija was brought in to help a team grappling with a 20-year-old legacy Java 8 system. As support for Java 8 was ending, they had to decide its future. The product owner Beija worked with was clear; the system's processes were broken, dominated and shaped by the technical implementation, and buggy. Many edge cases due to poor (or at least not state-of-the-art) implementation led to unnecessary processes and checks for downstream teams. The product owner saw a clear need to rebuild and rethink the entire thing. This set the stage for a collaborative modelling workshop, likely an EventStorming session, to understand the legacy system and plan its replacement.
 
-## Setting the Stage, Uncovering the Rift
+### Setting the Stage, Uncovering the Rift
 
 For Beija, "setting the stage" sessions with stakeholder groups before the main workshop are an integral part of her workshop preparation. This helps manage expectations and explain the process. She did this with everyone, including the product owner's manager, who was the process owner and sponsor. Beija assumed the product owner and their manager were aligned.
 
 Two days before the workshop, this assumption was shattered. The manager's goal was simple: document all existing edge cases to rebuild "basically the same thing." The product owner and Beija, however, wanted to rethink the entire process, addressing not just business-driven edge cases but also those caused by poor implementation. With no time to fully realign, Beija decided to proceed, using the workshop itself to reveal the true state of affairs to the manager.
 
-## The Workshop: Documentation Over Design
+### The Workshop: Documentation Over Design
 
 The workshop began with the manager's introduction, which, predictably, framed the session as a documentation exercise. This set the tone for the entire two days. Participants, mostly business people, dove deep into the technical minutiae of the existing system: "status 800 is this, status 300 is that," and the critical role of "nightly runs" in changing statuses.
 
 The session became an exhausting effort to map the "as-is" system, focusing on intricate technical states rather than business outcomes or potential improvements. It was a struggle to shift the conversation towards "what do we actually want to achieve?" The energy was spent documenting, not designing.
 
-## The Unexpected Outcome
+### The Unexpected Outcome
 
 While the workshop didn't achieve the "rethink" goal, nor did it serve as an effective documentation meeting (Event Storming isn't designed for that), it wasn't a total failure. It laid a crucial foundation by making the sheer complexity and technical debt of the current system visible. It clearly showed which parts of that complexity stemmed from business logic versus those driven solely by the existing implementation.
 
 The key takeaway for Beija was the critical importance of aligning all powerful stakeholders on the workshop’s explicit intention and goal *before* it begins. Relying on assumptions, especially with those in positions of authority, can derail the best-laid plans. 
 
-## Unpacking the Dynamics
+### Unpacking the Dynamics
 
 - **Goal Misalignment:** The fundamental conflict stemmed from the sponsor's desire to document the existing system versus the team's and facilitator's aim to rethink and redesign it. This was the main cause of the workshop's struggle.
 
@@ -58,7 +57,7 @@ The key takeaway for Beija was the critical importance of aligning all powerful 
 
 - **Preparation as Alignment:** The story underscores that "preparation" for a workshop isn't just about logistics and agenda; it's fundamentally about ensuring a shared understanding of purpose and desired outcomes among all key players.
 
-## The Como Prep Canvas Origin Story
+### The Como Prep Canvas Origin Story
 
 This workshop became the catalyst for Beija creating the [Como Prep Canvas](https://github.com/ddd-crew/como-prep-canvas)—a structured way to surface these alignment issues before they derail a session. The problem wasn't that Beija missed something subtle. It was that the standard prep approach doesn't force explicit conversations about conflicting goals at the top.
 

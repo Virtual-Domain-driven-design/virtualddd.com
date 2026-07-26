@@ -9,7 +9,7 @@ submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "conflict-resolution", "one-on-one", "behavioral-patterns"]
 specializes: ["understand-the-cause-of-resistance"]
 focusKeyphrase: "addressing disruptive behavior"
-metaDescription: "When someone's behavior disrupts a session, address it one-on-one by sharing observations and asking questions."
+metaDescription: "When someone's behaviour disrupts a session, address it one-on-one by sharing observations and asking questions."
 ---
 
 When you observe destructive behavior from a participant, address it in a private one-on-one conversation rather than calling it out publicly. Share your observations about what happened and what impact you noticed, then ask questions to understand where the behavior comes from. Avoid accusations or judgments. The goal is to understand what benefit that behavior provides to them, because all behavior serves some purpose for the person doing it.

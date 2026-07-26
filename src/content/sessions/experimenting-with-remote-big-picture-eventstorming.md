@@ -9,6 +9,7 @@ level: ["Advanced"]
 tags: ["eventstorming", "remote work"]
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Big Picture EventStorming, run remotely: finding emergent bounded contexts, building a shared view of the problem space and locating the next constraint."
 featuredImage: "./_assets/experimenting-with-remote-big-picture-eventstorming-featured.png"
 ---
 

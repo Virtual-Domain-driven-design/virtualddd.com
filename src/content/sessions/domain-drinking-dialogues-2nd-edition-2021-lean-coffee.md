@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/OO3egnXnpMw"
 podcastPlayer: "https://player.captivate.fm/episode/5572b14f-596e-4a09-a643-aa082d880712/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Closing 2021 with a lean coffee: the community sets the agenda and we work through whatever the room brings, drink in hand."
 featuredImage: "./_assets/domain-drinking-dialogues-2nd-edition-2021-lean-coffee-featured.jpeg"
 ---
 

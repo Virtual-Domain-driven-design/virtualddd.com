@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Example Mapping", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design"]
+seoTitle: "EventStorming: Switch to Example Mapping for Rules"
 ---
 
 During Process or Design level EventStorming we can get stuck in talking about invisible things for business constraint/rule like the purple or yellow sticky. It happens that we get into the use cases or examples discussion, it is here were we switch to Example Mapping.

@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming"]
+seoTitle: "Remote EventStorming: Switch Driver Every 5 Minutes"
 ---
 
 ### How do we keep the interaction going in a remote EventStorming?

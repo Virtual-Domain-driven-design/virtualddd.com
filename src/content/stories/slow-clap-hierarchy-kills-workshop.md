@@ -11,7 +11,7 @@ podcast: "https://player.captivate.fm/episode/2ffa26c7-e26d-47f2-9b07-19a7c61c43
 curatedHeuristics: ["notice-working-too-hard-facilitator", "make-explicit-feelings-group-stuck", "step-back-observe-losing-control", "start-small-leadership-resists", "address-destructive-behavior-privately", "watch-approval-seeking-safety-signal", "check-problem-hinders-you-or-group"]
 focusKeyphrase: "hierarchy kills workshop facilitation"
 seoTitle: "When Hierarchy Kills the Workshop: Facilitating Under Fire"
-seoMetadescription: "What happens when a CTO slow claps during a vulnerable moment in your workshop? Evelyn van Kelle shares how hierarchy kills collaboration and what facilitators can do about it."
+seoMetadescription: "Evelyn van Kelle on a CTO slow-clapping through a vulnerable moment, how hierarchy kills collaboration, and what a facilitator can do about it."
 featuredImageSquared: "./_assets/slow-clap-hierarchy-kills-workshop-featured-squared.png"
 featuredImage: "./_assets/slow-clap-hierarchy-kills-workshop-featured.png"
 ---
@@ -20,7 +20,7 @@ We often assume that once we get the session scheduled, the hard part is over. J
 
 That's the challenge Evelyn van Kelle shared with us in this installment of Stories on Facilitating Software Architecture and Design. It's a story about trying to facilitate collaborative modeling when hierarchy doesn't just influence the conversation - it actively suffocates it.
 
-## Already Fighting Uphill
+### Already Fighting Uphill
 
 Evelyn was a few weeks into working with a company going through major changes. Uncertainty was everywhere. Decisions weren't being made or repeatedly postponed. Fingers were being pointed. The hierarchy was so present in daily operations that in most meetings, only the people high up in rank were speaking while everyone else watched and waited to be told what to do.
 
@@ -30,7 +30,7 @@ The session reflected that anxiety. Conversations stayed high-level. There were 
 
 Most tellingly, people kept asking for approval to even move a sticky note. They'd look to specific people in the room before taking any action, people who happened to be high up in the organizational hierarchy.
 
-## Working Too Hard
+### Working Too Hard
 
 Evelyn and her co-facilitator found themselves working harder than usual to get anything moving. Another heuristic: when you're working this hard as a facilitator, something's going on that needs attention.
 
@@ -40,7 +40,7 @@ They tried intervening with sense-making exercises, attempting to make some of t
 
 That's when she applied one of her own heuristics: when you don't feel in control, stand back literally. Just observe. Watch the behavioral patterns.
 
-## The CTO's Rounds
+### The CTO's Rounds
 
 There was one more ingredient in this situation: the CTO. Part of the leadership group that wasn't sold on this "wasted day." He had more important work to do, so he wouldn't be participating.
 
@@ -48,7 +48,7 @@ What he did instead was walk in every now and then. Just to check how things wer
 
 Evelyn noticed her own physical reaction every time: shoulders tensing, breath catching in her throat, starting to sweat. But it wasn't just her. The whole group would stop. People stopped writing on stickies, stopped sharing opinions, stopped doing anything. The entire session would freeze until he left.
 
-## The Slow Clap
+### The Slow Clap
 
 Then came what Evelyn calls the grand finale.
 
@@ -66,7 +66,7 @@ Her co-facilitator did the same, sharing their vulnerability and that unsafe fee
 
 The group chose to continue. They did a sense-making exercise for anyone who wanted to share something about what had just happened. Some people did. In hindsight, Evelyn thinks it was the right move, but the impact of that behavior on the group was intense.
 
-## Unpacking the Dynamics
+### Unpacking the Dynamics
 
 - **Physical reactions are data**: Evelyn learned that when she gets an intense physical reaction, it's a signal that something important is happening; a moment where she can and should act. This became a heuristic for her.
 
@@ -80,13 +80,13 @@ The group chose to continue. They did a sense-making exercise for anyone who wan
 
 - **Understanding behavior doesn't mean excusing it**: After the session, Evelyn had a one-on-one conversation with the CTO. Her goal wasn't to tell him he was wrong, but to understand where the behavior came from. She learned that his behavior earned him compliments from others in his peer group. For him, at that moment, maintaining that identity was more important than the group's progress.
 
-## The Session That Shouldn't Have Happened
+### The Session That Shouldn't Have Happened
 
 Looking back, Evelyn says she wouldn't run that session the same way. Making it a big official event for leadership turned it into something that had to be justified and defended. A better approach might have been to weave collaborative modeling into regular work, experimenting with it in smaller doses without the spotlight.
 
 But she doesn't regret the experience. It cost her a few sleepless nights, but she learned something that's stuck with her: every facilitator will face behavior that triggers them, that they don't like, that hinders the group. The question isn't whether it will happen. The question is what you do when it does.
 
-## Further Reading
+### Further Reading
 
 **Facilitating Software Design and Architectur**: *Evelyn van Kelle, Gien Verschatse, Kenny Baas-Schwegler - Collaborative Software Design: Facilitating Domain modeling decision* – Practical guidance directly from the facilitators behind this series on handling behavioral challenges in architectural workshops.
 

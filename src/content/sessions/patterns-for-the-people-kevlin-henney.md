@@ -10,6 +10,7 @@ tags: ["patterns"]
 video: "https://www.ustream.tv/embed/recorded/120901497"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Kevlin Henney on patterns as a way of improving habits and conversations, rather than the catalogue of solutions most people remember them as."
 featuredImage: "./_assets/patterns-for-the-people-kevlin-henney-featured.jpeg"
 ---
 

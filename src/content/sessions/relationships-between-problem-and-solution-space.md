@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/xmkjODmaa8k"
 podcastPlayer: "https://player.captivate.fm/episode/95294e03-bd80-486a-93fe-5315ca57b774/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Problem space and solution space is one of the more confusing ideas in DDD, and the subject of a long debate in the community. An attempt to settle it."
 featuredImage: "./_assets/relationships-between-problem-and-solution-space-featured.jpeg"
 ---
 

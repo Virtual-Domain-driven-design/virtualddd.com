@@ -10,6 +10,7 @@ tags: ["legacy", "refactoring", "anemic domain model", "java"]
 video: "https://www.youtube.com/embed/Ut3H8oh892A"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Dr Carola Lilienthal refactors a legacy example live, using DDD to work through large entities and the other monstrosities legacy code is made of."
 featuredImage: "./_assets/live-coding-legacy-live-coding-with-dr-carola-lilienthal-featured.jpeg"
 ---
 

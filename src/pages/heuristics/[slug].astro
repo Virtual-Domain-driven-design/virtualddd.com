@@ -8,6 +8,8 @@ import HeuristicDetail from '../../components/HeuristicDetail.astro';
 import HeuristicTypePage from '../../components/HeuristicTypePage.astro';
 import { getCollection } from 'astro:content';
 import { HEURISTIC_TYPES } from '../../lib/heuristics';
+import { pageTitle } from '../../lib/seo';
+import { excerpt } from '../../lib/excerpt';
 
 export async function getStaticPaths() {
   const all = (await getCollection('heuristics')).sort((a, b) => a.data.title.localeCompare(b.data.title));
@@ -24,12 +26,24 @@ export async function getStaticPaths() {
 }
 
 const props = Astro.props;
+// The type indexes keep the brand; a single heuristic does not (see pageTitle).
 const title =
-  props.kind === 'type' ? `${props.type.title} — Virtual DDD` : `${props.heuristic.data.title} — Virtual DDD`;
+  props.kind === 'type'
+    ? pageTitle(props.type.title, { brand: true })
+    : pageTitle(props.heuristic.data.seoTitle ?? props.heuristic.data.title);
+// `metaDescription` is the editorial one from Notion and was being ignored here,
+// so 35 hand-written descriptions never reached a page. The question is the
+// fallback: it is a question, not a description, and often under 70 characters.
 const description =
   props.kind === 'type'
     ? props.type.text
-    : props.heuristic.data.question ?? props.heuristic.data.title;
+    // The body's opening sentence *is* the heuristic, so it makes a far better
+    // snippet than the question — which is a question, and was under 70
+    // characters on 56 of these pages. The question stays as the last resort.
+    : props.heuristic.data.metaDescription
+      ?? excerpt(props.heuristic.body ?? '', props.heuristic.data.question ?? '', 165)
+      ?? props.heuristic.data.question
+      ?? props.heuristic.data.title;
 ---
 
 <BaseLayout title={title} description={description}>

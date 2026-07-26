@@ -10,6 +10,8 @@ tags: ["visual collaboration", "complexity thinking", "bounded contexts", "distr
 video: "https://www.youtube.com/embed/oj4zGj6sPDc"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Modelling Bounded Context Collaboration: Hands-On"
+seoMetadescription: "A hands-on session on the interaction between components — the major source of global complexity, and the balance Vlad Khononov describes."
 featuredImage: "./_assets/hands-on-exploring-techniques-for-modelling-bounded-context-collaboration-featured.png"
 ---
 

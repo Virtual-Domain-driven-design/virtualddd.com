@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/HvT8wNE1C2U"
 podcastPlayer: "https://player.captivate.fm/episode/f3ee6067-b442-480c-b296-74bcd2dcdb2b/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Behaviour-Driven Development was Dan North's answer to teaching developers how to think about testing. What it gives back to modelling."
 featuredImage: "./_assets/how-to-improve-modelling-with-behaviour-driven-development-featured.jpeg"
 ---
 

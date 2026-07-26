@@ -10,6 +10,7 @@ tags: ["systems thinking"]
 video: "https://youtu.be/rG2Z_j_Zhzg"
 podcastPlayer: "https://player.captivate.fm/episode/ca093a49-ce86-4892-81d0-27231c302f48/"
 organiser: "Kenny Baas-Schwegler"
+seoMetadescription: "Lorraine Steyn introduces systems thinking: a system always produces what it was designed to produce, even when that is not remotely what anyone meant."
 featuredImage: "./_assets/systems-thinking-intro-with-lorraine-steyn-featured.jpg"
 ---
 

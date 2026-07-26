@@ -10,6 +10,7 @@ tags: ["DDDDD", "live coding", "haskell", "event sroucing", "projections"]
 video: "https://www.youtube.com/embed/FtxPdXp_FTA"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Live coding event-sourced projections with higher-order functions, algebraic data types and pattern matching — and dogged determination."
 featuredImage: "./_assets/ddddd-20-live-coding-expressive-projections-featured.jpeg"
 ---
 

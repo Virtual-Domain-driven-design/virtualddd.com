@@ -6,12 +6,13 @@ date: 2024-11-21T06:00:00.000+00:00
 tags: ["domain-driven-design"]
 meetup: "https://www.meetup.com/virtual-domain-driven-design-meetup/events/303878436/"
 tickets: "https://opencollective.com/virtualddd/events/global-domain-driven-day-2024-6c9f9811"
+seoMetadescription: "A worldwide Domain-Driven Design event: local meetups across time zones plus a continuous 16-hour online open space, hosted by the Virtual DDD community."
 featuredImage: "./_assets/global-domain-driven-days-2024-featured.jpg"
 ---
 
 The Global Domain-Driven Design (DDD) Day is a world wide event aimed at promoting the principles and practices of Domain-Driven Design. Organized by the Virtual Domain-Driven Design community, this event combines local meetups with a continuous 16-hour online open space. Local organizers are invited to host their own events, which will be featured on our website, allowing participants to choose between attending local meetups, joining the online open space, or even both.
 
-### Key Details
+#### Key Details
 
 **Date:** 21st November
 
@@ -43,7 +44,7 @@ Local communities who are joining:
 
 - [DDD LATAM, Santiago Chili](https://www.meetup.com/ddd-latam/events/302642318/?utm_medium=referral&utm_campaign=share-btn_savedevents_share_modal&utm_source=link) - [https://www.meetup.com/ddd-latam/events/302642318/?utm_medium=referral&utm_campaign=share-btn_savedevents_share_modal&utm_source=link](https://www.meetup.com/ddd-latam/events/302642318/?utm_medium=referral&utm_campaign=share-btn_savedevents_share_modal&utm_source=link)
 
-## Agenda - Round 1
+### Agenda - Round 1
 
 | Time (UTC) |  |
 | --- | --- |
@@ -54,7 +55,7 @@ Local communities who are joining:
 | 9:45 - 10:35 | Round 3 |
 | 10:45 - 11:30  | Round 4 |
 
-## Agenda - Round 2
+### Agenda - Round 2
 
 | Time (UTC) |  |
 | --- | --- |
@@ -65,7 +66,7 @@ Local communities who are joining:
 | 15:45 - 16:35 | Round 3 |
 | 16:45 - 17:30  | Round 4 |
 
-## Agenda - Round 3
+### Agenda - Round 3
 
 | Time (UTC) |  |
 | --- | --- |
@@ -76,7 +77,7 @@ Local communities who are joining:
 | 21:45 - 22:35 | Round 3 |
 | 22:45 - 23:30  | Round 4 |
 
-## Agenda Local communities streaming to Gather Town
+### Agenda Local communities streaming to Gather Town
 
 | Time (UTC) |  |
 | --- | --- |
@@ -87,11 +88,11 @@ Local communities who are joining:
 | 18:00 - 18:45 | DDD Hungary - talk II. - **Process mining** with ABBYY Timeline - Tamás Máhr |
 | 10:00 - 11:00 | DDD Latam |
 
-### The Online Open Space
+#### The Online Open Space
 
 The online open space will be held on Gather Town as we did with our previous open spaces, a virtual meeting platform that facilitates interactive and engaging sessions. This open space will reset every ~5 hours and begin with a featured talk, allowing participants from various time zones to join at convenient times. The online space provides a continuous learning environment where participants can engage in discussions, attend sessions, and collaborate on DDD-related topics.
 
-## Participation Options for Local Organizers
+### Participation Options for Local Organizers
 
 1. **Host a Local Meetup:**
   - Organize your meetup as you usually do, whether it's a talk, workshop, hands-on modelling session, or an open-space evening.

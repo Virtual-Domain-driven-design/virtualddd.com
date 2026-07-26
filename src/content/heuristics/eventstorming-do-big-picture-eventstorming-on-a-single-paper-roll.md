@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Sociotechnical Systems"]
+seoTitle: "EventStorming: Use a Single Paper Roll"
 ---
 
 For a Big Picture EventStorming let all the participants share their domain events on a single paper roll.

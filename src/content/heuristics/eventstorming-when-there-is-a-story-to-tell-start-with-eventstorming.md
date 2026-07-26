@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design"]
+seoTitle: "EventStorming: Start Here When There's a Story"
 ---
 
 When there is a story to tell, for instance a business process or a customer journey or even doing a planning session, then start your visual collaboration with EventStorming.

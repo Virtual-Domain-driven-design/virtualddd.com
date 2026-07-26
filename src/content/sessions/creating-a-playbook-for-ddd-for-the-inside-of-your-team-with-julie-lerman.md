@@ -10,6 +10,8 @@ tags: ["inside-out", "socio-technical", "essential"]
 video: "https://www.youtube.com/embed/GVa5vI19kZo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Creating a DDD Playbook for Your Team, with Julie Lerman"
+seoMetadescription: "Julie Lerman on introducing DDD when you are still learning it yourself — extending the Starter Modelling Process into a playbook for a team."
 featuredImage: "./_assets/creating-a-playbook-for-ddd-for-the-inside-of-your-team-with-julie-lerman-featured.jpeg"
 ---
 

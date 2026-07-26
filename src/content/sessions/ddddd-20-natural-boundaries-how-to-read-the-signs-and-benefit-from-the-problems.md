@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/yMRuP3tcugQ"
 podcastPlayer: "https://player.captivate.fm/episode/920dcf8e-b26d-4cba-a493-2b7744a91138/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Natural Boundaries: Reading the Signs in Your Organisation"
+seoMetadescription: "Finding the right context boundaries is hard; implementing them without changing the organisation is harder. How to read the signs the organisation gives you."
 featuredImage: "./_assets/ddddd-20-natural-boundaries-how-to-read-the-signs-and-benefit-from-the-problems-featured.jpeg"
 ---
 

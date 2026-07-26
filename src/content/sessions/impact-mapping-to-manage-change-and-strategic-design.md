@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/7u-EtXVKR5g"
 podcastPlayer: "https://player.captivate.fm/episode/f53a0542-4fa9-45ef-8487-3c5f57eb5b41/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "João Rosa and Krisztina Hirth on using impact mapping to find routes to a measurable goal before you know what the solution is."
 featuredImage: "./_assets/impact-mapping-to-manage-change-and-strategic-design-featured.png"
 ---
 

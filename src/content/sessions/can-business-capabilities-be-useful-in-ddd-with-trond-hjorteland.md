@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/WSAHL7oHGUw"
 podcastPlayer: "https://player.captivate.fm/episode/e539d317-60af-4158-8c3e-4c2a1855e6ce/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Are Business Capabilities Useful in DDD? Trond Hjorteland"
+seoMetadescription: "Trond Hjorteland on whether business capabilities earn their place in DDD, and what a community of mostly hands-on technologists tends to miss."
 featuredImage: "./_assets/can-business-capabilities-be-useful-in-ddd-with-trond-hjorteland-featured.jpeg"
 ---
 

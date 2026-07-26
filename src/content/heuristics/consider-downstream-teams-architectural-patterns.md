@@ -13,6 +13,7 @@ enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["notice-working-too-hard-facilitator"]
 focusKeyphrase: "downstream team impact"
 metaDescription: "Think through how architectural changes will affect QA, operations, and other teams before implementation."
+seoTitle: "Consider Downstream Teams When Choosing Patterns"
 ---
 
 When choosing an architectural approach, explicitly think through what it means for the teams that deploy, test, and support your software—not just what it means for developers. Introducing patterns like message queues or event sourcing changes how QA needs to test and how operations needs to deploy. If these teams don't understand the new patterns and you haven't thought through their experience, your architectural improvement becomes everyone else's problem.

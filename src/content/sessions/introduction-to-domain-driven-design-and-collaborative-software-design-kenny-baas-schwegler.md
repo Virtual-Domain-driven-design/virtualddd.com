@@ -9,6 +9,8 @@ level: ["Beginner"]
 tags: ["eventstorming"]
 video: "https://youtu.be/j5OtL-MhwNw"
 organiser: "Andrea Magnorsky"
+seoTitle: "Introduction to DDD and Collaborative Software Design"
+seoMetadescription: "Kenny Baas-Schwegler introduces Domain-Driven Design and collaborative software design: meeting user and business needs with an architecture that stays adaptable."
 featuredImage: "./_assets/introduction-to-domain-driven-design-and-collaborative-software-design-kenny-baas-schwegler-featured.png"
 ---
 

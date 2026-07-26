@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/hi_DlT_dNg4"
 podcastPlayer: "https://player.captivate.fm/episode/3795e781-a972-45c8-9a7f-dc8741e16be8/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Remote Facilitation: Making Distributed Meetings Work"
+seoMetadescription: "Kirsten Clacey, Jay-Allen Morris and Jo Perold on making remote collaboration effective and genuinely enjoyable rather than merely survivable."
 featuredImage: "./_assets/remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold-featured.jpeg"
 ---
 

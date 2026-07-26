@@ -91,10 +91,27 @@ Phase 6, not a collection.
   change it without a redirect plan.
 - When adding SEO fields to Sessions/Open Spaces, **reuse the Stories naming**
   (`slug`, `SEO Title`, `SEO Metadescription`) — do not invent a third
-  convention. Structured data (JSON-LD) is **generated** from existing
-  properties, never hand-authored in Notion.
+  convention. Heuristics keeps its own older names (`Slug`,
+  `Meta Description`) plus a matching `SEO Title`.
+- Structured data (JSON-LD) is **generated** from existing properties, never
+  hand-authored in Notion.
 - Relations: model as Astro `reference()` and let the build fail on a dangling
   link rather than dropping it silently.
+
+**House style for titles and descriptions.** Detail pages carry no brand suffix
+(see `pageTitle` in `src/lib/seo.ts`), so the budget is ~60 characters for the
+title and 150–160 for the description — search results truncate around there,
+and the suffix was costing 15 characters of actual topic on every page.
+
+Write an `SEO Title` only where the natural title runs long or is opaque; a
+field that duplicates its own fallback is a second copy to maintain.
+Descriptions are en-GB, lead with the concrete situation or the person, and
+never open with "Learn how to…" — that was the Yoast voice, and it does not
+sound like this community.
+
+A blank field is a legitimate choice, because the fallbacks are good: a session
+falls back to a sentence-trimmed excerpt of its abstract, and a heuristic to the
+opening sentence of its body, which *is* the heuristic.
 
 ## Brand
 
@@ -229,6 +246,11 @@ since `ddd-crew.github.io` already publishes these.
   `--strict` tolerates it.
 - `npm run redirects` — regenerate `public/.htaccess` from the committed
   inventories in `data/`. Re-run after adding or renaming content.
+- `npm run seo` — push `data/seo-copy.csv` into Notion (`--write` to apply;
+  dry run otherwise). The SEO titles and descriptions live in Notion like
+  everything else, but ~290 of them were authored at once, and a CSV is
+  reviewable in a way that editing 290 Notion rows is not. Re-running is safe:
+  it only writes a field whose value actually differs.
 - `npm run check:urls` — assert that every one of the 967 indexed WordPress
   URLs is served, redirected to a page that exists, or Gone. Run after
   `npm run build`; it fails the build rather than letting a URL 404.

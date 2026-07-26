@@ -9,6 +9,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 video: "https://youtu.be/67ufd370cFY"
 podcastPlayer: "https://player.captivate.fm/episode/186bdf82-2597-4822-9d12-f7495a5e7b6d/"
 organiser: "Andrea Magnorsky"
+seoMetadescription: "Hazel Weakly on what separates a good abstraction from a bad one, and why some take hold across an organisation while others quietly die."
 featuredImage: "./_assets/abstractions-as-bridges-with-hazel-weakly-featured.jpg"
 ---
 

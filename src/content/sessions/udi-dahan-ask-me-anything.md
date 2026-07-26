@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/c07zWlLBvVg"
 podcastPlayer: "https://player.captivate.fm/episode/e15ddbfa-4038-4182-b163-0a43a8bfdee7/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Udi Dahan: Ask Me Anything on DDD and Architecture"
+seoMetadescription: "A fireside chat with Udi Dahan taking questions on Domain-Driven Design, SOA, event-driven architecture, CQRS and large-scale distributed systems."
 featuredImage: "./_assets/udi-dahan-ask-me-anything-featured.jpeg"
 ---
 

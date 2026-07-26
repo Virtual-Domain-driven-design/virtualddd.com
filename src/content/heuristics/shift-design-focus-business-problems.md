@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Design Thinking", "Facilitation", "Business Problems", "Technical Constraints", "Product Strategy"]
 focusKeyphrase: "Focus business problems"
-metaDescription: "Learn how to effectively shift design discussions from technical constraints and legacy systems to core business problems, fostering a solution-agnostic approach."
+metaDescription: "When design talk collapses into technical constraints and legacy systems, steer it back to the business problem before any solution is on the table."
 ---
 
 Deliberately remove the legacy system from the immediate scope of discussion. Redirect the conversation to the underlying business problems the system is meant to solve, fostering a solution-agnostic perspective.

@@ -10,6 +10,7 @@ tags: ["DDDDD", "bounded context", "eventstorming", "mob programming"]
 video: "https://www.youtube.com/embed/Dg478xHcDrY"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "A mob firedrill: how far can a room get building a web bounded context from scratch, and what does the attempt teach about working together?"
 featuredImage: "./_assets/ddddd-20-build-a-bounded-context-mob-firedrill-featured.jpeg"
 ---
 

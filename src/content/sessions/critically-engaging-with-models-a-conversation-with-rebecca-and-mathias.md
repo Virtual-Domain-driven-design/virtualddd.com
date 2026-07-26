@@ -14,6 +14,8 @@ humantix: "https://events.humanitix.com/critically-engaging-with-models-a-conver
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Krisztina Hirth", "Kenny Baas-Schwegler"]
 curatedHeuristics: ["study-models-extract-building-blocks-values"]
+seoTitle: "Critically Engaging With Models: Rebecca Wirfs-Brock"
+seoMetadescription: "Rebecca Wirfs-Brock presents her essay Critically Engaging With Models, followed by a group discussion on how we choose and question the models we use."
 featuredImage: "./_assets/critically-engaging-with-models-a-conversation-with-rebecca-and-mathias-featured.png"
 ---
 

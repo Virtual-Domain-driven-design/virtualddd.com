@@ -10,6 +10,7 @@ tags: ["remote work", "eventstorming", "design heuristics"]
 video: "https://www.youtube.com/embed/CbPEibNUe0s"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "EventStorming taken online: the DDD community's go-to tool for collaborating across silo boundaries, and what changes when the wall is virtual."
 featuredImage: "./_assets/trying-out-online-eventstorming-featured.jpeg"
 ---
 

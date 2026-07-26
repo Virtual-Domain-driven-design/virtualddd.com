@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/uJ0f8fLU2Vw"
 podcastPlayer: "https://player.captivate.fm/episode/5e578f21-318d-46d5-ad24-a395c4ea79a2/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Bytesize Architecture Sessions with Andrea Magnorsky"
+seoMetadescription: "Andrea Magnorsky on Bytesize Architecture Sessions: a short, repeatable format for teams with inconsistent views of their own systems."
 featuredImage: "./_assets/sharing-your-systems-knowledge-with-bytesize-architecture-sessions-with-andrea-magnorsky-featured.jpg"
 ---
 

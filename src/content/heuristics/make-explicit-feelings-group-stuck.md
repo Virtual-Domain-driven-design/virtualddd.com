@@ -8,7 +8,7 @@ authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Versc
 submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "psychological-safety", "sense-making", "vulnerability"]
 focusKeyphrase: "making feelings explicit"
-metaDescription: "When a group is stuck, share your own feelings first and invite others to share if they recognize similar reactions."
+metaDescription: "When a group is stuck, share your own feelings first and invite others to share if they recognise similar reactions."
 ---
 
 When you observe that a group has become stuck or frozen and you're experiencing strong emotions yourself, share what you're feeling and ask if others recognize it. This creates permission for the group to acknowledge what's actually happening rather than pretending everything is fine. The key is to share your feelings without imposing your judgment about what caused them.

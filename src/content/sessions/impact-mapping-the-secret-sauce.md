@@ -9,6 +9,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["hands-on", "software modeling", "diagramming", "software architecture"]
 video: "https://youtu.be/XG985T2mMMQ"
 organiser: "Andrea Magnorsky"
+seoMetadescription: "Impact mapping: a lightweight collaborative planning technique built on user interaction design and outcome-driven planning."
 featuredImage: "./_assets/impact-mapping-the-secret-sauce-featured.png"
 ---
 

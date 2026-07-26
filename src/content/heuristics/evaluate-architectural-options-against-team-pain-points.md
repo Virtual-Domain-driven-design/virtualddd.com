@@ -12,6 +12,7 @@ enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["surface-value-preferences-before-technical-solutions"]
 focusKeyphrase: "Architectural Pain Points"
 metaDescription: "Uncover hidden values behind architectural preferences to evaluate options against real team pain points and foster productive discussions."
+seoTitle: "Evaluate Options Against Real Team Pain Points"
 ---
 
 When someone pushes hard for a particular architectural approach, they're often expressing underlying values or fears rather than purely technical reasoning. By explicitly identifying these value-based heuristics—the principles actually driving their preference—you can have productive conversations about trade-offs without getting stuck in personality dynamics.

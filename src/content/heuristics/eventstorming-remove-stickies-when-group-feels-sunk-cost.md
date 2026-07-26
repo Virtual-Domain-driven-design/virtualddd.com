@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "Cognitive Bias", "Collaborative Software Design"]
+seoTitle: "EventStorming: Remove Your Own Stickies First"
 ---
 
 A popular phrase in EventStorming is: You can see by the amount of stickies removed and crumbled on the grond how effective the EventStorming is. However sometimes a group is not removing stickies themselve. As a facilitator you want to lead by example and start removing stickies that can be removed.

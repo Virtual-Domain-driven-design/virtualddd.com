@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Elena Stojmilova"
 tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-Making", "ADR", "Sociotechnical Systems"]
+seoTitle: "Formalise Architectural Advice Forums"
 ---
 
 Establish a formal, recurring forum where teams present their architectural decisions to the wider group. This practice moves knowledge sharing from informal conversations to a structured process. It fosters reuse, consistency, and collective learning across the organization.

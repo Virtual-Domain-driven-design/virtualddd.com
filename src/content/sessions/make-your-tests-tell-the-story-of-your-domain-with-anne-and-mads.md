@@ -11,6 +11,8 @@ video: "https://www.youtube.com/embed/7_KZ8_R4oOU"
 podcastPlayer: "https://player.captivate.fm/episode/6cd8bd2e-2c42-4166-ad54-502c53cf81dd/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoTitle: "Make Your Tests Tell the Story of Your Domain"
+seoMetadescription: "Anne Landro and Mads Opheim on writing tests that carry the nuance perfect naming cannot — so the domain is still readable months later."
 featuredImage: "./_assets/make-your-tests-tell-the-story-of-your-domain-with-anne-and-mads-featured.jpeg"
 ---
 

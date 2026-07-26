@@ -12,7 +12,7 @@ enables: ["notice-anxiety-signal-missing-something"]
 prerequisites: ["notice-anxiety-signal-missing-something"]
 specializes: ["design-bounded-contexts-around-eventstorming-policies", "eventstorming-introduce-new-colours-iteratively"]
 focusKeyphrase: "abandon methodology barriers"
-metaDescription: "Recognize when formal techniques intimidate participants and shift to freeform collaboration that meets people where they are."
+metaDescription: "Recognise when formal techniques intimidate participants and shift to freeform collaboration that meets people where they are."
 ---
 
 When the methodology itself becomes intimidating or creates a power dynamic, abandon it. If event storming, domain storytelling, or any formal technique puts you on a pedestal while participants struggle, switch to whiteboards, boxes, and arrows—whatever helps people contribute. The goal is collaboration, not perfect execution of a named practice.

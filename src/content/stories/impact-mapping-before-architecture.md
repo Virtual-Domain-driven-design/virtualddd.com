@@ -8,7 +8,6 @@ authors: ["Kim Kao", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["Facilitating Software Architecture and Design", "Domain-Driven Design", "Legacy Modernization", "Stakeholder Alignment", "Collaborative Modeling", "Impact Mapping"]
 youtube: "https://youtu.be/td_vdQgeVwY"
 podcast: "https://player.captivate.fm/episode/abc53c50-27c3-420f-a470-be1238b3e88a/"
-curatedHeuristics: ["find-entry-point-that-unlocks-whole-process", "start-impact-mapping-before-technical-solutions", "invite-clients-into-practitioner-community-early"]
 focusKeyphrase: "impact mapping"
 seoTitle: "Impact Mapping Before Architecture: Solve the Right Problem"
 seoMetadescription: "When a vendor said Kubernetes would fix everything, Kim Kao used impact mapping to uncover the real problem first. Learn to solve the right problem."
@@ -20,7 +19,7 @@ We've all been in that meeting. Someone senior has already decided on a solution
 
 Kim Kao, a solutions architect manager at AWS based in Taiwan, shared exactly this kind of situation in Episode 21 of Stories on Facilitating Software Design and Architecture. A retail client came to him having already been told by another vendor that Kubernetes was the fix for their operational problems. What followed is a useful lesson in why slowing down to understand a problem is often faster than rushing to solve it.
 
-## The Answer Was Already in the Room
+### The Answer Was Already in the Room
 
 The general manager was direct: the business had been hit hard, competitors were circling, and someone needed to do something. A vendor had already provided the answer — containerise everything, deploy Kubernetes, and the operational problems would go away.
 
@@ -28,7 +27,7 @@ Kim's reaction was measured. "I told them, if you found this is the only way to 
 
 The problem wasn't the infrastructure. The problem was that nobody had a clear picture of what they were actually dealing with.
 
-## A System Nobody Fully Understood
+### A System Nobody Fully Understood
 
 When Kim started asking questions about the existing system, a familiar picture emerged. The core platform had been built over twenty years. Most of the current team had no idea how it was constructed, who had made which decisions, or why certain things worked the way they did. "Nobody knows what the content is," as Kim put it.
 
@@ -36,7 +35,7 @@ This isn't unusual. It's one of the more common situations in software — a sys
 
 Kim didn't try to reverse-engineer the whole system. Instead, he suggested they step back further and look at what the business was actually trying to achieve.
 
-## Impact Mapping Before Architecture
+### Impact Mapping Before Architecture
 
 Rather than moving straight into technical investigation, Kim introduced impact mapping — a structured way of working backwards from a goal. Who needs to be involved? What behaviours do we need to change or enable? What do we actually have to build?
 
@@ -46,7 +45,7 @@ He gathered decision-makers and functional leads: the marketing team, inventory 
 
 The marketing team knew user behaviour from analytics. The inventory team understood consumption rates and merchant performance. Logistics had visibility into fulfilment timelines. None of them had been talking to each other in a way that connected those perspectives. Kim's role was to create the conditions for that conversation to happen.
 
-## EventStorming as a Way Into the Complexity
+### EventStorming as a Way Into the Complexity
 
 Once the impact mapping had given them a clearer picture of where to focus, Kim moved into EventStorming. He ran a two-day workshop with around forty to fifty people — project managers, product owners, sales staff, engineers. For many of them, it was the first time they had all been in the same room working through the same process together.
 
@@ -56,7 +55,7 @@ Through that process, a clearer starting point emerged: merchant management. The
 
 The output wasn't a finished design. It was a first draft — a candidate for extracting merchant management from the legacy system and moving it toward a cloud-ready microservices design. Not complete, but concrete enough to have a real conversation about what to do next.
 
-## What Made the Difference Here
+### What Made the Difference Here
 
 Looking at what Kim did across this engagement, a few things stand out:
 
@@ -70,7 +69,7 @@ Looking at what Kim did across this engagement, a few things stand out:
 
 - **Starting points matter.** Choosing merchant management as the entry point wasn't arbitrary. It was the result of working backwards from business impact. A different starting point might have produced a technically interesting result that had no meaningful effect on what the business actually cared about.
 
-## The Technical Problem Was Always a People Problem
+### The Technical Problem Was Always a People Problem
 
 By the end of the engagement, Kim had helped a retail business take a first step toward untangling a twenty-year-old system — not by applying the latest technology, but by getting the right people in a room together and helping them think clearly about what they were trying to achieve.
 
@@ -78,7 +77,7 @@ His observation near the end is worth sitting with: "I found I was a businessman
 
 The question this raises for anyone doing similar work: when a client or colleague comes to you with an answer already in hand, what does it take to create enough trust and space to ask whether they've actually understood the problem first?
 
-## Further Reading
+### Further Reading
 
 **Worth exploring:**
 

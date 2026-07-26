@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/6Mzff5zbQ6c"
 podcastPlayer: "https://player.captivate.fm/episode/af9c47d1-45c0-4dd6-99f0-07e978ec6f6d/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "How much design belongs up front? A discussion on getting early feedback on load-bearing decisions without building on a flawed model."
 featuredImage: "./_assets/balancing-upfront-design-versus-iterative-design-featured.jpeg"
 ---
 

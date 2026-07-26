@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Collaborative Software Design", "Psychological Safety", "Collaborative modelling"]
+seoTitle: "EventStorming: Detail via Invisible Conversations"
 ---
 
 During a EventStorming we want to add more detail when the conversation is not visualised. If during a conversation the body language is turned towards the group instead of towards the the paper roll, then we need to add more details.

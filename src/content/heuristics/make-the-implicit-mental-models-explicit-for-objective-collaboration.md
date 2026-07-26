@@ -8,6 +8,7 @@ authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnors
 submitter: "Paul Rayner"
 tags: ["Collaborative modelling", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
 complements: ["design-experiences-not-explanations"]
+seoTitle: "Make Implicit Mental Models Explicit"
 ---
 
 Make internalised mental models tangible, explicit and externalised using collaborative modelling techniques like Event Storming or Domain Storytelling. This creates a shared, physical artefact that the team can inspect, question, and rearrange together. It shifts the focus from critiquing a person's idea to collectively refining a shared model.

@@ -9,7 +9,7 @@ submitter: "Diana Montalion"
 tags: ["stakeholder-management", "organizational-change", "architecture-decisions", "risk-management"]
 complements: ["treat-resistance-as-a-valuable-signal"]
 focusKeyphrase: "organizational outcomes focus"
-metaDescription: "Frame architectural experiments around outcomes the organization already values rather than debating approaches."
+metaDescription: "Frame architectural experiments around outcomes the organisation already values rather than debating approaches."
 ---
 
 Avoid philosophical debates about uncertainty and experimental approaches. Instead, identify what the organization clearly wants to achieve—outcomes that keep coming up in product strategy, vision discussions, and understanding users. There's always inherent uncertainty about exactly how to deliver these outcomes, but there's also tremendous desire to find out. This creates space for experimentation.

@@ -7,6 +7,7 @@ type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
 tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+seoTitle: "EventStorming: Split and Merge Above Seven People"
 ---
 
 Have a maximum of 7 people for a process or a design leven EventStoming. We want to split and merge when we have more than 7 people.

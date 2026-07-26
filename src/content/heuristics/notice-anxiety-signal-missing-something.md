@@ -11,7 +11,7 @@ complements: ["pause-every-ten-minutes-invite-dissent", "build-connection-before
 enables: ["drop-methodology-when-barrier", "challenge-workshop-premise-before-diving-in"]
 prerequisites: ["drop-methodology-when-barrier"]
 focusKeyphrase: "facilitator anxiety signal"
-metaDescription: "Recognize your own anxiety about outcomes as information that you might be avoiding an important conversation."
+metaDescription: "Recognise your own anxiety about outcomes as information that you might be avoiding an important conversation."
 ---
 
 When you notice your own anxiety rising about not producing an outcome, treat it as information. That fear of failing in your enabling role can neurologically prevent you from sensing and acting on what's actually happening in the room. High sensitivity to things not going right combined with outcome-driven responsibility creates a trap where you push forward instead of slowing down.

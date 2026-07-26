@@ -11,6 +11,7 @@ video: "https://www.youtube.com/embed/sXdSjhWNeMg"
 podcastPlayer: "https://player.captivate.fm/episode/2f80ee7a-2afb-421a-bb79-ec0e834d8965/"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Learning DDD alone is frustrating. A discussion on starting and growing a local Domain-Driven Design community so you have people to ask."
 featuredImage: "./_assets/sunddday-discussion-growing-your-local-ddd-community-featured.jpeg"
 ---
 

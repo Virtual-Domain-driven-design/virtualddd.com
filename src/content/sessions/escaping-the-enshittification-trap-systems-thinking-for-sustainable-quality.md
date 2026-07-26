@@ -12,6 +12,8 @@ podcastPlayer: "https://player.captivate.fm/episode/cc1e9a98-d57f-4ae1-a875-b7f5
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Kenny Baas-Schwegler"]
 curatedHeuristics: ["modulate-quality-investment-by-domain-importance", "frame-testing-as-an-information-gathering-activity", "design-for-modern-quality-attributes", "prioritise-recoverability-over-flawless-deployment", "treat-quality-as-an-emergent-property", "align-quality-strategy-with-product-lifecycle-phase", "make-implicit-quality-perspectives-explicit", "define-quality-as-value-to-a-prioritised-persona"]
+seoTitle: "Escaping the Enshittification Trap"
+seoMetadescription: "Quality as an emergent property of teams, tools and processes rather than something tested in at the end — and how systems thinking keeps it sustainable."
 featuredImage: "./_assets/escaping-the-enshittification-trap-systems-thinking-for-sustainable-quality-featured.png"
 ---
 

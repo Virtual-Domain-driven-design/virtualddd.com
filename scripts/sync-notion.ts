@@ -424,6 +424,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       }
       const fk = h.text('Focus Keyphrase'); if (fk) l.push(`focusKeyphrase: ${yamlStr(fk)}`);
       const md = h.text('Meta Description'); if (md) l.push(`metaDescription: ${yamlStr(md)}`);
+      const st = h.text('SEO Title'); if (st) l.push(`seoTitle: ${yamlStr(st)}`);
       return l;
     },
   },

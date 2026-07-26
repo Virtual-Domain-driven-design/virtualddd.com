@@ -7,6 +7,8 @@ type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky", "Eric Evans"]
 submitter: "Paul Rayner"
 tags: ["Sociotechnical Systems", "Collaborative modelling", "Software Architecture", "Facilitating Software Design and Architecture", "Decision-Making Process", "Conflict Management"]
+metaDescription: "When exploring solutions, generate at least three distinct alternatives. Two options tend to produce an us-versus-them dynamic and a false binary."
+seoTitle: "Generate Three Options to Depersonalise Debate"
 ---
 
 When exploring solutions, always generate at least three distinct alternatives. Having only two options often leads to an "us versus them" dynamic and a false dichotomy. A third option encourages more creative thinking and helps break stalemates by providing a different perspective.  This reframes the conversation as a collective evaluation of multiple potential solutions on their own merits. It encourages objective analysis rather than defending personal positions.

@@ -8,7 +8,7 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["difficult conversations", "Stakeholder Communication", "challenging feedback", "professional communication", "leadership skills"]
 focusKeyphrase: "difficult conversations"
-metaDescription: "Learn to deliver challenging feedback & uncomfortable truths to stakeholders without alienating them. Frame difficult conversations with mutual goals & company success."
+metaDescription: "Deliver uncomfortable truths to stakeholders by framing them around shared goals, so the conversation stays about the work rather than about blame."
 ---
 
 Frame difficult conversations by emphasizing a mutual goal of success and the company's best interest. Acknowledge potential discomfort or frustration, but maintain an optimistic outlook on achieving the desired outcome.

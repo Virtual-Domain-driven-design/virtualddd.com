@@ -9,8 +9,8 @@ tags: ["Software Architecture", "Ivory-Tower Architect", "Hands-on Architect", "
 youtube: "https://youtu.be/X4iUO_3Qebk"
 podcast: "https://player.captivate.fm/episode/0fd161b1-cd12-492f-8d0f-8017b90cc12c/"
 focusKeyphrase: "Facilitating Software Architecture"
-seoTitle: "Facilitating Software Architecture: Moving Beyond Traditional Approaches"
-seoMetadescription: "Tired of bottlenecks and delays in software architecture? Explore new, collaborative approaches to enable your teams, improve flow, and deliver better systems. Learn why the old ways just aren't cutting it anymore."
+seoTitle: "Facilitating Software Architecture: The Old Ways"
+seoMetadescription: "Why architecture bottlenecks persist, and what collaborative approaches actually change — the opening episode of the Facilitating Stories series."
 featuredImageSquared: "./_assets/stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it-featured-squared.png"
 featuredImage: "./_assets/stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it-featured.png"
 ---
@@ -19,7 +19,7 @@ Today we kicked off a new series: "Stories on Facilitating Software Architecture
 
 We consistently observe the same patterns across different architectural approaches. Whether teams follow traditional enterprise architecture practices or take more hands-on, emergent approaches, they encounter similar obstacles when delivering effective software architecture. The challenge remains: how do we build systems that truly work and enable flow of software delivery? That's precisely what drives our exploration of alternative approaches that deliver real results.
 
-## The Problem: Blockers, Bottlenecks, and the Status Quo
+### The Problem: Blockers, Bottlenecks, and the Status Quo
 
 When you look at how organisations scale their software, you see a many teams – different kinds of  teams – all needing to make architectural decisions. And these aren't just small decisions; they often impact other teams significantly. The big question is: how transparent are these decisions? How do teams coordinate? And how does the very structure of the organisation help, or hurt, this process? Also how do they validate the decision after the fact, and get feedback so that teams and the organisation can benefit from learning this
 
@@ -35,7 +35,7 @@ When it comes to system creation, there are two main modes:
 
 Both of these approaches, despite good intentions, often lead to teams waiting for architectural input, which hinders flow and can result in bad decisions within and across teams.
 
-## Team Boundaries and The Learning Gap
+### Team Boundaries and The Learning Gap
 
 Think about John Cutler's model of team boundaries (we talked about this in the recording, and you might see it in some visuals we share later [https://amplitude.com/blog/journey-to-product-teams-infographic](https://amplitude.com/blog/journey-to-product-teams-infographic) also [https://indiyoung.com/explanations-problem-space/](https://indiyoung.com/explanations-problem-space/) ). It illustrates the different phases of software development: opportunity selection, requirements, planning, design, build, test, release, run.
 
@@ -45,7 +45,7 @@ What we often see is that many development teams are completely removed from the
 
 This is why Evelyn van Kelle, Gien Verschatse and Kenny Baas-Schwegler wrote there book Collaborative Software Design, and been pushing for a shift towards more collaborative and decentralized approaches. The status quo, with its ivory towers and hands-on blockers, keeps this alive.
 
-## The Fifth Revolution and Empowering Teams
+### The Fifth Revolution and Empowering Teams
 
 Andrew talks about the "fifth revolution" – continuously designing organizations for flow and ownership. This is about enabling swift and continuous delivery of customer value. Product thinking was essential, DevOps was a game-changer, and the Agile Manifesto set the stage. Now, with Team Topologies and stream-aligned teams, it's really about letting teams design themselves for flow. The goal isn't for managers to dictate team structures, but for teams to take ownership of their flow.
 
@@ -53,7 +53,7 @@ Now, you might be thinking, "This sounds great, but my organization isn't there 
 
 We even shared an example in our recording: a team struggling because their Product Owner wasn't available for Example Mapping sessions (a Collaborative Modelling tool). The team decided to do the example mapping for themselves, based on a Backlog Item ticket they received. This brought up a lot of questions and uncovered assumptions. By pushing these questions and assumptions back to the Product Owner, they started "bringing the pain forward." This ultimately showed the Product Owner the value of earlier involvement, shifting the boundary of their work.
 
-## Start by Assessing Current State
+### Start by Assessing Current State
 
 So, where do you start? Begin by assessing the current flow of change in your context. Identify the blockers to getting things done.
 
@@ -63,7 +63,7 @@ These stories are about practical ways to tackle these challenges. In our next s
 
 So, stay tuned for more "Stories on Facilitating Software Architecture." We're just getting started, and we're excited to explore this journey with you.
 
-## Resources
+### Resources
 
 - Facilitating Software Architecture: Empowering Teams to Make Architectural Decisions by Andrew Harmel-Law
 

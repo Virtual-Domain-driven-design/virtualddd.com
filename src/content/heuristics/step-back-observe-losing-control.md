@@ -8,7 +8,7 @@ authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Versc
 submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "self-regulation", "observation", "emotional-awareness"]
 focusKeyphrase: "facilitator self-regulation"
-metaDescription: "When you feel triggered or lose control as a facilitator, take a literal step back and observe behavior patterns."
+metaDescription: "When you feel triggered or lose control as a facilitator, take a literal step back and observe behaviour patterns."
 ---
 
 When you feel overwhelmed, triggered, or like you're losing control during facilitation, take a literal physical step back and observe what's happening. Your emotional reaction can blur your vision and make you see things that aren't there or miss what's actually present. Stepping back creates distance that helps you see behavioral patterns more clearly.

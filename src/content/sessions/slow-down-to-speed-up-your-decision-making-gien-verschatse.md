@@ -11,6 +11,8 @@ video: "https://youtu.be/I-2TlTJschA"
 podcastPlayer: "https://player.captivate.fm/episode/437d5f84-84d6-45f8-9c74-a0e188cda706/"
 organiser: "Andrea Magnorsky"
 curatedHeuristics: ["generate-multiple-options-to-depersonalise-design-debates"]
+seoTitle: "Slow Down to Speed Up Your Decision-Making"
+seoMetadescription: "Gien Verschatse on why reaching for Kubernetes is not a strategy, and how slowing a decision down gets you to a better one faster."
 featuredImage: "./_assets/slow-down-to-speed-up-your-decision-making-gien-verschatse-featured.png"
 ---
 

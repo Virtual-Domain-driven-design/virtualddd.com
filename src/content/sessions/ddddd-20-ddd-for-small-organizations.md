@@ -10,6 +10,7 @@ tags: ["DDDDD", "startup", "essential"]
 video: "https://www.youtube.com/embed/Xw_eh9vLAio"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
+seoMetadescription: "Most DDD talks target large organisations. This one is for startups and small product companies — the misconceptions, and what actually carries over."
 featuredImage: "./_assets/ddddd-20-ddd-for-small-organizations-featured.jpeg"
 ---
 
