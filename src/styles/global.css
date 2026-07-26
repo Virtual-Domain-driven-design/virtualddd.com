@@ -71,3 +71,25 @@ th { background: var(--color-surface); font-family: var(--font-heading); font-we
 .card--heuristic:focus-visible {
   outline-color: var(--color-ink);
 }
+
+/* Skip link — off-screen until focused, then a solid plate at the top left.
+   It must be visible when focused, which is the whole point of it. */
+.skip-link {
+  position: absolute; left: var(--space-4); top: -4rem; z-index: 100;
+  background: var(--color-primary); color: var(--on-brand);
+  font-family: var(--font-heading); font-weight: 600;
+  padding: var(--space-3) var(--space-5); text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-link:focus { top: var(--space-4); }
+main:focus { outline: none; }
+
+/* Motion is decoration here — never information — so it is safe to stop. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

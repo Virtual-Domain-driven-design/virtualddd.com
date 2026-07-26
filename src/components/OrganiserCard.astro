@@ -55,6 +55,8 @@ const links = [
   .org-stretch::after { content: ''; position: absolute; inset: 0; }
   .org-stretch:hover { color: var(--color-primary); text-decoration: none; }
   .org-icons { position: relative; }
-  .org-icons a { color: var(--color-primary); display: inline-flex; }
+  /* 24px minimum target around a 20px icon (WCAG 2.5.8). */
+  .org-icons a { color: var(--color-primary); display: inline-flex; align-items: center;
+    justify-content: center; min-width: 24px; min-height: 24px; }
   .org-icons a:hover { color: var(--color-primary-dark); }
 </style>

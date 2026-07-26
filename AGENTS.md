@@ -298,6 +298,13 @@ Anything not covered here is open — the brand is the fixed point, not the layo
   everything else demoted. Join links are marked `.js-live` and appear only from
   two hours before the start — before that they are noise — and the page still
   shows them if JavaScript is off.
+- **Text on a brand fill is ink, not white.** The brand colours are bright:
+  white on cyan measured 2.22:1 and white on pink 3.11:1, both under the 4.5:1
+  small text needs, and the pink one was the RSVP button. So there are two
+  tokens and they are not interchangeable — `--on-brand` (ink) for text on a
+  *solid* fill: a chip, a button, a panel; `--on-colour` (white) for text over a
+  *photograph*, where a dark scrim is already doing the work. A browser test
+  measures the real ratio, so a new fill cannot quietly fail.
 
 ---
 
@@ -356,6 +363,12 @@ shared layer, never copied into a second page. Copying is what once made
 - **Never remove a focus ring.** `global.css` defines `:focus-visible` against
   the brand tokens because the near-black canvas swallows the browser default. A
   browser test asserts it is still there.
+- **The accessibility floor**, each held down by a test: text on a brand fill
+  clears 4.5:1; the first tab stop is the skip link and it lands in `<main>`;
+  filtering announces its result count (`aria-live`); every `button` is at least
+  24×24. A link inside a sentence is exempt from that last one (WCAG 2.5.8,
+  inline) — a button never is. `prefers-reduced-motion` is honoured globally,
+  because the motion here is decoration and never information.
 - `astro check` must stay at **0 errors, 0 warnings, 0 hints**.
 
 ---
@@ -409,8 +422,8 @@ keep doing.
 
 Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
 `filter-reset`, `type-filter`, `next-session`, `add-to-calendar`, `prev`,
-`next`, `nav`, `nav-toggle`, `guest`, `guest-credit`, `person-name`. Add to that
-list rather than reaching for a class.
+`next`, `nav`, `nav-toggle`, `guest`, `guest-credit`, `person-name`,
+`skip-link`. Add to that list rather than reaching for a class.
 
 ### Blocking vs reporting
 

@@ -104,7 +104,7 @@ const jsonLd = collectionPage(Astro.site, {
           {tags.map((t) => <option value={t}>{t}</option>)}
         </select>
         <button id="f-reset" class="filter-reset" data-test="filter-reset" type="button">Reset</button>
-        <span class="result-count" id="count" data-test="result-count"></span>
+        <span class="result-count" id="count" data-test="result-count" aria-live="polite" role="status"></span>
       </div>
 
       <div class="grid-cards" id="cards" data-test="results">{past.map((s) => <SessionCard session={s} />)}</div>

@@ -378,6 +378,82 @@ describe('progressive enhancement', () => {
 });
 
 describe('accessibility basics', () => {
+  // The four defects a pre-launch review found by hand. Each was invisible to
+  // the suite at the time, and each is the kind that comes back on the next
+  // restyle unless something holds it down.
+
+  test('the first tab stop skips the navigation', async () => {
+    const page = await browser.newPage();
+    await page.goto(base + '/sessions/', { waitUntil: 'domcontentloaded' });
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(() => {
+      const a = document.activeElement;
+      const box = a.getBoundingClientRect();
+      return { hook: a.dataset.test, onScreen: box.top >= 0 && box.height > 0, href: a.getAttribute('href') };
+    });
+    assert.equal(r.hook, 'skip-link', 'the first tab stop should be the skip link');
+    assert.ok(r.onScreen, 'the skip link must be visible once focused');
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(200);
+    const landed = await page.evaluate(() => document.activeElement?.id);
+    assert.equal(landed, 'main', 'following it should put focus in the main landmark');
+    await page.close();
+  });
+
+  test('text on a brand fill stays readable', async () => {
+    // White on cyan was 2.22:1 and white on pink 3.11:1 — both under the 4.5:1
+    // small text needs, and the pink one was the RSVP button. Ink on the same
+    // fills clears it without touching a brand colour.
+    const page = await browser.newPage();
+    await page.goto(base + '/sessions/', { waitUntil: 'domcontentloaded' });
+    const ratios = await page.evaluate(() => {
+      const lum = (c) => {
+        const [r, g, b] = c.match(/\d+/g).map(Number)
+          .map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const out = {};
+      for (const sel of ['.chip--primary', '.chip--accent', '.chip--value', '.btn', '.btn--accent']) {
+        const e = document.querySelector(sel);
+        if (!e) continue;
+        const cs = getComputedStyle(e);
+        const [hi, lo] = [lum(cs.color), lum(cs.backgroundColor)].sort((a, b) => b - a);
+        out[sel] = (hi + 0.05) / (lo + 0.05);
+      }
+      return out;
+    });
+    for (const [sel, ratio] of Object.entries(ratios)) {
+      assert.ok(ratio >= 4.5, `${sel} is ${ratio.toFixed(2)}:1 against its own fill, under the 4.5:1 minimum`);
+    }
+  });
+
+  test('filtering announces its result count', async () => {
+    const page = await browser.newPage();
+    for (const p of ['/sessions/', '/heuristics/', '/facilitating-archdes/']) {
+      await page.goto(base + p, { waitUntil: 'domcontentloaded' });
+      const live = await page.$eval('[data-test="result-count"]', (e) => e.getAttribute('aria-live'));
+      assert.ok(live, `${p} updates a count nobody is told about`);
+    }
+    await page.close();
+  });
+
+  test('every button is at least 24px', async () => {
+    // Links inside a sentence are exempt (WCAG 2.5.8, inline); a button is
+    // never inline prose. The carousel dots were 9x9.
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const small = [];
+    for (const p of ['/', '/sessions/', '/heuristics/']) {
+      await page.goto(base + p, { waitUntil: 'domcontentloaded' });
+      small.push(...await page.evaluate((path) => [...document.querySelectorAll('button')]
+        .map((e) => { const r = e.getBoundingClientRect(); return { path, w: Math.round(r.width), h: Math.round(r.height),
+          label: (e.getAttribute('aria-label') || e.textContent.trim()).slice(0, 20) }; })
+        .filter((e) => e.w && e.h && (e.w < 24 || e.h < 24)), p));
+    }
+    assert.deepEqual(small, [], `buttons under 24px: ${JSON.stringify(small)}`);
+    await page.close();
+  });
+
   test('images have alt attributes and controls have accessible names', async () => {
     const page = await browser.newPage();
     const problems = [];

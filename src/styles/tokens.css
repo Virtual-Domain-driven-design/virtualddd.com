@@ -63,7 +63,15 @@
    * naming each of its stops would produce tokens nobody could ever reuse. */
   --overlay-white-strong: rgba(255, 255, 255, 0.9);  /* hover on an inverse button */
   --overlay-white-soft: rgba(255, 255, 255, 0.25);   /* hover on the cyan topbar */
-  --on-colour: #fff;                                 /* text on primary/accent */
+  /* Two different jobs, so two different tokens — conflating them is what put
+   * white text on cyan at 2.22:1, well under the 4.5:1 that small text needs.
+   *   --on-brand   text on a *solid* brand fill (a chip, a button, a panel).
+   *                Ink, because the brand colours are bright: ink on cyan is
+   *                11:1, on pink 6.2:1, on the heuristic purple 4.6:1.
+   *   --on-colour  text over a *photograph* that already carries a scrim.
+   *                White, because the scrim under it is dark. */
+  --on-brand: var(--color-ink);
+  --on-colour: #fff;                                 /* text over a scrimmed photo */
   --on-colour-muted: rgba(255, 255, 255, 0.9);       /* its quieter companion */
   --scrim-weak: rgba(0, 0, 0, 0.35);                 /* top of an image overlay */
   --scrim: rgba(0, 0, 0, 0.6);                       /* text shadow over a photo */

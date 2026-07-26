@@ -28,7 +28,7 @@
   display: inline-flex; align-items: center; gap: var(--space-2);
   font-family: var(--font-heading); font-weight: 600; font-size: var(--text-base);
   padding: var(--space-2) var(--space-6); border-radius: 0;
-  background: var(--color-primary); color: #fff; border: 2px solid var(--color-primary);
+  background: var(--color-primary); color: var(--on-brand); border: 2px solid var(--color-primary);
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 .btn:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); text-decoration: none; }
@@ -75,9 +75,9 @@
   font-family: var(--font-heading); font-weight: 600;
   text-transform: uppercase; letter-spacing: 0.05em;
 }
-.chip--primary { background: var(--color-primary); color: var(--on-colour); }
-.chip--accent { background: var(--color-accent); color: var(--on-colour); }
-.chip--value { background: var(--color-heur-value); color: var(--on-colour); }
+.chip--primary { background: var(--color-primary); color: var(--on-brand); }
+.chip--accent { background: var(--color-accent); color: var(--on-brand); }
+.chip--value { background: var(--color-heur-value); color: var(--on-brand); }
 .chip--outline { background: transparent; border: 1px solid var(--color-border); padding: 0.15em 0.6em; }
 
 /* A row of them. */
@@ -395,7 +395,7 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
   background: color-mix(in srgb, var(--color-surface) 90%, transparent);
   color: var(--color-text); font-size: var(--text-2xl); line-height: 1;
 }
-.carousel-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.carousel-arrow:hover { background: var(--color-primary); border-color: var(--color-primary); color: var(--on-brand); }
 .carousel-prev { left: calc(-1 * var(--space-5)); }
 .carousel-next { right: calc(-1 * var(--space-5)); }
 @media (min-width: 800px) { .carousel-arrow { display: block; } }
@@ -404,8 +404,16 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
 .solo { overflow: hidden; border-radius: var(--radius); }
 .solo-track { display: flex; transition: transform 0.5s ease; }
 .solo-slide { flex: 0 0 100%; min-width: 0; }
-.solo-dots { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
-.solo-dots button { width: 9px; height: 9px; border-radius: 0; border: 0; background: var(--color-border); cursor: pointer; padding: 0; transition: width 0.2s, background 0.2s; }
+.solo-dots { display: flex; gap: 0; margin-top: var(--space-4); }
+/* The dot stays 9px; the *target* is 25px, because a 9px button is under the
+   24px minimum and is genuinely hard to hit with a thumb. Transparent padding
+   with the background clipped to the content box does that without changing
+   what anyone sees. */
+.solo-dots button {
+  width: 9px; height: 9px; border-radius: 0; border: 0; cursor: pointer;
+  box-sizing: content-box; padding: 8px; background: var(--color-border);
+  background-clip: content-box; transition: width 0.2s, background 0.2s;
+}
 .solo-dots button.on { background: var(--color-primary); width: 24px; }
 
 /* ------------------------------------------------------------ light panels */
