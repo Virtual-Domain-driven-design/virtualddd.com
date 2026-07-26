@@ -85,7 +85,7 @@ const jsonLd = collectionPage(Astro.site, {
         facets={[{ key: 'tags', param: 'tag', allLabel: 'All tags', label: 'Filter by tag', options: tags }]}
         emptyMessage="No stories match your filters."
       >
-        <div class="grid-cards story-list">
+        <div class="story-list">
           {stories.map((s) => {
             const d = s.data;
             const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
@@ -146,7 +146,15 @@ const jsonLd = collectionPage(Astro.site, {
 
     /* A three-up grid rather than a stack: 24 full-width cards made this page
        19,887px tall, which is not an archive anyone scrolls to the end of. */
-    .story-list { --card-min: 20rem; }
+    /* One column, not a grid. A story is a long read with an excerpt under it;
+       three narrow columns turn the archive into a wall of thumbnails and
+       squeeze the excerpt to a line. The filter bar is capped to match, so the
+       column has one edge rather than two. */
+    .story-list { display: flex; flex-direction: column; gap: var(--space-8); max-width: 52rem; margin-inline: auto; }
+    .archive :global(.card-filter) { max-width: 52rem; margin-inline: auto; }
+    /* The heading shares the column's left edge, rather than floating out to
+       the page margin on its own. */
+    .archive .eyebrow { display: flex; max-width: 52rem; margin-inline: auto; }
   </style>
 
   <script>
