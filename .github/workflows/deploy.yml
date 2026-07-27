@@ -57,15 +57,51 @@ jobs:
         continue-on-error: true
         run: npm run test:content
 
-      - name: Deploy to the host
-        uses: burnett01/rsync-deployments@7.0.1
-        with:
-          switches: --archive --compress --delete --delay-updates --checksum
-          path: dist/
-          remote_path: ${{ secrets.KUALO_PATH }}
-          remote_host: ${{ secrets.KUALO_HOST }}
-          remote_user: ${{ secrets.KUALO_USER }}
-          remote_key: ${{ secrets.KUALO_SSH_KEY }}
+      # Everything above this line is worth running on every push whether or
+      # not a host is configured — it is what stops a broken site shipping.
+      # The deploy itself waits until someone has wired the secrets.
+      - name: Is there anywhere to deploy to?
+        id: target
+        env:
+          HOST: ${{ secrets.KUALO_HOST }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: |
+          [ -n "$SITE_URL" ] && echo "verify=true" >> "$GITHUB_OUTPUT" || echo "verify=false" >> "$GITHUB_OUTPUT"
+          if [ -z "$HOST" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No KUALO_HOST secret set, so nothing was deployed." >> "$GITHUB_STEP_SUMMARY"
+            echo "The build and the tests above still ran, and they passed." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Done by hand rather than with a third-party action: this step is handed
+      # an SSH key, and it is worth being able to read exactly what happens to
+      # it. --delay-updates so the site never serves a half-copied deploy.
+      - name: Deploy
+        if: steps.target.outputs.ready == 'true'
+        env:
+          SSH_KEY: ${{ secrets.KUALO_SSH_KEY }}
+          HOST: ${{ secrets.KUALO_HOST }}
+          USER: ${{ secrets.KUALO_USER }}
+          PATH_ON_HOST: ${{ secrets.KUALO_PATH }}
+          PORT: ${{ secrets.KUALO_SSH_PORT || '22' }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          rsync --archive --compress --delete --delay-updates --human-readable \
+            -e "ssh -i ~/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes" \
+            dist/ "$USER@$HOST:$PATH_ON_HOST"
+          rm -f ~/.ssh/deploy_key
+
+      # The check that cannot be done locally: only the real server proves the
+      # .htaccess is honoured, that a 410 is a 410, and that a .md file is
+      # served as markdown rather than downloaded.
+      - name: Verify the deployed host
+        if: steps.target.outputs.ready == 'true' && steps.target.outputs.verify == 'true'
+        run: npm run verify:live "${{ secrets.SITE_URL }}"
 
       # Only after the site is actually live, so a post never links to a page
       # that has not shipped.
