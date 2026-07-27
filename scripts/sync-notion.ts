@@ -121,9 +121,19 @@ function loadState(): SyncState {
   try { return JSON.parse(readFileSync(STATE_FILE, 'utf8')); } catch { return {}; }
 }
 
+/** Sorted at both levels, because JSON key order is insertion order and the
+ *  inner keys arrive in whatever order Notion returned the rows in. That order
+ *  is not something Notion promises to keep, and an unsorted file would diff
+ *  whenever it shifted — with no page having changed. `git diff --quiet` is the
+ *  entire deploy gate, so that means a build, an rsync and a Discord post
+ *  announcing nothing. Sorting makes the file a function of its contents. */
 function saveState(state: SyncState) {
   mkdirSync('data', { recursive: true });
-  const ordered = Object.fromEntries(Object.keys(state).sort().map((k) => [k, state[k]]));
+  const byKey = (entries: Record<string, EntryState>) =>
+    Object.fromEntries(Object.keys(entries).sort().map((id) => [id, entries[id]]));
+  const ordered = Object.fromEntries(
+    Object.keys(state).sort().map((k) => [k, byKey(state[k])]),
+  );
   writeFileSync(STATE_FILE, JSON.stringify(ordered, null, 2) + '\n');
 }
 
@@ -144,18 +154,52 @@ function liveUrlSet(): Set<string> {
   } catch { return new Set(); }
 }
 
+const ALERTS_FILE = 'data/sync-alerts.json';
+
+/** Something a person has to decide, that the sync cannot decide for them. */
+interface Alert {
+  /** `unpublished-but-live` — an address still served because nobody said to
+   *  retire it. `published-without-a-slug` — a page Notion calls published that
+   *  has no address at all, so nothing will ever render it. */
+  kind: 'unpublished-but-live' | 'published-without-a-slug';
+  section: string;
+  title: string;
+  /** The public address for the first kind; the Notion page for the second,
+   *  since there is no public address to link to. */
+  url: string;
+}
+
 /** What the run wants a human to look at, for the workflow to hand to n8n.
  *
  * A file rather than a webhook call: the sync stays offline-friendly and
  * testable, and the pipeline decides where the message goes. Discord today,
- * a Notion comment when that integration is allowed to write them. */
-function writeAlert(items: { url: string; title: string }[]) {
+ * a Notion comment when that integration is allowed to write them.
+ *
+ * Both kinds are the same shape of problem — published in Notion, not true on
+ * the site, and only an editor knows which way it should go. Neither is worth
+ * failing a run over, and both are invisible if they only reach a CI log.
+ *
+ * One collection per process but one file for all of them, so a run replaces
+ * its own section's entries and leaves the others alone. Written even when
+ * there is nothing to say, because something somebody has resolved has to be
+ * able to disappear — a file that only ever grows is a file nobody reads.
+ *
+ * Deliberately carries no timestamp. The pipeline deploys only when the sync
+ * produced a diff, and a `generated` field would change on every single run,
+ * so an hour in which nobody touched Notion would ship a build anyway. Git
+ * already records when this changed. */
+function writeAlert(section: string, items: Alert[]) {
   mkdirSync('data', { recursive: true });
-  writeFileSync('data/sync-alerts.json', JSON.stringify({
-    kind: 'unpublished-but-live',
-    generated: new Date().toISOString(),
-    items,
-  }, null, 2) + '\n');
+  let kept: Alert[] = [];
+  try {
+    kept = (JSON.parse(readFileSync(ALERTS_FILE, 'utf8')).items ?? [])
+      .filter((i: { section?: string }) => i.section !== section);
+  } catch { /* no file yet, or unreadable — this run writes a fresh one */ }
+
+  const merged = [...kept, ...items]
+    .sort((a, b) => (a.kind + a.url).localeCompare(b.kind + b.url));
+
+  writeFileSync(ALERTS_FILE, JSON.stringify({ items: merged }, null, 2) + '\n');
 }
 
 const REDIRECTS_FILE = 'data/retired-urls.csv';
@@ -465,6 +509,8 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   const retired: string[] = [];
   /** Pages that vanished without anyone saying they meant it. */
   const quarantined: { url: string; title: string }[] = [];
+  /** Published, but with no slug — so there is no address to render them at. */
+  const unrenderable: { url: string; title: string }[] = [];
   /** Generated files somebody changed by hand; refetched from Notion. */
   const edited: string[] = [];
   let reused = 0;
@@ -488,7 +534,14 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     const get = (n: string) => P[n];
     const slug = (get(spec.slugProp)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
     const title = plainTitle(page, spec.titleProp);
-    if (!slug) { console.log(`  ! no slug, skipping "${title}"`); continue; }
+    // Published in Notion, but with nowhere to live. Skipping is right — there
+    // is no address to build — but silently skipping is not: the editor thinks
+    // this is on the site, and only they can give it a slug.
+    if (!slug) {
+      console.log(`  ! no slug, skipping "${title}"`);
+      unrenderable.push({ title, url: page.url });
+      continue;
+    }
     const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
     const rel = (n: string) => (get(n)?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
 
@@ -643,7 +696,21 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     console.log('    They are still being served, and nothing is blocked. Either republish them,');
     console.log('    or tick Retire URL to take the address down properly:');
     for (const q of quarantined) console.log(`      ${q.url}  (${q.title})`);
-    writeAlert(quarantined);
+  }
+  if (unrenderable.length) {
+    console.log(`\n  ! ${unrenderable.length} page(s) published in Notion with no slug, so they have no address:`);
+    for (const u of unrenderable) console.log(`      ${u.title}  ${u.url}`);
+    console.log('    Nothing will render them until somebody fills the slug in.');
+  }
+
+  // Unconditional, so that resolving the last one empties the list rather than
+  // leaving a stale alert for the pipeline to keep raising. A preview run is
+  // not allowed to touch it, and a --limit run has not seen the whole database.
+  if (write && !limit) {
+    writeAlert(spec.section, [
+      ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: spec.section, title: q.title, url: q.url })),
+      ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: spec.section, title: u.title, url: u.url })),
+    ]);
   }
 
   if (write && !limit) { state[key] = now; saveState(state); }

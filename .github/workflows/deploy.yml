@@ -178,17 +178,28 @@ jobs:
         run: npm run verify:live "${{ secrets.SITE_URL }}"
 
       # Only after the site is actually live, so a post never links to a page
-      # that has not shipped.
+      # that has not shipped. And a warning rather than a failure for the same
+      # reason: by this point the site is deployed and verified, so a message
+      # nobody received is not grounds for calling a good deploy bad.
       - name: Tell n8n what shipped
         if: success()
         env:
           HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
+          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
         run: |
           [ -n "$HOOK" ] || { echo "no deploy webhook configured, skipping"; exit 0; }
-          jq -n \
+          code=$(jq -n \
             --arg commit "${{ github.sha }}" \
             --arg url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
             --arg changes "${{ inputs.changes }}" \
             --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             '{event:"deployed", site:"https://virtualddd.com", commit:$commit, commitUrl:$url, changes:$changes, run:$run}' \
-            | curl -sS -X POST -H 'Content-Type: application/json' -d @- "$HOOK"
+            | curl -sS -o /dev/null -w '%{http_code}' -X POST \
+                -H 'Content-Type: application/json' \
+                -H "X-VirtualDDD-Token: $TOKEN" \
+                -d @- "$HOOK")
+          case "$code" in
+            2*) echo "n8n was told ($code)." ;;
+            403) echo "::warning::n8n rejected the notice (403). Is N8N_WEBHOOK_TOKEN set, and does it match the Header Auth credential in n8n?" ;;
+            *)   echo "::warning::n8n answered $code; nothing was posted to Discord. The deploy itself is fine." ;;
+          esac

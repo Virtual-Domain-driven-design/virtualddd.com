@@ -532,27 +532,42 @@ produce a correct deploy. If every automated part breaks, publishing degrades
 to a script and a commit — never an outage. Keep it that way.
 
 ```
-Notion ──► n8n ──► repository_dispatch ──► sync.yml ──► deploy.yml ──► n8n
-        (publish: at once)              (~20s)        build, test,   Discord
-        (edits: batched hourly)                       rsync
+                     ┌── hourly cron ──┐
+Notion ──────────────┤                 ├──► sync.yml ──► deploy.yml ──► n8n
+        (a session   └── n8n dispatch ─┘     (~20s)      build, test,   Discord
+         going live)                                     rsync
 ```
 
-**The two are split by urgency, not by machinery.**
+**The clock does the work. An event is only ever a shortcut.**
 
-- **Publishing** is the only thing n8n watches. Every five minutes it asks a
-  single question — *is anything published in Notion missing from the site's
-  own `/llms.txt`?* — and dispatches if so. That is stateless and self-healing:
-  an event fired into a broken pipeline is gone forever, whereas a discrepancy
-  is still there on the next poll.
-- **Editing** rides the clock: an hourly sync, no watcher at all. This is why
+- **Editing rides the clock**: an hourly sync, no watcher at all. This is why
   there is no debouncing anywhere. Notion's "page updated" cannot tell a new
   publication from a typo on an old one, so filtering it would fire on every
   keystroke-sized change; not watching is simpler than throttling.
+
+  It is also what makes the pipeline self-healing, and the reason nothing else
+  needs to be. The hourly run holds no state, cares nothing for why the last
+  run did not happen, and re-reads everything — so a missed event, a failed
+  deploy or an afternoon with n8n switched off all cost latency and nothing
+  else.
+- **Publishing a session** is the one thing worth not waiting an hour for, and
+  the one thing with an event already to hand: the **VirtualDDD GoLive session**
+  workflow knows the moment it sets `Status = Published`, and dispatches from
+  there. Everything else published in Notion — a story, a heuristic, an open
+  space — is deliberate, unhurried work, and rides the clock with the edits.
+
+  There is no watcher, and deliberately so. A poll comparing Notion against the
+  site's own `/llms.txt` would buy latency on that unhurried content and pay for
+  it with a second copy of `CONTENT_SPECS` to keep in step, a guard against
+  dispatching when the site is merely down, and a backoff for pages the sync can
+  never render. The hourly cron already gives what such a poll would be credited
+  with. If publishing ever does become urgent, shorten the cron before adding a
+  watcher.
 - **Drift** heals nightly (`--full`, 03:17 UTC), which is also what re-pulls
   the ddd-crew repositories.
 
-A typo is therefore live within the hour, a new session within about four
-minutes, and an hour in which nobody touches Notion costs one minute of CI and
+A typo is therefore live within the hour, a session going live in about ninety
+seconds, and an hour in which nobody touches Notion costs one minute of CI and
 deploys nothing.
 
 **Nothing deploys unless the sync produced a diff.** The generated markdown is
@@ -618,6 +633,27 @@ handles both rather than leaving them for someone to notice.
 
 Never resolve one of these by deleting the URL from `data/live-urls.txt`. That
 file is the promise, not a record of what happens to be built.
+
+### Things only an editor can decide
+
+`data/sync-alerts.json` collects what the sync can see but must not act on. Two
+kinds, both *published in Notion, not true on the site*:
+
+- **`unpublished-but-live`** — the quarantine above.
+- **`published-without-a-slug`** — a page Notion calls published that has no
+  slug, and therefore no address. Skipping it is right; there is nothing to
+  build. Skipping it *silently* is not: the editor believes it is on the site,
+  and only they can give it a slug.
+
+Neither is worth failing a run over, and both are invisible if they only reach
+a CI log — which is the whole reason the file exists. It is keyed by section and
+rewritten on every run, so resolving the last one empties the list rather than
+leaving a stale alert behind, and one collection cannot erase another's.
+
+It carries no timestamp on purpose: a `generated` field would change on every
+run, and *nothing deploys unless the sync produced a diff* would quietly become
+false. `sync.yml` posts it to n8n only when the file itself changed, which is
+what stops the same alert being raised every hour for weeks.
 
 ## Going live
 

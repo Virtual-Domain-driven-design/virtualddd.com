@@ -94,6 +94,43 @@ jobs:
           removed=$(git diff --diff-filter=D --name-only -- src/content | wc -l)
           echo "summary=${added} new, ${modified} updated, ${removed} removed" >> "$GITHUB_OUTPUT"
 
+      # Two things the sync can see but must not decide: an address still being
+      # served after its page stopped being published, and a page Notion calls
+      # published that has no slug and so no address at all. Neither is worth
+      # failing a run over, and both are invisible if they only reach a CI log.
+      #
+      # Before the commit, so HEAD is still the previous run and the file's own
+      # diff is the whole test: the same alert is only ever raised once.
+      - name: Anything only a person can decide?
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
+          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          [ -n "$HOOK" ] || { echo "No webhook configured, so nobody was told."; exit 0; }
+          [ -f data/sync-alerts.json ] || { echo "Nothing to raise."; exit 0; }
+          # --porcelain rather than `git diff`, which cannot see a file that has
+          # never been committed — the very first alert is exactly that case.
+          [ -n "$(git status --porcelain -- data/sync-alerts.json)" ] \
+            || { echo "The same as last time; already raised."; exit 0; }
+          items=$(jq -c '.items // []' data/sync-alerts.json)
+          [ "$items" = "[]" ] && { echo "Everything outstanding has been resolved."; exit 0; }
+          code=$(jq -n --argjson items "$items" --arg run "$RUN" \
+            '{event:"sync-alerts", items:$items, run:$run}' \
+            | curl -sS -o /dev/null -w '%{http_code}' -X POST \
+                -H 'Content-Type: application/json' \
+                -H "X-VirtualDDD-Token: $TOKEN" \
+                -d @- "$HOOK")
+          # Never fails the run. These alerts are editorial, and publishing must
+          # not be held hostage to a chat webhook — but an alert that silently
+          # went nowhere is worse than no alert, so it is said out loud.
+          case "$code" in
+            2*) echo "Raised with the organisers ($code)." ;;
+            403) echo "::warning::n8n rejected the alert (403). Is N8N_WEBHOOK_TOKEN set, and does it match the Header Auth credential in n8n?" ;;
+            *)   echo "::warning::n8n answered $code; these alerts reached nobody:"; echo "$items" | jq -r '.[] | "  " + .kind + ": " + .title' ;;
+          esac
+
       - name: Commit
         if: steps.diff.outputs.changed == 'true'
         run: |
