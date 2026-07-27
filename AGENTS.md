@@ -566,6 +566,26 @@ branch, so a fetched body and a reused body are byte-identical. Without that a
 changed page would flip-flop between syncs and "no diff, no deploy" would ship
 whitespace.
 
+### Generated content is not editable here
+
+`src/content/` is written by the sync and never edited in this repository.
+Three layers keep that true, because with an incremental sync a stray edit
+would otherwise persist rather than being overwritten within minutes:
+
+- **The sync notices.** `sync-state.json` records a digest of every body it
+  wrote. If the file on disk no longer matches, the page is refetched from
+  Notion and the edit is named in the log. A missing digest counts as
+  unknown provenance and also refetches — a guard that trusts by default is
+  a decoration.
+- **CI refuses to deploy it.** A push touching `src/content/` by anyone other
+  than `virtualddd-sync` fails the deploy with an explanation, rather than
+  shipping a site that says something Notion does not.
+- **CODEOWNERS** puts a maintainer on any pull request that touches it.
+
+None of this is about mistrust. The edit would simply be lost on the next sync,
+and it is kinder to say so immediately than to let someone write something that
+quietly disappears.
+
 ### When an editorial change breaks a URL
 
 A URL is a promise. Two ordinary actions in Notion break one, and the sync

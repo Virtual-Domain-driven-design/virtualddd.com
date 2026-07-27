@@ -13,6 +13,7 @@
  */
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
+import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
   createBlocksToMd, fileUrl, kebab, plainTitle,
@@ -107,7 +108,13 @@ interface EntryState {
   slug: string;
   /** Notion's `last_edited_time` when we last rendered this body. */
   edited: string;
+  /** Digest of the body we wrote, so an edit made here rather than in Notion
+   *  is noticed and refetched instead of being quietly kept. */
+  hash: string;
 }
+
+/** Short, stable digest of a body. Only ever compared with itself. */
+const digest = (body: string) => createHash('sha256').update(body).digest('hex').slice(0, 16);
 type SyncState = Record<string, Record<string, EntryState>>;
 
 function loadState(): SyncState {
@@ -458,6 +465,8 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   const retired: string[] = [];
   /** Pages that vanished without anyone saying they meant it. */
   const quarantined: { url: string; title: string }[] = [];
+  /** Generated files somebody changed by hand; refetched from Notion. */
+  const edited: string[] = [];
   let reused = 0;
 
   const allRows = await queryAll(spec.dataSourceId);
@@ -519,10 +528,21 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     const before = was[id];
     const editedAt = page.last_edited_time as string;
     const previous = before && !full ? readExisting(`${outDir}/${before.slug}.md`) : null;
-    const unchanged = !!previous && before!.edited === editedAt;
+    // Reuse the body only if Notion says the page has not changed *and* the
+    // file is still the one we wrote. Someone editing generated content by
+    // hand is not a merge conflict to resolve — Notion is the source of
+    // truth, so the edit is simply replaced, and said out loud.
+    // No recorded digest means we cannot vouch for what is on disk, so we
+    // refetch rather than trust it. That costs one full sync the first time
+    // this runs, and is the difference between a guard and a decoration.
+    const untouched = !!previous && !!before!.hash && digest(previous.body) === before!.hash;
+    const unchanged = !!previous && before!.edited === editedAt && untouched;
+    if (previous && before?.edited === editedAt && !untouched) {
+      edited.push(`${outDir}/${before.slug}.md`);
+    }
 
     if (before && before.slug !== slug) renamed.push({ from: before.slug, to: slug });
-    now[id] = { slug, edited: editedAt };
+    now[id] = { slug, edited: editedAt, hash: '' };
 
     const fm: string[] = ['---'];
     fm.push(`title: ${yamlStr(title)}`);
@@ -541,7 +561,9 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     // so a body that was fetched and a body that was reused are byte-identical.
     // Without this a changed page would flip-flop on alternate syncs, and
     // "no diff, no deploy" would deploy nothing but whitespace.
-    rendered.set(`${slug}.md`, `${fm.join('\n')}\n\n${body.replace(/\n+$/, '')}\n`);
+    const finalBody = body.replace(/\n+$/, '');
+    now[id].hash = digest(finalBody);
+    rendered.set(`${slug}.md`, `${fm.join('\n')}\n\n${finalBody}\n`);
     if (!unchanged) console.log(`  ✓ ${slug}.md (${body.length}c, ${ctx.count} imgs)`);
   }
 
@@ -593,6 +615,12 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   }
 
   if (reused) console.log(`  · ${reused} unchanged, body reused (no fetch)`);
+
+  if (edited.length) {
+    console.log(`\n  ! ${edited.length} generated file(s) had been changed by hand; refetched from Notion:`);
+    for (const f of edited) console.log(`      ${f}`);
+    console.log('    Notion is the source of truth. Make the change there.');
+  }
 
   if (renamed.length) {
     console.log(`\n  ! ${renamed.length} slug(s) changed, which changes a URL:`);

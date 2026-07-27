@@ -1,0 +1,8 @@
+# Generated from Notion by `npm run sync` — never edited here.
+#
+# CODEOWNERS cannot forbid a change, but it makes one visible: any pull request
+# touching these paths needs a maintainer to look at it, and the deploy
+# workflow refuses to ship a hand edit outright.
+/src/content/          @Baasie
+/data/sync-state.json  @Baasie
+/data/live-urls.txt    @Baasie

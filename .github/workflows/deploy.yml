@@ -31,6 +31,36 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the guard below diffs against the previous commit
+
+      # Generated content belongs to Notion, and only the sync may change it.
+      # A hand edit here is not a merge conflict to resolve: it will be undone
+      # by the next sync, and until then the site says something Notion does
+      # not. Better to stop and say so than to deploy it.
+      - name: Did anyone hand-edit the generated content?
+        if: github.event_name == 'push'
+        run: |
+          touched=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- src/content 2>/dev/null || true)
+          [ -z "$touched" ] && { echo "No generated content touched."; exit 0; }
+          author=$(git log -1 --format='%an' ${{ github.sha }})
+          if [ "$author" = "virtualddd-sync" ]; then
+            echo "Changed by the sync, which is the only thing allowed to."
+            exit 0
+          fi
+          {
+            echo "### Generated content was edited by hand"
+            echo
+            echo "\`src/content/\` is written by \`npm run sync\` from Notion, and never edited here."
+            echo "The next sync will replace these files, so the change would be lost anyway:"
+            echo
+            echo "$touched" | sed 's/^/    /'
+            echo
+            echo "Make the change in Notion instead. If the *shape* of the content needs to"
+            echo "change, that is a schema change — see AGENTS.md, \"Content model\"."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::error::Generated content under src/content/ was edited by hand (author: $author). Change it in Notion."
+          exit 1
 
       - uses: actions/setup-node@v4
         with:
