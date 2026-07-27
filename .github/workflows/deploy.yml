@@ -127,8 +127,21 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes"
+          # Say why, when it does not work. Swallowing ssh-keyscan's stderr
+          # once cost an afternoon: the deploy failed in six silent seconds
+          # because there was no host key to verify against, and the log said
+          # nothing at all.
+          if ! timeout 20 bash -c "</dev/tcp/$HOST/$PORT" 2>/dev/null; then
+            echo "::error::Cannot reach the host on port $PORT from this runner."
+            echo "The host is up (it serves the site), so this is usually the host's"
+            echo "brute-force protection blocking a GitHub runner IP. Kualo: cPHulk."
+            exit 1
+          fi
+          if ! ssh-keyscan -T 15 -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts 2>/tmp/keyscan.err; then
+            echo "::error::ssh-keyscan failed:"; cat /tmp/keyscan.err; exit 1
+          fi
+          grep -q . ~/.ssh/known_hosts || { echo "::error::ssh-keyscan returned no host key."; cat /tmp/keyscan.err; exit 1; }
+          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes -o ConnectTimeout=20"
           RELEASE="releases/${{ github.sha }}"
 
           # Never replace a real directory. If the document root is not already
