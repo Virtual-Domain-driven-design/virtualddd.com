@@ -19,7 +19,12 @@ on:
   repository_dispatch:
     types: [content-published, content-edited]
   schedule:
-    - cron: '17 3 * * *'   # 03:17 UTC, nightly
+    # Ordinary edits ride the clock. Nothing in n8n watches for them, which is
+    # why there is no debouncing anywhere: a typo fixed in Notion is live
+    # within the hour, and an hour in which nobody edits costs one minute of CI
+    # and deploys nothing.
+    - cron: '25 * * * *'   # hourly, for edits
+    - cron: '17 3 * * *'   # nightly, --full, for drift
   workflow_dispatch:
     inputs:
       full:
@@ -57,7 +62,7 @@ jobs:
           # Raises GitHub's 60/hour unauthenticated limit, which CI runners
           # share across tenants and would otherwise hit at random.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FULL: ${{ (github.event_name == 'schedule' || inputs.full) && '--full' || '' }}
+          FULL: ${{ (github.event.schedule == '17 3 * * *' || inputs.full) && '--full' || '' }}
         run: |
           npx tsx scripts/sync-notion.ts guests --write
           for c in sessions open-spaces stories heuristics; do

@@ -537,11 +537,23 @@ Notion ──► n8n ──► repository_dispatch ──► sync.yml ──► 
         (edits: batched hourly)                       rsync
 ```
 
-**n8n decides when, because only n8n knows whether anything changed.** A
-publish fires immediately; ordinary edits are collected and fired once an hour.
-A blind schedule would spend ten minutes discovering nothing had happened —
-which is also why the nightly run (`--full`, 03:17 UTC) is a reconciliation
-safety net rather than the main path.
+**The two are split by urgency, not by machinery.**
+
+- **Publishing** is the only thing n8n watches. Every five minutes it asks a
+  single question — *is anything published in Notion missing from the site's
+  own `/llms.txt`?* — and dispatches if so. That is stateless and self-healing:
+  an event fired into a broken pipeline is gone forever, whereas a discrepancy
+  is still there on the next poll.
+- **Editing** rides the clock: an hourly sync, no watcher at all. This is why
+  there is no debouncing anywhere. Notion's "page updated" cannot tell a new
+  publication from a typo on an old one, so filtering it would fire on every
+  keystroke-sized change; not watching is simpler than throttling.
+- **Drift** heals nightly (`--full`, 03:17 UTC), which is also what re-pulls
+  the ddd-crew repositories.
+
+A typo is therefore live within the hour, a new session within about four
+minutes, and an hour in which nobody touches Notion costs one minute of CI and
+deploys nothing.
 
 **Nothing deploys unless the sync produced a diff.** The generated markdown is
 committed, so `git diff --quiet` is the whole test.
