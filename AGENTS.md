@@ -587,6 +587,34 @@ handles both rather than leaving them for someone to notice.
 Never resolve one of these by deleting the URL from `data/live-urls.txt`. That
 file is the promise, not a record of what happens to be built.
 
+## Going live
+
+The deploy is atomic: every release is rsynced into `~/releases/<sha>` and the
+document root is a **symlink** swapped once the copy is complete. Nobody sees a
+half-written site, and a rollback is one command.
+
+**CI will not touch a document root that is a real directory.** It checks, and
+fails with this note rather than deleting anything — because a real directory
+there might be somebody's live site, and a deploy job is not the place to find
+that out. Pointing a domain at the new site is therefore a deliberate, one-time
+human step:
+
+```bash
+# 1. Deploy once with KUALO_PATH set to a path that does not exist yet,
+#    e.g. ~/staging.virtualddd.com. CI creates it as a symlink.
+
+# 2. When you are ready to cut a domain over, on the host:
+mv ~/virtualddd.com ~/virtualddd.com.wordpress     # keep the old site
+ln -sfn ~/releases/<sha> ~/virtualddd.com          # point at the newest release
+
+# 3. Roll back at any time by pointing the symlink at an earlier release:
+ls -1dt ~/releases/*/                              # newest first
+ln -sfn ~/releases/<older-sha> ~/virtualddd.com
+```
+
+The last five releases are kept, so a rollback is always available without a
+rebuild. Keep the old site directory until you are sure, then remove it.
+
 ## Commands
 
 | Command | What it does |

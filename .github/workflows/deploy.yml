@@ -77,23 +77,54 @@ jobs:
 
       # Done by hand rather than with a third-party action: this step is handed
       # an SSH key, and it is worth being able to read exactly what happens to
-      # it. --delay-updates so the site never serves a half-copied deploy.
+      # it — write, chmod 600, use, delete.
+      #
+      # Releases are atomic. Each deploy is rsynced into its own directory and
+      # the document root is a symlink that is swapped when the copy is
+      # complete, so nobody ever sees a half-written site, and a rollback is
+      # one `ln -sfn` away.
       - name: Deploy
         if: steps.target.outputs.ready == 'true'
         env:
           SSH_KEY: ${{ secrets.KUALO_SSH_KEY }}
           HOST: ${{ secrets.KUALO_HOST }}
-          USER: ${{ secrets.KUALO_USER }}
-          PATH_ON_HOST: ${{ secrets.KUALO_PATH }}
+          SSH_USER: ${{ secrets.KUALO_USER }}
+          DOCROOT: ${{ secrets.KUALO_PATH }}
           PORT: ${{ secrets.KUALO_SSH_PORT || '22' }}
+          KEEP: 5
         run: |
+          set -euo pipefail
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          rsync --archive --compress --delete --delay-updates --human-readable \
-            -e "ssh -i ~/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes" \
-            dist/ "$USER@$HOST:$PATH_ON_HOST"
+          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes"
+          RELEASE="releases/${{ github.sha }}"
+
+          # Never replace a real directory. If the document root is not already
+          # a symlink it may be a live site put there by someone else, and CI
+          # is not the place to find out. Switching it over is a deliberate,
+          # one-time human step — see AGENTS.md, "Going live".
+          $SSH "$SSH_USER@$HOST" "
+            set -e
+            if [ -e '$DOCROOT' ] && [ ! -L '$DOCROOT' ]; then
+              echo '$DOCROOT exists and is a real directory, not a symlink.'
+              echo 'Refusing to touch it. See AGENTS.md, \"Going live\".'
+              exit 1
+            fi
+            mkdir -p '$RELEASE'
+          "
+
+          rsync --archive --compress --delete --human-readable \
+            -e "$SSH" dist/ "$SSH_USER@$HOST:$RELEASE/"
+
+          # The swap, and tidy up old releases.
+          $SSH "$SSH_USER@$HOST" "
+            set -e
+            ln -sfn \"\$HOME/$RELEASE\" '$DOCROOT'
+            ls -1dt \"\$HOME\"/releases/*/ | tail -n +\$(( $KEEP + 1 )) | xargs -r rm -rf
+            echo \"live: \$(readlink '$DOCROOT')\"
+          "
           rm -f ~/.ssh/deploy_key
 
       # The check that cannot be done locally: only the real server proves the
