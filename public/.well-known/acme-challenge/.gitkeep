@@ -1,0 +1,10 @@
+This directory must exist in every release.
+
+cPanel's AutoSSL proves domain ownership by writing a token here and fetching
+it over HTTP. The document root is a symlink to the current release, so if a
+release does not contain this directory the challenge has nowhere to land and
+the certificate quietly fails to renew — about ninety days after anyone would
+have thought to check.
+
+Anything AutoSSL writes here is wiped by the next deploy, which is fine: the
+token is fetched within seconds of being written.
