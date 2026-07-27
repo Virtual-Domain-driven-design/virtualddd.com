@@ -72,7 +72,13 @@ jobs:
       - name: Types
         run: npx astro check
 
+      # Repository *variables*, not secrets: both values are visible in the page
+      # source of every page, so hiding them would only make them harder to
+      # change. Unset means no analytics tag at all, which is what a fork gets.
       - name: Build
+        env:
+          PUBLIC_ANALYTICS_SRC: ${{ vars.PUBLIC_ANALYTICS_SRC }}
+          PUBLIC_ANALYTICS_DOMAIN: ${{ vars.PUBLIC_ANALYTICS_DOMAIN }}
         run: npm run build
 
       - name: Contracts, redirects and browser behaviour

@@ -82,6 +82,17 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 const { all } = await splitSessions();
 const latest = [...all].sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime)).slice(0, 3);
 const year = new Date().getFullYear();
+
+// Both are public by design — they end up in the page source — so they are
+// repository *variables*, not secrets. Only in a production build: a dev server
+// counting its own page loads is noise in the one number we keep.
+//
+// The script URL is a variable rather than a constant because Plausible's
+// hosted and self-hosted builds serve the identical tag from different hosts.
+// Moving the analytics onto our own machine later is then one value, not a
+// re-instrumentation of 328 pages.
+const analyticsSrc = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_SRC : undefined;
+const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_DOMAIN : undefined;
 ---
 
 <!doctype html>
@@ -122,6 +133,17 @@ const year = new Date().getFullYear();
       <link rel="alternate" type="text/markdown" title={`${title} — markdown`} href={`${Astro.url.pathname}index.md`} />
     )}
     {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    {/* Counts page views and nothing else: no cookies, no cross-site
+        identifier, nothing that needs a consent banner — see the privacy
+        policy, which has to keep saying something true. Absent unless both
+        variables are set, so a fork, a local build and a preview deploy are
+        silent by default rather than polluting the real numbers. `defer` and
+        the absence of any fallback are deliberate: if the host is unreachable
+        the page is unaffected and the visit is simply not counted. */}
+    {analyticsSrc && analyticsDomain && (
+      <script is:inline defer src={analyticsSrc} data-domain={analyticsDomain}></script>
+    )}
   </head>
   <body>
     <!-- Every page repeats 14 navigation links; without this a keyboard or
@@ -174,7 +196,7 @@ const year = new Date().getFullYear();
         </div>
       </div>
       <div class="wrap footer-bottom">
-        <p>© {year} Virtual DDD</p>
+        <p>@{year} Virtual Design | Branddesign by Art of Design</p>
         <p class="footer-links">
           <a href="/code-of-conduct/">Code of Conduct</a>
           <a href="/privacy-policy/">Privacy</a>
