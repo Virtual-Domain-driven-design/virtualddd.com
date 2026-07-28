@@ -1,0 +1,83 @@
+# Rebuild when Bluesky has something the home page does not.
+#
+# The feed on the home page is fetched at build time (src/pages/index.astro),
+# which makes it exactly as fresh as the last deploy — and a deploy happens when
+# Notion changes or somebody pushes, neither of which has anything to do with
+# posting on Bluesky. A quiet week in Notion is a stale panel on the page
+# everyone lands on.
+#
+# So: ask Bluesky what the newest post is, ask the live site whether it is
+# showing it, and deploy only if it is not. Which is the same rule the sync
+# lives by — nothing deploys unless something actually changed — and it matters
+# here for a concrete reason: the host keeps five releases, so an unconditional
+# daily rebuild would spend the whole rollback history on days when nothing
+# happened.
+#
+# It repairs a second failure too, and this is the one nobody would notice. If
+# Bluesky is slow or down *during* a build, that build ships a home page with no
+# feed at all and a warning in a log nobody reads. The check below then finds
+# the newest post missing from the page and rebuilds, without anyone asking.
+name: Refresh the Bluesky feed
+
+on:
+  schedule:
+    - cron: '20 6 * * *' # daily, before the day starts in Europe
+  workflow_dispatch:
+
+# Only to dispatch the deploy. Nothing here reads or writes the repository.
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Is the home page showing the newest post?
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SITE: ${{ secrets.SITE_URL }}
+          HANDLE: virtualddd.com
+        run: |
+          set -euo pipefail
+          SITE="${SITE:-https://virtualddd.com}"
+
+          feed=$(curl -sS --max-time 20 \
+            "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=$HANDLE&limit=1&filter=posts_no_replies" \
+            || true)
+
+          # No answer is not a reason to rebuild. Bluesky being unreachable from
+          # this runner says nothing about the site, and rebuilding on it would
+          # bake in whatever the build's own fetch got — possibly nothing.
+          newest=$(printf '%s' "$feed" | jq -r '.feed[0].post.uri // empty' | awk -F/ '{print $NF}')
+          if [ -z "$newest" ]; then
+            echo "::warning::Bluesky did not answer, or has no posts. Nothing to compare, so nothing to do."
+            echo "rebuild=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if curl -sS --max-time 25 "$SITE/" | grep -q "$newest"; then
+            echo "rebuild=false" >> "$GITHUB_OUTPUT"
+            echo "The home page is already showing $newest." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "rebuild=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Rebuilding"
+              echo
+              echo "Bluesky's newest post is \`$newest\`, and the home page is not showing it."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # deploy.yml builds from the current main, which is the same content the
+      # last deploy shipped — only the feed differs. No `ref` input, so it uses
+      # the tip, which is what we want.
+      - name: Rebuild
+        if: steps.check.outputs.rebuild == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main \
+            --field changes="a new post on Bluesky"
+          echo "Asked deploy.yml to rebuild."

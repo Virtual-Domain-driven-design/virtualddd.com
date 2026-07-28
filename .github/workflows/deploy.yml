@@ -35,7 +35,15 @@ on:
         description: The commit to build. Defaults to the one that triggered the run.
         type: string
         required: false
+  # The same `changes` line a caller can pass, so a run started by hand or by
+  # another workflow can say why. refresh-feed.yml uses it to explain a rebuild
+  # that carries no content change at all.
   workflow_dispatch:
+    inputs:
+      changes:
+        description: A short human summary of what changed, for the notification.
+        type: string
+        required: false
 
 # One deploy at a time. Two rsyncs into the same directory would interleave.
 # Production is one queue, and stays one queue: two deploys must never rsync
