@@ -394,6 +394,90 @@ describe('progressive enhancement', () => {
       await ctx.close();
     }
   });
+
+  test('the page scrolls past its own header, once, without flicking back', async () => {
+    // The defect this guards: the header shrank while it was still in the
+    // document flow, so collapsing it took ~235px out of the page and the
+    // browser returned them as scroll. That dropped the visitor back under the
+    // threshold, the header grew again, and the next wheel notch repeated it —
+    // wheel-scrolling a desktop page went 40, 0, 40, 0 and never got past the
+    // header. Only the tall state was ever reachable by scrolling.
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await ctx.newPage();
+    await page.goto(base + '/', { waitUntil: 'load' });
+    await page.waitForTimeout(200);
+
+    const step = 40;
+    const notches = 8;
+    const tall = await page.$eval('[data-test="site-header"]', (el) => el.offsetHeight);
+    const seen = [];
+    for (let i = 0; i < notches; i++) {
+      await page.mouse.wheel(0, step);
+      await page.waitForTimeout(120);
+      seen.push(await page.evaluate(() => Math.round(window.scrollY)));
+    }
+
+    // Every notch moves the page, and none of them takes it backwards.
+    const stuck = seen.filter((y, i) => y <= (seen[i - 1] ?? -1));
+    assert.deepEqual(stuck, [], `the page fought back while scrolling: ${seen.join(' ')}`);
+    assert.ok(seen.at(-1) >= step * notches - 4,
+      `${notches} notches of ${step}px reached only ${seen.at(-1)}px: ${seen.join(' ')}`);
+
+    // And the slim header is a state a scrolling visitor actually arrives in.
+    const slim = await page.$eval('[data-test="site-header"]', (el) => el.offsetHeight);
+    assert.ok(slim < tall, `the header never shrank: ${tall}px at rest, ${slim}px scrolled`);
+    await ctx.close();
+  });
+
+  test('shrinking the header moves nothing else on the page', async () => {
+    // The header is out of the flow and `--header-h` holds its place, so the
+    // content below it may only move by however far the page was scrolled.
+    // If the spacer is ever wrong, this is what catches it.
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await ctx.newPage();
+    await page.goto(base + '/', { waitUntil: 'load' });
+    await page.waitForTimeout(200);
+
+    const top = await page.$eval('main', (el) => el.getBoundingClientRect().top);
+    assert.ok(Math.abs(top - (await page.$eval('[data-test="site-header"]', (el) => el.offsetHeight))) < 2,
+      `the page does not start where the header ends (main at ${top}px)`);
+
+    await page.evaluate(() => window.scrollTo(0, 300));
+    await page.waitForTimeout(400);
+    const after = await page.evaluate(() => ({
+      top: document.querySelector('main').getBoundingClientRect().top,
+      y: Math.round(window.scrollY),
+    }));
+    assert.equal(after.y, 300, 'the scroll position did not hold');
+    assert.ok(Math.abs(top - after.top - 300) < 2,
+      `the page jumped ${Math.round(top - after.top - 300)}px when the header collapsed`);
+    await ctx.close();
+  });
+
+  test('the skip link lands below the header, not under it', async () => {
+    // The header covers the top of the page, so an anchor that scrolls its
+    // target to y=0 hides it. That defeats the skip link entirely: the one
+    // visitor it exists for tabs, presses Enter, and the header is still all
+    // they can see. `scroll-padding-top` in global.css holds it clear.
+    for (const [width, js] of [[1440, true], [390, true], [1440, false]]) {
+      const ctx = await browser.newContext({ viewport: { width, height: 800 }, javaScriptEnabled: js });
+      const page = await ctx.newPage();
+      await page.goto(base + '/', { waitUntil: js ? 'load' : 'domcontentloaded' });
+      await page.waitForTimeout(js ? 300 : 100);
+
+      await page.focus('[data-test="skip-link"]');
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(700); // scroll-behavior is smooth
+
+      const { mainTop, headerBottom } = await page.evaluate(() => ({
+        mainTop: document.querySelector('main').getBoundingClientRect().top,
+        headerBottom: document.getElementById('site-header').getBoundingClientRect().bottom,
+      }));
+      assert.ok(mainTop >= headerBottom - 1,
+        `at ${width}px${js ? '' : ' without JS'} the content starts ${Math.round(headerBottom - mainTop)}px under the header`);
+      await ctx.close();
+    }
+  });
 });
 
 describe('accessibility basics', () => {

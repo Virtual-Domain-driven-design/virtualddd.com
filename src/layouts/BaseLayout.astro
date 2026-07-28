@@ -149,7 +149,7 @@ const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_
     <!-- Every page repeats 14 navigation links; without this a keyboard or
          switch user tabs through all of them before reaching the content. -->
     <a class="skip-link" href="#main" data-test="skip-link">Skip to content</a>
-    <header class="site-header" id="site-header">
+    <header class="site-header" id="site-header" data-test="site-header">
       <div class="topbar">
         <div class="wrap topbar-inner"><Socials /></div>
       </div>
@@ -207,6 +207,20 @@ const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_
 
     <style>
       .site-header { position: sticky; top: 0; z-index: 20; background: var(--color-bg); border-bottom: 1px solid var(--color-border); }
+
+      /* Out of the flow, with `--header-h` holding the space it used to take.
+         Sticky and in the flow, shrinking the header removed 235px from the
+         page and the browser returned them as scroll, which flipped the header
+         straight back — the desktop page could not be scrolled past its own
+         header. The reasoning, and why no threshold fixes it, is in
+         src/scripts/header.ts. Without JavaScript nothing ever collapses, so
+         the sticky header above is already right and this never applies. */
+      :global(html.js-header-fixed) .site-header { position: fixed; left: 0; right: 0; }
+      :global(html.js-header-fixed) body { padding-top: var(--header-h); }
+      /* Measuring flips `.scrolled` off and back within the frame; animating
+         that would show as a twitch on every resize. */
+      .site-header.js-measuring .header-inner,
+      .site-header.js-measuring .brand :global(img) { transition: none; }
 
       /* cyan social bar */
       .topbar { background: var(--color-primary); overflow: hidden; }

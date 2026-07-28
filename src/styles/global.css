@@ -1,6 +1,18 @@
 /* Base reset + typography + reusable components. Uses tokens.css. */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; color-scheme: dark; }
+
+/* The header sits over the page, so anything jumped to — the skip link's
+   target, a heading someone linked to — has to be pushed clear of it or it
+   arrives hidden underneath. `--header-slim-h` is the collapsed bar a visitor
+   scrolling down actually meets; it is measured in src/scripts/header.ts. The
+   fallbacks are the *tall* header, which is what is still on screen before
+   that script has run and the only thing there is without JavaScript. Landing
+   a little low costs nothing; landing under the header loses the target. */
+html { scroll-padding-top: calc(var(--header-slim-h, 19rem) + var(--space-3)); }
+@media (max-width: 799.98px) {
+  html { scroll-padding-top: calc(var(--header-slim-h, 5rem) + var(--space-3)); }
+}
 body {
   margin: 0;
   font-family: var(--font-body);
