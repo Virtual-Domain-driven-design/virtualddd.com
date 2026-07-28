@@ -46,6 +46,9 @@ jobs:
     outputs:
       changed: ${{ steps.diff.outputs.changed }}
       summary: ${{ steps.diff.outputs.summary }}
+      # The commit this run made. The deploy has to be told, or it builds the
+      # site as it stood before the sync — see the `ref` input in deploy.yml.
+      sha: ${{ steps.commit.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
 
@@ -132,6 +135,7 @@ jobs:
           esac
 
       - name: Commit
+        id: commit
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name  "virtualddd-sync"
@@ -140,6 +144,7 @@ jobs:
           git commit -m "Content: ${{ steps.diff.outputs.summary }}" \
                      -m "Synced from Notion by ${{ github.event_name }}."
           git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   deploy:
     needs: sync
@@ -148,3 +153,4 @@ jobs:
     secrets: inherit
     with:
       changes: ${{ needs.sync.outputs.summary }}
+      ref: ${{ needs.sync.outputs.sha }}

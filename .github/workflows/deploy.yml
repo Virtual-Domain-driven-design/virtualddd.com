@@ -18,6 +18,15 @@ on:
         description: A short human summary of what changed, for the notification.
         type: string
         required: false
+      ref:
+        # A called workflow runs at the *caller's* commit, and the sync commits
+        # after its run began — so without this the deploy built the site as it
+        # was before the content it was called to publish. Eight organiser
+        # photos were restored by a sync and the deploy that followed shipped
+        # the build without them. The sync passes the sha it just pushed.
+        description: The commit to build. Defaults to the one that triggered the run.
+        type: string
+        required: false
   workflow_dispatch:
 
 # One deploy at a time. Two rsyncs into the same directory would interleave.
@@ -33,6 +42,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # the guard below diffs against the previous commit
+          ref: ${{ inputs.ref || github.sha }}
+
+      # Say which commit is being published, every time. The defect this
+      # replaces was invisible precisely because nothing ever printed it: the
+      # run was green, the summary named the content that had changed, and the
+      # build was of the commit before it.
+      - name: What is being built?
+        run: |
+          built=$(git rev-parse HEAD)
+          echo "Building $built" >> "$GITHUB_STEP_SUMMARY"
+          git log -1 --format='%s (%an)' >> "$GITHUB_STEP_SUMMARY"
+          asked="${{ inputs.ref }}"
+          if [ -n "$asked" ] && [ "$built" != "$asked" ]; then
+            echo "::error::Asked to build $asked but the tree is at $built."
+            exit 1
+          fi
 
       # Generated content belongs to Notion, and only the sync may change it.
       # A hand edit here is not a merge conflict to resolve: it will be undone
@@ -148,7 +173,10 @@ jobs:
           fi
           grep -q . ~/.ssh/known_hosts || { echo "::error::ssh-keyscan returned no host key."; cat /tmp/keyscan.err; exit 1; }
           SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes -o ConnectTimeout=20"
-          RELEASE="releases/${{ github.sha }}"
+          # The commit that was *built*, which is not github.sha when the sync
+          # called this workflow — a release directory named after anything
+          # else makes a rollback pick the wrong site.
+          RELEASE="releases/$(git rev-parse HEAD)"
 
           # Never replace a real directory. If the document root is not already
           # a symlink it may be a live site put there by someone else, and CI
@@ -194,9 +222,13 @@ jobs:
           TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
         run: |
           [ -n "$HOOK" ] || { echo "no deploy webhook configured, skipping"; exit 0; }
+          # What was built, not what triggered the run — see the `ref` input.
+          # A Discord post linking to the commit before the one it published
+          # is how this defect stayed invisible.
+          built=$(git rev-parse HEAD)
           code=$(jq -n \
-            --arg commit "${{ github.sha }}" \
-            --arg url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
+            --arg commit "$built" \
+            --arg url "${{ github.server_url }}/${{ github.repository }}/commit/$built" \
             --arg changes "${{ inputs.changes }}" \
             --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             '{event:"deployed", site:"https://virtualddd.com", commit:$commit, commitUrl:$url, changes:$changes, run:$run}' \
