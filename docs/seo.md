@@ -46,6 +46,42 @@ heuristic.
 
 ---
 
+# The sitemap, and proving the site is ours
+
+`@astrojs/sitemap` writes `/sitemap-index.xml` at build time, and `robots.txt`
+points at it. Two things are deliberately kept out: `/410/`, which is the body
+of an error response rather than a page, and the three heuristic type indexes,
+which are filtered views of `/heuristics/` and would read as duplicates. The
+filter lives in `astro.config.mjs` next to the `changefreq` rules, so both
+decisions are one file.
+
+**There is no `lastmod`, on purpose.** A date that is not demonstrably accurate
+is worse than no date, and the recrawl signal that actually matters here is the
+redirect map, not a timestamp.
+
+**Google owns the domain property through DNS.** A
+`google-site-verification=…` TXT record sits on `virtualddd.com` at the
+registrar. It predates the move off WordPress, which is why the cutover did not
+cost us the Search Console history: a domain property is verified against DNS,
+not against whatever is serving the site that week. Do not remove that record
+when tidying DNS.
+
+**Bing is not claimed, and that is a choice rather than an oversight.** It
+would mean another login to hold and another account to keep in someone's
+hands, which is a real cost for a team this size. If it is ever worth doing,
+import the property from Search Console: that needs nothing in this repository,
+and no second token to rotate. Prefer it over the `msvalidate.01` meta tag and
+the `BingSiteAuth.xml` file, both of which put a credential in the build output
+that this site has no reason to carry.
+
+**Expect coverage churn, and do not panic at it.** The site inherited 967
+addresses, of which 261 return `410 Gone` on purpose. In a coverage report that
+is indistinguishable from a migration gone wrong, and it will surface weeks
+after the fact. The split is in [urls.md](urls.md) and is proved every week by
+`watch.yml`; the 410s are correct.
+
+---
+
 # AI legibility
 
 The site is meant to be read, cited and quoted by answer engines as well as
