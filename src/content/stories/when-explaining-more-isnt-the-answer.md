@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Collaborative Modeling"
 youtube: "https://youtu.be/86n74wXqwZA"
 podcast: "https://player.captivate.fm/episode/546b1af7-d871-41ff-abb0-265d4cf7611c/"
 curatedHeuristics: ["interrupt-patterns-stay-with-flock", "design-experiences-not-explanations", "focus-valued-organizational-outcomes"]
-focusKeyphrase: "experiential facilitation architecture"
 seoTitle: "When Explaining More Makes Things Worse"
 seoMetadescription: "Diana Montalion on why \"explain more\" fails architectural resistance—and how designing experiences creates breakthroughs that talking never will."
 featuredImageSquared: "./_assets/when-explaining-more-isnt-the-answer-featured-squared.png"

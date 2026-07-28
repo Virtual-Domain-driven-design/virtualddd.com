@@ -9,7 +9,6 @@ tags: ["ADR", "Software Architecture", "Social Dynamics", "Facilitating Software
 youtube: "https://youtu.be/Uy_saAvmROQ"
 podcast: "https://player.captivate.fm/episode/6b53b756-3249-44d9-b15e-7a260124d88d/"
 curatedHeuristics: ["write-down-decisions-early-and-often", "make-decisions-transparant"]
-focusKeyphrase: "systems change transparency"
 seoTitle: "Transparency in Systems Change"
 seoMetadescription: "How Architectural Decision Records turn architecture from a bottleneck into something a whole team can see, question and contribute to."
 featuredImageSquared: "./_assets/systems-change-transparency-featured-squared.png"

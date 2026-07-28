@@ -10,7 +10,6 @@ tags: ["incident-response", "deployment", "resilience", "recovery"]
 complements: ["prioritise-recoverability-over-flawless-deployment"]
 enables: ["build-safety-through-small-failures", "global-metadata-creates-global-risk", "distribute-debugging-beyond-war-room"]
 prerequisites: ["build-safety-through-small-failures"]
-focusKeyphrase: "rollback over fix-forward"
 metaDescription: "When a system enters an unstable state, reverting to a known working state is safer than attempting forward fixes in production."
 ---
 

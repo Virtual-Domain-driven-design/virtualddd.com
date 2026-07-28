@@ -7,7 +7,6 @@ type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["difficult conversations", "Stakeholder Communication", "challenging feedback", "professional communication", "leadership skills"]
-focusKeyphrase: "difficult conversations"
 metaDescription: "Deliver uncomfortable truths to stakeholders by framing them around shared goals, so the conversation stays about the work rather than about blame."
 ---
 

@@ -10,7 +10,6 @@ tags: ["architecture", "team-dynamics", "values-heuristics", "decision-making", 
 complements: ["notice-working-too-hard-facilitator", "make-decisions-transparant", "respect-apathy-in-decision-making"]
 enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["surface-value-preferences-before-technical-solutions"]
-focusKeyphrase: "Architectural Pain Points"
 metaDescription: "Uncover hidden values behind architectural preferences to evaluate options against real team pain points and foster productive discussions."
 seoTitle: "Evaluate Options Against Real Team Pain Points"
 ---

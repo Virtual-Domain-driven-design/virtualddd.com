@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Power Dynamics", "Colla
 youtube: "https://youtu.be/ClUQkGbIevo"
 podcast: "https://player.captivate.fm/episode/39d4201d-1de5-4d28-92c1-2c755489223e/"
 curatedHeuristics: ["evaluate-architectural-options-against-team-pain-points", "surface-value-preferences-before-technical-solutions", "consider-downstream-teams-architectural-patterns", "evaluate-options-against-team-frustrations"]
-focusKeyphrase: "loudest voice architectural decisions"
 seoTitle: "When the Loudest Voice Architects Your Future"
 seoMetadescription: "What happens when a team makes architectural decisions with no one to facilitate them? Gien Verschatse on burnout, bad choices, and lessons learned."
 featuredImageSquared: "./_assets/loudest-voice-architectural-decisions-featured-squared.png"

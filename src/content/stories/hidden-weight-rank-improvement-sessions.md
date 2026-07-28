@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Engineering CUlture", "
 youtube: "https://youtu.be/sd8cTUMieog"
 podcast: "https://player.captivate.fm/episode/cafee170-d3be-46e6-90fb-2447349e7d38/"
 curatedHeuristics: ["acknowledge-power-dynamics-in-public-code-critique", "treat-resistance-as-a-valuable-signal", "generate-multiple-options-to-depersonalise-design-debates", "own-mistakes-and-repair-the-social-fabric", "make-the-implicit-mental-models-explicit-for-objective-collaboration", "prioritize-shared-context-before-exploring-solutions", "introduce-change-as-an-evolution-not-revolution"]
-focusKeyphrase: "Unseen Authority"
 seoTitle: "The Hidden Weight of Rank: Unseen Authority with Paul Rayner"
 seoMetadescription: "Paul Rayner on a well-intended improvement session that ended with a developer quitting — a candid lesson in unseen authority and power dynamics."
 featuredImageSquared: "./_assets/hidden-weight-rank-improvement-sessions-featured-squared.png"

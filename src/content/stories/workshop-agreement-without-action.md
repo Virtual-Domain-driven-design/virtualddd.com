@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "collaborative software 
 youtube: "https://youtu.be/5Zp7eNsLFLM"
 podcast: "https://player.captivate.fm/episode/57ee2f33-ce16-48a8-9d82-320393458a5e/"
 curatedHeuristics: ["pause-every-ten-minutes-invite-dissent", "notice-anxiety-signal-missing-something", "build-connection-before-content", "drop-methodology-when-barrier", "challenge-workshop-premise-before-diving-in"]
-focusKeyphrase: "workshop agreement without action"
 seoTitle: "When Workshop Agreement Doesn't Lead to Action | Xin Yao"
 seoMetadescription: "Xin Yao on two workshops where everyone agreed and nothing shipped — how to surface the real concerns behind the success theatre."
 featuredImageSquared: "./_assets/workshop-agreement-without-action-featured-squared.png"

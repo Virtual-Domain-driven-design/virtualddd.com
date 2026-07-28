@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Psychological Safety", 
 youtube: "https://youtu.be/URZL78DSpv4"
 podcast: "https://player.captivate.fm/episode/cae1c91a-e8c6-401d-aaf6-58f4d3eac439/"
 curatedHeuristics: ["design-as-living-conversation", "global-metadata-creates-global-risk", "executives-provide-resources-not-pressure", "build-safety-through-small-failures", "default-rollback-over-fix-forward", "distribute-debugging-beyond-war-room"]
-focusKeyphrase: "psychological safety incident response"
 seoTitle: "Incident Command and Psychological Safety"
 seoMetadescription: "When a Google Cloud outage was fixed by someone no one paged, the real lesson was psychological safety. Learn how Liz Fong-Jones built resilient teams."
 featuredImageSquared: "./_assets/psychological-safety-incident-response-featured-squared.png"

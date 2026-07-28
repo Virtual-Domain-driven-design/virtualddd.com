@@ -7,7 +7,6 @@ type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Decision Making", "Facilitation", "Conflict Resolution", "Prioritization", "Trade-offs"]
-focusKeyphrase: "Facilitate conflicting decisions"
 metaDescription: "When priorities clash, make the trade-off explicit — name what each option gains and gives up — so the group chooses consciously rather than by attrition."
 ---
 

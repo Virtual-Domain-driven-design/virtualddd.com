@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Domain Events", "Techni
 youtube: "https://youtu.be/eyJhUqGJgbA"
 podcast: "https://player.captivate.fm/episode/b9001bb9-070a-4c03-89e4-faf221c37778/"
 curatedHeuristics: ["permit-contained-failure-to-foster-learning", "distinguish-between-tigers-and-mice-in-design", "domain-events-must-carry-their-own-context", "the-goal-is-the-right-outcome-not-being-right", "mistrust-simplicity-achieved-without-thought", "a-decision-is-what-gets-implemented"]
-focusKeyphrase: "Domain Events vs Technical Events"
 seoTitle: "The True Cost of \"The Simplest Thing to Do”"
 seoMetadescription: "Krisztina Hirth on how choosing 'simple' technical events over real domain events produced 90% noise and an eight-month cleanup."
 featuredImageSquared: "./_assets/true-cost-simplest-thing-to-do-featured-squared.png"

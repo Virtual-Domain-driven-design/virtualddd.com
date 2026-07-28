@@ -7,7 +7,6 @@ type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["constructive feedback", "meeting facilitation", "communication skills", "team collaboration", "professional development"]
-focusKeyphrase: "Help unprepared facilitator"
 metaDescription: "As a participant with an unprepared facilitator, ask empathetic questions that realign the group on its goal without taking the session away from them."
 ---
 

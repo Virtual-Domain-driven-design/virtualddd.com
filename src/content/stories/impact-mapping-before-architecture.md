@@ -8,7 +8,6 @@ authors: ["Kim Kao", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["Facilitating Software Architecture and Design", "Domain-Driven Design", "Legacy Modernization", "Stakeholder Alignment", "Collaborative Modeling", "Impact Mapping"]
 youtube: "https://youtu.be/td_vdQgeVwY"
 podcast: "https://player.captivate.fm/episode/abc53c50-27c3-420f-a470-be1238b3e88a/"
-focusKeyphrase: "impact mapping"
 seoTitle: "Impact Mapping Before Architecture: Solve the Right Problem"
 seoMetadescription: "When a vendor said Kubernetes would fix everything, Kim Kao used impact mapping to uncover the real problem first. Learn to solve the right problem."
 featuredImageSquared: "./_assets/impact-mapping-before-architecture-featured-squared.png"

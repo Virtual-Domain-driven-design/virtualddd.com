@@ -9,7 +9,6 @@ tags: ["ADR", "Software Architecture", "Social Dynamics", "Facilitating Software
 youtube: "https://youtu.be/MCiO_CgEGrI"
 podcast: "https://player.captivate.fm/episode/fc4b652d-b818-4669-af76-27577cd253d6/"
 curatedHeuristics: ["acknowledge-significant-conflict-in-decision-rationale", "decompose-large-decisions-into-smaller-ones", "acknowledge-downsides-and-dissent-in-decisions", "revisit-decisions-when-context-changes", "retroactively-document-foundational-decisions"]
-focusKeyphrase: "ghost decisions architecture"
 seoTitle: "Uncovering Ghost Decisions in Architecture"
 seoMetadescription: "How to find the undocumented 'ghost decisions' shaping your architecture, and how Architecture Decision Records bring them into the open."
 featuredImageSquared: "./_assets/uncovering-ghost-decisions-architecture-featured-squared.png"

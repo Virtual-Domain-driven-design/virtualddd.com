@@ -9,7 +9,6 @@ submitter: "Evelyn van Kelle"
 tags: ["event-storming", "organizational-change", "leadership", "collaborative-modeling"]
 complements: ["workshop-stakeholder-alignment"]
 specializes: ["understand-the-cause-of-resistance"]
-focusKeyphrase: "introducing collaborative modeling"
 metaDescription: "When leadership resists big collaborative sessions, embed modelling into regular work rather than making it a special event."
 ---
 

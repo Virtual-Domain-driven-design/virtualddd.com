@@ -7,7 +7,6 @@ type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Facilitation", "Participant Feedback", "Constructive Communication", "Team Dynamics"]
-focusKeyphrase: "Approach struggling facilitator"
 metaDescription: "When a facilitator is visibly struggling, offer support rather than challenge: assume positive intent and give gentle prompts instead of taking over."
 ---
 

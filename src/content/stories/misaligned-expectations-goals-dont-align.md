@@ -9,7 +9,6 @@ tags: ["Collaborative Modeling", "Software Architecture", "Sociotechnical System
 youtube: "https://youtu.be/P67pgiGSWfU"
 podcast: "https://player.captivate.fm/episode/c328974e-e58f-4054-87e4-7945ca286668/"
 curatedHeuristics: ["deliver-difficult-conversations", "approach-struggling-facilitator", "guide-unprepared-facilitator", "communicate-critical-workshop-insights", "realign-workshop-goals", "steer-workshop-discussions", "facilitate-conflicting-decisions", "shift-design-focus-business-problems", "workshop-stakeholder-alignment"]
-focusKeyphrase: "Misaligned Expectations"
 seoMetadescription: "Beija Nigl on what to do when the sponsor's goal contradicts the team's — discovered 48 hours before a legacy modernisation kicks off."
 featuredImageSquared: "./_assets/misaligned-expectations-goals-dont-align-featured-squared.png"
 featuredImage: "./_assets/misaligned-expectations-goals-dont-align-featured.png"

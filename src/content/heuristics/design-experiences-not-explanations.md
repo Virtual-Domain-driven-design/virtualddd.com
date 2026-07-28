@@ -9,7 +9,6 @@ submitter: "Diana Montalion"
 tags: ["Facilitation", "learning", "change-management", "experiential-learning"]
 complements: ["pause-every-ten-minutes-invite-dissent", "make-the-implicit-mental-models-explicit-for-objective-collaboration"]
 prerequisites: ["build-connection-before-content"]
-focusKeyphrase: "experiential learning design"
 metaDescription: "When explanations fail to create understanding, design experiences where people can think through problems themselves."
 ---
 

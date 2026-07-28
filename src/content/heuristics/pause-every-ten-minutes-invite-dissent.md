@@ -10,7 +10,6 @@ tags: ["Facilitation", "psychological-safety", "feedback-loops", "workshop-desig
 complements: ["notice-anxiety-signal-missing-something", "challenge-workshop-premise-before-diving-in", "design-experiences-not-explanations", "interrupt-patterns-stay-with-flock"]
 enables: ["align-bounded-context-with-the-value-stream", "align-with-domain-experts", "align-with-transactional-boundaries", "align-with-investment-strategy", "align-with-historical-domain-boundaries", "align-with-source-of-change", "align-with-rate-of-change", "align-with-growth-strategy", "align-with-key-revenue-streams", "align-with-evolutionary-stage-the-simon-wardley-heuristic", "build-connection-before-content"]
 prerequisites: ["build-connection-before-content", "challenge-workshop-premise-before-diving-in"]
-focusKeyphrase: "invite dissent regularly"
 metaDescription: "Build regular pauses into facilitation to ask what people doubt or find useless, preventing polite silence."
 ---
 

@@ -8,7 +8,6 @@ authors: ["Larisa Feldman", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harme
 tags: ["Facilitating Software Architecture and Design", "Software Architecture", "Enabling Architecture", "Hands-on Architect", "Ivory-Tower Architect", "technical leadership"]
 youtube: "https://youtu.be/HQnvMHkssVM"
 podcast: "https://player.captivate.fm/episode/3fec96b4-f2f9-4567-8ff8-66474abc00fb/"
-focusKeyphrase: "reluctant architect"
 seoTitle: "The Reluctant Architect: A Career Path Nobody Plans"
 seoMetadescription: "Larisa Feldman spent years watching architects lose their spark—then became a reluctant architect herself. On why good architecture serves engineers."
 featuredImageSquared: "./_assets/the-reluctant-architect-featured-squared.png"

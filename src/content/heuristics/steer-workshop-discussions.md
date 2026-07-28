@@ -7,7 +7,6 @@ type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["workshop facilitation", "Meeting management", "Discussion control", "Goal alignment"]
-focusKeyphrase: "workshop on track"
 metaDescription: "When a workshop discussion drifts, return to the goal everyone agreed on and use it to refocus the group rather than cutting people off."
 ---
 

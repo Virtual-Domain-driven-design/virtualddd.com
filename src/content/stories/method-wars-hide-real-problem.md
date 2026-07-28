@@ -8,7 +8,6 @@ authors: ["Simon Wardley", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel
 tags: ["Facilitating Software Architecture and Design", "Software Architecture", "Governance", "Sociotechnical Systems", "Stakeholder Alignment", "Power Dynamics"]
 youtube: "https://youtu.be/uM_X2ypvaA0"
 podcast: "https://player.captivate.fm/episode/f124eda9-769d-442e-ac9f-b1a12d478ec6/"
-focusKeyphrase: "methodology wars architecture context"
 seoTitle: "Why Method Wars Hide the Real Architecture Problem"
 seoMetadescription: "Simon Wardley on how mapping the evolution of components ended the methodology wars on HS2 — context matters more than picking the right method."
 featuredImageSquared: "./_assets/method-wars-hide-real-problem-featured-squared.png"

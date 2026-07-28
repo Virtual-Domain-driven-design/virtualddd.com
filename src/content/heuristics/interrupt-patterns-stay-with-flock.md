@@ -8,7 +8,6 @@ authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Diana Montalion"
 tags: ["Facilitation", "systems-thinking", "cognitive-patterns", "architectural-guidance"]
 complements: ["pause-every-ten-minutes-invite-dissent", "notice-working-too-hard-facilitator"]
-focusKeyphrase: "pattern interruption facilitation"
 metaDescription: "Listen for moments when familiar thinking will recreate old problems, then nudge toward different questions."
 ---
 

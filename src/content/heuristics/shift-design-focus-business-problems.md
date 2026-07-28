@@ -7,7 +7,6 @@ type: ["design-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Design Thinking", "Facilitation", "Business Problems", "Technical Constraints", "Product Strategy"]
-focusKeyphrase: "Focus business problems"
 metaDescription: "When design talk collapses into technical constraints and legacy systems, steer it back to the business problem before any solution is on the table."
 ---
 

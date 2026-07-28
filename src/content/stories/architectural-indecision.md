@@ -9,7 +9,6 @@ tags: ["Software Architecture", "team collaboration", "Facilitating Software Arc
 youtube: "https://youtu.be/hYOztFDJSmM"
 podcast: "https://player.captivate.fm/episode/a6cf2188-2539-4986-8975-a44af952981d/"
 curatedHeuristics: ["value-lived-experience-over-theoretical-principles", "prioritise-system-integrity-over-local-convenience", "respect-apathy-in-decision-making", "ask-what-does-it-take-to-go-along-with-a-decision", "proxy-accountability-to-unblock-decisions", "address-dissent-by-enabling-commitment", "generate-experience-through-practical-experimentation"]
-focusKeyphrase: "Team indecision software architecture"
 seoTitle: "Navigating Team Indecision in Software Architecture"
 seoMetadescription: "What to do when a team stays silent and no decision gets made — a real story about giving developers ownership of their own technical choices."
 featuredImageSquared: "./_assets/architectural-indecision-featured-squared.png"

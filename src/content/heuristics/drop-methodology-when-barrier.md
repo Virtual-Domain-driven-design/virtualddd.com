@@ -11,7 +11,6 @@ complements: ["notice-anxiety-signal-missing-something"]
 enables: ["notice-anxiety-signal-missing-something"]
 prerequisites: ["notice-anxiety-signal-missing-something"]
 specializes: ["design-bounded-contexts-around-eventstorming-policies", "eventstorming-introduce-new-colours-iteratively"]
-focusKeyphrase: "abandon methodology barriers"
 metaDescription: "Recognise when formal techniques intimidate participants and shift to freeform collaboration that meets people where they are."
 ---
 

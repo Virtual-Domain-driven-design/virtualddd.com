@@ -10,7 +10,6 @@ tags: ["architecture", "documentation", "knowledge-management", "team-ownership"
 complements: ["cultivate-ownership-for-decision-accountability"]
 enables: ["build-safety-through-small-failures"]
 prerequisites: ["build-safety-through-small-failures"]
-focusKeyphrase: "living design conversation"
 metaDescription: "Design should be owned by teams, not individuals, with ongoing conversation about why decisions were made and when to revisit them."
 ---
 

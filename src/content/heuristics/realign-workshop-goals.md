@@ -7,7 +7,6 @@ type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["workshop facilitation", "Goal alignment", "Meeting management", "Facilitator tips"]
-focusKeyphrase: "realign workshop goals"
 metaDescription: "When it becomes clear mid-session that people disagree about the purpose, stop and realign with everyone present before spending more of the room's time."
 ---
 

@@ -11,7 +11,6 @@ competesWith: ["respect-apathy-in-decision-making"]
 complements: ["align-with-evolutionary-stage-the-simon-wardley-heuristic", "write-down-decisions-early-and-often", "make-decisions-transparant"]
 enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["notice-working-too-hard-facilitator"]
-focusKeyphrase: "downstream team impact"
 metaDescription: "Think through how architectural changes will affect QA, operations, and other teams before implementation."
 seoTitle: "Consider Downstream Teams When Choosing Patterns"
 ---

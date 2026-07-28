@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Power Dynamics", "Confl
 youtube: "https://youtu.be/OjWax86V-M4"
 podcast: "https://player.captivate.fm/episode/c397619c-c430-460e-9e36-c36f4c632c3b/"
 curatedHeuristics: ["when-disagreeing-first-reflect-on-your-feedback", "detach-personal-emotion-from-technical-decision", "use-architecture-principles-as-decision-guardrails", "facilitate-communication-to-resolve-boundary-conflicts", "frame-boundary-models-for-autonomy-and-flow", "prioritise-documenting-impact-over-process-consistency", "accept-imperfect-boundaries-in-legacy-decomposition"]
-focusKeyphrase: "architect disagreement team decision"
 seoTitle: "The Architect's Dilemma: Disagreeing With Your Team"
 seoMetadescription: "What an architect can do when a team decides something they fundamentally disagree with: shift from control to influence, and build guardrails instead."
 featuredImageSquared: "./_assets/architects-disagreement-team-decision-featured-squared.png"

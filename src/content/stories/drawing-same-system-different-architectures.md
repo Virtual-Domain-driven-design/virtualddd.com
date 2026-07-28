@@ -8,7 +8,6 @@ authors: ["Aino Corry", "Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["Facilitating Software Architecture and Design", "Software Architecture", "Collaborative Modeling", "Psychological Safety", "Social Dynamics"]
 youtube: "https://youtu.be/U5NHOSBjdtE"
 podcast: "https://player.captivate.fm/episode/ada53abb-c031-43a6-97f8-c88ed0a82e13/"
-focusKeyphrase: "architecture mental models"
 seoMetadescription: "Ask four architects to draw the same system and you get four diagrams. Externalising those mental models is what surfaces the disagreement."
 featuredImageSquared: "./_assets/drawing-same-system-different-architectures-featured-squared.png"
 featuredImage: "./_assets/drawing-same-system-different-architectures-featured.png"

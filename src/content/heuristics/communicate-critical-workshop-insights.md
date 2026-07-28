@@ -7,7 +7,6 @@ type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["Stakeholder Communication", "Workshop Debrief", "Difficult Feedback", "Business Insights", "Management Communication"]
-focusKeyphrase: "Communicating critical insights"
 metaDescription: "Get the uncomfortable findings to the people who were not in the room: a short, evidence-based summary with a clear recommendation beats a full write-up."
 ---
 

@@ -9,7 +9,6 @@ tags: ["Governance", "Facilitating Software Architecture and Design", "Social Dy
 youtube: "https://youtu.be/GXz-zzNyL38"
 podcast: "https://player.captivate.fm/episode/47be4840-e08e-42b6-8319-7936a9914dae/"
 curatedHeuristics: ["treat-decisions-as-immutable-histrorical-records", "value-team-autonomy-over-rescuing", "amplify-team-decisions-with-organisational-capital", "prioritise-foundation-trust-in-the-team", "be-explicit-about-decision-making-authority", "measure-the-flow-of-decision-making", "capture-both-logic-and-sentiment-in-decisions", "decompose-large-decisions-into-smaller-ones"]
-focusKeyphrase: "governance after incident"
 seoTitle: "Software Governance After an Incident"
 seoMetadescription: "A decision made under incident pressure gets reversed afterwards. Why governance, supportive leadership and written decisions prevent the frustration."
 featuredImageSquared: "./_assets/governance-after-incident-decision-reversal-featured-squared.png"

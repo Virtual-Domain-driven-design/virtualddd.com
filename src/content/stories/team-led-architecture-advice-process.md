@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Software Architecture",
 youtube: "https://youtu.be/UmG_DhtynCs"
 podcast: "https://player.captivate.fm/episode/ba3ab849-6602-4816-9e3b-68f502e5834d/"
 curatedHeuristics: ["formalize-architectural-advice-forums-for-cross-context-awareness", "cultivate-ownership-for-decision-accountability", "engage-advisors-during-not-after-deliberation", "use-adrs-for-thinking-not-just-recording", "architects-as-enablers-not-gatekeepers", "treat-strong-opinions-as-inquiry-signals", "guide-decisions-do-not-dictate-solutions", "autonomy-requires-a-system-wide-perspective", "decompose-large-decisions-into-smaller-ones"]
-focusKeyphrase: "team-led architecture"
 seoMetadescription: "Elena Stojmilova on Open GI's shift to team-led architecture — from strong opinions to a culture where engineers own decisions and give advice."
 featuredImageSquared: "./_assets/team-led-architecture-advice-process-featured-squared.png"
 featuredImage: "./_assets/team-led-architecture-advice-process-featured.png"

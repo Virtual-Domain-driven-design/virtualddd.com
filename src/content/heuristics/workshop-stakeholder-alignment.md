@@ -8,7 +8,6 @@ authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
 tags: ["workshop facilitation", "stakeholder alignment", "meeting planning", "collaboration"]
 complements: ["start-small-leadership-resists"]
-focusKeyphrase: "workshop stakeholder alignment"
 metaDescription: "Align every stakeholder on the purpose and the intended outcome before the workshop starts — misalignment discovered on the day is expensive to repair."
 ---
 

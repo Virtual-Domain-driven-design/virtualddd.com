@@ -8,7 +8,6 @@ authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["Facilitating Software Architecture and Design", "Collaborative Modeling", "Sociotechnical Systems", "Power Dynamics", "Domain-Driven Design", "Stakeholder Alignment"]
 youtube: "https://youtu.be/WkoCfDHOXpw"
 podcast: "https://player.captivate.fm/episode/66174b84-14ab-4adf-9911-90c4a6830138/"
-focusKeyphrase: "the problem isn't technical"
 seoTitle: "When the Problem Isn't Technical: DDD Europe"
 seoMetadescription: "At DDD Europe, nine practitioners agreed the problem isn't technical. Discover why facilitation, power structures, and the right people decide outcomes."
 featuredImageSquared: "./_assets/problem-isnt-technical-ddd-europe-featured-squared.png"

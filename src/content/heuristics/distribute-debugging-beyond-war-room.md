@@ -10,7 +10,6 @@ tags: ["incident-response", "distributed-systems", "coordination", "autonomy"]
 complements: ["prioritise-recoverability-over-flawless-deployment"]
 enables: ["build-safety-through-small-failures", "default-rollback-over-fix-forward", "executives-provide-resources-not-pressure"]
 prerequisites: ["build-safety-through-small-failures"]
-focusKeyphrase: "distributed incident response"
 metaDescription: "Critical incident information often lives outside the war room. Structure response to let people surface solutions without waiting for invitation."
 ---
 

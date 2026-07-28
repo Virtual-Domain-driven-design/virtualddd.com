@@ -10,7 +10,6 @@ tags: ["self-awareness", "Facilitation", "psychological-safety", "enabling-archi
 complements: ["pause-every-ten-minutes-invite-dissent", "build-connection-before-content", "align-bounded-context-with-the-value-stream", "drop-methodology-when-barrier"]
 enables: ["drop-methodology-when-barrier", "challenge-workshop-premise-before-diving-in"]
 prerequisites: ["drop-methodology-when-barrier"]
-focusKeyphrase: "facilitator anxiety signal"
 metaDescription: "Recognise your own anxiety about outcomes as information that you might be avoiding an important conversation."
 ---
 

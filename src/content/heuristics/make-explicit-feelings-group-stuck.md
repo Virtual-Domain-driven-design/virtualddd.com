@@ -7,7 +7,6 @@ type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "psychological-safety", "sense-making", "vulnerability"]
-focusKeyphrase: "making feelings explicit"
 metaDescription: "When a group is stuck, share your own feelings first and invite others to share if they recognise similar reactions."
 ---
 

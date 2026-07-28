@@ -8,7 +8,6 @@ authors: ["Laila Bougria", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwe
 tags: ["Facilitating Software Architecture and Design", "Software Architecture", "Conflict Management", "team collaboration", "Governance", "Social Dynamics", "Sociotechnical Systems"]
 youtube: "https://youtu.be/VFtM8-nhmHk"
 podcast: "https://player.captivate.fm/episode/48c52611-9542-4805-982a-2c2e2621ed48/"
-focusKeyphrase: "architecture conflict collaboration"
 seoTitle: "Turning Architecture Conflict Into Collaboration"
 seoMetadescription: "Laïla Bougria on turning clashing opinions into decisions — reframing the problem before the solution, and retrospectives that build evidence."
 featuredImageSquared: "./_assets/turning-architecture-conflict-into-collaboration-featured-squared.png"

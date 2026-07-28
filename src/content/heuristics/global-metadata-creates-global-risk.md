@@ -9,7 +9,6 @@ submitter: "Liz Fong-Jones"
 tags: ["distributed-systems", "canary-deployment", "blast-radius", "load-balancing"]
 complements: ["prioritise-recoverability-over-flawless-deployment"]
 enables: ["default-rollback-over-fix-forward"]
-focusKeyphrase: "global metadata distribution"
 metaDescription: "Even isolated canary deployments create global risk if metadata about them must be distributed system-wide for routing decisions."
 ---
 

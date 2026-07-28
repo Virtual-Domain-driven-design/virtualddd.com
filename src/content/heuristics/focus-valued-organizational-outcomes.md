@@ -8,7 +8,6 @@ authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Diana Montalion"
 tags: ["stakeholder-management", "organizational-change", "architecture-decisions", "risk-management"]
 complements: ["treat-resistance-as-a-valuable-signal"]
-focusKeyphrase: "organizational outcomes focus"
 metaDescription: "Frame architectural experiments around outcomes the organisation already values rather than debating approaches."
 ---
 

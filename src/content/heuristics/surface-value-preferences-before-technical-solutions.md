@@ -10,7 +10,6 @@ tags: ["decision-making", "team-dynamics", "architectural-decisions", "Facilitat
 complements: ["make-decisions-transparant", "write-down-decisions-early-and-often", "respect-apathy-in-decision-making"]
 enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["evaluate-architectural-options-against-team-pain-points"]
-focusKeyphrase: "value-based preferences"
 metaDescription: "Dig into why people have strong technical preferences by uncovering the values and concerns driving them."
 seoTitle: "Surface Value Preferences Before Solutions"
 ---

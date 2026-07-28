@@ -11,7 +11,6 @@ competesWith: ["respect-apathy-in-decision-making"]
 complements: ["acknowledge-power-dynamics-in-public-code-critique"]
 prerequisites: ["prioritise-foundation-trust-in-the-team"]
 specializes: ["build-safety-through-small-failures"]
-focusKeyphrase: "hierarchy in modeling sessions"
 metaDescription: "When participants constantly seek approval from certain people before acting, hierarchy is blocking collaboration."
 ---
 

@@ -10,7 +10,6 @@ tags: ["psychological-safety", "workshop-design", "collaboration", "group-dynami
 complements: ["challenge-workshop-premise-before-diving-in", "notice-anxiety-signal-missing-something"]
 enables: ["challenge-workshop-premise-before-diving-in", "pause-every-ten-minutes-invite-dissent", "design-bounded-contexts-around-eventstorming-policies", "align-bounded-context-with-the-value-stream"]
 prerequisites: ["pause-every-ten-minutes-invite-dissent", "design-experiences-not-explanations"]
-focusKeyphrase: "connection before content"
 metaDescription: "Start collaborative sessions by building trust and connection in small groups before tackling the main content."
 ---
 

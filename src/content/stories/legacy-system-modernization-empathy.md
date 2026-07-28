@@ -9,7 +9,6 @@ tags: ["Legacy Modernization", "Software Architecture", "Facilitating Software A
 youtube: "https://youtu.be/tpE_uGhCx5g"
 podcast: "https://player.captivate.fm/episode/9e596e88-6d5a-4c61-91f2-6ae67d039f9b/"
 curatedHeuristics: ["prioritise-stakeholder-engagement-as-core-work", "detach-self-from-ideas", "tailor-communication-to-stakeholder-context", "allow-time-for-perspective-shifts", "calculated-interpersonal-risk-taking", "facilitate-dont-dictate-architectural-change", "understand-the-cause-of-resistance", "respect-legacy-systems-history"]
-focusKeyphrase: "Focus Keyphrase"
 seoTitle: "Legacy Modernisation: Why Empathy Beats Skill"
 seoMetadescription: "Michael Plöd on why respecting the original developer's intent turns resistance into progress when modernising a legacy system."
 featuredImageSquared: "./_assets/legacy-system-modernization-empathy-featured-squared.png"

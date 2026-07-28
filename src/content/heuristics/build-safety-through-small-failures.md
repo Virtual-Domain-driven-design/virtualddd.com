@@ -11,7 +11,6 @@ complements: ["prioritise-foundation-trust-in-the-team", "permit-contained-failu
 enables: ["executives-provide-resources-not-pressure", "distribute-debugging-beyond-war-room", "design-as-living-conversation", "default-rollback-over-fix-forward"]
 prerequisites: ["prioritise-foundation-trust-in-the-team", "distribute-debugging-beyond-war-room", "design-as-living-conversation", "executives-provide-resources-not-pressure", "default-rollback-over-fix-forward"]
 specializes: ["watch-approval-seeking-safety-signal"]
-focusKeyphrase: "psychological safety incidents"
 metaDescription: "Psychological safety during major incidents is built by how you respond to small failures, missed deadlines, and basic questions every day."
 seoTitle: "Build Psychological Safety Through Small Failures"
 ---

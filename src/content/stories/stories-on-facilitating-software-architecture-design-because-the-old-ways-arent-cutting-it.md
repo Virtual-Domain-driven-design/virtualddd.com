@@ -8,7 +8,6 @@ authors: ["Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["Software Architecture", "Ivory-Tower Architect", "Hands-on Architect", "Facilitating Software Architecture and Design"]
 youtube: "https://youtu.be/X4iUO_3Qebk"
 podcast: "https://player.captivate.fm/episode/0fd161b1-cd12-492f-8d0f-8017b90cc12c/"
-focusKeyphrase: "Facilitating Software Architecture"
 seoTitle: "Facilitating Software Architecture: The Old Ways"
 seoMetadescription: "Why architecture bottlenecks persist, and what collaborative approaches actually change — the opening episode of the Facilitating Stories series."
 featuredImageSquared: "./_assets/stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it-featured-squared.png"

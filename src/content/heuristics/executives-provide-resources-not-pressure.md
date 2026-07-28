@@ -10,7 +10,6 @@ tags: ["incident-response", "leadership", "pressure", "support"]
 complements: ["prioritise-foundation-trust-in-the-team"]
 enables: ["build-safety-through-small-failures", "distribute-debugging-beyond-war-room"]
 prerequisites: ["build-safety-through-small-failures"]
-focusKeyphrase: "executive incident response"
 metaDescription: "During incidents, executives should ensure adequate resources and urgency without speaking up in ways that intimidate or pressure responders."
 ---
 

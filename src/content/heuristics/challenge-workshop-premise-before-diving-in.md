@@ -10,7 +10,6 @@ tags: ["workshop-facilitation", "stakeholder-alignment", "psychological-safety",
 complements: ["pause-every-ten-minutes-invite-dissent", "build-connection-before-content"]
 enables: ["design-bounded-contexts-around-eventstorming-policies", "align-bounded-context-with-the-value-stream", "build-connection-before-content", "notice-anxiety-signal-missing-something"]
 prerequisites: ["pause-every-ten-minutes-invite-dissent", "align-bounded-context-with-the-value-stream"]
-focusKeyphrase: "challenge workshop premise"
 metaDescription: "Test if participants agree with the workshop purpose upfront to surface resistance before investing in the session."
 ---
 

@@ -8,7 +8,6 @@ authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Versc
 submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "conflict-resolution", "one-on-one", "behavioral-patterns"]
 specializes: ["understand-the-cause-of-resistance"]
-focusKeyphrase: "addressing disruptive behavior"
 metaDescription: "When someone's behaviour disrupts a session, address it one-on-one by sharing observations and asking questions."
 ---
 

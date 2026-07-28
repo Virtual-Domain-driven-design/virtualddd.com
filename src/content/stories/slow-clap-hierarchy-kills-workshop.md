@@ -9,7 +9,6 @@ tags: ["Facilitating Software Architecture and Design", "Social Dynamics", "Powe
 youtube: "https://youtu.be/XILzX7o4zWo"
 podcast: "https://player.captivate.fm/episode/2ffa26c7-e26d-47f2-9b07-19a7c61c431b/"
 curatedHeuristics: ["notice-working-too-hard-facilitator", "make-explicit-feelings-group-stuck", "step-back-observe-losing-control", "start-small-leadership-resists", "address-destructive-behavior-privately", "watch-approval-seeking-safety-signal", "check-problem-hinders-you-or-group"]
-focusKeyphrase: "hierarchy kills workshop facilitation"
 seoTitle: "When Hierarchy Kills the Workshop: Facilitating Under Fire"
 seoMetadescription: "Evelyn van Kelle on a CTO slow-clapping through a vulnerable moment, how hierarchy kills collaboration, and what a facilitator can do about it."
 featuredImageSquared: "./_assets/slow-clap-hierarchy-kills-workshop-featured-squared.png"

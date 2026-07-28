@@ -9,7 +9,6 @@ submitter: "Evelyn van Kelle"
 tags: ["Facilitation", "group-dynamics", "session-flow", "awareness"]
 complements: ["evaluate-architectural-options-against-team-pain-points", "interrupt-patterns-stay-with-flock"]
 prerequisites: ["consider-downstream-teams-architectural-patterns"]
-focusKeyphrase: "facilitator effort level"
 metaDescription: "When you find yourself working unusually hard to keep a session moving, something under the surface needs attention."
 ---
 

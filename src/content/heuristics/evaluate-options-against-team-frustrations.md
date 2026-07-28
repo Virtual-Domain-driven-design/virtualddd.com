@@ -9,7 +9,6 @@ submitter: "Gien Verschatse"
 tags: ["legacy-modernization", "technical-debt", "team-experience", "architectural-decisions"]
 complements: ["a-bounded-context-should-keep-its-internal-details-private", "align-with-evolutionary-stage-the-simon-wardley-heuristic", "write-down-decisions-early-and-often"]
 specializes: ["make-decisions-transparant"]
-focusKeyphrase: "architectural impact assessment"
 metaDescription: "Test whether a proposed technical change will relieve the frustrations that make development difficult."
 ---
 

@@ -8,7 +8,6 @@ authors: ["Michael Joyce", "Andrea Magnorsky", "Andrew Harmel-Law"]
 tags: ["Facilitating Software Architecture and Design", "Collaborative Modeling", "Stakeholder Alignment", "ADR", "Social Dynamics", "technical leadership", "Consensus"]
 youtube: "https://youtu.be/UrdOmhWyfTs"
 podcast: "https://player.captivate.fm/episode/df008cd7-71a9-473b-853a-b2d9ead7dfa2/"
-focusKeyphrase: "externalising decisions"
 seoTitle: "Externalising Decisions: Why Talking Isn't Alignment"
 seoMetadescription: "Michael Joyce on externalising decisions: why three months of talking lost to one day at a whiteboard, and how harmony over precision hides real disagreement."
 featuredImageSquared: "./_assets/externalising-decisions-not-alignment-featured-squared.png"

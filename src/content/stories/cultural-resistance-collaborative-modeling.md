@@ -8,7 +8,6 @@ authors: ["Marco Heimeshoff", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Sc
 tags: ["Facilitating Software Architecture and Design", "Collaborative Modeling", "Psychological Safety", "Sociotechnical Systems", "Power Dynamics", "Engineering CUlture"]
 youtube: "https://youtu.be/ACJCSAiPNgM"
 podcast: "https://player.captivate.fm/episode/f0964f9b-a8c4-4899-a380-47d842b394f5/"
-focusKeyphrase: "cultural resistance modeling"
 seoTitle: "Cultural Resistance to Collaborative Modeling"
 seoMetadescription: "Why EventStorming and collaborative modeling fail against cultural resistance — and why a real mandate matters more than the right method."
 featuredImageSquared: "./_assets/cultural-resistance-collaborative-modeling-featured-squared.png"
