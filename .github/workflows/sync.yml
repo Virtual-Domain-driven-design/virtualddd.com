@@ -87,7 +87,17 @@ jobs:
       - name: What changed?
         id: diff
         run: |
-          if git diff --quiet; then
+          # Stage first, and ask the index rather than the working tree.
+          # `git diff` cannot see a file git has never heard of, and that is
+          # every file of a collection the *first* time it syncs. Conferences
+          # wrote four entries and four logos into a directory that had never
+          # existed, and this step reported nothing to do: no commit, no deploy,
+          # a green run and an empty section on the site. Every other collection
+          # was committed by hand during the migration, so none of them ever hit
+          # it. `git add -A` is what the commit step does anyway; doing it here
+          # means the thing we test is the thing we would commit.
+          git add -A
+          if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Nothing changed in Notion since the last sync." >> "$GITHUB_STEP_SUMMARY"
             exit 0
@@ -96,12 +106,12 @@ jobs:
           {
             echo "### Content changes"
             echo
-            git diff --name-status -- src/content data/retired-urls.csv | sed 's/^/    /'
+            git diff --cached --name-status -- src/content data/retired-urls.csv | sed 's/^/    /'
           } >> "$GITHUB_STEP_SUMMARY"
           # A one-line summary for the Discord post, e.g. "3 changed, 1 new".
-          added=$(git diff --diff-filter=A --name-only -- src/content | wc -l)
-          modified=$(git diff --diff-filter=M --name-only -- src/content | wc -l)
-          removed=$(git diff --diff-filter=D --name-only -- src/content | wc -l)
+          added=$(git diff --cached --diff-filter=A --name-only -- src/content | wc -l)
+          modified=$(git diff --cached --diff-filter=M --name-only -- src/content | wc -l)
+          removed=$(git diff --cached --diff-filter=D --name-only -- src/content | wc -l)
           echo "summary=${added} new, ${modified} updated, ${removed} removed" >> "$GITHUB_OUTPUT"
 
       # Two things the sync can see but must not decide: an address still being
