@@ -84,6 +84,7 @@ The pipeline tells you rather than waiting to be asked. What lands where:
 | A deploy failed on `Cannot reach the host` | The host's brute-force protection blocked the runner. Re-run the deploy; a different runner has a different IP. Kualo calls it cPHulk |
 | CI is red on `main` after a content commit | The sync commits and deploys as separate jobs. Check which one failed before assuming the content is wrong |
 | The site is stale but the runs are green | Check the deploy built the commit you expect. The `What is being built?` step prints it |
+| Nothing has synced for hours, and no run was even started | The **VirtualDDD hourly sync** workflow in n8n. It keeps the hourly clock, because GitHub's own cron drops and delays scheduled runs on a quiet repository; that cron is only the backstop and *is* expected to run late |
 | Nobody knows | Ask on [Discord](https://discord.gg/tRJkcsFDKN). The organisers read it |
 
 Deploy and sync notifications reach Discord through n8n. If a message never

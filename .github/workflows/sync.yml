@@ -2,28 +2,40 @@
 #
 # Two triggers, deliberately:
 #
-#   repository_dispatch  n8n fires this the moment something is published, and
-#                        once an hour if edits have piled up. n8n is the only
-#                        part of the system that knows whether anything changed
-#                        — a schedule would spend ten minutes finding out.
+#   repository_dispatch  n8n fires this the moment a session is published, and
+#                        every hour on its own clock for ordinary edits. The
+#                        hourly one is the part that matters: the `schedule:`
+#                        below asks for :25 and GitHub actually fires it two to
+#                        three hours apart, which is a guest bio sitting
+#                        unpublished all afternoon. n8n's timer keeps time.
 #
-#   schedule             a nightly full sync. It ignores the incremental state
-#                        (`--full`) and re-pulls the ddd-crew repositories, so
-#                        any drift — a missed webhook, an upstream README —
-#                        heals within a day without anyone noticing it.
+#   schedule             the nightly full sync, and a backstop for the hourly
+#                        one. `--full` ignores the incremental state and
+#                        re-pulls the ddd-crew repositories, so any drift — a
+#                        missed dispatch, an upstream README — heals within a
+#                        day. GitHub being hours late with *that* costs nothing,
+#                        which is why it stays here while the hourly clock moved
+#                        to n8n.
 #
-# Nothing is deployed unless the sync produced a diff.
+# Nothing is deployed unless the sync produced a diff, so the two clocks
+# overlapping costs a minute of CI and nothing else.
 name: Sync from Notion
 
 on:
   repository_dispatch:
     types: [content-published, content-edited]
   schedule:
-    # Ordinary edits ride the clock. Nothing in n8n watches for them, which is
-    # why there is no debouncing anywhere: a typo fixed in Notion is live
-    # within the hour, and an hour in which nobody edits costs one minute of CI
-    # and deploys nothing.
-    - cron: '25 * * * *'   # hourly, for edits
+    # Ordinary edits ride the clock, and nothing watches for them, which is why
+    # there is no debouncing anywhere: an hour in which nobody edits costs one
+    # minute of CI and deploys nothing.
+    #
+    # The hourly one here is the backstop now, not the clock. GitHub delays and
+    # drops scheduled runs on a repository that is mostly quiet: across one day
+    # these fired at 00:53, 04:37, 06:02, 07:57, 10:55 and 13:07, never at :25.
+    # No cron expression fixes that, so the VirtualDDD hourly sync workflow in
+    # n8n keeps the hour. Leave this here anyway — it costs nothing, and it is
+    # what still publishes the site on a day n8n is switched off.
+    - cron: '25 * * * *'   # hourly, for edits — backstop; n8n keeps this hour
     - cron: '17 3 * * *'   # nightly, --full, for drift
   workflow_dispatch:
     inputs:

@@ -17,10 +17,10 @@ produce a correct deploy. If every automated part breaks, publishing degrades
 to a script and a commit, never an outage. Keep it that way.
 
 ```
-                     ┌── hourly cron ──┐
-Notion ──────────────┤                 ├──► sync.yml ──► deploy.yml ──► n8n
-        (a session   └── n8n dispatch ─┘     (~20s)      build, test,   Discord
-         going live)                                     rsync
+                     ┌── n8n, hourly ──┐
+Notion ──────────────┤  n8n dispatch   ├──► sync.yml ──► deploy.yml ──► n8n
+        (a session   └── GitHub cron ──┘     (~20s)      build, test,   Discord
+         going live)     (backstop)                      rsync
 ```
 
 **The clock does the work. An event is only ever a shortcut.**
@@ -35,6 +35,20 @@ Notion ──────────────┤                 ├──�
   run did not happen, and re-reads everything. So a missed event, a failed
   deploy or an afternoon with n8n switched off all cost latency and nothing
   else.
+- **The clock is n8n's, not GitHub's.** It was GitHub's until an edited guest
+  bio sat unpublished for an afternoon. `sync.yml` asks for `25 * * * *`, and
+  across the day around that edit the scheduled runs actually landed at 00:53,
+  04:37, 06:02, 07:57, 10:55 and 13:07: GitHub delays and drops scheduled runs
+  on a repository that is mostly quiet, and no cron expression argues with
+  that. "Live within the hour" was quietly a three-hour promise.
+
+  So the **VirtualDDD hourly sync** workflow in n8n fires the same
+  `repository_dispatch` every hour, and the cron in `sync.yml` stays on as the
+  backstop for a day n8n is off. It is as dumb as the cron it replaced and must
+  stay that way: it never asks whether anything changed, because the sync
+  re-reads everything and deploys nothing unless it produced a diff. Two clocks
+  overlapping cost a minute of CI, which is the price of not having to trust
+  either one.
 - **Publishing a session** is the one thing worth not waiting an hour for, and
   the one thing with an event already to hand: the **VirtualDDD GoLive session**
   workflow knows the moment it sets `Status = Published`, and dispatches from
@@ -45,11 +59,20 @@ Notion ──────────────┤                 ├──�
   site's own `/llms.txt` would buy latency on that unhurried content and pay for
   it with a second copy of `CONTENT_SPECS` to keep in step, a guard against
   dispatching when the site is merely down, and a backoff for pages the sync can
-  never render. The hourly cron already gives what such a poll would be credited
-  with. If publishing ever does become urgent, shorten the cron before adding a
-  watcher.
+  never render. The hourly clock already gives what such a poll would be
+  credited with. If publishing ever does become urgent, shorten n8n's hour
+  before adding a watcher.
 - **Drift** heals nightly (`--full`, 03:17 UTC), which is also what re-pulls
-  the ddd-crew repositories.
+  the ddd-crew repositories. This is a different job from the hourly sync, not
+  a slower copy of it. The hourly run only re-fetches a body Notion says has
+  changed, so anything that goes stale *without* an edit — an image whose
+  source died, a README upstream, a page the sync skipped on a bad day — is
+  only ever caught here.
+
+  It is still on GitHub's cron, and it can afford to be: nobody minds drift
+  healing at 05:00 instead of 03:17, and a night it is dropped altogether is
+  covered by the next one. Latency is the only thing GitHub's scheduler costs,
+  and this is the one run with latency to spare.
 
 A typo is therefore live within the hour, a session going live in about ninety
 seconds, and an hour in which nobody touches Notion costs one minute of CI and
