@@ -1,7 +1,7 @@
 # data/
 
-Committed inputs that the build reads. **None of these are generated, and none
-of them are safe to delete.**
+Committed inputs that the build reads, and one file the sync writes back.
+**None of them are safe to delete.**
 
 | File | What it is |
 |---|---|
@@ -12,6 +12,7 @@ of them are safe to delete.**
 | `guest-profiles.csv` | Speaker bios and links harvested from session descriptions, pushed by `npm run guests:profiles`. Fills empty Notion fields only. |
 | `guest-bio-removals.md` | Source paragraphs still duplicated between a session description and a guest bio, listed for a human to approve before anything is deleted from Notion. |
 | `session-guests.csv` | The one-time extraction that created the guest rows. Kept as the record of where those links came from. |
+| `sync-alerts.json` | The one **generated** file here: what the last sync wants a person to decide. It is committed on purpose — `sync.yml` raises an alert only when this file's own diff says it is new, so an ignored or uncommitted copy means no alert is ever raised. Resolving something empties it. |
 
 If a file here looks like a leftover, read AGENTS.md → "The URL contract" before
 touching it. Losing `live-urls.txt` means losing the ability to prove the site

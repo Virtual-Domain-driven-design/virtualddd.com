@@ -113,6 +113,17 @@ jobs:
         run: |
           [ -n "$HOOK" ] || { echo "No webhook configured, so nobody was told."; exit 0; }
           [ -f data/sync-alerts.json ] || { echo "Nothing to raise."; exit 0; }
+          # The whole test below is this file's own diff, so it has to be a file
+          # git will talk about. It spent a while in .gitignore, where
+          # --porcelain says nothing about it however much it changed, and every
+          # alert since the pipeline was built was answered with "already
+          # raised" — including eight organiser photos that had never been
+          # raised at all. Tripwire rather than a comment, because the failure
+          # is silent and looks exactly like having nothing to say.
+          if git check-ignore -q data/sync-alerts.json; then
+            echo "::error::data/sync-alerts.json is gitignored, so no alert can ever be raised."
+            exit 1
+          fi
           # --porcelain rather than `git diff`, which cannot see a file that has
           # never been committed — the very first alert is exactly that case.
           [ -n "$(git status --porcelain -- data/sync-alerts.json)" ] \

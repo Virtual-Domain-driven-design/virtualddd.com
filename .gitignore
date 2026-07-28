@@ -30,5 +30,3 @@ local.env
 # sync --dry-run output, for inspecting before it lands in src/content/
 preview/
 
-# transient: what the last sync wants a human to see
-data/sync-alerts.json
