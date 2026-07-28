@@ -13,6 +13,7 @@
  */
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
+import { normaliseTags } from '../src/lib/tags';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
@@ -451,7 +452,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       if (h.date('Datetime')) l.push(`datetime: ${h.date('Datetime')}`);
       if (h.select('Type of session')) l.push(`typeOfSession: ${yamlStr(h.select('Type of session')!)}`);
       const level = h.multi('Level'); if (level.length) l.push(`level: ${yamlList(level)}`);
-      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
       for (const [k, p] of [['video', 'Video'], ['podcastPlayer', 'PodcastPlayer'], ['miro', 'Miro'], ['meet', 'Meet'], ['humantix', 'Humantix']] as const) {
         const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
       }
@@ -472,7 +473,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     extra: async (h) => {
       const l: string[] = [];
       if (h.date('Date')) l.push(`date: ${h.date('Date')}`);
-      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
       for (const [k, p] of [['video', 'Video'], ['podcast', 'Podcast'], ['meetup', 'meetup'], ['miro', 'miro'], ['tickets', 'tickets']] as const) {
         const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
       }
@@ -491,7 +492,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       const ep = h.num('Episode'); if (ep != null) l.push(`episode: ${ep}`);
       const pd = h.date('Published Date'); if (pd) l.push(`publishedDate: ${pd.slice(0, 10)}`);
       const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
-      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
       for (const [k, p] of [['youtube', 'YouTube'], ['podcast', 'Podcast']] as const) {
         const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
       }
@@ -513,7 +514,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       const type = h.multi('Type'); if (type.length) l.push(`type: ${yamlList(type)}`);
       const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
       const submitter = h.select('Submitter'); if (submitter) l.push(`submitter: ${yamlStr(submitter)}`);
-      const tags = h.multi('Tags'); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
+      const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
       for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites '], ['specializes', 'Specializes']] as const) {
         const v = h.heur(p); if (v.length) l.push(`${k}: ${yamlList(v)}`);
       }
