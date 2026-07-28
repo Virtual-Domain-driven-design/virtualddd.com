@@ -489,7 +489,6 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
         const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
       }
       const heur = h.heur('Curated Heuristics'); if (heur.length) l.push(`curatedHeuristics: ${yamlList(heur)}`);
-      const fk = h.text('Focus keyphrase'); if (fk) l.push(`focusKeyphrase: ${yamlStr(fk)}`);
       const t = h.text('SEO Title'); if (t) l.push(`seoTitle: ${yamlStr(t)}`);
       const d = h.text('SEO Metadescription'); if (d) l.push(`seoMetadescription: ${yamlStr(d)}`);
       const sq = await h.img('Featured image squared', 'featured-squared'); if (sq) l.push(`featuredImageSquared: ${yamlStr(sq)}`);
@@ -511,7 +510,6 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites '], ['specializes', 'Specializes']] as const) {
         const v = h.heur(p); if (v.length) l.push(`${k}: ${yamlList(v)}`);
       }
-      const fk = h.text('Focus Keyphrase'); if (fk) l.push(`focusKeyphrase: ${yamlStr(fk)}`);
       const md = h.text('Meta Description'); if (md) l.push(`metaDescription: ${yamlStr(md)}`);
       const st = h.text('SEO Title'); if (st) l.push(`seoTitle: ${yamlStr(st)}`);
       return l;

@@ -84,7 +84,6 @@ const stories = defineCollection({
       youtube: z.url().optional(),
       podcast: z.url().optional(),
       curatedHeuristics: z.array(reference('heuristics')).default([]),
-      focusKeyphrase: z.string().optional(),
       ...seo,
     }),
 });
@@ -107,7 +106,6 @@ const heuristics = defineCollection({
       enables: z.array(reference('heuristics')).default([]),
       prerequisites: z.array(reference('heuristics')).default([]),
       specializes: z.array(reference('heuristics')).default([]),
-      focusKeyphrase: z.string().optional(),
       metaDescription: z.string().optional(),
       seoTitle: z.string().optional(),
     }),
