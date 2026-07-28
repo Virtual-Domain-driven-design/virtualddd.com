@@ -32,7 +32,8 @@ export function plainTitle(page: any, prop: string): string {
 export type StatusKind = 'select' | 'status';
 
 /** The Status value, from whichever of Notion's two status types the database
- * uses. The four databases are not consistent about this — see AGENTS.md. */
+ * uses. The four databases are not consistent about this; see
+ * docs/content-model.md. */
 export function statusOf(page: any, kind: StatusKind, prop = 'Status'): string {
   const p = page.properties?.[prop];
   return (kind === 'select' ? p?.select?.name : p?.status?.name) ?? '';

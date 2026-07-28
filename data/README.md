@@ -18,6 +18,6 @@ were removed once their copy was in Notion: a committed snapshot that pushes
 and nothing in the tool can tell. They are in the history if the workings are
 ever wanted.
 
-If a file here looks like a leftover, read AGENTS.md → "The URL contract" before
+If a file here looks like a leftover, read docs/urls.md before
 touching it. Losing `live-urls.txt` means losing the ability to prove the site
 still answers the addresses people have bookmarked.

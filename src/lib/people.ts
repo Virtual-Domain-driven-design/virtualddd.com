@@ -1,6 +1,7 @@
 /** Matching people across collections.
  *
- * People are modelled two ways in Notion (see AGENTS.md): Sessions use an
+ * People are modelled two ways in Notion (see docs/content-model.md): Sessions
+ * use an
  * `Organiser` relation to the people database, while Stories and Heuristics
  * store `Authors` as a free-text multi-select. So the same person appears as
  * "Kenny Baas-Schwegler" on a session and "Kenny Schwegler" on a story.

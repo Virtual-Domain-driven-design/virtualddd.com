@@ -82,7 +82,7 @@ jobs:
             echo "$touched" | sed 's/^/    /'
             echo
             echo "Make the change in Notion instead. If the *shape* of the content needs to"
-            echo "change, that is a schema change — see AGENTS.md, \"Content model\"."
+            echo "change, that is a schema change; see docs/content-model.md."
           } >> "$GITHUB_STEP_SUMMARY"
           echo "::error::Generated content under src/content/ was edited by hand (author: $author). Change it in Notion."
           exit 1
@@ -192,12 +192,12 @@ jobs:
           # Never replace a real directory. If the document root is not already
           # a symlink it may be a live site put there by someone else, and CI
           # is not the place to find out. Switching it over is a deliberate,
-          # one-time human step — see AGENTS.md, "The live site".
+          # one-time human step; see docs/operations.md.
           $SSH "$SSH_USER@$HOST" "
             set -e
             if [ -e '$DOCROOT' ] && [ ! -L '$DOCROOT' ]; then
               echo '$DOCROOT exists and is a real directory, not a symlink.'
-              echo 'Refusing to touch it. See AGENTS.md, \"The live site\".'
+              echo 'Refusing to touch it. See docs/operations.md.'
               exit 1
             fi
             # Said here rather than at the swap, where it is one opaque line

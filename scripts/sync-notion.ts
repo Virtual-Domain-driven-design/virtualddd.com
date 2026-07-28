@@ -9,7 +9,7 @@
  * this is the only writer. Add --write to land files under src/content/;
  * without it everything goes to a preview directory instead.
  *
- * See AGENTS.md, "Content model".
+ * See docs/content-model.md.
  */
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
@@ -832,7 +832,8 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
 // collections with a markdown body. One table entry each now says what is
 // different, which is all that ever was.
 //
-// The split itself is deliberate, and explained in AGENTS.md: organisers is an
+// The split itself is deliberate, and explained in docs/content-model.md:
+// organisers is an
 // operational database (who runs what), guests exists to make a good `Person`.
 
 interface PeopleSpec {

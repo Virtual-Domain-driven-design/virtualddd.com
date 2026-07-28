@@ -2,7 +2,7 @@
  *
  * Nearly free, because every page here is already generated from clean
  * markdown: this is a table of contents over content we hold, not a new
- * artefact to maintain. See AGENTS.md, "AI legibility".
+ * artefact to maintain. See docs/seo.md.
  */
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';

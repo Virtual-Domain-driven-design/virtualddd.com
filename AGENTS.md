@@ -1,792 +1,105 @@
-# AGENTS.md — virtualddd.com
+# AGENTS.md, virtualddd.com
 
 The working brief for this repository. Written for **anyone changing this site:
-a person, a coding agent, or the two together**. Use whichever agent you like —
-this file is the shared context, and it is the one that has to stay true.
+a person, a coding agent, or the two together**. `CLAUDE.md` points here, so
+point your own tool here too if it looks for a different filename.
 
-If your tool looks for a different filename, point it here. `CLAUDE.md` is a
-pointer to this file for exactly that reason.
+**[README.md](./README.md) is the front door.** It says what the site
+publishes, how to run it, and how somebody helps without touching code. Start
+there if you have not seen this project before. The everyday loop is *not*
+editing this repository, and knowing what it actually is will save you an hour.
 
----
+This file is the map. It carries the rules that must not be broken, in full,
+and points at the detail. Read it and you cannot do damage; read only the
+document you need and you can do the work.
 
-## What this is
+## Read this much, at minimum
 
-virtualddd.com is the site of **Virtual DDD**, a small, volunteer-run online
-community around Domain-Driven Design, software architecture and design. It is
-a **static Astro site** whose content comes from **Notion**, built in CI and
-deployed over SSH. The team is small and time is short, so the guiding
-constraint behind every decision here is *low ongoing maintenance*.
+1. **Notion is the source of truth.** Everything under `src/content/` is
+   generated and is never hand-edited. CI fails a push that touches it from
+   anyone but the sync. See [docs/pipeline.md](docs/pipeline.md).
+2. **URLs are promises.** Every address the old site answered is still served,
+   redirected once, or returned as `410 Gone` on purpose. `npm run check:urls`
+   is the guard, and it fails the build. Never edit `public/.htaccess`; edit
+   its generator. See [docs/urls.md](docs/urls.md).
+3. **The brand is the fixed point.** Layout, copy, components and structure are
+   open to improvement. The colours, the logo and the feel are not.
+   See [docs/brand-and-code.md](docs/brand-and-code.md).
+4. **Propose options, then ask.** For anything that changes what a visitor
+   sees, work out what the page and the Notion data actually do, name the
+   friction, offer options with a recommendation, and let the maintainers
+   decide. Recommend; do not unilaterally redesign.
+5. **Tests select `[data-test]` hooks and `js-*` classes only**, never a
+   styling class and never visible copy, so restyling a section cannot break
+   them. A check that an editor can turn red from Notion reports; it never
+   blocks a deploy. See [docs/testing.md](docs/testing.md).
+6. **Small steps, section by section.** Improvement is opt-in per section,
+   never a big-bang rebuild. Sections ship independently.
+7. **Improvements can land on either side.** Sometimes the right fix is in the
+   Notion schema or the editing workflow rather than in the code. Changing
+   Notion is in scope.
+8. **Feature ideas go to the Virtual DDD ToDo board in Notion**, not into a
+   file in this repository. Code changes go here; wishes go there.
 
-**[README.md](./README.md) is the front door** — what the site publishes, how
-to run it, the commands, and how somebody helps without touching code. It is
-not repeated here, so that neither file can go quietly out of date. Start there
-if you have not seen this project before; the everyday loop is **not** editing
-this repository, and knowing what the loop actually is will save you an hour.
+The team is small and time is short. The constraint behind every decision here
+is *low ongoing maintenance*.
 
-This file is the rest: the content model, the URL contract, how the pipeline
-fits together and what each part of it is protecting.
+## Where the detail lives
 
-## How we work
-
-These are the guardrails. They are what keeps a volunteer-run site coherent when
-different people (and different agents) touch it months apart.
-
-- **The brand is the fixed point.** The visual identity is preserved. Layout,
-  copy, components and structure are all open to improvement; the colours, the
-  logo and the feel are not up for redesign.
-- **Small steps, section by section.** Improvement is opt-in per section, never
-  a big-bang rebuild. Sections ship independently.
-- **Propose options, then ask.** For anything that changes what a visitor sees,
-  act as designer *and* engineer: work out what the page and the Notion data
-  actually do, name the friction, offer options with a recommendation — and let
-  the maintainers decide. Recommend; do not unilaterally redesign.
-- **Improvements can land on either side.** Sometimes the right fix is in the
-  Notion schema or the editing workflow, not in the code. Changing Notion is in
-  scope.
-- **Feature ideas go to Notion**, to the *Virtual DDD ToDo* board, not into a
-  file in this repo. Code changes go here; wishes go there.
-
----
-
-## Content model
-
-**Notion is the source of truth.** Everything under `src/content/` is
-**generated** by the sync scripts and **never hand-edited**. It is committed on
-purpose: content history in git, offline builds, and diffs you can review.
-
-| Collection | Notion data source (`collection://…`) |
+| Read this | Before you |
 |---|---|
-| sessions | `33e9db0a-1418-4a3e-a053-33fa384e5e93` |
-| open-spaces | `0cfb73c7-a638-4948-a4df-5fe06dcd2dd1` |
-| stories | `25aa485a-fafc-8047-94b7-000b3bbb228c` |
-| heuristics | `e7743290-3850-404e-ae98-23a4caf0488e` |
-| organisers | `cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6` |
-| session guests | `d82910e0-cac0-46f8-8a20-cb3a3376d5eb` |
-
-ddd-crew content comes from GitHub, not Notion (`npm run sync:ddd-crew`).
-
-### Two people databases, deliberately
-
-- **Organisers** drive `/organisers/` and are the target of a session's
-  `Organiser` / `Co-Organisers`. This is an *operational* database: Discord
-  accounts, community email, who runs what.
-- **Session Guests** are the speakers and panellists. None of those operational
-  fields apply to an external speaker, so they do not live in the organisers
-  database. The fields here exist to produce good `Person` structured data, and
-  the links become `sameAs`.
-
-The cost is that someone who both organises and speaks has a row in each. That
-is deliberate — `Also an organiser` marks it — and the alternative, one people
-table with a flag, was rejected because it would put 60+ external speakers into
-the database the community is actually run from. On the site the two rows are
-rejoined by name (`samePerson` in `src/lib/people.ts`): a guest who matches an
-organiser links to that organiser page and borrows its portrait, so nothing is
-typed twice.
-
-**A guest has no slug, no page and no role field.** The entry file is named
-`kebab(name)` purely so a session's `guests` relation resolves; it is never a
-URL, so renaming a guest in Notion is free. What someone does belongs in their
-bio — "Matthew is the co-author of Team Topologies" — not in a field beside it:
-one field is one thing for an editor to fill in, and it reads as a sentence
-rather than a job title.
-
-Guests render at two levels:
-
-- **Every** session with guests names them under the title — `Guests: A, B` —
-  which is the question a reader arrives with.
-- A guest with a **`Bio`** (and a portrait, if there is one) gets a block below
-  the description. No bio, no block; write one in Notion and it appears on the
-  next sync. `npm run test:content` reports guests on *upcoming* sessions who
-  have none.
-
-Either way they are `performer` on the session's `Event`, so the structured data
-never depends on how much bio anyone got round to writing.
-
-Bios are written **in Notion**. The first 19 were harvested from session
-descriptions and pushed in bulk from a committed CSV; that CSV and its script
-are gone, because a snapshot that pushes into the source of truth is wrong the
-moment somebody improves the copy there, and nothing in the tool can tell. If
-another bulk pass is ever wanted, `git log -- data/guest-profiles.csv` has the
-workings.
-
-### Publish gates (per database, not global)
-
-- **Sessions** render in two states, derived from `Datetime`, not from a manual
-  flip: `Status = Published` + a future `Datetime` → **upcoming** (RSVP);
-  `Status = Done` → **past archive** (recording, notes). `Ended` is an optional
-  internal "awaiting post-production" marker the site ignores.
-
-  The upcoming→past transition is **client-side**. Pages that lead with a
-  session render *every* upcoming session, soonest first, all but the first
-  hidden; the `js-next` sweep in `BaseLayout` picks the first that has not
-  finished and re-checks every minute. So the passage of time never needs a
-  rebuild. A session stays "next" for `SESSION_GRACE_MS` (3 hours, in
-  `src/lib/upcoming.ts`) after its start — someone arriving late wants today's
-  join link, not next month's RSVP — and that is the same window the `.js-live`
-  links use. The rule lives in one place because it runs twice, at build and in
-  the browser; `tests/unit/upcoming.test.mjs` is its specification.
-
-- **Open spaces, stories, heuristics**: `Status = Published`.
-- Only rows passing their gate produce files.
-
-### Relations
-
-Model them as Astro `reference()` and let the build fail on a dangling link
-rather than dropping it silently. The sync distinguishes two cases and says
-which: a heuristic that exists but is still being curated (normal — the link
-appears when it is published) versus a relation pointing at a page that is not
-in the database at all (a real dangling reference; `--strict` fails on it).
-
----
-
-## The URL contract
-
-**This is the part to be most careful with.** The site answers 967 public
-addresses, many of which predate the current build and are still linked from
-search results, newsletters and other people's blog posts. That contract is
-worth more than any code in this repo.
-
-- **294 are served** — the page exists at that address.
-- **412 redirect** — one hop, to a page that exists.
-- **261 return 410 Gone** — retired on purpose, so search engines drop them
-  cleanly instead of showing a soft 404 for years.
-
-`public/.htaccess` is **generated** — edit `scripts/build-redirects.mjs`, never
-the output. Its inputs are committed on purpose and **must not be deleted**:
-
-- `data/live-urls.txt` — the full inventory of 967 addresses.
-- `data/videos-inventory.csv` — 536 video URLs with their YouTube IDs, so that
-  section can return later **at the same URLs**.
-- `data/legacy-redirects.csv` — 35 rules inherited from the old redirect table.
-
-`npm run check:urls` proves every one of the 967 is served, redirected or Gone,
-with no chains, and fails the build otherwise. Two rules are deliberately
-commented out: `/papers/` and `/books/` become 301s to `/reading-list/` the day
-that page ships.
-
-`ErrorDocument` points at two branded pages: `/404.html` and `/410/`. Without
-them the host serves its own — an unbranded 404 with no way back, and a bare
-"Gone" for the 261 addresses retired on purpose.
-
-**When an editorial change retires a URL** — a merged duplicate, a renamed slug
-— the page stops existing on the next sync and `npm run check:urls` says so. Add
-the old → new pair to `RETIRED` in `scripts/build-redirects.mjs`.
-
-**One hostname.** `www.virtualddd.com` redirects to the bare domain, first in
-the generated `.htaccess` so it costs a single hop rather than a path redirect
-on the wrong host followed by another. WordPress did this; a static site does
-not, so for a few hours after the cutover every page had two addresses that
-both answered 200. None of the 967 inherited addresses is a www one, which is
-why `check-redirects.mjs` skips host-conditional rules — replaying that rule's
-`^(.*)$` against the inventory would match all 967 and prove nothing. The real
-server is asked instead, by `verify:live`.
-
-Other standing rules:
-
-- `trailingSlash: 'always'`. Every internal link ends in a slash; a test
-  enforces it, because the alternative is a 301 on every click.
-- **A slug is a promise.** Changing one changes a URL and needs a redirect.
-- Never remove a page without deciding whether its address should redirect or
-  return Gone.
-
----
-
-## SEO and structured data
-
-Structured data (JSON-LD) is **generated** from properties we already hold,
-never hand-authored in Notion. It lives in `src/lib/seo.ts` — one helper per
-kind (`sessionJsonLd`, `storyJsonLd`, `heuristicJsonLd`, `person`,
-`organization`, `heuristicSet`) so a type is described the same way wherever it
-appears, and `BaseLayout` emits the single `@graph` it is handed.
-
-**Coverage is every page but `/410/`**, which is an error body. Detail pages get
-their type, index pages a `CollectionPage` whose `ItemList` is what they list,
-standalone pages a plain `WebPage` — and **every page except the home page
-carries a `BreadcrumbList`**, built from `SECTIONS` in the same file so a crumb
-cannot call a section something the navigation does not.
-
-**A heuristic is a `DefinedTerm`, not an article.** It is a named,
-self-contained rule with an author — the most quotable thing on the site — so
-each is a term in the `DefinedTermSet` that `/heuristics/` declares, paired with
-the `WebPage` that explains it. The term carries what another system would cite;
-the page carries the authors, the tags, the `relatedLink` graph to sibling
-heuristics, and the term's `subjectOf` links to the sessions and stories that
-discussed it.
-
-**House style for titles and descriptions.** Detail pages carry no brand suffix
-(see `pageTitle`), so the budget is ~60 characters for a title and 150–160 for a
-description — search results truncate around there, and a suffix costs 15
-characters of actual topic on every page. Indexes keep the suffix, because
-"Heuristics" alone says nothing.
-
-Write an `SEO Title` only where the natural title runs long or is opaque; a
-field that duplicates its own fallback is a second copy to maintain.
-Descriptions are en-GB, lead with the concrete situation or the person, and
-never open with "Learn how to…". A blank field is a legitimate choice, because
-the fallbacks are good: a session falls back to a trimmed excerpt of its
-abstract, a heuristic to the opening sentence of its body — which *is* the
-heuristic.
-
----
-
-## AI legibility
-
-The site is meant to be read, cited and quoted by answer engines as well as
-people. `robots.txt` allows `GPTBot`, `ClaudeBot`, `PerplexityBot`,
-`Google-Extended` and `CCBot` by name, and says why in the file.
-
-Three surfaces, in ascending order of appetite:
-
-- **`/llms.txt`** — the table of contents: every session, story, heuristic, tool
-  and open space, one line each, with the guests on a session because "who spoke
-  about X" is what an archive of talks gets asked.
-- **`<page>/index.md`** — the markdown behind any content page, 299 of them,
-  advertised with `<link rel="alternate" type="text/markdown">`. Front matter
-  names the source URL, the author and the date; then the words, with no nav to
-  strip. `src/lib/markdown-page.ts` builds it, and `.htaccess` carries the
-  `AddType` so the host does not serve it as a download.
-- **`/llms-full.txt`** — the whole corpus in one request, ~500 KB.
-  **ddd-crew is deliberately excluded**: it is republished under CC BY-SA with
-  its canonical upstream, so folding it into a file that reads as ours would be
-  the wrong thing to do with a share-alike licence.
-
-None of this is a separate artefact to maintain — it is all generated from the
-markdown the sync already writes, which is why it is nearly free.
-
----
-
-## ddd-crew content
-
-Mostly CC BY-SA 4.0 (share-alike). Attribution to each repo and its contributors
-is **mandatory**, in the layout rather than per page, with a link to the licence.
-`rel=canonical` points upstream, since `ddd-crew.github.io` already publishes
-these. The licence and the credit are in the structured data and in each page's
-markdown too, so they survive being read without the HTML.
-
----
-
-## Brand
-
-The visual identity is preserved. The CSS is built against tokens in
-`src/styles/tokens.css`, which also holds the overlays (`--scrim*`,
-`--overlay-white-*`, `--on-colour*`, `--tint-*`) and documents the **three
-breakpoints** — 640 / 800 / 900 px, with `639.98` / `799.98` max-width
-companions. Only reusable surfaces are tokens: the stops inside one component's
-scrim gradient are not, and naming each would produce tokens nobody could reuse.
-There were eleven breakpoints once; three of them made the site change shape at
-widths nobody chose.
-
-### Design rules
-
-Anything not covered here is open — the brand is the fixed point, not the layout.
-
-- **Card colour.** Dark cards (`.card`) are the default. White
-  (`.card--heuristic`) means *this is a heuristic* — an index card you could
-  pull out of a box — and is used wherever a heuristic appears, including inside
-  session and story pages. No other content type uses a white card.
-- **Text on photographs.** Never rely on a text-shadow alone. Anything set over
-  a photographic or painted background gets `.scrim` (or its own plate). The
-  Kandinsky-style tiles are bright and busy; small copy over them without an
-  overlay is unreadable.
-- **One primary action per view.** The upcoming-session hero offers RSVP, with
-  everything else demoted. Join links are marked `.js-live` and appear only from
-  two hours before the start — before that they are noise — and the page still
-  shows them if JavaScript is off.
-- **Text on a brand fill is ink, not white.** The brand colours are bright:
-  white on cyan measured 2.22:1 and white on pink 3.11:1, both under the 4.5:1
-  small text needs, and the pink one was the RSVP button. So there are two
-  tokens and they are not interchangeable — `--on-brand` (ink) for text on a
-  *solid* fill: a chip, a button, a panel; `--on-colour` (white) for text over a
-  *photograph*, where a dark scrim is already doing the work. A browser test
-  measures the real ratio, so a new fill cannot quietly fail.
-
----
-
-## Code conventions
-
-**Shared before local.** A pattern used by more than one section lives in the
-shared layer, never copied into a second page. Copying is what once made
-"restyle the cards" a sixteen-file edit.
-
-- **`src/styles/patterns.css`** — the shared UI vocabulary, loaded once by
-  `BaseLayout`: `.btn`, `.chip` / `.chips`, `.card` (+ `--feature`,
-  `--upcoming`, `--heuristic`), `.grid-cards`, `.tbanner` (+ `--compact`),
-  `.hero-band` (+ `--padded`, `-inner`), `.page-wash`, `.lead`, `.eyebrow`,
-  `.section-head`, `.detail` / `-head` / `-body` / `-side`, `.prose-body`,
-  `.prose-muted`, `.prevnext`, `.filters`, `.carousel`, `.solo`, `.panel-cyan`,
-  `.scrim`. Add variants **here**, not in a page's `<style>`.
-
-  **Buttons are a closed set** on two axes — intent (default, `--accent`,
-  `--ghost`, `--ink`, `--inverse`) and shape (default, `--sm`, `--block`) — and
-  they compose. A page may position a button; it may not restyle one.
-
-  **Chips are one family.** `.chip` is the shape; `--label` adds the uppercase
-  heading treatment; `--primary` / `--accent` / `--value` fill it; `--outline`
-  is the bordered form used for content tags. `chipTone()` in
-  `src/lib/heuristics` maps a heuristic type to its fill, so a type's colour is
-  decided where its name is.
-
-  **Deliberately not shared:** what goes *inside* a `.hero-band`. The band
-  itself is shared by three index pages, but one fills it with a glow and
-  another with a photograph and a scrim. Those are different treatments, not
-  variants of one thing.
-
-  **Astro does not extend a page's style scope into a child component**, so a
-  `.card` override written in a page's scoped `<style>` silently never matches.
-  Variants must be global.
-
-- **`src/lib/`** — `dates` (every date format; the `data-format` values must
-  match `BaseLayout`'s local-time script), `embeds`, `excerpt`, `collections`
-  (session split, teasers, siblings, tag options, reference resolution),
-  `heuristics` (the three types — one definition), `people` (name matching and
-  profile links), `seo` (all structured data), `markdown-page`, `upcoming`
-  (which session is next — imported by both the build and the client script, so
-  the two cannot disagree).
-- **`scripts/lib/notion-md.ts`** — the Notion → markdown rules, with the API
-  client, rate limiting and image downloads left in `scripts/sync-notion.ts` and
-  injected. Pure enough to unit-test, which matters because this module decides
-  what every generated page says.
-- **`src/components/`** — `TeaserCard` is *the* card; `SessionCard` and
-  `StoryCard` are thin wrappers. `PersonRow` is *the* person — portrait, name,
-  role, bio, links — used for a session's host and its guests. `CardFilter` is
-  *the* filter: search, facets, result count, empty state and "load more" over
-  any grid of cards carrying the `data-search` / `data-<facet>` contract.
-- **`src/scripts/`** — the client-side behaviour, one module per concern
-  (`header`, `local-time`, `session-timing`), imported by `BaseLayout`'s single
-  script. Anything a page needs on the client goes here, not into a page's
-  `<script>`, so it can be read on its own.
-- **The shared card grid is a default, not an obligation.** `.grid-cards` suits
-  cards you scan; the stories archive is a single 52rem column because a story
-  is a long read with an excerpt under it, and three narrow columns turn that
-  into a wall of thumbnails. Consolidating markup must not flatten a layout
-  that was chosen.
-- **Responsive images are opt-in.** `TeaserCard` serves one width, which is
-  right for a card that is 260–400px wide at every breakpoint. Pass `imgSizes`
-  where the box genuinely changes size — the single-column stories list is
-  832px on a desktop and 350px on a phone, and that one prop halved what a
-  phone downloads.
-- Page `<style>` blocks are for what is genuinely local to that page.
-- **Progressive enhancement is a rule, not a preference.** Every `<time>` ships
-  a server-rendered fallback, filters only hide pre-rendered cards, the mobile
-  nav ships open and is collapsed by script, and no page depends on JavaScript
-  to show its content or to reach another page.
-- **Never remove a focus ring.** `global.css` defines `:focus-visible` against
-  the brand tokens because the near-black canvas swallows the browser default. A
-  browser test asserts it is still there.
-- **The accessibility floor**, each held down by a test: text on a brand fill
-  clears 4.5:1; the first tab stop is the skip link and it lands in `<main>`;
-  filtering announces its result count (`aria-live`); every `button` is at least
-  24×24. A link inside a sentence is exempt from that last one (WCAG 2.5.8,
-  inline) — a button never is. `prefers-reduced-motion` is honoured globally,
-  because the motion here is decoration and never information.
-- `astro check` must stay at **0 errors, 0 warnings, 0 hints**.
-
----
-
-## Adding a content type
-
-There is no single seam for this — a new collection touches about a dozen
-places, and forgetting one usually fails *quietly*. Work down this list in
-order; each step is small.
-
-1. **`src/content.config.ts`** — a `defineCollection` with a Zod schema
-   mirroring the Notion properties. Relations become `reference()`.
-2. **`scripts/sync-notion.ts`** — add a `CONTENT_SPECS` entry (a collection with
-   a markdown body) or a `PEOPLE_SPECS` entry (structured data, no body). Both
-   are tables: say what is different about the new collection, not how to fetch
-   it.
-3. **`package.json`** — a `sync:<name>` script, and add it to `sync:notion`. If
-   another collection references it, sync it **first**.
-4. **Routes** — `src/pages/<section>/index.astro` and `[slug].astro`.
-5. **`src/pages/<section>/[slug]/index.md.ts`** — the markdown twin:
-   `markdownPaths(collection)` and `markdownFor(context, …)` do the route, so
-   all the file says is what belongs in the front matter. Pass `markdown` to
-   `BaseLayout` so the page advertises it.
-6. **`src/lib/seo.ts`** — a JSON-LD helper for the type, a `SECTIONS` entry for
-   breadcrumbs, and `collectionPage(...)` on the index.
-7. **`src/lib/collections.ts`** — any shared query the pages both need.
-8. **`src/pages/llms.txt.ts`** — a "Start here" line and a section.
-9. **`src/pages/llms-full.txt.ts`** — unless the content is republished from
-   elsewhere under a share-alike licence.
-10. **`src/pages/rss.xml.ts`** — only if the type belongs in the feed.
-11. **`astro.config.mjs`** — a sitemap `serialize` rule if it needs a priority.
-12. **Tests** — a `data-test` hook if it has behaviour, a contract assertion in
-    `tests/build.test.mjs`, and this file updated.
-
-If you find yourself doing this a third time, that is the moment to build the
-abstraction — not before. With five collections, the list is cheaper than the
-framework.
-
----
-
-## Testing
-
-**Test the promises, not the pixels.** A promise is something a third party
-depends on and that breaks silently: a URL, a redirect, a feed, a canonical, a
-JSON-LD shape, "this page works with JavaScript off", "the next session is the
-next one". Those get hard tests. Layout, copy and components are what we are
-still deliberately changing, so tests must not pin them down.
-
-### The test surface
-
-Tests select **only** `[data-test]` hooks and `js-*` behaviour classes. Never a
-styling class, never an id the CSS also targets, never visible copy. A restyle
-then cannot break a behaviour test — which is what makes design work cheap to
-keep doing.
-
-Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
-`filter-reset`, `type-filter`, `load-more`, `next-session`, `add-to-calendar`,
-`prev`, `next`, `nav`, `nav-toggle`, `guest`, `guest-credit`, `person-name`,
-`skip-link`, `carousel`, `carousel-prev`, `carousel-next`, `latest-sessions`.
-Add to that list rather than reaching for a class.
-
-**A test must never be something an editor can turn red.** The blocking suite
-sits on the publish path, so it may not depend on how much content exists or on
-what any of it says. Two rules follow:
-
-- **Assert a relationship, not a number.** "Every published session has a page"
-  (`published('sessions')` in `tests/helpers.mjs`) says exactly what we mean and
-  cannot be broken from Notion. `sessions.length > 100` said the same thing
-  until somebody unpublished nine sessions. Where no relationship exists, use a
-  floor low enough that only a broken build reaches it, and say so in a comment.
-- **Never name a piece of content.** Read the tag off the page and slugify it;
-  do not write `?tag=collaborative-modelling` and make a rename a CI failure.
-
-**Count elements, not text.** `html.match(/data-test="card"/g)` also counts the
-selector inside an inline script that looks for those cards. `countHook()` and
-`markup()` in `tests/helpers.mjs` strip scripts first.
-
-**The one place a test may name a styling class** is a test whose subject *is*
-the styling: the contrast check reads `.chip--primary` because the question it
-asks is "what does that class look like". Nothing else.
-
-### Blocking vs reporting
-
-The suite sits on the publish path, so **a test an editor can turn red from
-Notion must not stop a deploy** — that would make publishing hostage to CI.
-
-- **Blocking** (`npm test`): unit rules, `astro check`, the build, contract
-  assertions over `dist/`, the redirect map, browser behaviour. If one fails the
-  site is broken; do not deploy.
-- **Reporting** (`npm run test:content`): duplicate titles, missing
-  descriptions, glued links, stories with no author, guests with no bio on an
-  upcoming session. Real defects, but they belong to whoever holds the Notion
-  page. Read them, fix them in Notion — do not gate the deploy on them.
-
-`npm run test:all` runs both.
-
-### The five layers, cheapest first
-
-1. **`tests/unit/*`** (`npm run test:unit`) — pure rules, no build, no browser,
-   under a second. Run with `--import tsx`, since they import the TypeScript
-   directly. `notion-md` (what every generated page says), `upcoming` (which
-   session is next), `card-filter` (which cards a filter leaves showing),
-   `people` (whether two names are one person — it decides whose photograph
-   appears), `seo` (every structured-data decision).
-
-   This is the layer to add to when you change a rule. `seo.ts` and
-   `card-filter.ts` are unit-tested precisely so they can be rewritten: the
-   tests say what the output must still mean, not how the code is arranged.
-   `socialCard` lives in its own module for the same reason — it needs
-   `astro:assets`, which only exists inside a build, and keeping it out of
-   `seo.ts` is what makes `seo.ts` testable at all.
-2. **Types and build** — `astro check` (0/0/0) and `npm run build`.
-3. **`tests/build.test.mjs`** — assertions over `dist/`: canonicals, OG tags,
-   one `<h1>`, internal links, JSON-LD shapes and breadcrumbs, feeds, archive
-   ordering, every upcoming session shipped, `.ics` start times, prev/next
-   round-tripping, the sitemap, the error pages, the markdown twins, and a size
-   ceiling on the deploy.
-4. **`tests/urls.test.mjs`** — replays `public/.htaccess` against the 967-URL
-   inventory.
-5. **`tests/browser.test.mjs`** — Playwright against the built site: horizontal
-   overflow at 360 and 390 px, search and filtering, the next-session sweep and
-   countdown **with the clock moved**, local time in a non-UTC timezone,
-   carousels, rendering with JavaScript off, accessible names, focus rings.
-   `TEST_FULL=1` widens the sample to every page. It also runs **axe-core**
-   over one page of each shape, scoped to WCAG 2.1/2.2 A and AA — the audit
-   that would have caught the contrast, target-size and heading defects a human
-   review had to find by hand.
-
-**`npm run verify:live <url>`** is the one that cannot run locally: it requests
-real URLs from a deployed host and checks the status codes, because only the
-real server proves the `.htaccess` is honoured, that a 410 is a 410, and that
-www comes home in one hop. Every deploy runs it against `SITE_URL`.
-
-It samples one URL family at a time unless told otherwise, and **`npm run` eats
-the flag** — for all 967, call the script directly:
-
-```bash
-node scripts/verify-live.mjs https://virtualddd.com --all   # ~20 minutes
-```
-
-Not covered, deliberately: visual regression (no baseline worth maintaining for
-a site still being designed), Lighthouse (run by hand before a release), and
-link checking of external URLs (they rot for reasons outside this repo).
-
----
-
-## From Notion to the site
-
-Build in **CI only**, never on the host. And the whole pipeline is *automation
-over a manual process*: running the sync and `git push` by hand must always
-produce a correct deploy. If every automated part breaks, publishing degrades
-to a script and a commit — never an outage. Keep it that way.
-
-```
-                     ┌── hourly cron ──┐
-Notion ──────────────┤                 ├──► sync.yml ──► deploy.yml ──► n8n
-        (a session   └── n8n dispatch ─┘     (~20s)      build, test,   Discord
-         going live)                                     rsync
-```
-
-**The clock does the work. An event is only ever a shortcut.**
-
-- **Editing rides the clock**: an hourly sync, no watcher at all. This is why
-  there is no debouncing anywhere. Notion's "page updated" cannot tell a new
-  publication from a typo on an old one, so filtering it would fire on every
-  keystroke-sized change; not watching is simpler than throttling.
-
-  It is also what makes the pipeline self-healing, and the reason nothing else
-  needs to be. The hourly run holds no state, cares nothing for why the last
-  run did not happen, and re-reads everything — so a missed event, a failed
-  deploy or an afternoon with n8n switched off all cost latency and nothing
-  else.
-- **Publishing a session** is the one thing worth not waiting an hour for, and
-  the one thing with an event already to hand: the **VirtualDDD GoLive session**
-  workflow knows the moment it sets `Status = Published`, and dispatches from
-  there. Everything else published in Notion — a story, a heuristic, an open
-  space — is deliberate, unhurried work, and rides the clock with the edits.
-
-  There is no watcher, and deliberately so. A poll comparing Notion against the
-  site's own `/llms.txt` would buy latency on that unhurried content and pay for
-  it with a second copy of `CONTENT_SPECS` to keep in step, a guard against
-  dispatching when the site is merely down, and a backoff for pages the sync can
-  never render. The hourly cron already gives what such a poll would be credited
-  with. If publishing ever does become urgent, shorten the cron before adding a
-  watcher.
-- **Drift** heals nightly (`--full`, 03:17 UTC), which is also what re-pulls
-  the ddd-crew repositories.
-
-A typo is therefore live within the hour, a session going live in about ninety
-seconds, and an hour in which nobody touches Notion costs one minute of CI and
-deploys nothing.
-
-**Nothing deploys unless the sync produced a diff.** The generated markdown is
-committed, so `git diff --quiet` is the whole test.
-
-**The deploy builds the commit the sync just made, and says which.** A called
-workflow runs at the *caller's* commit, and the sync commits after its own run
-has begun — so `deploy.yml` takes a `ref` input and `sync.yml` passes the sha
-it pushed. Without it every sync-triggered deploy shipped the site as it stood
-*before* the content it was called to publish: green run, correct summary, site
-one commit behind. It survived launch day because a sync that changes nothing
-deploys nothing, and a push deploys its own sha correctly — the first real
-content change was the first time it could be seen. The release directory, the
-Discord link and the `What is being built?` step all follow the built commit
-now, for the same reason: this was invisible because nothing said out loud
-which commit was being published.
-
-### The sync is incremental
-
-`data/sync-state.json` records, per page, the slug and Notion's
-`last_edited_time` at the last render.
-
-- **Front matter is rebuilt every run**, because properties arrive free with
-  the list query — and because a relation can go stale without the page being
-  touched: publishing a heuristic should add a link to the sessions that
-  reference it.
-- **A body is re-fetched only when Notion says that page changed.** Bodies are
-  the expensive part, about two seconds each.
-
-A full sync is ~10 minutes; a routine one is ~20 seconds. `--full` ignores the
-state and re-fetches everything.
-
-Trailing blank lines are normalised where the file is written, not in either
-branch, so a fetched body and a reused body are byte-identical. Without that a
-changed page would flip-flop between syncs and "no diff, no deploy" would ship
-whitespace.
-
-### Images
-
-Every picture is **downloaded** into the entry's `_assets/` and referenced
-relatively, because a Notion file URL is signed and expires within the hour.
-
-**A download that fails never removes a picture the site already has.** If the
-source will not answer, the copy from the last good sync stands and an
-`image-source-gone` alert names the URL that died. Launch day is why: eight
-organiser photos were *external* URLs into the old WordPress media library, so
-swapping the document root 404'd all eight, and the next sync rewrote every row
-without a photo and reported `✓`. The bytes were in `_assets` the whole time.
-Because the file on disk outlives the row that references it, this also repairs
-itself on the next run.
-
-**Prefer a Notion-hosted file to an external URL** in any property the site
-reads. External URLs are somebody else's uptime, and one of those somebodies is
-a site we turned off.
-
-Assets are pruned less eagerly than entries: a renamed or retired page's JSON
-goes, its old images stay. Harmless — Astro bundles only what is referenced —
-but they accumulate.
-
-### Generated content is not editable here
-
-`src/content/` is written by the sync and never edited in this repository.
-Three layers keep that true, because with an incremental sync a stray edit
-would otherwise persist rather than being overwritten within minutes:
-
-- **The sync notices.** `sync-state.json` records a digest of every body it
-  wrote. If the file on disk no longer matches, the page is refetched from
-  Notion and the edit is named in the log. A missing digest counts as
-  unknown provenance and also refetches — a guard that trusts by default is
-  a decoration.
-- **CI refuses to deploy it.** A push touching `src/content/` by anyone other
-  than `virtualddd-sync` fails the deploy with an explanation, rather than
-  shipping a site that says something Notion does not.
-- **CODEOWNERS** puts a maintainer on any pull request that touches it.
-
-None of this is about mistrust. The edit would simply be lost on the next sync,
-and it is kinder to say so immediately than to let someone write something that
-quietly disappears.
-
-### When an editorial change breaks a URL
-
-A URL is a promise. Two ordinary actions in Notion break one, and the sync
-handles both rather than leaving them for someone to notice.
-
-- **A renamed slug** is not ambiguous: the same page id under a new slug is a
-  fact. The sync writes the `301` itself into `data/retired-urls.csv`, which
-  `build-redirects.mjs` reads.
-- **A page that stops being published** is ambiguous, so the editor says which
-  they meant with the **`Retire URL`** checkbox:
-  - **ticked** → they mean it. The page goes, and the address answers `410 Gone`.
-  - **not ticked** → **quarantine**. The page keeps being served, everything
-    else deploys, and `data/sync-alerts.json` tells the workflow to raise it
-    with a human. An accidental unpublish must not silently 404 an address
-    other people have linked to — and must not block everyone else's publishing
-    either.
-  - **never had a public URL** → just removed; there is no promise to keep.
-
-Never resolve one of these by deleting the URL from `data/live-urls.txt`. That
-file is the promise, not a record of what happens to be built.
-
-### Things only an editor can decide
-
-`data/sync-alerts.json` collects what the sync can see but must not act on. Two
-kinds, both *published in Notion, not true on the site*:
-
-- **`unpublished-but-live`** — the quarantine above.
-- **`published-without-a-slug`** — a page Notion calls published that has no
-  slug, and therefore no address. Skipping it is right; there is nothing to
-  build. Skipping it *silently* is not: the editor believes it is on the site,
-  and only they can give it a slug.
-
-Neither is worth failing a run over, and both are invisible if they only reach
-a CI log — which is the whole reason the file exists. It is keyed by section and
-rewritten on every run, so resolving the last one empties the list rather than
-leaving a stale alert behind, and one collection cannot erase another's.
-
-It carries no timestamp on purpose: a `generated` field would change on every
-run, and *nothing deploys unless the sync produced a diff* would quietly become
-false. `sync.yml` posts it to n8n only when the file itself changed, which is
-what stops the same alert being raised every hour for weeks.
-
-**It must be committed, and `.gitignore` must never claim it.** The "has this
-changed?" test is `git status --porcelain` on that one file, and for an ignored
-file the answer is always nothing — so every alert the pipeline ever produced
-took the "already raised" branch and reached nobody, including eight organiser
-photos on launch day. The step now fails outright if the file is ignored,
-because that failure is silent and looks exactly like having nothing to say.
-
-A third kind joins the two above:
-
-- **`image-source-gone`** — the picture in Notion points somewhere that stopped
-  answering. The sync keeps the copy it downloaded last time rather than
-  dropping the image, so the page is still right; only an editor can re-upload
-  the original. See "Images" below.
-
-## The live site
-
-**virtualddd.com went live on 28 July 2026**, replacing WordPress 7.0.2 on the
-same Kualo host. All 967 inherited addresses were verified against the real
-server the same day: 294 served, 412 redirected, 261 Gone, no problems.
-
-The deploy is atomic: every release is rsynced into `~/releases/<sha>` and the
-document root is a **symlink** swapped once the copy is complete. Nobody sees a
-half-written site, and a rollback is one command.
-
-```
-/home/baasieco/virtualddd.com          → ~/releases/<sha>   the live site
-/home/baasieco/virtualddd.com.wordpress                     the old site, parked
-```
-
-**`KUALO_PATH` must be an absolute path.** It is interpolated inside single
-quotes in a shell on the host, so `~` is never expanded — a value starting with
-`~` fails at the very last step with `ln: failed to create symbolic link: No
-such file or directory`, after a successful build and a successful upload.
-
-**CI will not touch a document root that is a real directory.** It checks and
-fails rather than deleting anything, because a real directory there might be
-somebody's live site and a deploy job is not the place to find that out. That
-is why pointing a *new* domain at the site is a deliberate human step:
-
-```bash
-# Cutting a domain over, on the host:
-mv ~/virtualddd.com ~/virtualddd.com.wordpress     # keep the old site
-ln -sfn ~/releases/<sha> ~/virtualddd.com          # point at the newest release
-# then set KUALO_PATH to the absolute docroot and SITE_URL to the domain.
-
-# Roll back at any time by pointing the symlink at an earlier release:
-ls -1dt ~/releases/*/                              # newest first
-ln -sfn ~/releases/<older-sha> ~/virtualddd.com
-```
-
-The last five releases are kept, so a rollback is always available without a
-rebuild.
-
-**The parked WordPress directory is not dead weight.** Its `wp-content/uploads`
-is what the old site's media URLs pointed at, and things outside this repo
-still reference them — Notion did, until the organiser photos were re-uploaded.
-Do not delete it on the strength of the site looking fine.
-
-**The certificate** is a Let's Encrypt *wildcard* (`*.virtualddd.com`), which
-renews over DNS-01 rather than the HTTP challenge — so `public/.well-known/
-acme-challenge/` matters only if it is ever replaced by a per-domain AutoSSL
-cert. Keep the directory; do not rely on it.
-
-### Watching it, once a week
-
-`watch.yml` asks the deployed site on Mondays what no test in this repository
-can: whether all 967 addresses are still answered by real Apache, and how long
-the certificate has left. Both rot without anyone touching this repository — a
-host config change, a restore that loses the `.htaccess`, a renewal that
-quietly stopped — so neither can fail a build.
-
-It posts to Discord only when something is wrong. A weekly "still fine" is a
-message people learn to skip, and the run is already the record. Weekly rather
-than daily because 967 requests is a real load on a shared host, and neither
-failure is one you would fix within the hour.
-
-Two thresholds, doing different jobs. A certificate with **under 21 days** gets
-a Discord line: it should have renewed by now, worth an eye. **Under 14 days**,
-or any broken address, fails the run — a red scheduled run emails the account
-that last changed the workflow, from GitHub, rather than through n8n and a
-webhook. The louder signal deliberately does not travel the same kind of chain
-it is watching.
-
-## Commands
-
-**The table is in [README.md](./README.md#commands).** What is worth knowing
-here is what the table has no room for:
+| [docs/content-model.md](docs/content-model.md) | Add a field, add a collection, or wonder why guests and organisers are separate databases |
+| [docs/urls.md](docs/urls.md) | Rename a slug, retire a page, or touch redirects |
+| [docs/pipeline.md](docs/pipeline.md) | Change the sync, debug a missing page, or ask why nothing deployed |
+| [docs/testing.md](docs/testing.md) | Add or change a test, or find out what one is protecting |
+| [docs/brand-and-code.md](docs/brand-and-code.md) | Write CSS, add a component, or add a content type |
+| [docs/seo.md](docs/seo.md) | Touch titles, descriptions, structured data or the `llms` files |
+| [docs/operations.md](docs/operations.md) | Deploy by hand, roll back, move a domain, or chase a certificate |
+| [data/README.md](data/README.md) | Touch anything in `data/` |
+
+Commands are in the [README](./README.md#commands). What a table has no room
+for:
 
 - **`npm run build`** also runs `prune-dist.mjs`, which drops the unreferenced
-  originals Astro emits alongside its `.webp` — around 22 MB a build. `dist`
-  lands near 40 MB and is asserted under a 50 MB ceiling, so a silent prune
-  failure surfaces as a failing test rather than a slow rsync.
+  originals Astro emits alongside its `.webp`. That is around 22 MB a build.
+  `dist` is asserted under a 50 MB ceiling, so a silent prune failure surfaces
+  as a failing test rather than a slow rsync.
 - **`npm run sync`** does guests **before** sessions, because sessions
-  reference them. `--strict` fails on a dangling relation; `--full` ignores
+  reference them. `--strict` fails on a dangling relation. `--full` ignores
   `data/sync-state.json` and re-fetches every body.
-- **`npm run redirects`** must be re-run after adding or renaming content, and
-  a test now fails if the committed `.htaccess` is not what the generator would
-  write today.
-- **`npm run check:urls`** needs a build first: it checks the rules against the
+- **`npm run redirects`** must be re-run after adding or renaming content. A
+  test fails if the committed `.htaccess` is not what the generator would write
+  today.
+- **`npm run check:urls`** needs a build first. It checks the rules against the
   pages in `dist/`.
+
+## When something goes wrong
+
+The pipeline tells you rather than waiting to be asked. What lands where:
+
+| Symptom | Where to look |
+|---|---|
+| A page is published in Notion but not on the site | The **sync** run in GitHub Actions. A page with no slug, or one still quarantined, is reported there and posted to Discord |
+| Something in Notion needs a person to decide | **Discord**, from `data/sync-alerts.json`: an unpublished page whose address is still live, a page with no slug, an image whose source has gone |
+| A deploy failed on `Cannot reach the host` | The host's brute-force protection blocked the runner. Re-run the deploy; a different runner has a different IP. Kualo calls it cPHulk |
+| CI is red on `main` after a content commit | The sync commits and deploys as separate jobs. Check which one failed before assuming the content is wrong |
+| The site is stale but the runs are green | Check the deploy built the commit you expect. The `What is being built?` step prints it |
+| Nobody knows | Ask on [Discord](https://discord.gg/tRJkcsFDKN). The organisers read it |
+
+Deploy and sync notifications reach Discord through n8n. If a message never
+arrives, the run is still the record: the workflow summary says what happened,
+whether or not anyone was told.
+
+## The counts
+
+Inventory numbers live in the data, not in prose. `data/live-urls.txt` is the
+list of addresses the site promises to answer, and `npm run check:urls` proves
+each one is served, redirected or Gone. The exact split is in
+[docs/urls.md](docs/urls.md), in one table, so an inventory change is one edit.
+
+## A note on the Notion ids
+
+The database ids in [docs/content-model.md](docs/content-model.md) and in
+`scripts/sync-notion.ts` are published on purpose. They identify a database;
+they do not grant access to one. Reading anything needs `NOTION_TOKEN`, which
+is a repository secret and is not in this repository.

@@ -34,7 +34,8 @@ const orgByName = new Map(organisers.map((o) => [o.data.name.trim().toLowerCase(
 const host = d.organiser ? orgByName.get(d.organiser.trim().toLowerCase()) : undefined;
 
 // Guests — the speakers and panellists. Someone who both organises and speaks
-// has a row in each database on purpose (see AGENTS.md), so link a guest to
+// has a row in each database on purpose (see docs/content-model.md), so link a
+// guest to
 // their organiser page and fall back to the portrait and role already held
 // there rather than asking for the same thing twice.
 const guests = resolveRefs(d.guests, await guestsById())

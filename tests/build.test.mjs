@@ -6,7 +6,7 @@
  *
  * Content quality — anything an editor can break from Notion — is deliberately
  * *not* here; it lives in tests/content/ and reports without blocking. See
- * AGENTS.md, "Testing".
+ * docs/testing.md.
  *
  * Run after `npm run build`.
  */
@@ -512,5 +512,33 @@ describe('the deploy', () => {
       }
     }
     assert.deepEqual([...missing], [], `pruned assets still referenced:\n${[...missing].join('\n')}`);
+  });
+});
+
+describe('the documentation', () => {
+  // The brief is nine files that point at each other. A link that rots is the
+  // failure mode of splitting one file into several, so it is worth a test
+  // rather than a promise.
+  test('every internal link in the docs resolves', () => {
+    const docs = ['README.md', 'AGENTS.md', 'CLAUDE.md', 'data/README.md',
+      ...readdirSync('docs').filter((f) => f.endsWith('.md')).map((f) => `docs/${f}`)];
+    const bad = [];
+    for (const doc of docs) {
+      const dir = doc.includes('/') ? doc.slice(0, doc.lastIndexOf('/')) : '.';
+      const text = readFileSync(doc, 'utf8');
+      for (const [, target] of text.matchAll(/\]\((?!https?:|#|mailto:)([^)]+)\)/g)) {
+        const [path, anchor] = target.split('#');
+        if (!path) continue;
+        const resolved = join(dir, path);
+        if (!existsSync(resolved)) { bad.push(`${doc} → ${target} (no ${resolved})`); continue; }
+        if (anchor) {
+          // Headings become anchors; check the one we linked to exists.
+          const slugs = [...readFileSync(resolved, 'utf8').matchAll(/^#+ (.+)$/gm)]
+            .map(([, h]) => h.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-'));
+          if (!slugs.includes(anchor)) bad.push(`${doc} → ${target} (no such heading)`);
+        }
+      }
+    }
+    assert.deepEqual(bad, [], `broken documentation links:\n${bad.join('\n')}`);
   });
 });

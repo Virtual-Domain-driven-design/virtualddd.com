@@ -1,0 +1,189 @@
+# From Notion to the site
+
+How a change in Notion becomes a deployed page, what the sync does and does
+not do, and what it asks a person to decide. Read this before changing the
+sync, debugging a missing page, or asking why nothing deployed.
+
+Part of the working brief: [AGENTS.md](../AGENTS.md) is the map, and
+[README.md](../README.md) is the front door.
+
+---
+
+# From Notion to the site
+
+Build in **CI only**, never on the host. And the whole pipeline is *automation
+over a manual process*: running the sync and `git push` by hand must always
+produce a correct deploy. If every automated part breaks, publishing degrades
+to a script and a commit, never an outage. Keep it that way.
+
+```
+                     ┌── hourly cron ──┐
+Notion ──────────────┤                 ├──► sync.yml ──► deploy.yml ──► n8n
+        (a session   └── n8n dispatch ─┘     (~20s)      build, test,   Discord
+         going live)                                     rsync
+```
+
+**The clock does the work. An event is only ever a shortcut.**
+
+- **Editing rides the clock**: an hourly sync, no watcher at all. This is why
+  there is no debouncing anywhere. Notion's "page updated" cannot tell a new
+  publication from a typo on an old one, so filtering it would fire on every
+  keystroke-sized change; not watching is simpler than throttling.
+
+  It is also what makes the pipeline self-healing, and the reason nothing else
+  needs to be. The hourly run holds no state, cares nothing for why the last
+  run did not happen, and re-reads everything. So a missed event, a failed
+  deploy or an afternoon with n8n switched off all cost latency and nothing
+  else.
+- **Publishing a session** is the one thing worth not waiting an hour for, and
+  the one thing with an event already to hand: the **VirtualDDD GoLive session**
+  workflow knows the moment it sets `Status = Published`, and dispatches from
+  there. Everything else published in Notion (a story, a heuristic, an open
+  space) is deliberate, unhurried work, and rides the clock with the edits.
+
+  There is no watcher, and deliberately so. A poll comparing Notion against the
+  site's own `/llms.txt` would buy latency on that unhurried content and pay for
+  it with a second copy of `CONTENT_SPECS` to keep in step, a guard against
+  dispatching when the site is merely down, and a backoff for pages the sync can
+  never render. The hourly cron already gives what such a poll would be credited
+  with. If publishing ever does become urgent, shorten the cron before adding a
+  watcher.
+- **Drift** heals nightly (`--full`, 03:17 UTC), which is also what re-pulls
+  the ddd-crew repositories.
+
+A typo is therefore live within the hour, a session going live in about ninety
+seconds, and an hour in which nobody touches Notion costs one minute of CI and
+deploys nothing.
+
+**Nothing deploys unless the sync produced a diff.** The generated markdown is
+committed, so `git diff --quiet` is the whole test.
+
+**The deploy builds the commit the sync just made, and says which.** A called
+workflow runs at the *caller's* commit, and the sync commits after its own run
+has begun. So `deploy.yml` takes a `ref` input and `sync.yml` passes the sha
+it pushed. Without it every sync-triggered deploy shipped the site as it stood
+*before* the content it was called to publish: green run, correct summary, site
+one commit behind. It survived launch day because a sync that changes nothing
+deploys nothing, and a push deploys its own sha correctly. The first real
+content change was the first time it could be seen. The release directory, the
+Discord link and the `What is being built?` step all follow the built commit
+now, for the same reason: this was invisible because nothing said out loud
+which commit was being published.
+
+## The sync is incremental
+
+`data/sync-state.json` records, per page, the slug and Notion's
+`last_edited_time` at the last render.
+
+- **Front matter is rebuilt every run**, because properties arrive free with
+  the list query, and because a relation can go stale without the page being
+  touched: publishing a heuristic should add a link to the sessions that
+  reference it.
+- **A body is re-fetched only when Notion says that page changed.** Bodies are
+  the expensive part, about two seconds each.
+
+A full sync is ~10 minutes; a routine one is ~20 seconds. `--full` ignores the
+state and re-fetches everything.
+
+Trailing blank lines are normalised where the file is written, not in either
+branch, so a fetched body and a reused body are byte-identical. Without that a
+changed page would flip-flop between syncs and "no diff, no deploy" would ship
+whitespace.
+
+## Images
+
+Every picture is **downloaded** into the entry's `_assets/` and referenced
+relatively, because a Notion file URL is signed and expires within the hour.
+
+**A download that fails never removes a picture the site already has.** If the
+source will not answer, the copy from the last good sync stands and an
+`image-source-gone` alert names the URL that died. Launch day is why: eight
+organiser photos were *external* URLs into the old WordPress media library, so
+swapping the document root 404'd all eight, and the next sync rewrote every row
+without a photo and reported `✓`. The bytes were in `_assets` the whole time.
+Because the file on disk outlives the row that references it, this also repairs
+itself on the next run.
+
+**Prefer a Notion-hosted file to an external URL** in any property the site
+reads. External URLs are somebody else's uptime, and one of those somebodies is
+a site we turned off.
+
+Assets are pruned less eagerly than entries: a renamed or retired page's JSON
+goes, its old images stay. Harmless, since Astro bundles only what is
+referenced, but they accumulate.
+
+## Generated content is not editable here
+
+`src/content/` is written by the sync and never edited in this repository.
+Three layers keep that true, because with an incremental sync a stray edit
+would otherwise persist rather than being overwritten within minutes:
+
+- **The sync notices.** `sync-state.json` records a digest of every body it
+  wrote. If the file on disk no longer matches, the page is refetched from
+  Notion and the edit is named in the log. A missing digest counts as
+  unknown provenance and also refetches. A guard that trusts by default is
+  a decoration.
+- **CI refuses to deploy it.** A push touching `src/content/` by anyone other
+  than `virtualddd-sync` fails the deploy with an explanation, rather than
+  shipping a site that says something Notion does not.
+- **CODEOWNERS** puts a maintainer on any pull request that touches it.
+
+None of this is about mistrust. The edit would simply be lost on the next sync,
+and it is kinder to say so immediately than to let someone write something that
+quietly disappears.
+
+## When an editorial change breaks a URL
+
+A URL is a promise. Two ordinary actions in Notion break one, and the sync
+handles both rather than leaving them for someone to notice.
+
+- **A renamed slug** is not ambiguous: the same page id under a new slug is a
+  fact. The sync writes the `301` itself into `data/retired-urls.csv`, which
+  `build-redirects.mjs` reads.
+- **A page that stops being published** is ambiguous, so the editor says which
+  they meant with the **`Retire URL`** checkbox:
+  - **ticked** → they mean it. The page goes, and the address answers `410 Gone`.
+  - **not ticked** → **quarantine**. The page keeps being served, everything
+    else deploys, and `data/sync-alerts.json` tells the workflow to raise it
+    with a human. An accidental unpublish must not silently 404 an address
+    other people have linked to, and it must not block everyone else's publishing
+    either.
+  - **never had a public URL** → just removed; there is no promise to keep.
+
+Never resolve one of these by deleting the URL from `data/live-urls.txt`. That
+file is the promise, not a record of what happens to be built.
+
+## Things only an editor can decide
+
+`data/sync-alerts.json` collects what the sync can see but must not act on. Two
+kinds, both *published in Notion, not true on the site*:
+
+- **`unpublished-but-live`**: the quarantine above.
+- **`published-without-a-slug`**: a page Notion calls published that has no
+  slug, and therefore no address. Skipping it is right; there is nothing to
+  build. Skipping it *silently* is not: the editor believes it is on the site,
+  and only they can give it a slug.
+
+Neither is worth failing a run over, and both are invisible if they only reach
+a CI log, which is the whole reason the file exists. It is keyed by section and
+rewritten on every run, so resolving the last one empties the list rather than
+leaving a stale alert behind, and one collection cannot erase another's.
+
+It carries no timestamp on purpose: a `generated` field would change on every
+run, and *nothing deploys unless the sync produced a diff* would quietly become
+false. `sync.yml` posts it to n8n only when the file itself changed, which is
+what stops the same alert being raised every hour for weeks.
+
+**It must be committed, and `.gitignore` must never claim it.** The "has this
+changed?" test is `git status --porcelain` on that one file, and for an ignored
+file the answer is always nothing. So every alert the pipeline ever produced
+took the "already raised" branch and reached nobody, including eight organiser
+photos on launch day. The step now fails outright if the file is ignored,
+because that failure is silent and looks exactly like having nothing to say.
+
+A third kind joins the two above:
+
+- **`image-source-gone`**: the picture in Notion points somewhere that stopped
+  answering. The sync keeps the copy it downloaded last time rather than
+  dropping the image, so the page is still right; only an editor can re-upload
+  the original. See "Images", earlier in this document.

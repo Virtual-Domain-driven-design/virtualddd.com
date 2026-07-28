@@ -7,7 +7,7 @@
  *
  * **Selectors are the contract.** Tests here select only `[data-test]` hooks and
  * `js-*` behaviour classes, never a styling class and never visible copy, so
- * restyling a section cannot break them. See AGENTS.md, "The test surface".
+ * restyling a section cannot break them. See docs/testing.md, "The test surface".
  *
  * Run after `npm run build`. Sampled rather than exhaustive so it stays quick;
  * `npm run test:full` widens the sample.
