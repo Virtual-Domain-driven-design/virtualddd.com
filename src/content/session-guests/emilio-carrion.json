@@ -1,5 +1,7 @@
 {
   "name": "Emilio Carrión",
   "bio": "Emilio is a Staff Engineer at Mercadona Tech.",
-  "alsoAnOrganiser": false
+  "linkedin": "https://www.linkedin.com/in/emcarrio/",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/emilio-carrion-photo.jpg"
 }

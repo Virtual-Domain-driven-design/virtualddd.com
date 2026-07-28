@@ -1,5 +1,7 @@
 {
   "name": "Trond Hjorteland",
-  "bio": "Trond is a senior IT consultant, an IT architect and open sociotechnical systems practitioner working on large, complex, business-critical systems in telecom, media, TV and the public sector. His mantra: great solutions emerge from collaborative sense-making and design.",
-  "alsoAnOrganiser": false
+  "bio": "I help organisations with IT architecture, domain modelling, and service design, using  DDD, business capability mapping, event storming, microservices, and event-driven architectures, combined with the organisational and agile practices needed to make those designs actually stick.",
+  "linkedin": "https://www.linkedin.com/in/trondhjort/",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/trond-hjorteland-photo.jpg"
 }
