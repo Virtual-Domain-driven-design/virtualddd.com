@@ -9,5 +9,6 @@
     "Meetups",
     "Discord"
   ],
-  "showOnTeam": true
+  "showOnTeam": true,
+  "photo": "./_assets/krisztina-hirth-photo.jpg"
 }

@@ -9,5 +9,6 @@
     "Discord",
     "Meetups"
   ],
-  "showOnTeam": true
+  "showOnTeam": true,
+  "photo": "./_assets/andrea-magnorsky-photo.jpg"
 }

@@ -8,5 +8,6 @@
   "organises": [
     "Discord"
   ],
-  "showOnTeam": true
+  "showOnTeam": true,
+  "photo": "./_assets/marco-heimeshoff-photo.jpg"
 }

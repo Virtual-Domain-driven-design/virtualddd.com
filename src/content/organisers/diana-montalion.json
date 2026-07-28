@@ -7,5 +7,6 @@
   "organises": [
     "Discord"
   ],
-  "showOnTeam": true
+  "showOnTeam": true,
+  "photo": "./_assets/diana-montalion-photo.jpg"
 }
