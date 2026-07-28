@@ -38,9 +38,18 @@ on:
   workflow_dispatch:
 
 # One deploy at a time. Two rsyncs into the same directory would interleave.
+# Production is one queue, and stays one queue: two deploys must never rsync
+# the same docroot at once, and a queued one must not be dropped.
+#
+# Pull requests get a queue each, keyed by branch. They joined the production
+# group the moment this workflow started answering them, and three Dependabot
+# pull requests arriving together promptly cancelled two of each other — only
+# one run may sit pending in a group. A rehearsal must not be able to jostle a
+# release, in either direction.
 concurrency:
-  group: deploy
-  cancel-in-progress: false
+  group: >-
+    deploy-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Read-only. This job builds and rsyncs; it never writes to the repository,
 # and the token it is handed should not be able to. The repository default is
