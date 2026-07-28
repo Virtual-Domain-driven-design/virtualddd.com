@@ -8,7 +8,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  createBlocksToMd, kebab, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  createBlocksToMd, isAssetFor, kebab, resolveRelation, richText, statusOf, yamlList, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -215,5 +215,32 @@ describe('relation gating', () => {
 
   test('reports a relation to a page that does not exist as dangling', () => {
     assert.deepEqual(resolveRelation('id-deleted', published, unpublished), { kind: 'dangling' });
+  });
+});
+
+describe('recognising an asset a previous sync stored', () => {
+  // What this guards: when an image source stops answering, the sync keeps the
+  // copy it already has instead of dropping the picture. Handing back the
+  // *wrong* file would be worse than dropping it, so the match is exact but
+  // for the extension.
+  test('matches the asset for that slug and label, whatever the extension', () => {
+    assert.ok(isAssetFor('marco-heimeshoff-photo.jpg', 'marco-heimeshoff', 'photo'));
+    assert.ok(isAssetFor('andrew-harmel-law-photo.png', 'andrew-harmel-law', 'photo'));
+    assert.ok(isAssetFor('a-session-featured.webp', 'a-session', 'featured'));
+  });
+
+  test('a longer label does not answer for a shorter one', () => {
+    // body-1 and body-11 sit in the same directory for any page with more
+    // than ten pictures in it.
+    assert.ok(isAssetFor('a-story-body-1.jpg', 'a-story', 'body-1'));
+    assert.equal(isAssetFor('a-story-body-11.jpg', 'a-story', 'body-1'), false);
+  });
+
+  test('a slug does not lend its picture to a slug it is a prefix of', () => {
+    assert.equal(isAssetFor('kenny-baas-schwegler-photo.jpg', 'kenny-baas', 'photo'), false);
+  });
+
+  test('another label of the same entry is not a match', () => {
+    assert.equal(isAssetFor('a-session-featured.webp', 'a-session', 'photo'), false);
   });
 });

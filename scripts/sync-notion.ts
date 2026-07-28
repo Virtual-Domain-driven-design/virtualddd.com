@@ -16,7 +16,7 @@ import { Client } from '@notionhq/client';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
-  createBlocksToMd, fileUrl, kebab, plainTitle,
+  createBlocksToMd, fileUrl, isAssetFor, kebab, plainTitle,
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
@@ -160,8 +160,11 @@ const ALERTS_FILE = 'data/sync-alerts.json';
 interface Alert {
   /** `unpublished-but-live` — an address still served because nobody said to
    *  retire it. `published-without-a-slug` — a page Notion calls published that
-   *  has no address at all, so nothing will ever render it. */
-  kind: 'unpublished-but-live' | 'published-without-a-slug';
+   *  has no address at all, so nothing will ever render it.
+   *  `image-source-gone` — the picture in Notion points somewhere that no
+   *  longer answers; the site is showing the last copy it downloaded, and only
+   *  an editor can re-upload it. */
+  kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -295,7 +298,40 @@ async function shrinkImage(raw: Buffer, ext: string): Promise<Buffer> {
   } catch { return raw; }
 }
 
-/** Download an image next to the entry; return the `./` relative path or null. */
+/** The asset an earlier sync stored for this slug and label, if it is still
+ *  there. The naming rule is `isAssetFor` in scripts/lib/notion-md.ts. */
+function existingAsset(dir: string, slug: string, label: string): string | null {
+  try {
+    return readdirSync(dir).find((f) => isAssetFor(f, slug, label)) ?? null;
+  } catch { return null; } // no _assets directory yet: nothing to keep
+}
+
+/** Images kept from an earlier sync because their source stopped answering.
+ *  Flushed into the alert file by whichever collection is being synced, so a
+ *  person is told to re-upload rather than finding out from the page. */
+const strandedImages: { slug: string; label: string; url: string }[] = [];
+
+/** What this run had to keep, as alerts for the section being synced. */
+const strandedAlerts = (section: string): Alert[] =>
+  strandedImages.map((s) => ({
+    kind: 'image-source-gone' as const,
+    section,
+    title: `${s.slug} (${s.label})`,
+    url: s.url,
+  }));
+
+/** Download an image next to the entry; return the `./` relative path or null.
+ *
+ * A download that fails must never *remove* a picture the site already has.
+ * Going live proved why: eight organiser photos were external URLs into the
+ * old WordPress media library, so the moment the document root swapped they
+ * 404'd, and the next sync rewrote all eight rows without a photo — every
+ * portrait gone from a green run that reported ✓. The bytes were still sitting
+ * in `_assets` the whole time.
+ *
+ * So when the source will not answer, the copy from the last good sync stands.
+ * That also repairs the damage by itself: a row whose photo was dropped gets
+ * it back on the next run, because the file on disk outlives the JSON. */
 async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise<string | null> {
   try {
     const res = await fetch(url);
@@ -308,6 +344,12 @@ async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise
     writeFileSync(`${ctx.dir}/${name}`, buf);
     return `./_assets/${name}`;
   } catch (e: any) {
+    const kept = existingAsset(ctx.dir, ctx.slug, label);
+    if (kept) {
+      console.warn(`    ! image source gone (${label}): ${e.message} — keeping ${kept}`);
+      strandedImages.push({ slug: ctx.slug, label, url });
+      return `./_assets/${kept}`;
+    }
     console.warn(`    ! image download failed (${label}): ${e.message}`);
     return null;
   }
@@ -710,6 +752,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     writeAlert(spec.section, [
       ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: spec.section, title: q.title, url: q.url })),
       ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: spec.section, title: u.title, url: u.url })),
+      ...strandedAlerts(spec.section),
     ]);
   }
 
@@ -863,6 +906,10 @@ async function runPeople(key: string, outDir: string, write: boolean) {
     unlinkSync(`${outDir}/${f}`);
     console.log(`  – removed ${f} (no longer in the database)`);
   }
+
+  // Unconditional, like the content sync's: re-uploading the last picture in
+  // Notion has to be able to empty this list, not just stop adding to it.
+  if (write) writeAlert(spec.label, strandedAlerts(spec.label));
 
   if (!write) console.log(`\n  (preview only — files in ${outDir})`);
 }

@@ -73,6 +73,18 @@ export function richText(rts: any[] = []): string {
 
 export interface AssetCtx { dir: string; slug: string; count: number }
 
+/** Is this file the asset a previous sync stored for `slug` and `label`?
+ *
+ * Assets are written as `<slug>-<label>.<ext>` — `photo`, `featured`,
+ * `body-1`. The rule lives here, and the directory read stays in the script,
+ * because what makes it subtle is names shadowing each other: `body-1` must
+ * not answer for `body-11`, and a slug that is the prefix of another slug must
+ * not lend it its picture. Only the extension may follow the label. */
+export function isAssetFor(file: string, slug: string, label: string): boolean {
+  const stem = `${slug}-${label}.`;
+  return file.startsWith(stem) && /^[a-z0-9]+$/i.test(file.slice(stem.length));
+}
+
 export interface MdDeps {
   /** Fetch a block's children. The script supplies the paged API call. */
   childrenOf: (blockId: string) => Promise<any[]>;
