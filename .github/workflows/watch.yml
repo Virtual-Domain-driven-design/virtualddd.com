@@ -94,8 +94,25 @@ jobs:
             *)  echo "::warning::n8n answered $code; if anything was wrong, nobody has been told." ;;
           esac
 
+      # Red, not just a message. A failed scheduled run emails the account that
+      # last changed this workflow, straight from GitHub — which is the point:
+      # the Discord line above travels through n8n and a webhook, the same kind
+      # of chain it is watching, and an alert that quietly went nowhere is the
+      # failure this repository keeps finding.
       - name: Fail the run if the site is not keeping its promises
-        if: steps.urls.outputs.ok == 'false'
+        if: always()
         run: |
-          echo "::error::The deployed site no longer answers every address it promises. See the summary."
-          exit 1
+          bad=0
+          if [ "${{ steps.urls.outputs.ok }}" = "false" ]; then
+            echo "::error::The deployed site no longer answers every address it promises. See the summary."
+            bad=1
+          fi
+          days=${{ steps.cert.outputs.days || 0 }}
+          # AutoSSL renews with about a month to go. Two weeks out it has not
+          # renewed, and that is a conversation with the host rather than
+          # something to keep watching.
+          if [ "$days" -gt 0 ] && [ "$days" -lt 14 ]; then
+            echo "::error::The certificate expires in $days days and has not been renewed."
+            bad=1
+          fi
+          exit $bad

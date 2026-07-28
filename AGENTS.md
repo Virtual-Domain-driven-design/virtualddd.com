@@ -776,10 +776,17 @@ the certificate has left. Both rot without anyone touching this repository — a
 host config change, a restore that loses the `.htaccess`, a renewal that
 quietly stopped — so neither can fail a build.
 
-It posts to Discord only when something is wrong, and fails the run. A weekly
-"still fine" is a message people learn to skip, and the run is already the
-record. Weekly rather than daily because 967 requests is a real load on a
-shared host, and neither failure is one you would fix within the hour.
+It posts to Discord only when something is wrong. A weekly "still fine" is a
+message people learn to skip, and the run is already the record. Weekly rather
+than daily because 967 requests is a real load on a shared host, and neither
+failure is one you would fix within the hour.
+
+Two thresholds, doing different jobs. A certificate with **under 21 days** gets
+a Discord line: it should have renewed by now, worth an eye. **Under 14 days**,
+or any broken address, fails the run — a red scheduled run emails the account
+that last changed the workflow, from GitHub, rather than through n8n and a
+webhook. The louder signal deliberately does not travel the same kind of chain
+it is watching.
 
 ## Commands
 
