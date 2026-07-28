@@ -1,0 +1,68 @@
+# Merge a routine dependency bump once the suite has proved it.
+#
+# **Only after the checks pass.** This runs on `workflow_run`, so it starts when
+# the Deploy workflow — which on a pull request builds and runs the blocking
+# suite without deploying anything — has finished, and it merges only if that
+# finished green.
+#
+# `workflow_run` rather than the more obvious `pull_request` because a workflow
+# triggered by Dependabot gets a read-only token and cannot merge anything, and
+# rather than branch protection because protecting `main` would block the
+# direct pushes this project publishes by: the sync bot commits content to
+# `main` all day, and `docs/pipeline.md` promises publishing degrades to a
+# script and a commit. A required check would quietly end that.
+#
+# Majors are left alone. Dependabot puts them in their own pull request, which
+# is not in the `routine` group, so the branch name does not match below and
+# nothing here touches it.
+name: Merge routine dependency updates
+
+on:
+  workflow_run:
+    workflows: ['Deploy']
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.actor.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge it, if it is a routine one
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+
+          # The run knows its own pull request; ask, rather than guessing from
+          # a branch name in the event payload.
+          pr=$(gh api "repos/$REPO/actions/runs/$RUN_ID" \
+                 --jq '.pull_requests[0].number // empty')
+          if [ -z "$pr" ]; then
+            # A fork's pull request reports no linked PR here. Nothing to do,
+            # and nothing to worry about: Dependabot does not use forks.
+            echo "No pull request attached to this run."
+            exit 0
+          fi
+
+          branch=$(gh pr view "$pr" --repo "$REPO" --json headRefName --jq .headRefName)
+          echo "PR #$pr on $branch"
+
+          # Dependabot names the branch after the group. `routine` is patch and
+          # minor only — see dependabot.yml — so a major never matches and is
+          # left for a person to read.
+          case "$branch" in
+            dependabot/*/routine-* | dependabot/*/actions-*) ;;
+            *) echo "Not a grouped routine update; leaving it for a human."; exit 0 ;;
+          esac
+
+          gh pr merge "$pr" --repo "$REPO" --squash --delete-branch
+          echo "Merged #$pr — the suite passed on it before this ran."

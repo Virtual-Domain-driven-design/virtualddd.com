@@ -12,6 +12,14 @@ on:
   push:
     branches: [main]
     paths-ignore: ['**.md', 'LICENSE*']
+  # A pull request gets everything above the deploy line: types, build, the
+  # blocking suite. Nothing here had *any* check on a pull request before, so a
+  # dependency bump could only be judged after it had already landed on main.
+  # The same file rather than a second one, because the thing worth running is
+  # identical and a copy would drift.
+  pull_request:
+    branches: [main]
+    paths-ignore: ['**.md', 'LICENSE*']
   workflow_call:
     inputs:
       changes:
@@ -143,9 +151,16 @@ jobs:
         env:
           HOST: ${{ secrets.KUALO_HOST }}
           SITE_URL: ${{ secrets.SITE_URL }}
+          EVENT: ${{ github.event_name }}
         run: |
           [ -n "$SITE_URL" ] && echo "verify=true" >> "$GITHUB_OUTPUT" || echo "verify=false" >> "$GITHUB_OUTPUT"
-          if [ -z "$HOST" ]; then
+          # A pull request is a rehearsal: it proves the build and the tests,
+          # and it publishes nothing. Guarding here rather than on each step
+          # below means the deploy and the verification are already reading it.
+          if [ "$EVENT" = "pull_request" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Pull request: built and tested, not deployed." >> "$GITHUB_STEP_SUMMARY"
+          elif [ -z "$HOST" ]; then
             echo "ready=false" >> "$GITHUB_OUTPUT"
             echo "No KUALO_HOST secret set, so nothing was deployed." >> "$GITHUB_STEP_SUMMARY"
             echo "The build and the tests above still ran, and they passed." >> "$GITHUB_STEP_SUMMARY"
@@ -252,7 +267,7 @@ jobs:
       # reason: by this point the site is deployed and verified, so a message
       # nobody received is not grounds for calling a good deploy bad.
       - name: Tell n8n what shipped
-        if: success()
+        if: success() && steps.target.outputs.ready == 'true'
         env:
           HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
           TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}

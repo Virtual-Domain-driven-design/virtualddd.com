@@ -77,3 +77,44 @@ or any broken address, fails the run. A red scheduled run emails the account
 that last changed the workflow, from GitHub, rather than through n8n and a
 webhook. The louder signal deliberately does not travel the same kind of chain
 it is watching.
+
+## Keeping the packages current
+
+`dependabot.yml` opens **one** pull request most Mondays: everything patch and
+minor, grouped. Ungrouped it would open five, and five nobody reads is the same
+as none, except that it also teaches everyone to ignore the notification. The
+GitHub Actions are watched the same way — nothing was looking at those, which is
+why every run spent months warning that `checkout@v4` targets a deprecated Node.
+
+A routine group **merges itself** once the suite has passed on it
+(`dependabot-automerge.yml`). What makes that safe is not the bot: `deploy.yml`
+now answers pull requests too, so types, build, contracts, redirects and the
+browser suite all run on the bump before anything merges, and the same suite
+runs again before the rsync. A bump that breaks the site cannot reach the host.
+
+**A major waits for a person.** Dependabot gives it its own pull request outside
+the `routine` group, the branch name does not match, and nothing merges it.
+Astro 8 or TypeScript 7 is a reading job, not an update.
+
+The merge runs on `workflow_run` rather than the obvious `pull_request`, for two
+reasons worth not rediscovering: a workflow triggered by Dependabot gets a
+read-only token and cannot merge anything, and protecting `main` with a required
+check — the usual alternative — would block the direct pushes this project
+publishes by. The sync bot commits to `main` all day.
+
+## Who can read the secrets
+
+Anyone with **write access to this repository**, which today is four people. Not
+because anything is misconfigured: a secret is hidden from logs and from the
+public, never from someone who can push a workflow that prints it. The
+organisation's base permission is `read`, so no wider org membership reaches
+them, and the repository being public does not expose them — a fork's pull
+request gets no secrets, and nothing here uses `pull_request_target`.
+
+What follows from that: **the SSH key is only as safe as four GitHub accounts.**
+Require two-factor authentication on the organisation, and restrict the key
+where it lands rather than only where it is stored — `restrict,command="…"` in
+`authorized_keys` on the host turns a stolen key from a shell into one rsync.
+
+Every workflow declares `permissions:`. Only `sync.yml` has `contents: write`,
+because committing the synced content is its whole job.
