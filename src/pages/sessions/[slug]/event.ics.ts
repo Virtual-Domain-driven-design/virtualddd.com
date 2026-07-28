@@ -42,7 +42,7 @@ export function GET({ props, params, site }: APIContext) {
     guests.length ? `With ${guests.join(', ')}.` : '',
     d.organiser ? `Hosted by ${d.organiser}.` : '',
     `Details: ${url}`,
-    d.humantix ? `RSVP: ${d.humantix}` : '',
+    d.humanitix ? `RSVP: ${d.humanitix}` : '',
   ].filter(Boolean).join('\n');
 
   const body = [

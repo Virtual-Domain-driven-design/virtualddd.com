@@ -27,10 +27,10 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
         <p class="feat-when"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{fallback}</time></p>
         <p class="feat-countdown js-countdown" data-iso={iso}></p>
         <div class="feat-cta">
-          {d.humantix
-            ? <a class="btn btn--accent" href={d.humantix}>RSVP</a>
+          {d.humanitix
+            ? <a class="btn btn--accent" href={d.humanitix}>RSVP</a>
             : <a class="btn btn--accent" href={`/sessions/${session.id}/`}>More info →</a>}
-          {d.humantix && <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>}
+          {d.humanitix && <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>}
         </div>
 
         {(d.meet || d.video) && (

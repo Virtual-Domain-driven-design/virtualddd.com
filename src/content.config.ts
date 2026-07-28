@@ -40,7 +40,7 @@ const sessions = defineCollection({
       podcastPlayer: z.url().optional(),
       miro: z.url().optional(),
       meet: z.url().optional(),
-      humantix: z.url().optional(),
+      humanitix: z.url().optional(),
       organiser: z.string().optional(),
       coOrganisers: z.array(z.string()).default([]),
       // Speakers and panellists. A relation, unlike the organiser strings

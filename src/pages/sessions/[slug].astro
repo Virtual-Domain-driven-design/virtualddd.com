@@ -154,8 +154,8 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
       <div class="side-card">
         <p class="side-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
-        {isUpcoming && (d.humantix || d.meet) && (
-          <a class="btn btn--accent side-rsvp" href={d.humantix ?? d.meet}>RSVP to attend</a>
+        {isUpcoming && (d.humanitix || d.meet) && (
+          <a class="btn btn--accent side-rsvp" href={d.humanitix ?? d.meet}>RSVP to attend</a>
         )}
         {isUpcoming && (
           <a class="btn btn--ghost side-rsvp" data-test="add-to-calendar" href={`/sessions/${session.id}/event.ics`}>Add to calendar</a>

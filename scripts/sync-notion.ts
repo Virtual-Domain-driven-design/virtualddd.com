@@ -453,9 +453,16 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       if (h.select('Type of session')) l.push(`typeOfSession: ${yamlStr(h.select('Type of session')!)}`);
       const level = h.multi('Level'); if (level.length) l.push(`level: ${yamlList(level)}`);
       const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
-      for (const [k, p] of [['video', 'Video'], ['podcastPlayer', 'PodcastPlayer'], ['miro', 'Miro'], ['meet', 'Meet'], ['humantix', 'Humantix']] as const) {
+      for (const [k, p] of [['video', 'Video'], ['podcastPlayer', 'PodcastPlayer'], ['miro', 'Miro'], ['meet', 'Meet']] as const) {
         const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);
       }
+      // Either spelling. The Notion property was `Humantix` for years, and a
+      // rename on one side alone takes the RSVP button off every upcoming
+      // session within the hour — the sync would read a property that is no
+      // longer there and write nothing. Tolerating both makes the two renames
+      // independent; drop the old name once Notion no longer has it.
+      const rsvp = h.url('Humanitix') ?? h.url('Humantix');
+      if (rsvp) l.push(`humanitix: ${yamlStr(rsvp)}`);
       const org = h.person('Organiser')[0]; if (org) l.push(`organiser: ${yamlStr(org)}`);
       const co = h.person('Co-Organisers'); if (co.length) l.push(`coOrganisers: ${yamlList(co)}`);
       const guests = h.guest('Guests'); if (guests.length) l.push(`guests: ${yamlList(guests)}`);

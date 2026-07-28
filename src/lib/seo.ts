@@ -227,8 +227,8 @@ export function sessionJsonLd(
     ...(opts.image ? { image: [opts.image] } : {}),
     ...(d.seoMetadescription ? { description: d.seoMetadescription } : {}),
     ...(performers.length ? { performer: performers.map(person) } : {}),
-    ...(d.humantix && opts.isUpcoming
-      ? { offers: { '@type': 'Offer', url: d.humantix, price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' } }
+    ...(d.humanitix && opts.isUpcoming
+      ? { offers: { '@type': 'Offer', url: d.humanitix, price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock' } }
       : {}),
     url: opts.url,
   };

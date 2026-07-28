@@ -55,10 +55,10 @@ const jsonLd = collectionPage(Astro.site, {
                 <p class="hero-date"><time class="js-local" data-format="datetime" datetime={sIso} data-iso={sIso}>{longDateTime(f.datetime)}</time></p>
                 {f.organiser && <p class="hero-host">Hosted by {f.organiser}</p>}
                 <div class="hero-cta">
-                  {f.humantix
-                    ? <a class="btn btn--accent" href={f.humantix}>RSVP to attend</a>
+                  {f.humanitix
+                    ? <a class="btn btn--accent" href={f.humanitix}>RSVP to attend</a>
                     : <a class="btn btn--accent" href={`/sessions/${session.id}/`}>More info →</a>}
-                  {f.humantix && <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>}
+                  {f.humanitix && <a class="btn btn--ghost" href={`/sessions/${session.id}/`}>More info →</a>}
                 </div>
                 {(f.meet || f.video) && (
                   <div class="hero-live js-live" data-iso={sIso}>

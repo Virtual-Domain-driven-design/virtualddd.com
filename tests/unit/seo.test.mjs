@@ -123,7 +123,7 @@ describe('a session', () => {
   });
 
   test('only offers a ticket while the session is still ahead', () => {
-    const data = { ...session.data, humantix: 'https://tickets.example/x' };
+    const data = { ...session.data, humanitix: 'https://tickets.example/x' };
     const opts = { url: 'https://virtualddd.com/sessions/a-session/', trail: topTrail('x', '/x/') };
     assert.ok(typeOf(sessionJsonLd(SITE, { ...session, data }, { ...opts, isUpcoming: true }), 'Event').offers);
     assert.ok(!typeOf(sessionJsonLd(SITE, { ...session, data }, { ...opts, isUpcoming: false }), 'Event').offers,
