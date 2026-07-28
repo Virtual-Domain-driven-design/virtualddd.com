@@ -37,6 +37,20 @@ ddd-crew content comes from GitHub, not Notion (`npm run sync:ddd-crew`).
   database. The fields here exist to produce good `Person` structured data, and
   the links become `sameAs`.
 
+**Both databases carry the same four profile links**: `URL` (`Website` on
+guests), `LinkedIn`, `Mastodon` and `Bluesky`. `profileLinks` in
+`src/lib/people.ts` is the one list that orders them, and everything that shows
+a person's links reads it — the organiser page, the organiser card's icons, a
+session's guest block, and the `sameAs` on every `Person` node. Adding a fifth
+network is that list plus an icon, not a change in four places.
+
+**Store the full URL, not the handle.** Mastodon and Bluesky are both written
+`@name@server` in conversation, and neither is a link. `@kenny_baas@mastodon.social`
+is `https://mastodon.social/@kenny_baas`, and `@kenny.weave-it.org` is
+`https://bsky.app/profile/kenny.weave-it.org`. A handle in the field publishes a
+broken link and a broken `sameAs`, and the sync cannot tell the difference
+because Notion's URL property does not either.
+
 The cost is that someone who both organises and speaks has a row in each. That
 is deliberate, and `Also an organiser` marks it. The alternative, one people
 table with a flag, was rejected because it would put 60+ external speakers into

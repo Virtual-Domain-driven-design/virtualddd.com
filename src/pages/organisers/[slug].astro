@@ -44,6 +44,10 @@ const SHOW = 6;
 const SHOW_LIST = 10;
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+// Built once and used twice, below and in `sameAs`: a person's profiles are one
+// fact, and a page that lists a Mastodon account the structured data omits is
+// two answers to the same question.
+const links = profileLinks(d);
 // The same Person shape a session's guests get, so the two descriptions of a
 // person who does both cannot drift apart.
 const org = organization(Astro.site);
@@ -51,7 +55,7 @@ const jsonLd = graph(org, person({
   name: d.name,
   role: d.role,
   url: d.website,
-  sameAs: profileLinks(d).map((l) => l.href),
+  sameAs: links.map((l) => l.href),
   page: `${site}/organisers/${organiser.id}/`,
   memberOf: org['@id'],
 }), breadcrumbs(Astro.site, trail('organisers', d.name, `/organisers/${organiser.id}/`)));
@@ -78,10 +82,11 @@ const description = d.role
     <aside class="detail-side">
       <div class="side-card">
         {d.photo && <Image class="portrait" src={d.photo} alt={d.name} width={480} />}
-        {(d.website || d.linkedin) && (
+        {links.length > 0 && (
           <div class="side-links">
-            {d.website && <a class="btn btn--ghost btn--sm btn--block" href={d.website}>Website ↗</a>}
-            {d.linkedin && <a class="btn btn--ghost btn--sm btn--block" href={d.linkedin}>LinkedIn ↗</a>}
+            {links.map((l) => (
+              <a class="btn btn--ghost btn--sm btn--block" href={l.href}>{l.label} ↗</a>
+            ))}
           </div>
         )}
         {d.organises.length > 0 && (

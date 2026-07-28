@@ -895,6 +895,8 @@ const ROW_SPECS: Record<string, RowSpec> = {
       role: h.text('Role') || undefined,
       website: h.url('URL'),
       linkedin: h.url('LinkedIn'),
+      mastodon: h.url('Mastodon'),
+      bluesky: h.url('Bluesky'),
       area: h.select('Area'),
       organises: h.multi('Organises'),
       showOnTeam: h.checkbox('Show on team'),

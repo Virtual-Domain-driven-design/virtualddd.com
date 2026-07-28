@@ -118,6 +118,26 @@ describe('what the editors control', () => {
     assert.deepEqual(missing, [], `entries with no featured image:\n${missing.join('\n')}`);
   });
 
+  test('a profile link is a link, not a handle', () => {
+    // Mastodon and Bluesky are both spoken as `@name@server`, and neither is an
+    // address. Notion's URL property accepts the handle without complaint, the
+    // sync copies it faithfully, and the page ships a dead link *and* a dead
+    // `sameAs` — which is worse than no link, because a search engine believes
+    // it. The conversion is mechanical, and docs/content-model.md spells it
+    // out: @kenny_baas@mastodon.social → https://mastodon.social/@kenny_baas.
+    const bad = [];
+    for (const p of all) {
+      const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
+      if (!raw) continue;
+      for (const node of JSON.parse(raw)['@graph'] ?? []) {
+        for (const same of [].concat(node.sameAs ?? [])) {
+          if (!/^https?:\/\//.test(same)) bad.push(`${p.path}: ${node.name ?? '?'} → "${same}"`);
+        }
+      }
+    }
+    assert.deepEqual(bad, [], `profile links that are not URLs:\n${bad.join('\n')}`);
+  });
+
   test('every heuristic says which kind it is', () => {
     // The type drives the card's colour, the three type pages and the filter.
     // A heuristic with none is reachable only by search — and the browser puts
