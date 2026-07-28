@@ -12,37 +12,19 @@ pointer to this file for exactly that reason.
 ## What this is
 
 virtualddd.com is the site of **Virtual DDD**, a small, volunteer-run online
-community around Domain-Driven Design, software architecture and design. It
-publishes:
-
-- **sessions** — live online meetups people RSVP to, then watch back
-- **open spaces** — participant-led unconferences
-- **stories** — on facilitating software architecture and design
-- **heuristics** — a curated collection of rules of thumb
-- **ddd-crew** — community tools republished under CC BY-SA 4.0
-
-It is a **static Astro site** whose content comes from **Notion**, built in CI
-and deployed over SSH. The team is small and time is short, so the guiding
+community around Domain-Driven Design, software architecture and design. It is
+a **static Astro site** whose content comes from **Notion**, built in CI and
+deployed over SSH. The team is small and time is short, so the guiding
 constraint behind every decision here is *low ongoing maintenance*.
 
-## First time here?
+**[README.md](./README.md) is the front door** — what the site publishes, how
+to run it, the commands, and how somebody helps without touching code. It is
+not repeated here, so that neither file can go quietly out of date. Start there
+if you have not seen this project before; the everyday loop is **not** editing
+this repository, and knowing what the loop actually is will save you an hour.
 
-```bash
-npm install
-npm run dev          # http://localhost:4321
-npm test             # the blocking suite (~80s): unit, build, contracts, browser
-```
-
-The everyday loop is **not** editing this repo. It is:
-
-1. Edit the content in **Notion**.
-2. `npm run sync` — pulls Notion and the ddd-crew repos into `src/content/`.
-3. `npm test` — if it is green, the site is not broken.
-4. Commit the generated markdown and push. That deploys.
-
-You need `NOTION_TOKEN` in `local.env` to sync. Ask an organiser for one. You do
-**not** need it to build, test or work on the site's code — the content is
-committed.
+This file is the rest: the content model, the URL contract, how the pipeline
+fits together and what each part of it is protecting.
 
 ## How we work
 
@@ -790,17 +772,18 @@ it is watching.
 
 ## Commands
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Local dev server |
-| `npm run build` | Static build to `dist/`, then `prune-dist.mjs` drops the unreferenced originals Astro emits alongside its `.webp` (~22 MB a build). `dist` lands around 40 MB and is asserted under a 50 MB ceiling, so a silent prune failure shows up as a test rather than a slow rsync |
-| `npm run preview` | Serve the built site |
-| `npm run sync` | The whole content pipeline: Notion (all collections, organisers, guests) then the ddd-crew repos. Guests sync **before** sessions, since sessions reference them. `--strict` fails on a dangling relation |
-| `npm run sync:<name>` | One collection, for a targeted run |
-| `npm run redirects` | Regenerate `public/.htaccess` from the inventories in `data/`. Re-run after adding or renaming content |
-| `npm run check:urls` | Assert all 967 inherited URLs are served, redirected or Gone. Run after `npm run build` |
-| `npm run seo` | Push `data/seo-copy.csv` into Notion (`--write` to apply). Only writes a field whose value actually differs |
-| `npm run guests:profiles` | Push `data/guest-profiles.csv` into the guests database. Fills empty fields only |
-| `npm test` | The blocking suite |
-| `npm run test:content` | The reporting suite |
-| `npm run verify:live <url>` | Check a deployed host's status codes, sampled by family. For all 967, `node scripts/verify-live.mjs <url> --all` — `npm run` swallows the flag and samples silently |
+**The table is in [README.md](./README.md#commands).** What is worth knowing
+here is what the table has no room for:
+
+- **`npm run build`** also runs `prune-dist.mjs`, which drops the unreferenced
+  originals Astro emits alongside its `.webp` — around 22 MB a build. `dist`
+  lands near 40 MB and is asserted under a 50 MB ceiling, so a silent prune
+  failure surfaces as a failing test rather than a slow rsync.
+- **`npm run sync`** does guests **before** sessions, because sessions
+  reference them. `--strict` fails on a dangling relation; `--full` ignores
+  `data/sync-state.json` and re-fetches every body.
+- **`npm run redirects`** must be re-run after adding or renaming content, and
+  a test now fails if the committed `.htaccess` is not what the generator would
+  write today.
+- **`npm run check:urls`** needs a build first: it checks the rules against the
+  pages in `dist/`.

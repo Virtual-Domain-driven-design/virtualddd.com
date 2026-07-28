@@ -11,7 +11,7 @@ name: Deploy
 on:
   push:
     branches: [main]
-    paths-ignore: ['**.md', 'LICENSE*', '.github/ISSUE_TEMPLATE/**']
+    paths-ignore: ['**.md', 'LICENSE*']
   workflow_call:
     inputs:
       changes:
