@@ -187,6 +187,15 @@ them the host serves its own — an unbranded 404 with no way back, and a bare
 — the page stops existing on the next sync and `npm run check:urls` says so. Add
 the old → new pair to `RETIRED` in `scripts/build-redirects.mjs`.
 
+**One hostname.** `www.virtualddd.com` redirects to the bare domain, first in
+the generated `.htaccess` so it costs a single hop rather than a path redirect
+on the wrong host followed by another. WordPress did this; a static site does
+not, so for a few hours after the cutover every page had two addresses that
+both answered 200. None of the 967 inherited addresses is a www one, which is
+why `check-redirects.mjs` skips host-conditional rules — replaying that rule's
+`^(.*)$` against the inventory would match all 967 and prove nothing. The real
+server is asked instead, by `verify:live`.
+
 Other standing rules:
 
 - `trailingSlash: 'always'`. Every internal link ends in a slash; a test
@@ -515,8 +524,15 @@ Notion must not stop a deploy** — that would make publishing hostage to CI.
 
 **`npm run verify:live <url>`** is the one that cannot run locally: it requests
 real URLs from a deployed host and checks the status codes, because only the
-real server proves the `.htaccess` is honoured. Run it against staging before a
-release and against production after.
+real server proves the `.htaccess` is honoured, that a 410 is a 410, and that
+www comes home in one hop. Every deploy runs it against `SITE_URL`.
+
+It samples one URL family at a time unless told otherwise, and **`npm run` eats
+the flag** — for all 967, call the script directly:
+
+```bash
+node scripts/verify-live.mjs https://virtualddd.com --all   # ~20 minutes
+```
 
 Not covered, deliberately: visual regression (no baseline worth maintaining for
 a site still being designed), Lighthouse (run by hand before a release), and
@@ -573,6 +589,18 @@ deploys nothing.
 **Nothing deploys unless the sync produced a diff.** The generated markdown is
 committed, so `git diff --quiet` is the whole test.
 
+**The deploy builds the commit the sync just made, and says which.** A called
+workflow runs at the *caller's* commit, and the sync commits after its own run
+has begun — so `deploy.yml` takes a `ref` input and `sync.yml` passes the sha
+it pushed. Without it every sync-triggered deploy shipped the site as it stood
+*before* the content it was called to publish: green run, correct summary, site
+one commit behind. It survived launch day because a sync that changes nothing
+deploys nothing, and a push deploys its own sha correctly — the first real
+content change was the first time it could be seen. The release directory, the
+Discord link and the `What is being built?` step all follow the built commit
+now, for the same reason: this was invisible because nothing said out loud
+which commit was being published.
+
 ### The sync is incremental
 
 `data/sync-state.json` records, per page, the slug and Notion's
@@ -592,6 +620,28 @@ Trailing blank lines are normalised where the file is written, not in either
 branch, so a fetched body and a reused body are byte-identical. Without that a
 changed page would flip-flop between syncs and "no diff, no deploy" would ship
 whitespace.
+
+### Images
+
+Every picture is **downloaded** into the entry's `_assets/` and referenced
+relatively, because a Notion file URL is signed and expires within the hour.
+
+**A download that fails never removes a picture the site already has.** If the
+source will not answer, the copy from the last good sync stands and an
+`image-source-gone` alert names the URL that died. Launch day is why: eight
+organiser photos were *external* URLs into the old WordPress media library, so
+swapping the document root 404'd all eight, and the next sync rewrote every row
+without a photo and reported `✓`. The bytes were in `_assets` the whole time.
+Because the file on disk outlives the row that references it, this also repairs
+itself on the next run.
+
+**Prefer a Notion-hosted file to an external URL** in any property the site
+reads. External URLs are somebody else's uptime, and one of those somebodies is
+a site we turned off.
+
+Assets are pruned less eagerly than entries: a renamed or retired page's JSON
+goes, its old images stay. Harmless — Astro bundles only what is referenced —
+but they accumulate.
 
 ### Generated content is not editable here
 
@@ -655,33 +705,68 @@ run, and *nothing deploys unless the sync produced a diff* would quietly become
 false. `sync.yml` posts it to n8n only when the file itself changed, which is
 what stops the same alert being raised every hour for weeks.
 
-## Going live
+**It must be committed, and `.gitignore` must never claim it.** The "has this
+changed?" test is `git status --porcelain` on that one file, and for an ignored
+file the answer is always nothing — so every alert the pipeline ever produced
+took the "already raised" branch and reached nobody, including eight organiser
+photos on launch day. The step now fails outright if the file is ignored,
+because that failure is silent and looks exactly like having nothing to say.
+
+A third kind joins the two above:
+
+- **`image-source-gone`** — the picture in Notion points somewhere that stopped
+  answering. The sync keeps the copy it downloaded last time rather than
+  dropping the image, so the page is still right; only an editor can re-upload
+  the original. See "Images" below.
+
+## The live site
+
+**virtualddd.com went live on 28 July 2026**, replacing WordPress 7.0.2 on the
+same Kualo host. All 967 inherited addresses were verified against the real
+server the same day: 294 served, 412 redirected, 261 Gone, no problems.
 
 The deploy is atomic: every release is rsynced into `~/releases/<sha>` and the
 document root is a **symlink** swapped once the copy is complete. Nobody sees a
 half-written site, and a rollback is one command.
 
-**CI will not touch a document root that is a real directory.** It checks, and
-fails with this note rather than deleting anything — because a real directory
-there might be somebody's live site, and a deploy job is not the place to find
-that out. Pointing a domain at the new site is therefore a deliberate, one-time
-human step:
+```
+/home/baasieco/virtualddd.com          → ~/releases/<sha>   the live site
+/home/baasieco/virtualddd.com.wordpress                     the old site, parked
+```
+
+**`KUALO_PATH` must be an absolute path.** It is interpolated inside single
+quotes in a shell on the host, so `~` is never expanded — a value starting with
+`~` fails at the very last step with `ln: failed to create symbolic link: No
+such file or directory`, after a successful build and a successful upload.
+
+**CI will not touch a document root that is a real directory.** It checks and
+fails rather than deleting anything, because a real directory there might be
+somebody's live site and a deploy job is not the place to find that out. That
+is why pointing a *new* domain at the site is a deliberate human step:
 
 ```bash
-# 1. Deploy once with KUALO_PATH set to a path that does not exist yet,
-#    e.g. ~/staging.virtualddd.com. CI creates it as a symlink.
-
-# 2. When you are ready to cut a domain over, on the host:
+# Cutting a domain over, on the host:
 mv ~/virtualddd.com ~/virtualddd.com.wordpress     # keep the old site
 ln -sfn ~/releases/<sha> ~/virtualddd.com          # point at the newest release
+# then set KUALO_PATH to the absolute docroot and SITE_URL to the domain.
 
-# 3. Roll back at any time by pointing the symlink at an earlier release:
+# Roll back at any time by pointing the symlink at an earlier release:
 ls -1dt ~/releases/*/                              # newest first
 ln -sfn ~/releases/<older-sha> ~/virtualddd.com
 ```
 
 The last five releases are kept, so a rollback is always available without a
-rebuild. Keep the old site directory until you are sure, then remove it.
+rebuild.
+
+**The parked WordPress directory is not dead weight.** Its `wp-content/uploads`
+is what the old site's media URLs pointed at, and things outside this repo
+still reference them — Notion did, until the organiser photos were re-uploaded.
+Do not delete it on the strength of the site looking fine.
+
+**The certificate** is a Let's Encrypt *wildcard* (`*.virtualddd.com`), which
+renews over DNS-01 rather than the HTTP challenge — so `public/.well-known/
+acme-challenge/` matters only if it is ever replaced by a per-domain AutoSSL
+cert. Keep the directory; do not rely on it. Check the expiry each autumn.
 
 ## Commands
 
@@ -698,4 +783,4 @@ rebuild. Keep the old site directory until you are sure, then remove it.
 | `npm run guests:profiles` | Push `data/guest-profiles.csv` into the guests database. Fills empty fields only |
 | `npm test` | The blocking suite |
 | `npm run test:content` | The reporting suite |
-| `npm run verify:live <url>` | Check a deployed host's status codes |
+| `npm run verify:live <url>` | Check a deployed host's status codes, sampled by family. For all 967, `node scripts/verify-live.mjs <url> --all` — `npm run` swallows the flag and samples silently |

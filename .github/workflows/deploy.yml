@@ -181,12 +181,12 @@ jobs:
           # Never replace a real directory. If the document root is not already
           # a symlink it may be a live site put there by someone else, and CI
           # is not the place to find out. Switching it over is a deliberate,
-          # one-time human step — see AGENTS.md, "Going live".
+          # one-time human step — see AGENTS.md, "The live site".
           $SSH "$SSH_USER@$HOST" "
             set -e
             if [ -e '$DOCROOT' ] && [ ! -L '$DOCROOT' ]; then
               echo '$DOCROOT exists and is a real directory, not a symlink.'
-              echo 'Refusing to touch it. See AGENTS.md, \"Going live\".'
+              echo 'Refusing to touch it. See AGENTS.md, \"The live site\".'
               exit 1
             fi
             mkdir -p '$RELEASE'
