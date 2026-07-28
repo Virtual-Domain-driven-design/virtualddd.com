@@ -73,6 +73,19 @@ export function richText(rts: any[] = []): string {
 
 export interface AssetCtx { dir: string; slug: string; count: number }
 
+/** Every `_assets/…` file an entry refers to.
+ *
+ * Reads the written entry rather than the run's own bookkeeping, because a
+ * sync is incremental: most entries are not re-rendered, and their pictures
+ * are just as referenced as the ones that were. Matches the frontmatter form
+ * (`featuredImage: "./_assets/x.jpg"`), the markdown form (`![](./_assets/…)`)
+ * and JSON (`"photo": "./_assets/…"`). Percent-escapes are decoded, since a
+ * file whose name has a space is written escaped and stored unescaped. */
+export function assetRefs(entry: string): string[] {
+  return [...entry.matchAll(/_assets\/([^)"'\s]+)/g)]
+    .map((m) => { try { return decodeURIComponent(m[1]); } catch { return m[1]; } });
+}
+
 /** Is this file the asset a previous sync stored for `slug` and `label`?
  *
  * Assets are written as `<slug>-<label>.<ext>` — `photo`, `featured`,

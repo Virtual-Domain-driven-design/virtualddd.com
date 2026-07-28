@@ -10,7 +10,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 test('every inherited URL is served, redirected or Gone', () => {
   let out;
@@ -48,4 +50,24 @@ test('www redirects to the bare domain, once, before anything else', () => {
 
   const first = lines.findIndex((l) => l.startsWith('RewriteRule'));
   assert.equal(first, i + 1, 'a path rule runs before the www redirect, which costs a second hop');
+});
+
+test('the committed .htaccess is what the generator would write today', () => {
+  // public/.htaccess is generated from data/ and src/content/, and regenerating
+  // it is something a person has to remember. The URL contract test above only
+  // notices if one of the 967 addresses stops being handled — a rule that
+  // should exist and does not, because nobody re-ran the command, satisfies it
+  // perfectly. This is the difference between the file and its inputs.
+  const dir = mkdtempSync(join(tmpdir(), 'htaccess-'));
+  try {
+    const out = join(dir, '.htaccess');
+    execFileSync('node', ['scripts/build-redirects.mjs', `--out=${out}`], { encoding: 'utf8' });
+    assert.equal(
+      readFileSync(out, 'utf8'),
+      readFileSync('public/.htaccess', 'utf8'),
+      'public/.htaccess is out of date with its inputs — run `npm run redirects` and commit the result',
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

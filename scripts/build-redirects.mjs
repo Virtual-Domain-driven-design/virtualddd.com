@@ -241,9 +241,12 @@ L.push('RewriteRule ^books/?$ - [G,L]');
 L.push('</IfModule>');
 L.push('');
 
-writeFileSync('public/.htaccess', L.join('\n'));
+// `--out=` lets the test regenerate somewhere harmless and compare, rather
+// than overwriting the file it is checking.
+const out = process.argv.find((a) => a.startsWith('--out='))?.slice(6) ?? 'public/.htaccess';
+writeFileSync(out, L.join('\n'));
 
 const rules = L.filter((l) => l.startsWith('RewriteRule')).length;
-console.log(`build-redirects: ${rules} rules -> public/.htaccess`);
+console.log(`build-redirects: ${rules} rules -> ${out}`);
 console.log(`  legacy ${legacy.length} · landing ${Object.keys(LANDING).length} · team ${Object.keys(TEAM).length + 1}`);
 console.log(`  video recordings 301 ${recordings.length} · other videos 410 ${foreign}`);

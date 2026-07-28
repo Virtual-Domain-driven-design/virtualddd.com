@@ -16,7 +16,7 @@ import { Client } from '@notionhq/client';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
-  createBlocksToMd, fileUrl, isAssetFor, kebab, plainTitle,
+  createBlocksToMd, assetRefs, fileUrl, isAssetFor, kebab, plainTitle,
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
@@ -296,6 +296,36 @@ async function shrinkImage(raw: Buffer, ext: string): Promise<Buffer> {
     const out = await img.toBuffer();
     return out.length < raw.length ? out : raw;
   } catch { return raw; }
+}
+
+/** Delete pictures no entry refers to any more.
+ *
+ * The entry files are the authority, not this run's bookkeeping: a sync is
+ * incremental, so most entries were not re-rendered and their images must
+ * survive. Called only where entries were pruned too — a partial run has not
+ * seen enough of the collection to know what is unused.
+ *
+ * Not a space problem (one orphan in 245 after the whole migration). It is
+ * that an image replaced in Notion leaves its predecessor behind for good,
+ * and a directory nobody can explain is a directory nobody dares tidy. */
+function pruneAssets(outDir: string, label = 'asset'): void {
+  const assetDir = `${outDir}/_assets`;
+  let files: string[];
+  try {
+    // Files only. This sync writes them flat, but ddd-crew nests its assets a
+    // directory deep, and a `unlinkSync` on a directory throws — a tidy-up is
+    // not worth failing a publish over.
+    files = readdirSync(assetDir, { withFileTypes: true }).filter((e) => e.isFile()).map((e) => e.name);
+  } catch { return; } // nothing downloaded yet
+  const referenced = new Set(
+    readdirSync(outDir)
+      .filter((f) => f.endsWith('.md') || f.endsWith('.json'))
+      .flatMap((f) => assetRefs(readFileSync(`${outDir}/${f}`, 'utf8'))),
+  );
+  for (const f of files.filter((f) => !referenced.has(f))) {
+    unlinkSync(`${assetDir}/${f}`);
+    console.log(`  – removed ${label} ${f} (nothing refers to it)`);
+  }
 }
 
 /** The asset an earlier sync stored for this slug and label, if it is still
@@ -707,6 +737,9 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       if (id) now[id] = was[id];
       console.log(`  ! ${f} is no longer published in Notion but ${url} is a live URL — still serving it`);
     }
+
+    // After the entries, so a quarantined page keeps its pictures.
+    pruneAssets(outDir, 'image');
   }
 
   if (reused) console.log(`  · ${reused} unchanged, body reused (no fetch)`);
@@ -906,6 +939,7 @@ async function runPeople(key: string, outDir: string, write: boolean) {
     unlinkSync(`${outDir}/${f}`);
     console.log(`  – removed ${f} (no longer in the database)`);
   }
+  pruneAssets(outDir, 'photo');
 
   // Unconditional, like the content sync's: re-uploading the last picture in
   // Notion has to be able to empty this list, not just stop adding to it.

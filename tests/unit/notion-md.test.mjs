@@ -8,7 +8,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  createBlocksToMd, isAssetFor, kebab, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  assetRefs, createBlocksToMd, isAssetFor, kebab, resolveRelation, richText, statusOf, yamlList, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -242,5 +242,39 @@ describe('recognising an asset a previous sync stored', () => {
 
   test('another label of the same entry is not a match', () => {
     assert.equal(isAssetFor('a-session-featured.webp', 'a-session', 'photo'), false);
+  });
+});
+
+describe('finding the pictures an entry refers to', () => {
+  // What this guards: the sync deletes assets nothing refers to. Missing a
+  // reference here deletes a picture that is on the site.
+  test('reads frontmatter, markdown and JSON references alike', () => {
+    assert.deepEqual(assetRefs('featuredImage: "./_assets/a-session-featured.webp"'),
+      ['a-session-featured.webp']);
+    assert.deepEqual(assetRefs('![a caption](./_assets/a-story-body-1.png)'),
+      ['a-story-body-1.png']);
+    assert.deepEqual(assetRefs('  "photo": "./_assets/kenny-baas-schwegler-photo.jpg"'),
+      ['kenny-baas-schwegler-photo.jpg']);
+  });
+
+  test('finds every reference in one entry, not just the first', () => {
+    const body = '![](./_assets/x-body-1.png)\n\ntext\n\n![](./_assets/x-body-2.png)';
+    assert.deepEqual(assetRefs(body), ['x-body-1.png', 'x-body-2.png']);
+  });
+
+  test('decodes an escaped name, because that is how the file is stored', () => {
+    // Written escaped in markdown, saved unescaped on disk. Comparing the two
+    // forms would delete the file for not matching itself.
+    assert.deepEqual(assetRefs('![](./_assets/a%20name%20with%20spaces.jpg)'),
+      ['a name with spaces.jpg']);
+  });
+
+  test('keeps a nested path whole, as ddd-crew writes them', () => {
+    assert.deepEqual(assetRefs('![](./_assets/context-mapping/cheat-sheet.png)'),
+      ['context-mapping/cheat-sheet.png']);
+  });
+
+  test('says nothing about an entry with no pictures', () => {
+    assert.deepEqual(assetRefs('title: "no images here"'), []);
   });
 });
