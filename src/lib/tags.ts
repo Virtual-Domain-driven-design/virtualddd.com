@@ -65,6 +65,10 @@ const SPELLING: [RegExp, string][] = [
   [/\bcentralized\b/g, 'centralised'],
   // Not a spelling of anything else, but plainly meant to be.
   [/\bcollaborate modelling\b/g, 'collaborative modelling'],
+  // Closed compounds. Both are written as one word by the people who named
+  // them, and both had a spaced twin sitting beside them in the filter.
+  [/\bevent storming\b/g, 'eventstorming'],
+  [/\bstory telling\b/g, 'storytelling'],
 ];
 
 /** The one spelling of a tag.

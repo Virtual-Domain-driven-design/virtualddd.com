@@ -57,6 +57,11 @@ describe('one spelling per tag', () => {
     assert.equal(normaliseTag('collaborate modelling'), 'collaborative modelling');
   });
 
+  test('a closed compound is not two tags', () => {
+    merges('event storming', 'EventStorming', 'eventstorming');
+    merges('domain story telling', 'Domain Storytelling', 'domain storytelling');
+  });
+
   test('leaves a tag that is already right alone', () => {
     for (const t of ['bounded context', 'ux', 'adr', 'systems thinking', 'hands-on']) {
       assert.equal(normaliseTag(t), t, `${t} should be left as it is`);
