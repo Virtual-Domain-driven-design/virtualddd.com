@@ -27,9 +27,7 @@
     "sync:heuristics": "tsx scripts/sync-notion.ts content --collection=heuristics --write",
     "sync:organisers": "tsx scripts/sync-notion.ts organisers --write",
     "sync:guests": "tsx scripts/sync-notion.ts guests --write",
-    "sync:ddd-crew": "tsx scripts/sync-ddd-crew.ts --write",
-    "seo": "node scripts/write-seo.mjs",
-    "guests:profiles": "node scripts/write-guest-profiles.mjs"
+    "sync:ddd-crew": "tsx scripts/sync-ddd-crew.ts --write"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

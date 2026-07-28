@@ -102,9 +102,12 @@ Guests render at two levels:
 Either way they are `performer` on the session's `Event`, so the structured data
 never depends on how much bio anyone got round to writing.
 
-`data/guest-profiles.csv` + `npm run guests:profiles` pushes bios and links into
-Notion, filling **empty fields only** so a person editing their own bio always
-wins over a re-run.
+Bios are written **in Notion**. The first 19 were harvested from session
+descriptions and pushed in bulk from a committed CSV; that CSV and its script
+are gone, because a snapshot that pushes into the source of truth is wrong the
+moment somebody improves the copy there, and nothing in the tool can tell. If
+another bulk pass is ever wanted, `git log -- data/guest-profiles.csv` has the
+workings.
 
 ### Publish gates (per database, not global)
 

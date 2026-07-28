@@ -13,6 +13,10 @@ synced into `src/content/` as markdown, and is committed here — so the site
 builds offline, every content change is a reviewable diff, and publishing never
 depends on an API being up.
 
+**The community lives on [Discord](https://discord.gg/tRJkcsFDKN).** That is
+where the talks, the questions and the people are — and the best place to start
+if you would like to help with any of what follows.
+
 ## How it gets to the web
 
 ```
@@ -45,7 +49,7 @@ this repository. **Notion is the source of truth**; everything under
 `src/content/` is generated from it, and a change made here is overwritten by
 the next sync.
 
-Ask an organiser for access, then:
+Ask an organiser on [Discord](https://discord.gg/tRJkcsFDKN) for access, then:
 
 - **Sessions** — the write-up afterwards, the recording, who spoke. A session
   shows as *upcoming* while its `Datetime` is in the future and moves to the
@@ -89,6 +93,8 @@ organisers have one.
 Issues and pull requests are welcome; this is a community site and it is meant
 to be improved by the community. **Feature ideas belong on the Virtual DDD ToDo
 board in Notion** rather than here — issues are for what is broken or unclear.
+If you are not sure which a thing is, ask on
+[Discord](https://discord.gg/tRJkcsFDKN); somebody there will know.
 
 **Read [AGENTS.md](./AGENTS.md) first.** It is the working brief: the content
 model, the URL contract, how the pipeline fits together, the conventions, and
@@ -118,8 +124,6 @@ Two things to know before changing anything:
 | `npm run sync:<name>` | One collection, for a targeted run |
 | `npm run redirects` | Regenerate `public/.htaccess` from the inventories in `data/` |
 | `npm run check:urls` | Assert all 967 inherited URLs are served, redirected or Gone |
-| `npm run seo` | Push `data/seo-copy.csv` into Notion (`--write` to apply) |
-| `npm run guests:profiles` | Push `data/guest-profiles.csv` into the guests database |
 | `node scripts/verify-live.mjs <url> --all` | Ask a deployed host about all 967 addresses (~20 min). Called directly because `npm run` swallows the `--all` |
 
 ### Fallback
