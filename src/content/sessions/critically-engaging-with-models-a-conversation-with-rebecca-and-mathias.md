@@ -9,7 +9,7 @@ tags: ["critical thinking", "systems thinking", "software modelling", "cognitive
 video: "https://youtu.be/US21k_wQ7YI"
 podcastPlayer: "https://player.captivate.fm/episode/2c4a7834-e3e0-4944-8fb9-1725d9b79d06/"
 meet: "https://meet.google.com/wqd-wiox-dbt"
-humantix: "https://events.humanitix.com/critically-engaging-with-models-a-conversation-with-rebecca-and-mathias"
+humanitix: "https://events.humanitix.com/critically-engaging-with-models-a-conversation-with-rebecca-and-mathias"
 organiser: "Andrea Magnorsky"
 coOrganisers: ["Krisztina Hirth", "Kenny Baas-Schwegler"]
 guests: ["rebecca-wirfs-brock"]

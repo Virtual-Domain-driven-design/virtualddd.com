@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["software design", "software architecture", "chaos engineering"]
 video: "https://youtube.com/live/3MHn4rRjuJ8"
 meet: "https://meet.google.com/koo-vzyo-yoq"
-humantix: "https://events.humanitix.com/surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"
+humanitix: "https://events.humanitix.com/surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"
 organiser: "Andrea Magnorsky"
 guests: ["emilio-carrion"]
 seoTitle: "Offline-First Architecture: Surviving a National Blackout"

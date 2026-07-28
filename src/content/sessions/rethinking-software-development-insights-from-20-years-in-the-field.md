@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["software architecture", "refactoring", "software development"]
 video: "https://youtu.be/Ist6GO-LHb8"
 meet: "https://meet.google.com/mqa-okdi-ifi"
-humantix: "https://events.humanitix.com/rethinking-software-development-insights-from-20-years-in-the-field"
+humanitix: "https://events.humanitix.com/rethinking-software-development-insights-from-20-years-in-the-field"
 organiser: "Zsofia Herendi"
 guests: ["alexander-thurow"]
 seoTitle: "Rethinking Software Development: 20 Years On"

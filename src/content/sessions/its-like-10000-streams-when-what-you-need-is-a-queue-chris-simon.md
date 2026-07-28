@@ -8,7 +8,7 @@ level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["event-driven architecture"]
 video: "https://youtube.com/live/tYtfeuRAubg"
 meet: "https://meet.google.com/ksm-nqwx-chu"
-humantix: "https://events.humanitix.com/streams-queues-chris-simon"
+humanitix: "https://events.humanitix.com/streams-queues-chris-simon"
 organiser: "Andrea Magnorsky"
 guests: ["chris-simon"]
 seoTitle: "When You Need a Queue, Not Event-Driven Architecture"
