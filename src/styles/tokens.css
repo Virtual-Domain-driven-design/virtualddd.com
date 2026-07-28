@@ -35,7 +35,11 @@
   --text-xl: 1.5rem;
   --text-2xl: 1.95rem;
   --text-3xl: 2.5rem;
-  --text-4xl: 3.2rem;
+  /* The one step that has to bend: at a flat 3.2rem a single long word in a
+     title — "#BlackLivesMatter", "Experimentation" — is wider than a 360px
+     phone, and three pages scrolled sideways because of it. Full size from
+     ~600px up, so nothing above a phone changes. */
+  --text-4xl: clamp(2.2rem, 8.5vw, 3.2rem);
 
   /* Spacing */
   --space-1: 0.25rem;
