@@ -56,8 +56,11 @@ const SPELLING: [RegExp, string][] = [
   [/\bmodeler\b/g, 'modeller'],
   [/\bbehavioral\b/g, 'behavioural'],
   [/\borganizational\b/g, 'organisational'],
-  [/\borganization\b/g, 'organisation'],
-  [/ization\b/g, 'isation'],
+  // The plural matters: `\bization\b` cannot see `organizations`, because the
+  // trailing s is a word character and there is no boundary to match. That
+  // left exactly one tag — "teams and organizations" — American.
+  [/\borganization(s?)\b/g, 'organisation$1'],
+  [/ization(s?)\b/g, 'isation$1'],
   [/izing\b/g, 'ising'],
   [/\bcentralized\b/g, 'centralised'],
   // Not a spelling of anything else, but plainly meant to be.

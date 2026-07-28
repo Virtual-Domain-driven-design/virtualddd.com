@@ -45,6 +45,8 @@ describe('one spelling per tag', () => {
     merges('software modeling', 'software modelling', 'software modelling');
     merges('Legacy Modernization', 'legacy-modernisation', 'legacy modernisation');
     merges('organizational-change', 'organisational change', 'organisational change');
+    // The plural is its own case: \bization\b cannot see the trailing s.
+    merges('teams and organizations', 'teams and organisations', 'teams and organisations');
   });
 
   test('the typos that were really in there', () => {
