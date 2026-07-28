@@ -6,7 +6,7 @@ question: "How do you create an environment where people will speak up during a 
 type: ["guiding-heuristics"]
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Liz Fong-Jones"
-tags: ["psychological-safety", "incident-response", "team-culture", "learning"]
+tags: ["Psychological Safety", "incident response", "team culture", "learning"]
 complements: ["prioritise-foundation-trust-in-the-team", "permit-contained-failure-to-foster-learning"]
 enables: ["executives-provide-resources-not-pressure", "distribute-debugging-beyond-war-room", "design-as-living-conversation", "default-rollback-over-fix-forward"]
 prerequisites: ["prioritise-foundation-trust-in-the-team", "distribute-debugging-beyond-war-room", "design-as-living-conversation", "executives-provide-resources-not-pressure", "default-rollback-over-fix-forward"]

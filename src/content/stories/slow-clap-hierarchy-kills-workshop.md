@@ -5,7 +5,7 @@ status: "Published"
 episode: 13
 publishedDate: 2026-02-17
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
-tags: ["Facilitating Software Architecture and Design", "Social Dynamics", "Power Dynamics", "Psychological Safety", "Collaborative Modeling", "Conflict Management"]
+tags: ["Facilitating Software Architecture and Design", "Social Dynamics", "Power Dynamics", "Psychological Safety", "collaborative modelling", "Conflict Management"]
 youtube: "https://youtu.be/XILzX7o4zWo"
 podcast: "https://player.captivate.fm/episode/2ffa26c7-e26d-47f2-9b07-19a7c61c431b/"
 curatedHeuristics: ["notice-working-too-hard-facilitator", "make-explicit-feelings-group-stuck", "step-back-observe-losing-control", "start-small-leadership-resists", "address-destructive-behavior-privately", "watch-approval-seeking-safety-signal", "check-problem-hinders-you-or-group"]

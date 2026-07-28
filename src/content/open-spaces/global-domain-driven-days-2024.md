@@ -3,7 +3,7 @@ title: "Global Domain-Driven Day 2024"
 slug: "global-domain-driven-days-2024"
 status: "Done"
 date: 2024-11-21T06:00:00.000+00:00
-tags: ["domain-driven-design"]
+tags: ["domain-driven design"]
 meetup: "https://www.meetup.com/virtual-domain-driven-design-meetup/events/303878436/"
 tickets: "https://opencollective.com/virtualddd/events/global-domain-driven-day-2024-6c9f9811"
 seoMetadescription: "A worldwide Domain-Driven Design event: local meetups across time zones plus a continuous 16-hour online open space, hosted by the Virtual DDD community."

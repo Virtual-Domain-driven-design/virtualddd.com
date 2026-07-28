@@ -5,7 +5,7 @@ status: "Published"
 datetime: 2026-08-05T18:00:00.000+12:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["software design", "software architecture", "chaos-engineering"]
+tags: ["software design", "software architecture", "chaos engineering"]
 video: "https://youtube.com/live/3MHn4rRjuJ8"
 meet: "https://meet.google.com/koo-vzyo-yoq"
 humantix: "https://events.humanitix.com/surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"

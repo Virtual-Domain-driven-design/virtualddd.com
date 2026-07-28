@@ -6,7 +6,7 @@ question: "How do you guide people toward different architectural approaches wit
 type: ["guiding-heuristics"]
 authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Diana Montalion"
-tags: ["Facilitation", "systems-thinking", "cognitive-patterns", "architectural-guidance"]
+tags: ["Facilitation", "systems thinking", "cognitive patterns", "architectural guidance"]
 complements: ["pause-every-ten-minutes-invite-dissent", "notice-working-too-hard-facilitator"]
 metaDescription: "Listen for moments when familiar thinking will recreate old problems, then nudge toward different questions."
 ---

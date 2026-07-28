@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-08-26T17:00:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
-tags: ["agile teams", "cross functional", "agile", "product design", "diversity", "Inclusion", "socio-technical"]
+tags: ["agile teams", "cross-functional", "agile", "product design", "diversity", "Inclusion", "socio-technical"]
 video: "https://www.youtube.com/embed/RM0uErMljoA"
 podcastPlayer: "https://player.captivate.fm/episode/d7f5cfea-c243-4559-a538-1d4df3526da4/"
 organiser: "Kenny Baas-Schwegler"

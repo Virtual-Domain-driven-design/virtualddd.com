@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T15:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced"]
-tags: ["DDDDD", "live coding", "haskell", "event sroucing", "projections"]
+tags: ["DDDDD", "live coding", "haskell", "event sourcing", "projections"]
 video: "https://www.youtube.com/embed/FtxPdXp_FTA"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

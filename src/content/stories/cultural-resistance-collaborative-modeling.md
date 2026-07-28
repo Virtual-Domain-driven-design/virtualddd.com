@@ -5,7 +5,7 @@ status: "Published"
 episode: 20
 publishedDate: 2026-05-26
 authors: ["Marco Heimeshoff", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
-tags: ["Facilitating Software Architecture and Design", "Collaborative Modeling", "Psychological Safety", "Sociotechnical Systems", "Power Dynamics", "Engineering CUlture"]
+tags: ["Facilitating Software Architecture and Design", "collaborative modelling", "Psychological Safety", "Sociotechnical Systems", "Power Dynamics", "Engineering CUlture"]
 youtube: "https://youtu.be/ACJCSAiPNgM"
 podcast: "https://player.captivate.fm/episode/f0964f9b-a8c4-4899-a380-47d842b394f5/"
 seoTitle: "Cultural Resistance to Collaborative Modeling"

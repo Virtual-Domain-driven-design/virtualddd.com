@@ -6,7 +6,7 @@ question: "How do you know when your facilitation technique is preventing rather
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Xin Yao"
-tags: ["Facilitation", "methodology", "pragmatism", "collaborative-modeling"]
+tags: ["Facilitation", "methodology", "pragmatism", "Collaborative modelling"]
 complements: ["notice-anxiety-signal-missing-something"]
 enables: ["notice-anxiety-signal-missing-something"]
 prerequisites: ["notice-anxiety-signal-missing-something"]

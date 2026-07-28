@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-12-28T18:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["essential", "strategic design", "tactical design", "collaborate modelling"]
+tags: ["essential", "strategic design", "tactical design", "collaborative modelling"]
 video: "https://www.youtube.com/embed/OO3egnXnpMw"
 podcastPlayer: "https://player.captivate.fm/episode/5572b14f-596e-4a09-a643-aa082d880712/"
 organiser: "Kenny Baas-Schwegler"

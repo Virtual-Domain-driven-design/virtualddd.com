@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2022-11-17T18:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["software design", "software architecture", "diagramming", "software modeling"]
+tags: ["software design", "software architecture", "diagramming", "software modelling"]
 video: "https://www.youtube.com/embed/uJ0f8fLU2Vw"
 podcastPlayer: "https://player.captivate.fm/episode/5e578f21-318d-46d5-ad24-a395c4ea79a2/"
 organiser: "Kenny Baas-Schwegler"

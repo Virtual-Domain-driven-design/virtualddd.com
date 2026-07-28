@@ -5,7 +5,7 @@ status: "Published"
 episode: 11
 publishedDate: 2026-01-18
 authors: ["Beija Nigl", "Michael Plöd", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["Collaborative Modeling", "Software Architecture", "Sociotechnical Systems", "Facilitating Software Architecture and Design", "Stakeholder Alignment", "Domain-Driven Design"]
+tags: ["collaborative modelling", "Software Architecture", "Sociotechnical Systems", "Facilitating Software Architecture and Design", "Stakeholder Alignment", "Domain-Driven Design"]
 youtube: "https://youtu.be/P67pgiGSWfU"
 podcast: "https://player.captivate.fm/episode/c328974e-e58f-4054-87e4-7945ca286668/"
 curatedHeuristics: ["deliver-difficult-conversations", "approach-struggling-facilitator", "guide-unprepared-facilitator", "communicate-critical-workshop-insights", "realign-workshop-goals", "steer-workshop-discussions", "facilitate-conflicting-decisions", "shift-design-focus-business-problems", "workshop-stakeholder-alignment"]
