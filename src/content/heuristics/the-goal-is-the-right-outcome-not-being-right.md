@@ -6,7 +6,7 @@ question: "What should be the primary goal when facilitating a design discussion
 type: ["value-based-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Krisztina Hirth"
-tags: ["Sociotechnical Systems", "Facilitating Software Design and Architecture", "Decision-Making Process", "Psychological Safety", "Ranking"]
+tags: ["sociotechnical systems", "facilitating software architecture and design", "decision-making process", "psychological safety", "ranking"]
 ---
 
 The objective of a design discussion is not to prove one's own correctness but to arrive at a sound, team-owned solution. Focusing on 'being right' closes off collaboration and can lead to enforced, poorly understood decisions. The true goal is collective understanding and commitment.

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T06:30:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Beginner"]
-tags: ["DDDDD", "visual collaboration", "bounded context"]
+tags: ["ddddd", "visual collaboration", "bounded context"]
 video: "https://www.youtube.com/embed/QoGvpbkzZTQ"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

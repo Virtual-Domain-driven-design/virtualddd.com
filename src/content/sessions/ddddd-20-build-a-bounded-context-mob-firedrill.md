@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T15:30:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Beginner"]
-tags: ["DDDDD", "bounded context", "eventstorming", "mob programming"]
+tags: ["ddddd", "bounded context", "eventstorming", "mob programming"]
 video: "https://www.youtube.com/embed/Dg478xHcDrY"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

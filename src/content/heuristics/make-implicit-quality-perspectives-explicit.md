@@ -6,7 +6,7 @@ question: "How do we align teams who have different, unstated assumptions about 
 type: ["guiding-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Quality", "Sociotechnical Systems", "Cognitive Bias", "Psychological Safety", "Conflict Management"]
+tags: ["quality", "sociotechnical systems", "cognitive bias", "psychological safety", "conflict management"]
 ---
 
 Acknowledge that different functions perceive quality differently: product values ‘building the right thing’, engineering values ‘building the thing right’, and operations values ‘supporting the thing well’. Make these perspectives explicit through a formal discussion or a social contract. This prevents misalignment and fosters a holistic view of quality.

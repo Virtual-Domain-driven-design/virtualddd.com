@@ -6,7 +6,7 @@ question: "How many people can we have during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+tags: ["eventstorming", "sociotechnical systems", "collaborative modelling", "collaborative software design"]
 seoTitle: "EventStorming: Split and Merge Above Seven People"
 ---
 

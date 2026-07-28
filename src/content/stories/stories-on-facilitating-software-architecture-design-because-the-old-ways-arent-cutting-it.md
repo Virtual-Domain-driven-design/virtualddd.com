@@ -5,7 +5,7 @@ status: "Published"
 episode: 1
 publishedDate: 2025-09-02
 authors: ["Andrea Magnorsky", "Kenny Schwegler"]
-tags: ["Software Architecture", "Ivory-Tower Architect", "Hands-on Architect", "Facilitating Software Architecture and Design"]
+tags: ["software architecture", "ivory-tower architect", "hands-on architect", "facilitating software architecture and design"]
 youtube: "https://youtu.be/X4iUO_3Qebk"
 podcast: "https://player.captivate.fm/episode/0fd161b1-cd12-492f-8d0f-8017b90cc12c/"
 seoTitle: "Facilitating Software Architecture: The Old Ways"

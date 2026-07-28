@@ -6,7 +6,7 @@ question: "How can we determine if an event is a valuable Domain Event or just t
 type: ["design-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Krisztina Hirth"
-tags: ["Event-driven architecture", "Bounded Context Design", "Coupling", "Distributed systems", "Facilitating Software Design and Architecture"]
+tags: ["event-driven architecture", "bounded context design", "coupling", "distributed systems", "facilitating software architecture and design"]
 ---
 
 A true Domain Event communicates a significant business occurrence and must contain sufficient context for consumers to act without querying the source system. If consumers frequently need to ask 'why' or 'what does this mean', the event is a poorly designed technical notification. It must report on the business, not the implementation.

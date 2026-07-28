@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T13:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["DDDDD", "context mapping", "strategic design", "eventstorming"]
+tags: ["ddddd", "context mapping", "strategic design", "eventstorming"]
 video: "https://www.youtube.com/embed/yaiDzBLi1-A"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

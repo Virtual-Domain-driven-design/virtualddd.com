@@ -6,7 +6,7 @@ question: "How should we document decisions influenced by interpersonal or inter
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
 submitter: "Andrea Magnorsky"
-tags: ["ADR", "Decision-Making Process", "Conflict Management", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["adr", "decision-making process", "conflict management", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Acknowledging that a decision was contentious provides crucial context for anyone revisiting it later. You do not need to detail personal dynamics, but noting significant disagreement is important. This helps future teams understand the historical forces at play and can investigate further if needed.

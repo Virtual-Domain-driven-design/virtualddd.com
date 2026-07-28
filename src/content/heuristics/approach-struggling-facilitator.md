@@ -6,7 +6,7 @@ question: "How should participants approach a facilitator who appears to be stru
 type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["Facilitation", "Participant Feedback", "Constructive Communication", "Team Dynamics"]
+tags: ["facilitation", "participant feedback", "constructive communication", "team dynamics"]
 metaDescription: "When a facilitator is visibly struggling, offer support rather than challenge: assume positive intent and give gentle prompts instead of taking over."
 ---
 

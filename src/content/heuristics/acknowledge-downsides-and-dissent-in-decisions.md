@@ -6,7 +6,7 @@ question: "How can we document a decision while acknowledging disagreement or kn
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
 submitter: "Andrew Harmel-Law"
-tags: ["ADR", "Decision-Making Process", "Conflict Management", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["adr", "decision-making process", "conflict management", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Use phrases like ”adopted despite” to list the known downsides of the chosen option. This formally acknowledges dissenting viewpoints and trade-offs directly within the decision record. It helps people feeling more heard and provides a more complete picture of the decision.

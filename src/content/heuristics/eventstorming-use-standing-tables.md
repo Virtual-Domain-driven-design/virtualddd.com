@@ -6,7 +6,7 @@ question: "How can we foster collaboration during design?"
 type: ["guiding-heuristics"]
 authors: ["Cédric Pontet"]
 submitter: "Cédric Pontet"
-tags: ["EventStorming", "Sociotechnical Systems", "Psychological Safety", "Cognitive Bias", "Collaborative Software Design", "Collaborative modelling"]
+tags: ["eventstorming", "sociotechnical systems", "psychological safety", "cognitive bias", "collaborative software design", "collaborative modelling"]
 ---
 
 Alberto Brandolini often says that meeting room tables and chairs should be removed or pushed away when preparing an EventStorming workshop. This is the best way to foster collaboration, engagement, and mobility of your participants. However, where do you put all the sticky notes and markers when you don't have a table?

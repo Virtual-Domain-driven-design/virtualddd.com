@@ -5,7 +5,7 @@ status: "Published"
 episode: 15
 publishedDate: 2026-03-17
 authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
-tags: ["Facilitating Software Architecture and Design", "collaborative modelling", "Psychological Safety", "Sociotechnical Systems", "Domain-Driven Design", "Engineering CUlture", "Social Dynamics", "Enabling Architecture"]
+tags: ["facilitating software architecture and design", "collaborative modelling", "psychological safety", "sociotechnical systems", "domain-driven design", "engineering culture", "social dynamics", "enabling architecture"]
 youtube: "https://youtu.be/86n74wXqwZA"
 podcast: "https://player.captivate.fm/episode/546b1af7-d871-41ff-abb0-265d4cf7611c/"
 curatedHeuristics: ["interrupt-patterns-stay-with-flock", "design-experiences-not-explanations", "focus-valued-organizational-outcomes"]

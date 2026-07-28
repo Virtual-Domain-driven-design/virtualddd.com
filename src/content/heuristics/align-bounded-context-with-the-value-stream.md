@@ -6,7 +6,7 @@ question: "How do I design Bounded Contexts?"
 type: ["design-heuristics"]
 authors: ["Marco Consolaro"]
 submitter: "Marco Consolaro"
-tags: ["Bounded Context", "Sociotechnical Systems"]
+tags: ["bounded context", "sociotechnical systems"]
 complements: ["notice-anxiety-signal-missing-something"]
 enables: ["pause-every-ten-minutes-invite-dissent", "challenge-workshop-premise-before-diving-in", "build-connection-before-content"]
 prerequisites: ["challenge-workshop-premise-before-diving-in"]

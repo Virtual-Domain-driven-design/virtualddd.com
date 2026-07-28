@@ -5,7 +5,7 @@ status: "Published"
 episode: 10
 publishedDate: 2026-01-06
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
-tags: ["legacy modernisation", "Software Architecture", "Facilitating Software Architecture and Design", "Sociotechnical Systems", "Social Dynamics"]
+tags: ["legacy modernisation", "software architecture", "facilitating software architecture and design", "sociotechnical systems", "social dynamics"]
 youtube: "https://youtu.be/tpE_uGhCx5g"
 podcast: "https://player.captivate.fm/episode/9e596e88-6d5a-4c61-91f2-6ae67d039f9b/"
 curatedHeuristics: ["prioritise-stakeholder-engagement-as-core-work", "detach-self-from-ideas", "tailor-communication-to-stakeholder-context", "allow-time-for-perspective-shifts", "calculated-interpersonal-risk-taking", "facilitate-dont-dictate-architectural-change", "understand-the-cause-of-resistance", "respect-legacy-systems-history"]

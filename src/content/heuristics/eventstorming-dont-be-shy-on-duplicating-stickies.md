@@ -6,7 +6,7 @@ question: "When running EventStorming workshops, duplication is not evil."
 type: ["guiding-heuristics"]
 authors: ["Cédric Pontet"]
 submitter: "Cédric Pontet"
-tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Sociotechnical Systems"]
+tags: ["eventstorming", "collaborative software design", "collaborative modelling", "sociotechnical systems"]
 ---
 
 People, especially developers, usually abhor duplication. But when running an EventStorming workshop, duplicating sticky notes is not necessarily evil, and even recommended.

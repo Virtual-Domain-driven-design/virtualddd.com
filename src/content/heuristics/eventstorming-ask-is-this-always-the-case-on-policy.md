@@ -6,7 +6,7 @@ question: "How can we discover more edge cases during an EventStorming session?"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Cognitive Bias"]
+tags: ["eventstorming", "collaborative software design", "collaborative modelling", "cognitive bias"]
 ---
 
 If we visualise a policy (Lilac sticky) during an EventStorming based on 'whenever this Domain Event happens we will do this action/command', always ask the question: Is this what we always do?

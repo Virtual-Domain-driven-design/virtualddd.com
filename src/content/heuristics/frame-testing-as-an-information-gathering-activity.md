@@ -6,7 +6,7 @@ question: "How should we evaluate the purpose and effectiveness of our testing e
 type: ["guiding-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Testing", "Quality", "Sociotechnical Systems", "Ranking"]
+tags: ["testing", "quality", "sociotechnical systems", "ranking"]
 ---
 
 Define the primary purpose of testing as gathering information about the state of the system to enable informed decisions. This reframes testing from a simple bug-finding exercise to a strategic activity that reduces uncertainty. Every test must be justified by the value of the information it provides.

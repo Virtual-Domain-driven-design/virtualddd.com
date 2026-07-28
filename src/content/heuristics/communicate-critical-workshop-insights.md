@@ -6,7 +6,7 @@ question: "How do you communicate critical, potentially uncomfortable insights t
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["Stakeholder Communication", "Workshop Debrief", "Difficult Feedback", "Business Insights", "Management Communication"]
+tags: ["stakeholder communication", "workshop debrief", "difficult feedback", "business insights", "management communication"]
 metaDescription: "Get the uncomfortable findings to the people who were not in the room: a short, evidence-based summary with a clear recommendation beats a full write-up."
 ---
 

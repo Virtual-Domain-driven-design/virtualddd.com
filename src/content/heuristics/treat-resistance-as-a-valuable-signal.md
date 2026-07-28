@@ -6,7 +6,7 @@ question: "How should we react when team members push back against a proposed de
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Paul Rayner"
-tags: ["Conflict Management", "Psychological Safety", "Sociotechnical Systems", "Facilitating Software Design and Architecture"]
+tags: ["conflict management", "psychological safety", "sociotechnical systems", "facilitating software architecture and design"]
 complements: ["focus-valued-organizational-outcomes"]
 ---
 

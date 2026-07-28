@@ -6,7 +6,7 @@ question: "When a design or leadership decision inadvertently harms a team membe
 type: ["value-based-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Paul Rayner"
-tags: ["Sociotechnical Systems", "Technical Leadership", "Facilitating Software Design and Architecture", "Conflict Management"]
+tags: ["sociotechnical systems", "technical leadership", "facilitating software architecture and design", "conflict management"]
 ---
 
 When you make a mistake, take direct ownership instead of defending your intentions. Offer a genuine apology ('I was wrong') rather than a conditional one ('I'm sorry you feel that way'). Assess the social 'blast radius' and apologize to everyone affected to repair trust with the entire team.

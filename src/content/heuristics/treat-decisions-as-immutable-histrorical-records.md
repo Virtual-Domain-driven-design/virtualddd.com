@@ -6,7 +6,7 @@ question: "How should we manage the evolution of a decision over time, especiall
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Andrew Harmel-Law"
-tags: ["Facilitating Software Design and Architecture", "Decision-Making Process", "ADR", "Software Architecture"]
+tags: ["facilitating software architecture and design", "decision-making process", "adr", "software architecture"]
 ---
 
 Document each decision as a distinct, immutable record, such as an Architectural Decision Record (ADR). A subsequent choice that alters a previous one should be a new, separate record that explicitly supersedes the original. This maintains a clear historical log and prevents the paralysis that comes from endlessly reopening past choices.

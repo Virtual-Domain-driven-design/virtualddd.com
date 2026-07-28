@@ -5,7 +5,7 @@ status: "Published"
 episode: 3
 publishedDate: 2025-09-30
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["ADR", "Software Architecture", "Social Dynamics", "Facilitating Software Architecture and Design", "Power Dynamics"]
+tags: ["adr", "software architecture", "social dynamics", "facilitating software architecture and design", "power dynamics"]
 youtube: "https://youtu.be/MCiO_CgEGrI"
 podcast: "https://player.captivate.fm/episode/fc4b652d-b818-4669-af76-27577cd253d6/"
 curatedHeuristics: ["acknowledge-significant-conflict-in-decision-rationale", "decompose-large-decisions-into-smaller-ones", "acknowledge-downsides-and-dissent-in-decisions", "revisit-decisions-when-context-changes", "retroactively-document-foundational-decisions"]

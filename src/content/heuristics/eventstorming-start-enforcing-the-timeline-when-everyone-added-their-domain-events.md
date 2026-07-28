@@ -6,7 +6,7 @@ question: "When do we start to structure the EventStorming by enforcing the time
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+tags: ["eventstorming", "sociotechnical systems", "collaborative modelling", "collaborative software design"]
 seoTitle: "EventStorming: When to Enforce the Timeline"
 ---
 

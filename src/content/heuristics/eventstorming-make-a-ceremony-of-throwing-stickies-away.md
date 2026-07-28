@@ -6,7 +6,7 @@ question: "How do we make people comfortable with iterative modelling?"
 type: ["guiding-heuristics"]
 authors: ["Tobias Goeschel"]
 submitter: "Tobias Goeschel"
-tags: ["Sociotechnical Systems", "EventStorming", "Psychological Safety", "Ranking", "Collaborative Software Design", "Collaborative modelling"]
+tags: ["sociotechnical systems", "eventstorming", "psychological safety", "ranking", "collaborative software design", "collaborative modelling"]
 ---
 
 When people are new to EventStorming, their initial approach is often to be reluctant to write things that aren't 100% correct. By making an example of the first sticky you throw away as a facilitator, you allow everyone to try something, be wrong, and improve over time. Doing so helps set the stage for iterative learning.

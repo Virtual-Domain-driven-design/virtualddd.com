@@ -6,7 +6,7 @@ question: "How should we handle strong, potentially biased opinions in an adviso
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Elena Stojmilova"
-tags: ["Sociotechnical Systems", "ADR", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Conflict Management"]
+tags: ["sociotechnical systems", "adr", "decision-making process", "decentralised decision-making", "facilitating software architecture and design", "conflict management"]
 ---
 
 Do not dismiss strong opinions, even if they seem confrontational, as they may hide valid concerns or unstated assumptions. Use questioning to unravel the reasoning behind the opinion, transforming it from a potential blocker into valuable input. This ensures all perspectives are properly considered.

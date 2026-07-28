@@ -6,7 +6,7 @@ question: "Explore all the edge cases and what happens when things go wrong."
 type: ["guiding-heuristics"]
 authors: ["Cédric Pontet"]
 submitter: "Cédric Pontet"
-tags: ["EventStorming", "Sociotechnical Systems", "Cognitive Bias", "Collaborative modelling", "Collaborative Software Design"]
+tags: ["eventstorming", "sociotechnical systems", "cognitive bias", "collaborative modelling", "collaborative software design"]
 ---
 
 At the beginning of an EventStorming session, we tend to focus on the happy path, what happens when things go well and we reach the end of our process without an issue. But life is not that easy! We all know that sometimes things don't go according to the initial plan.

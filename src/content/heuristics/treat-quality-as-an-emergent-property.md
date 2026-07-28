@@ -6,7 +6,7 @@ question: "How can we build quality in, rather than inspecting for it at the end
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Software Architecture", "Software Design", "Quality"]
+tags: ["software architecture", "software design", "quality"]
 ---
 
 View quality not as a final gate but as an emergent property of the entire development ecosystem. Focus on improving systemic factors like communication clarity, psychological safety, and feedback loop speed. A healthy system will naturally produce a high-quality outcome.

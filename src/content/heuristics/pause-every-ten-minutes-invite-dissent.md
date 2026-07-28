@@ -6,7 +6,7 @@ question: "How do you create regular opportunities for people to voice doubts wi
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Xin Yao"
-tags: ["Facilitation", "Psychological Safety", "feedback loops", "workshop design"]
+tags: ["facilitation", "psychological safety", "feedback loops", "workshop design"]
 complements: ["notice-anxiety-signal-missing-something", "challenge-workshop-premise-before-diving-in", "design-experiences-not-explanations", "interrupt-patterns-stay-with-flock"]
 enables: ["align-bounded-context-with-the-value-stream", "align-with-domain-experts", "align-with-transactional-boundaries", "align-with-investment-strategy", "align-with-historical-domain-boundaries", "align-with-source-of-change", "align-with-rate-of-change", "align-with-growth-strategy", "align-with-key-revenue-streams", "align-with-evolutionary-stage-the-simon-wardley-heuristic", "build-connection-before-content"]
 prerequisites: ["build-connection-before-content", "challenge-workshop-premise-before-diving-in"]

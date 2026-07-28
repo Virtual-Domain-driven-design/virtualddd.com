@@ -5,7 +5,7 @@ status: "Published"
 episode: 21
 publishedDate: 2026-06-09
 authors: ["Kim Kao", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["Facilitating Software Architecture and Design", "Domain-Driven Design", "legacy modernisation", "Stakeholder Alignment", "collaborative modelling", "Impact Mapping"]
+tags: ["facilitating software architecture and design", "domain-driven design", "legacy modernisation", "stakeholder alignment", "collaborative modelling", "impact mapping"]
 youtube: "https://youtu.be/td_vdQgeVwY"
 podcast: "https://player.captivate.fm/episode/abc53c50-27c3-420f-a470-be1238b3e88a/"
 seoTitle: "Impact Mapping Before Architecture: Solve the Right Problem"

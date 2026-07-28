@@ -6,7 +6,7 @@ question: "How do I design a bounded context?"
 type: ["design-heuristics"]
 authors: ["Nick Tune"]
 submitter: "Nick Tune"
-tags: ["Strategic design"]
+tags: ["strategic design"]
 enables: ["pause-every-ten-minutes-invite-dissent"]
 ---
 

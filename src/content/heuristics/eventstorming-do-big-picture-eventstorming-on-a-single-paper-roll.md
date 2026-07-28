@@ -6,7 +6,7 @@ question: "How many people can we have during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Collaborative Software Design", "Collaborative modelling", "Sociotechnical Systems"]
+tags: ["eventstorming", "collaborative software design", "collaborative modelling", "sociotechnical systems"]
 seoTitle: "EventStorming: Use a Single Paper Roll"
 ---
 

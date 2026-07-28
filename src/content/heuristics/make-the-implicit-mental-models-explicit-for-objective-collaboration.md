@@ -6,7 +6,7 @@ question: "How can a team effectively challenge and align their different intern
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Paul Rayner"
-tags: ["Collaborative modelling", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
+tags: ["collaborative modelling", "facilitating software architecture and design", "sociotechnical systems"]
 complements: ["design-experiences-not-explanations"]
 seoTitle: "Make Implicit Mental Models Explicit"
 ---

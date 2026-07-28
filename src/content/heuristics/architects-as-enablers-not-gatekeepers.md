@@ -6,7 +6,7 @@ question: "What is the role of an architect in a decentralized decision-making m
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Elena Stojmilova"
-tags: ["Sociotechnical Systems", "Software Architecture", "Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Decision-Making Process"]
+tags: ["sociotechnical systems", "software architecture", "facilitating software architecture and design", "decentralised decision-making", "decision-making process"]
 ---
 
 The architect's role transitions from being the primary decision-maker to a facilitator and mentor. Their goal is to enable teams to make better decisions by sharing knowledge and context, not to dictate the architecture. This requires unlearning old habits of command.

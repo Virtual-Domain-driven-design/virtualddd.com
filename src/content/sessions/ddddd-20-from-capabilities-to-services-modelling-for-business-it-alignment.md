@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T07:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["DDDDD", "enterprise architecture", "capabilities", "services", "business/IT alignment"]
+tags: ["ddddd", "enterprise architecture", "capabilities", "services", "business/it alignment"]
 video: "https://www.youtube.com/embed/rH7On4Z_Lzo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

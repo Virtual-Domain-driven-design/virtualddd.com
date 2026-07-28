@@ -6,7 +6,7 @@ question: "How can we prevent design discussions from becoming a personal confli
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky", "Eric Evans"]
 submitter: "Paul Rayner"
-tags: ["Sociotechnical Systems", "Collaborative modelling", "Software Architecture", "Facilitating Software Design and Architecture", "Decision-Making Process", "Conflict Management"]
+tags: ["sociotechnical systems", "collaborative modelling", "software architecture", "facilitating software architecture and design", "decision-making process", "conflict management"]
 metaDescription: "When exploring solutions, generate at least three distinct alternatives. Two options tend to produce an us-versus-them dynamic and a false binary."
 seoTitle: "Generate Three Options to Depersonalise Debate"
 ---

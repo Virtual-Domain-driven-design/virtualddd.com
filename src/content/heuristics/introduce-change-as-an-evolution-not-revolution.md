@@ -6,7 +6,7 @@ question: "How can we introduce new ideas that conflict with a team member's dee
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Andrea Magnorsky"
-tags: ["Conflict Management", "Facilitating Software Design and Architecture", "Technical Leadership", "Sociotechnical Systems"]
+tags: ["conflict management", "facilitating software architecture and design", "technical leadership", "sociotechnical systems"]
 ---
 
 Recognize that challenging someone's methods can feel like an attack on their professional identity or core beliefs. Introduce change as a small differentiator or evolution of their existing model, rather than a complete replacement. Meet people where they are to avoid triggering a defensive reaction and allow for gradual adoption.

@@ -6,7 +6,7 @@ question: "How should you handle architectural decisions that impact multiple te
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Peter Hunter"
-tags: ["Conflict Management", "Facilitating Software Design and Architecture", "Bounded Context", "Sociotechnical Systems"]
+tags: ["conflict management", "facilitating software architecture and design", "bounded context", "sociotechnical systems"]
 ---
 
 When a decision crosses team boundaries, the primary role is to facilitate communication rather than dictate a solution. The goal is to prevent teams from becoming defensive and to encourage collaborative problem-solving. This helps teams redraw boundaries or find agreements themselves.

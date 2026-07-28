@@ -6,7 +6,7 @@ question: "How do you introduce collaborative modeling when leadership sees it a
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["event storming", "organisational change", "leadership", "Collaborative modelling"]
+tags: ["eventstorming", "organisational change", "leadership", "collaborative modelling"]
 complements: ["workshop-stakeholder-alignment"]
 specializes: ["understand-the-cause-of-resistance"]
 metaDescription: "When leadership resists big collaborative sessions, embed modelling into regular work rather than making it a special event."

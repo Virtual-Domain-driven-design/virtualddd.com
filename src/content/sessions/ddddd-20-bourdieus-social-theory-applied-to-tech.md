@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T09:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced"]
-tags: ["DDDDD", "sociotechnical system", "bourdieu", "culture"]
+tags: ["ddddd", "sociotechnical system", "bourdieu", "culture"]
 video: "https://www.youtube.com/embed/1PoTCoF9-tY"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

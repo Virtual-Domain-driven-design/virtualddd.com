@@ -6,7 +6,7 @@ question: "How should we define and measure quality when it is inherently subjec
 type: ["value-based-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Quality", "Software Design", "Sociotechnical Systems"]
+tags: ["quality", "software design", "sociotechnical systems"]
 ---
 
 Define quality as ’value to some person who matters’, forcing prioritisation of whose perspective is most critical. This transforms quality from an abstract concept into a tangible goal tied to the experience of a specific stakeholder or user. This focus clarifies trade-offs and aligns effort with strategic intent.

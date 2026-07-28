@@ -6,7 +6,7 @@ question: "How do you steer a workshop back on track when discussions diverge fr
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["workshop facilitation", "Meeting management", "Discussion control", "Goal alignment"]
+tags: ["workshop facilitation", "meeting management", "discussion control", "goal alignment"]
 metaDescription: "When a workshop discussion drifts, return to the goal everyone agreed on and use it to refocus the group rather than cutting people off."
 ---
 

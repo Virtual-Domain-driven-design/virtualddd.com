@@ -6,7 +6,7 @@ question: "If only the domain experts has the knowledge, how can we transfer tha
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
-tags: ["Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design", "EventStorming"]
+tags: ["sociotechnical systems", "collaborative modelling", "collaborative software design", "eventstorming"]
 seoTitle: "EventStorming: Expert Talks, Everyone Else Writes"
 ---
 

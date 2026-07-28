@@ -5,7 +5,7 @@ status: "Published"
 episode: 22
 publishedDate: 2026-06-23
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["Facilitating Software Architecture and Design", "collaborative modelling", "Sociotechnical Systems", "Power Dynamics", "Domain-Driven Design", "Stakeholder Alignment"]
+tags: ["facilitating software architecture and design", "collaborative modelling", "sociotechnical systems", "power dynamics", "domain-driven design", "stakeholder alignment"]
 youtube: "https://youtu.be/WkoCfDHOXpw"
 podcast: "https://player.captivate.fm/episode/66174b84-14ab-4adf-9911-90c4a6830138/"
 seoTitle: "When the Problem Isn't Technical: DDD Europe"

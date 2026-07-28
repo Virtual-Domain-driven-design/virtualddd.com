@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T14:00:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Beginner"]
-tags: ["DDDDD", "remote facilitation"]
+tags: ["ddddd", "remote facilitation"]
 video: "https://www.youtube.com/embed/q3Oh9zVKHKo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

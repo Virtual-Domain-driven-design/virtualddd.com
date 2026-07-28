@@ -6,7 +6,7 @@ question: "How can we lower coupling from between bounded contexts or systems"
 type: ["design-heuristics"]
 authors: ["Mathias Verraes"]
 submitter: "Kenny Schwegler"
-tags: ["Bounded Context", "Distributed systems", "Coupling"]
+tags: ["bounded context", "distributed systems", "coupling"]
 complements: ["evaluate-options-against-team-frustrations"]
 ---
 

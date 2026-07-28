@@ -5,7 +5,7 @@ status: "Published"
 episode: 5
 publishedDate: 2025-10-28
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["Governance", "Facilitating Software Architecture and Design", "Social Dynamics", "Power Dynamics", "leadership"]
+tags: ["governance", "facilitating software architecture and design", "social dynamics", "power dynamics", "leadership"]
 youtube: "https://youtu.be/GXz-zzNyL38"
 podcast: "https://player.captivate.fm/episode/47be4840-e08e-42b6-8319-7936a9914dae/"
 curatedHeuristics: ["treat-decisions-as-immutable-histrorical-records", "value-team-autonomy-over-rescuing", "amplify-team-decisions-with-organisational-capital", "prioritise-foundation-trust-in-the-team", "be-explicit-about-decision-making-authority", "measure-the-flow-of-decision-making", "capture-both-logic-and-sentiment-in-decisions", "decompose-large-decisions-into-smaller-ones"]

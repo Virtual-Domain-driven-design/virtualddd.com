@@ -5,7 +5,7 @@ status: "Published"
 episode: 16
 publishedDate: 2026-03-31
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
-tags: ["Facilitating Software Architecture and Design", "Psychological Safety", "Sociotechnical Systems", "Engineering CUlture", "team collaboration", "Social Dynamics", "technical leadership"]
+tags: ["facilitating software architecture and design", "psychological safety", "sociotechnical systems", "engineering culture", "team collaboration", "social dynamics", "technical leadership"]
 youtube: "https://youtu.be/URZL78DSpv4"
 podcast: "https://player.captivate.fm/episode/cae1c91a-e8c6-401d-aaf6-58f4d3eac439/"
 curatedHeuristics: ["design-as-living-conversation", "global-metadata-creates-global-risk", "executives-provide-resources-not-pressure", "build-safety-through-small-failures", "default-rollback-over-fix-forward", "distribute-debugging-beyond-war-room"]

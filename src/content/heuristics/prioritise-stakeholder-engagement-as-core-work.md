@@ -6,7 +6,7 @@ question: "How should architects justify and prioritize time spent on stakeholde
 type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Michael Plöd"
-tags: ["Sociotechnical Systems", "Collaborative modelling", "Facilitating Software Design and Architecture", "Software Architecture", "Investment"]
+tags: ["sociotechnical systems", "collaborative modelling", "facilitating software architecture and design", "software architecture", "investment"]
 ---
 
 View stakeholder management and communication as an integral, non-negotiable part of an architect's core responsibilities, essential for aligning perspectives and ensuring successful change. This time is not discretionary but fundamental to the role. It is as critical as any technical design task.

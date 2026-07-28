@@ -6,7 +6,7 @@ question: "How do we introduce new colours during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+tags: ["eventstorming", "sociotechnical systems", "collaborative modelling", "collaborative software design"]
 specializes: ["drop-methodology-when-barrier"]
 ---
 

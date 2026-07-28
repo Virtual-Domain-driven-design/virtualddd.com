@@ -6,7 +6,7 @@ question: "How can we refine and create an ubiquitous language?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Collaborative modelling", "Example Mapping", "Sociotechnical Systems", "Collaborative Software Design"]
+tags: ["eventstorming", "collaborative modelling", "example mapping", "sociotechnical systems", "collaborative software design"]
 ---
 
 When combining several visual vollaboration tools, like EventStorming and Example Mapping, pay attention to the language. We want to be consistent in the language we use between the visual collaboration tools. For instance using ReserveSeats as an action/command in EventStroming, then we want to reuse it during Example Mapping saying when we reserve two seats.

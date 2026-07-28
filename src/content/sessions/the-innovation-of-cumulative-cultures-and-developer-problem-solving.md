@@ -5,6 +5,7 @@ status: "Done"
 datetime: 2025-04-15T20:00:00.000+12:00
 typeOfSession: "talk"
 level: ["Intermediate"]
+tags: ["engineering culture", "psychological safety", "learning", "behavioural science"]
 video: "https://youtu.be/wYhX3QxskxQ"
 podcastPlayer: "https://player.captivate.fm/episode/cd58e534-2d19-491f-9834-033a99d4b55c/"
 organiser: "Andrea Magnorsky"

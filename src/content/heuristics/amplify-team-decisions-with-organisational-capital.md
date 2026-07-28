@@ -6,7 +6,7 @@ question: "As a leader, how can I support a team's decision without taking owner
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["Sociotechnical Systems", "Ranking", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["sociotechnical systems", "ranking", "decision-making process", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Use your organisational, political, or social capital to amplify and support a decision made by the team. This involves publicly echoing the decision and providing supplementary data or context that reinforces its validity. This strengthens the team's autonomy while ensuring the decision is well-supported.

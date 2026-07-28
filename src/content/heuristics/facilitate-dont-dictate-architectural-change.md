@@ -6,7 +6,7 @@ question: "What is the most effective stance for an architect when driving signi
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Michael Plöd"
-tags: ["Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Software Design", "Ranking", "Sociotechnical Systems"]
+tags: ["decentralised decision-making", "facilitating software architecture and design", "software design", "ranking", "sociotechnical systems"]
 ---
 
 An architect's role is to facilitate understanding and alignment, not to command. This requires empathy and a deep understanding of diverse perspectives to guide change effectively. Avoid hierarchical power plays in favor of collaborative problem-solving.

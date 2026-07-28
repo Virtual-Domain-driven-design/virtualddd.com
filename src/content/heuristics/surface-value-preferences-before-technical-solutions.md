@@ -6,7 +6,7 @@ question: "How do you prevent technical preferences from dominating architectura
 type: ["value-based-heuristics"]
 authors: ["Gien Verschatse", "Andrea Magnorsky", "Kenny Schwegler", "Evelyn van Kelle"]
 submitter: "Gien Verschatse"
-tags: ["decision-making", "Team Dynamics", "architectural decisions", "Facilitation"]
+tags: ["decision-making", "team dynamics", "adr", "facilitation"]
 complements: ["make-decisions-transparant", "write-down-decisions-early-and-often", "respect-apathy-in-decision-making"]
 enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["evaluate-architectural-options-against-team-pain-points"]

@@ -6,7 +6,7 @@ question: "In modern distributed systems, where should we focus our efforts: def
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Resilient Engineering", "Recoverability", "Software Design", "Quality"]
+tags: ["resilient engineering", "recoverability", "software design", "quality"]
 complements: ["global-metadata-creates-global-risk", "distribute-debugging-beyond-war-room", "default-rollback-over-fix-forward"]
 ---
 

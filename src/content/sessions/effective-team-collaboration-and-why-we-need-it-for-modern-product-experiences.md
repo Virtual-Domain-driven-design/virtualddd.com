@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2022-05-05T17:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["architect decisions", "software design", "long term impact"]
+tags: ["adr", "software design", "long term impact"]
 video: "https://www.youtube.com/embed/WNQ3ZLcW4Mw"
 podcastPlayer: "https://player.captivate.fm/episode/975db4f3-d3f7-4a72-b7fb-ef5907782097/"
 organiser: "Kenny Baas-Schwegler"

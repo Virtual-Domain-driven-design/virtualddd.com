@@ -5,7 +5,7 @@ status: "Published"
 episode: 4
 publishedDate: 2025-10-14
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["Software Architecture", "team collaboration", "Facilitating Software Architecture and Design", "ADR", "technical leadership", "collaborative software design"]
+tags: ["software architecture", "team collaboration", "facilitating software architecture and design", "adr", "technical leadership", "collaborative software design"]
 youtube: "https://youtu.be/hYOztFDJSmM"
 podcast: "https://player.captivate.fm/episode/a6cf2188-2539-4986-8975-a44af952981d/"
 curatedHeuristics: ["value-lived-experience-over-theoretical-principles", "prioritise-system-integrity-over-local-convenience", "respect-apathy-in-decision-making", "ask-what-does-it-take-to-go-along-with-a-decision", "proxy-accountability-to-unblock-decisions", "address-dissent-by-enabling-commitment", "generate-experience-through-practical-experimentation"]

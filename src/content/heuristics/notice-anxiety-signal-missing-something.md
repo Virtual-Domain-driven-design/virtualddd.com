@@ -6,7 +6,7 @@ question: "How do you recognize when your own anxiety is preventing you from add
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Xin Yao"
-tags: ["self-awareness", "Facilitation", "Psychological Safety", "enabling architecture"]
+tags: ["self-awareness", "facilitation", "psychological safety", "enabling architecture"]
 complements: ["pause-every-ten-minutes-invite-dissent", "build-connection-before-content", "align-bounded-context-with-the-value-stream", "drop-methodology-when-barrier"]
 enables: ["drop-methodology-when-barrier", "challenge-workshop-premise-before-diving-in"]
 prerequisites: ["drop-methodology-when-barrier"]

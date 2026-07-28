@@ -6,7 +6,7 @@ question: "How do you move forward when team members disagree with a decision bu
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["Decision-Making Process", "Deep Democracy", "ADR", "Conflict Management", "Facilitating Software Design and Architecture"]
+tags: ["decision-making process", "deep democracy", "adr", "conflict management", "facilitating software architecture and design"]
 ---
 
 After a decision is made, allow dissenting members to express their concerns freely without becoming defensive. Then, shift the conversation by asking, “What do you need to go along with this decision?” This validates their perspective while focusing on a constructive path forward, turning disagreement into a plan for support.

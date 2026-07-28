@@ -6,7 +6,7 @@ question: "When do we switch to example mapping from EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Example Mapping", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design"]
+tags: ["eventstorming", "example mapping", "collaborative modelling", "sociotechnical systems", "collaborative software design"]
 seoTitle: "EventStorming: Switch to Example Mapping for Rules"
 ---
 

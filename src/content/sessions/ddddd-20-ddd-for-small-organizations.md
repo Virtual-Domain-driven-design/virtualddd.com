@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T19:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Beginner"]
-tags: ["DDDDD", "startup", "essential"]
+tags: ["ddddd", "startup", "essential"]
 video: "https://www.youtube.com/embed/Xw_eh9vLAio"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

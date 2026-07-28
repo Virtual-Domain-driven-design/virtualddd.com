@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2025-10-02T19:00:00.000+13:00
 typeOfSession: "talk"
 level: ["Intermediate", "Advanced"]
-tags: ["decision-making", "architect decisions", "sociotechnical systems"]
+tags: ["decision-making", "adr", "sociotechnical systems"]
 video: "https://youtu.be/I-2TlTJschA"
 podcastPlayer: "https://player.captivate.fm/episode/437d5f84-84d6-45f8-9c74-a0e188cda706/"
 organiser: "Andrea Magnorsky"

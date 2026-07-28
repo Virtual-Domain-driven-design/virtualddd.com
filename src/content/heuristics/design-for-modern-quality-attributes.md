@@ -6,7 +6,7 @@ question: "What non-functional attributes are critical for maintaining quality i
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Quality", "Software Architecture", "Software Design"]
+tags: ["quality", "software architecture", "software design"]
 ---
 
 Treat testability, observability, and recoverability as first-class design concerns, not afterthoughts. A system that cannot be easily tested, understood in production, or quickly restored is inherently low-quality. Build in the necessary instrumentation, APIs, and deployment mechanisms from the start.

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T09:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Beginner"]
-tags: ["DDDDD", "context mapping", "strategic design", "collaborative modelling"]
+tags: ["ddddd", "context mapping", "strategic design", "collaborative modelling"]
 video: "https://www.youtube.com/embed/8TDiuQ3vdh0"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

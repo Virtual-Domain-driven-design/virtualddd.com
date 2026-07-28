@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-08-13T17:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Beginner"]
-tags: ["visual collaboration", "complexity thinking", "bounded contexts", "distributed systems", "eventstorming", "domain story telling", "domain message flow modelling"]
+tags: ["visual collaboration", "complexity thinking", "bounded contexts", "distributed systems", "eventstorming", "domain storytelling", "domain message flow modelling"]
 video: "https://www.youtube.com/embed/oj4zGj6sPDc"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

@@ -6,7 +6,7 @@ question: "How should you handle decisions that replace your own previous work?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Peter Hunter"
-tags: ["Sociotechnical Systems", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["sociotechnical systems", "decision-making process", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Acknowledge emotional attachment to past work, but consciously set it aside to evaluate new decisions on their own merits. The system's forward progress is more important than the preservation of personal contributions. This ensures objectivity and supports necessary evolution.

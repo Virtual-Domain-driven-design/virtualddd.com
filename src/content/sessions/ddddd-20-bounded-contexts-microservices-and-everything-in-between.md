@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T05:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Beginner"]
-tags: ["DDDDD", "bounded context", "socio-technical", "microservices", "software architecture"]
+tags: ["ddddd", "bounded context", "socio-technical", "microservices", "software architecture"]
 video: "https://www.youtube.com/embed/Z0RgR9xIQE4"
 podcastPlayer: "https://player.captivate.fm/episode/2a705aac-63ab-4d24-8f9b-cb3eaec65568/"
 organiser: "Kenny Baas-Schwegler"

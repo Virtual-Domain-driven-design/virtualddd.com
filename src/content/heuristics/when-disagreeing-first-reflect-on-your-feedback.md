@@ -6,7 +6,7 @@ question: "What should an architect do when they disagree with a team's decision
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Peter Hunter"
-tags: ["Sociotechnical Systems", "Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Software Architecture", "Psychological Safety", "Team Agency"]
+tags: ["sociotechnical systems", "facilitating software architecture and design", "decentralised decision-making", "software architecture", "psychological safety", "team agency"]
 ---
 
 Before concluding a team is wrong, critically assess your own feedback. Consider if your advice was persuasive or if you provided the necessary context for them to see the bigger picture. This focuses on improving your advisory skill rather than assigning blame.

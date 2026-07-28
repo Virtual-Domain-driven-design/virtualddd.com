@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T10:00:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Beginner"]
-tags: ["DDDDD", "event sourcing"]
+tags: ["ddddd", "event sourcing"]
 video: "https://www.youtube.com/embed/uB0SkrElPRo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

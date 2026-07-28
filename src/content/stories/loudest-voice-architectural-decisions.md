@@ -5,7 +5,7 @@ status: "Published"
 episode: 14
 publishedDate: 2026-03-03
 authors: ["Gien Verschatse", "Kenny Schwegler", "Evelyn van Kelle", "Andrea Magnorsky"]
-tags: ["Facilitating Software Architecture and Design", "Power Dynamics", "collaborative modelling", "Psychological Safety", "Social Dynamics", "Engineering CUlture", "collaborative software design"]
+tags: ["facilitating software architecture and design", "power dynamics", "collaborative modelling", "psychological safety", "social dynamics", "engineering culture", "collaborative software design"]
 youtube: "https://youtu.be/ClUQkGbIevo"
 podcast: "https://player.captivate.fm/episode/39d4201d-1de5-4d28-92c1-2c755489223e/"
 curatedHeuristics: ["evaluate-architectural-options-against-team-pain-points", "surface-value-preferences-before-technical-solutions", "consider-downstream-teams-architectural-patterns", "evaluate-options-against-team-frustrations"]

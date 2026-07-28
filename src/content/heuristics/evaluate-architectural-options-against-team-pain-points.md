@@ -6,7 +6,7 @@ question: "How do you know if an architectural change will actually improve the 
 type: ["design-heuristics"]
 authors: ["Gien Verschatse", "Andrea Magnorsky", "Kenny Schwegler", "Evelyn van Kelle"]
 submitter: "Gien Verschatse"
-tags: ["architecture", "Team Dynamics", "values heuristics", "decision-making", "Facilitation"]
+tags: ["architecture", "team dynamics", "values heuristics", "decision-making", "facilitation"]
 complements: ["notice-working-too-hard-facilitator", "make-decisions-transparant", "respect-apathy-in-decision-making"]
 enables: ["prioritise-foundation-trust-in-the-team"]
 prerequisites: ["surface-value-preferences-before-technical-solutions"]

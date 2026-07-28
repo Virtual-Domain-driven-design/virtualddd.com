@@ -6,7 +6,7 @@ question: "How do you ensure a decision is successfully adopted by the team afte
 type: ["guiding-heuristics"]
 authors: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Kenny Schwegler"
-tags: ["Deep Democracy", "Facilitating Software Design and Architecture", "Conflict Management", "Decision-Making Process"]
+tags: ["deep democracy", "facilitating software architecture and design", "conflict management", "decision-making process"]
 ---
 
 After a decision is taken, immediately ask the group: “What do you need to go along with this?” This shifts the focus from debate to constructive action and identifies necessary support. A decision’s success depends on the team’s ability to execute it.

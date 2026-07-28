@@ -6,7 +6,7 @@ question: "How do we prioritize which design battles to fight and which to conce
 type: ["value-based-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Krisztina Hirth"
-tags: ["Sociotechnical Systems", "Decision-Making Process", "Collaborative Software Design", "Facilitating Software Design and Architecture"]
+tags: ["sociotechnical systems", "decision-making process", "collaborative software design", "facilitating software architecture and design"]
 ---
 
 Focus architectural oversight on decisions with long-lasting, severe impact ('tigers') rather than on smaller, correctable mistakes ('mice'). Wasting political and emotional capital on minor issues is counterproductive when major systemic risks exist. This approach grants teams autonomy on less critical decisions.

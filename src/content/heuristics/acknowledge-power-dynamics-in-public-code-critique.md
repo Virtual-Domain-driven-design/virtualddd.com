@@ -6,7 +6,7 @@ question: "How can a senior team member critique code publicly without causing s
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Paul Rayner"
-tags: ["Conflict Management", "Ranking", "Sociotechnical Systems", "Facilitating Software Design and Architecture", "Technical Leadership"]
+tags: ["conflict management", "ranking", "sociotechnical systems", "facilitating software architecture and design", "technical leadership"]
 complements: ["watch-approval-seeking-safety-signal"]
 ---
 

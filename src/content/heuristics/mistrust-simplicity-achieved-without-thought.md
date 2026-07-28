@@ -6,7 +6,7 @@ question: "How should we evaluate a design solution that seems deceptively simpl
 type: ["guiding-heuristics"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Krisztina Hirth"
-tags: ["Sociotechnical Systems", "Decision-Making Process", "Facilitating Software Design and Architecture", "Cognitive Bias"]
+tags: ["sociotechnical systems", "decision-making process", "facilitating software architecture and design", "cognitive bias"]
 ---
 
 Be deeply skeptical of solutions for a complex problem chosen purely because they are the fastest to implement, as this often indicates a lack of critical design thinking. The initial implementation speed can hide significant long-term costs in maintenance, correction, and system complexity. True simplicity is achieved through thoughtful design, not by avoiding it.

@@ -6,7 +6,7 @@ question: "How can we create a collaborative advising culture instead of critici
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Elena Stojmilova"
-tags: ["Facilitating Software Design and Architecture", "Decentralised Decision-Making", "Conflict Management", "Sociotechnical Systems", "Psychological Safety"]
+tags: ["facilitating software architecture and design", "decentralised decision-making", "conflict management", "sociotechnical systems", "psychological safety"]
 ---
 
 Do not wait until a decision is fully formed to present it for advice, as this invites criticism rather than collaboration. Engage architects and stakeholders throughout the decision-making process to incorporate their knowledge and context early. This makes the process more efficient and collaborative.

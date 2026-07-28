@@ -6,7 +6,7 @@ question: "What is the role of leadership when a team is struggling with a decis
 type: ["value-based-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
+tags: ["decision-making process", "decentralised decision-making", "facilitating software architecture and design", "sociotechnical systems"]
 ---
 
 Leaders should facilitate and enable team decision-making rather than intervening to solve the problem themselves, if there even is a problem, because often the team doesn’t experience one themselves. Taking over decisions, even with good intentions, creates a cycle of dependency and disempowerment. The goal is to build the team's capacity to make better decisions in the future. 

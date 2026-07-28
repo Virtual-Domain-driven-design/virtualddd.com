@@ -6,7 +6,7 @@ question: "How can we make it safe for people to speak up?"
 type: ["value-based-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["Deep Democracy", "Collaborative modelling"]
+tags: ["deep democracy", "collaborative modelling"]
 ---
 
 ## Description

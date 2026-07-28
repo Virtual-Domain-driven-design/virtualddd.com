@@ -5,7 +5,7 @@ status: "Published"
 episode: 19
 publishedDate: 2026-05-12
 authors: ["Laila Bougria", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
-tags: ["Facilitating Software Architecture and Design", "Software Architecture", "Conflict Management", "team collaboration", "Governance", "Social Dynamics", "Sociotechnical Systems"]
+tags: ["facilitating software architecture and design", "software architecture", "conflict management", "team collaboration", "governance", "social dynamics", "sociotechnical systems"]
 youtube: "https://youtu.be/VFtM8-nhmHk"
 podcast: "https://player.captivate.fm/episode/48c52611-9542-4805-982a-2c2e2621ed48/"
 seoTitle: "Turning Architecture Conflict Into Collaboration"

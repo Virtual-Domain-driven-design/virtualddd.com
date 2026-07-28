@@ -6,7 +6,7 @@ question: "How do you know if something you find problematic is actually blockin
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["Facilitation", "sense-making", "neutrality", "self-awareness"]
+tags: ["facilitation", "sense-making", "neutrality", "self-awareness"]
 metaDescription: "Before acting on something that bothers you as a facilitator, check whether it's hindering the group or just you."
 ---
 

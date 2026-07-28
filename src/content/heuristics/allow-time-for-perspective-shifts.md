@@ -6,7 +6,7 @@ question: "How should one manage expectations regarding the speed at which indiv
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Michael Plöd"
-tags: ["Sociotechnical Systems", "Deep Democracy", "Collaborative modelling", "Facilitating Software Design and Architecture", "Psychological Safety"]
+tags: ["sociotechnical systems", "deep democracy", "collaborative modelling", "facilitating software architecture and design", "psychological safety"]
 ---
 
 Recognise that shifting deeply held perspectives, especially when it implies past decisions were suboptimal, requires significant time and patience. Avoid forcing the issue; allow individuals space to process and come to their own conclusions. Stressing people will not accelerate genuine acceptance.

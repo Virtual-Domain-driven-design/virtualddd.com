@@ -6,7 +6,7 @@ question: "How can I make projection more adaptable?"
 type: ["design-heuristics"]
 authors: ["Nick Tune"]
 submitter: "Nick Tune"
-tags: ["Event-driven architecture", "event sourcing", "CQRS"]
+tags: ["event-driven architecture", "event sourcing", "cqrs"]
 ---
 
 ## Short description

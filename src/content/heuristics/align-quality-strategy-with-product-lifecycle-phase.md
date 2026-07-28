@@ -6,7 +6,7 @@ question: "How should our approach to quality evolve as a product or feature mat
 type: ["guiding-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Quality", "Strategic design", "Product Design"]
+tags: ["quality", "strategic design", "product design"]
 ---
 
 Adapt the quality strategy to the product’s current lifecycle phase: Explore, Expand, or Extract. In the ‘Explore’ phase, quality means rapid learning and experimentation, while in the ‘Extract’ phase, it means stability and efficiency. A single, static definition of quality is ineffective across a product&#39;s evolution.

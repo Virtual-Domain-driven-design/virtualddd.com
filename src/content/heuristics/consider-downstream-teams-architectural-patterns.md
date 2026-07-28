@@ -6,7 +6,7 @@ question: "How do you avoid creating problems for teams that deploy and test you
 type: ["guiding-heuristics"]
 authors: ["Gien Verschatse", "Andrea Magnorsky", "Kenny Schwegler", "Evelyn van Kelle"]
 submitter: "Gien Verschatse"
-tags: ["architectural decisions", "team topology", "deployment", "qa", "consequences"]
+tags: ["adr", "team topology", "deployment", "qa", "consequences"]
 competesWith: ["respect-apathy-in-decision-making"]
 complements: ["align-with-evolutionary-stage-the-simon-wardley-heuristic", "write-down-decisions-early-and-often", "make-decisions-transparant"]
 enables: ["prioritise-foundation-trust-in-the-team"]

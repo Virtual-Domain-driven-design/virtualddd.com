@@ -6,7 +6,7 @@ question: "When should I use EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design"]
+tags: ["eventstorming", "collaborative modelling", "sociotechnical systems", "collaborative software design"]
 seoTitle: "EventStorming: Start Here When There's a Story"
 ---
 

@@ -5,7 +5,7 @@ status: "Published"
 episode: 7
 publishedDate: 2025-11-25
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
-tags: ["Facilitating Software Architecture and Design", "Power Dynamics", "Conflict Management", "technical leadership", "Social Dynamics"]
+tags: ["facilitating software architecture and design", "power dynamics", "conflict management", "technical leadership", "social dynamics"]
 youtube: "https://youtu.be/OjWax86V-M4"
 podcast: "https://player.captivate.fm/episode/c397619c-c430-460e-9e36-c36f4c632c3b/"
 curatedHeuristics: ["when-disagreeing-first-reflect-on-your-feedback", "detach-personal-emotion-from-technical-decision", "use-architecture-principles-as-decision-guardrails", "facilitate-communication-to-resolve-boundary-conflicts", "frame-boundary-models-for-autonomy-and-flow", "prioritise-documenting-impact-over-process-consistency", "accept-imperfect-boundaries-in-legacy-decomposition"]

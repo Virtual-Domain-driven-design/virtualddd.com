@@ -6,7 +6,7 @@ question: "When should I build software myself, or buy it off the shelve?"
 type: ["design-heuristics"]
 authors: ["Nick Tune"]
 submitter: "Nick Tune"
-tags: ["Strategic design"]
+tags: ["strategic design"]
 ---
 
 ## Short description

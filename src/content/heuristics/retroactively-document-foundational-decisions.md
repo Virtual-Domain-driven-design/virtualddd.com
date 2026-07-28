@@ -6,7 +6,7 @@ question: "How do we handle critical, undocumented decisions made in the project
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
 submitter: "Andrew Harmel-Law"
-tags: ["ADR", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["adr", "decision-making process", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Reverse-engineer Architecture Decision Records (ADRs) for foundational decisions that were never formally documented. This makes implicit constraints explicit, clarifies historical context, and allows the team to re-evaluate them. It provides a clear baseline for new team members and future decisions. 

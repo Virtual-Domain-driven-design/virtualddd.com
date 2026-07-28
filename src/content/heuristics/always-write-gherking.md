@@ -6,7 +6,7 @@ question: "When should I formalise with the Gherkin script?"
 type: ["guiding-heuristics"]
 authors: ["Matt Wynne"]
 submitter: "Kenny Schwegler"
-tags: ["Behaviour-Driven Development"]
+tags: ["behaviour-driven development"]
 ---
 
 You should always write Gherkin for the examples that you got our of the discovery phase. Writing the examples as Gherkin get's you new insights. You don't need to use it to automate.

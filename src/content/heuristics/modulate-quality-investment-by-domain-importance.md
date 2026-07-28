@@ -6,7 +6,7 @@ question: "How do we allocate our limited quality and testing budget across a la
 type: ["design-heuristics"]
 authors: ["Anne-Marie Charrett"]
 submitter: "Anne-Marie Charrett"
-tags: ["Quality", "Strategic design", "Investment"]
+tags: ["quality", "strategic design", "investment"]
 ---
 
 Align the level of quality investment with the strategic importance of the business domain (Core, Supporting, or Generic). The Core Domain, which provides the primary competitive advantage, warrants the highest investment in rigorous testing and quality assurance. Supporting domains can receive a more pragmatic and less exhaustive quality treatment.

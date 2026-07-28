@@ -6,7 +6,7 @@ question: "How should senior architects support newly empowered teams?"
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Peter Hunter"
-tags: ["Ranking", "Facilitating Software Design and Architecture", "Conflict Management", "Decentralised Decision-Making", "Decision-Making Process", "Sociotechnical Systems"]
+tags: ["ranking", "facilitating software architecture and design", "conflict management", "decentralised decision-making", "decision-making process", "sociotechnical systems"]
 ---
 
 Instead of providing direct answers, guide teams by asking probing questions and suggesting alternative perspectives. This fosters their decision-making skills and ownership without undermining their autonomy. The goal is to enable, not to command.

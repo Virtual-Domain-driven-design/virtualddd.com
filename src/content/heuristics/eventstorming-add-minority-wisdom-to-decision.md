@@ -6,7 +6,7 @@ question: "How do we wrap up a dot voting at a big picture EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Collaborative Software Design", "Psychological Safety", "Collaborative modelling"]
+tags: ["eventstorming", "collaborative software design", "psychological safety", "collaborative modelling"]
 ---
 
 When wrapping up a big picture EventStorming with a dot voting on hotspots or opportunities, we need to add minority wisdom to the decision made. Tell the people who did not vote on the majority decision that you are sorry. Then ask 'what do you need to also commit to that decision'. Add this wisdom (within the boundaries of the decision made) to the decision so that we made a collective autocratic decision, where everyone feels included.

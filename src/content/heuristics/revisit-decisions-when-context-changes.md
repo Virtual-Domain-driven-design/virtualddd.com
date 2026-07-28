@@ -6,7 +6,7 @@ question: "How do we know if a long-standing architectural constraint is still v
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
 submitter: "Andrew Harmel-Law"
-tags: ["ADR", "Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["adr", "decision-making process", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Decisions are made based on the context at a specific point in time, such as team size or available technology. Documenting this original context allows you to determine if it has changed enough to justify revisiting the decision. This prevents historical choices from becoming unchallengeable dogma.

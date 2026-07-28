@@ -5,7 +5,7 @@ status: "Published"
 episode: 12
 publishedDate: 2026-02-03
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
-tags: ["Facilitating Software Architecture and Design", "collaborative software design", "Power Dynamics", "Psychological Safety", "Enabling Architecture"]
+tags: ["facilitating software architecture and design", "collaborative software design", "power dynamics", "psychological safety", "enabling architecture"]
 youtube: "https://youtu.be/5Zp7eNsLFLM"
 podcast: "https://player.captivate.fm/episode/57ee2f33-ce16-48a8-9d82-320393458a5e/"
 curatedHeuristics: ["pause-every-ten-minutes-invite-dissent", "notice-anxiety-signal-missing-something", "build-connection-before-content", "drop-methodology-when-barrier", "challenge-workshop-premise-before-diving-in"]

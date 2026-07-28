@@ -6,7 +6,7 @@ question: "How do you get teams to buy into and maintain strategic models like a
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Peter Hunter"
-tags: ["Bounded Context", "Facilitating Software Design and Architecture", "Team Agency", "Resistance behaviour"]
+tags: ["bounded context", "facilitating software architecture and design", "team agency", "resistance behaviour"]
 ---
 
 Position strategic models like a context map as enablers for team autonomy and fast flow, not as constraints. When teams see that well-defined boundaries help them work independently, they become invested in the model's accuracy. This shifts perception from a mandate to a shared tool.

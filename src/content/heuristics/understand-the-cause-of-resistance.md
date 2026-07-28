@@ -6,7 +6,7 @@ question: "How should one address strong resistance from key stakeholders during
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Michael Plöd"
-tags: ["Resistance behaviour", "Sociotechnical Systems", "Facilitating Software Design and Architecture", "Deep Democracy", "Conflict Management", "Software Architecture"]
+tags: ["resistance behaviour", "sociotechnical systems", "facilitating software architecture and design", "deep democracy", "conflict management", "software architecture"]
 specializes: ["address-destructive-behavior-privately", "start-small-leadership-resists"]
 ---
 

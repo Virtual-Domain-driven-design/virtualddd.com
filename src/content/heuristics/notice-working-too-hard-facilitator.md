@@ -6,7 +6,7 @@ question: "How do you know when something beneath the surface is blocking a sess
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["Facilitation", "group dynamics", "session flow", "awareness"]
+tags: ["facilitation", "group dynamics", "session flow", "awareness"]
 complements: ["evaluate-architectural-options-against-team-pain-points", "interrupt-patterns-stay-with-flock"]
 prerequisites: ["consider-downstream-teams-architectural-patterns"]
 metaDescription: "When you find yourself working unusually hard to keep a session moving, something under the surface needs attention."

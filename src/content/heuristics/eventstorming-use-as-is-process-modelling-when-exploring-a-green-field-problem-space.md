@@ -6,7 +6,7 @@ question: "When shall I use process modelling eventstorming for as-is discovery 
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Alberto brandolini"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design"]
+tags: ["eventstorming", "sociotechnical systems", "collaborative modelling", "collaborative software design"]
 seoTitle: "EventStorming: As-Is Modelling for Brown Field"
 ---
 

@@ -6,7 +6,7 @@ question: "How can you guide autonomous teams to make sound decisions without di
 type: ["design-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Elena Stojmilova"
-tags: ["Software Architecture", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["software architecture", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Establish clear, shared architecture principles that teams must consult during their decision-making process. These principles act as a framework, ensuring non-functional requirements like cost are consistently considered. This provides guardrails for autonomy.

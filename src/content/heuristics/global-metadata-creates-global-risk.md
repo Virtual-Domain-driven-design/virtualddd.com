@@ -6,7 +6,7 @@ question: "How do you limit the blast radius of canary deployments and experimen
 type: ["design-heuristics"]
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Liz Fong-Jones"
-tags: ["Distributed systems", "canary deployment", "blast radius", "load balancing"]
+tags: ["distributed systems", "canary deployment", "blast radius", "load balancing"]
 complements: ["prioritise-recoverability-over-flawless-deployment"]
 enables: ["default-rollback-over-fix-forward"]
 metaDescription: "Even isolated canary deployments create global risk if metadata about them must be distributed system-wide for routing decisions."

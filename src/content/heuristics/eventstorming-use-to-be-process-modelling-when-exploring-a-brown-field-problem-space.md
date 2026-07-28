@@ -6,7 +6,7 @@ question: "When shall I use process modelling eventstorming for to-be discovery 
 type: ["guiding-heuristics"]
 authors: ["Marco Heimeshoff", "Paul Rayner", "Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Sociotechnical Systems", "Collaborative modelling", "Collaborative Software Design", "Strategic design"]
+tags: ["eventstorming", "sociotechnical systems", "collaborative modelling", "collaborative software design", "strategic design"]
 seoTitle: "EventStorming: To-Be Modelling for Green Field"
 ---
 

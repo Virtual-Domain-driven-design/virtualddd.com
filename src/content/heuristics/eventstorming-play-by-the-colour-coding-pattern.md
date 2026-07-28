@@ -6,7 +6,7 @@ question: "How do we introduce new colours during an EventStorming?"
 type: ["guiding-heuristics"]
 authors: ["Alberto brandolini"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Collaborative modelling", "Sociotechnical Systems", "Collaborative Software Design", "Psychological Safety"]
+tags: ["eventstorming", "collaborative modelling", "sociotechnical systems", "collaborative software design", "psychological safety"]
 ---
 
 We can start a process or design EventStorming is two ways:

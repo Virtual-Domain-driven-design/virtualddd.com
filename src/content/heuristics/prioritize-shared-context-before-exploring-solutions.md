@@ -6,7 +6,7 @@ question: "Where should a team focus its initial energy when tackling a new desi
 type: ["guiding-heuristics"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Paul Rayner"
-tags: ["Facilitating Software Design and Architecture", "Sociotechnical Systems", "Collaborative modelling", "Software Architecture"]
+tags: ["facilitating software architecture and design", "sociotechnical systems", "collaborative modelling", "software architecture"]
 ---
 
 Resist the urge to immediately jump into solutioning, as this often leads to solving the wrong problem. Dedicate significant time upfront to collectively establishing the context: where the team is starting from and the true nature of the problem. A shared and deep understanding of the context is the most critical foundation for effective design.

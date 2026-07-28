@@ -6,7 +6,7 @@ question: "How can we avoid the frustration of performative collaboration when a
 type: ["guiding-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["Decision-Making Process", "Facilitating Software Design and Architecture", "Collaborative Software Design", "Deep Democracy"]
+tags: ["decision-making process", "facilitating software architecture and design", "collaborative software design", "deep democracy"]
 ---
 
 Clearly communicate the decision-making process being used for any given choice. If a leader has already made a decision, they should state it directly rather than creating a false pretense of seeking input. This respects people's time and avoids breeding cynicism. We can categorise four different decision-making types and we can use the following scale to communicate it to people:

@@ -6,7 +6,7 @@ question: "How should one approach potentially confrontational or emotionally ch
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Michael Plöd"
-tags: ["Deep Democracy", "Stoicism", "Facilitating Software Design and Architecture", "Psychological Safety", "Sociotechnical Systems", "Resistance behaviour"]
+tags: ["deep democracy", "stoicism", "facilitating software architecture and design", "psychological safety", "sociotechnical systems", "resistance behaviour"]
 ---
 
 Sometimes, direct and empathetic engagement carries interpersonal risk but can yield significant breakthroughs. Prepare for potential negative outcomes by considering pros, cons, and a plan for managing the situation. Maintain professionalism and avoid taking offenses personally.

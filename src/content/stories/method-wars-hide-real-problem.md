@@ -5,7 +5,7 @@ status: "Published"
 episode: 17
 publishedDate: 2026-04-07
 authors: ["Simon Wardley", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-tags: ["Facilitating Software Architecture and Design", "Software Architecture", "Governance", "Sociotechnical Systems", "Stakeholder Alignment", "Power Dynamics"]
+tags: ["facilitating software architecture and design", "software architecture", "governance", "sociotechnical systems", "stakeholder alignment", "power dynamics"]
 youtube: "https://youtu.be/uM_X2ypvaA0"
 podcast: "https://player.captivate.fm/episode/f124eda9-769d-442e-ac9f-b1a12d478ec6/"
 seoTitle: "Why Method Wars Hide the Real Architecture Problem"

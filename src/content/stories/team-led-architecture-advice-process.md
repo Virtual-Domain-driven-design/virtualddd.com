@@ -5,7 +5,7 @@ status: "Published"
 episode: 6
 publishedDate: 2025-11-11
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
-tags: ["Facilitating Software Architecture and Design", "Software Architecture", "ADR", "Architecture Advice Forum", "Team-Led Architecture", "Team Autonomy"]
+tags: ["facilitating software architecture and design", "software architecture", "adr", "team-led architecture", "team autonomy"]
 youtube: "https://youtu.be/UmG_DhtynCs"
 podcast: "https://player.captivate.fm/episode/ba3ab849-6602-4816-9e3b-68f502e5834d/"
 curatedHeuristics: ["formalize-architectural-advice-forums-for-cross-context-awareness", "cultivate-ownership-for-decision-accountability", "engage-advisors-during-not-after-deliberation", "use-adrs-for-thinking-not-just-recording", "architects-as-enablers-not-gatekeepers", "treat-strong-opinions-as-inquiry-signals", "guide-decisions-do-not-dictate-solutions", "autonomy-requires-a-system-wide-perspective", "decompose-large-decisions-into-smaller-ones"]

@@ -6,7 +6,7 @@ question: "How do I design Bounded Contexts?"
 type: ["design-heuristics"]
 authors: ["Nick Tune"]
 submitter: "Nick Tune"
-tags: ["Bounded Context", "Sociotechnical Systems"]
+tags: ["bounded context", "sociotechnical systems"]
 enables: ["pause-every-ten-minutes-invite-dissent"]
 ---
 

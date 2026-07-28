@@ -6,7 +6,7 @@ question: "How should you approach defining team boundaries when migrating a leg
 type: ["design-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Peter Hunter"
-tags: ["Bounded Context", "Legacy", "Facilitating Software Design and Architecture", "Decision-Making Process", "Bounded Context Design", "Coupling"]
+tags: ["bounded context", "legacy", "facilitating software architecture and design", "decision-making process", "bounded context design", "coupling"]
 ---
 
 When applying DDD to a legacy system, accept that the initial boundaries will be imperfect and 'not pretty.' The goal is to create a starting point for team autonomy, even if it requires pragmatic compromises on architectural purity. These boundaries can be refined over time.

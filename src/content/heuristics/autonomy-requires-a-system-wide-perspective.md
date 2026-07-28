@@ -6,7 +6,7 @@ question: "How should a newly autonomous team approach its first major decisions
 type: ["guiding-heuristics"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 submitter: "Elena Stojmilova"
-tags: ["Team Agency", "Sociotechnical Systems", "Software Architecture", "Decentralised Decision-Making", "Facilitating Software Design and Architecture"]
+tags: ["team agency", "sociotechnical systems", "software architecture", "decentralised decision-making", "facilitating software architecture and design"]
 ---
 
 Transitioning from implementation to decision-making requires shifting focus from isolated code to the broader system. Consider costs, cross-team impacts, and long-term consequences, not just the immediate technical appeal of a solution. This change in perspective is fundamental to effective autonomy.

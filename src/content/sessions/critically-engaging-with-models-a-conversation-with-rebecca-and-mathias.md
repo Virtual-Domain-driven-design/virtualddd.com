@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2026-01-28T20:00:00.000+01:00
 typeOfSession: "debate"
 level: ["Advanced"]
-tags: ["Critical Thinking", "systems thinking", "software modelling", "cognitive bias"]
+tags: ["critical thinking", "systems thinking", "software modelling", "cognitive bias"]
 video: "https://youtu.be/US21k_wQ7YI"
 podcastPlayer: "https://player.captivate.fm/episode/2c4a7834-e3e0-4944-8fb9-1725d9b79d06/"
 meet: "https://meet.google.com/wqd-wiox-dbt"

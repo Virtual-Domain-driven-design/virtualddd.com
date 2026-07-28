@@ -6,7 +6,7 @@ question: "How can I distil bounded context after an EventStorming session?"
 type: ["design-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["EventStorming", "Bounded Context"]
+tags: ["eventstorming", "bounded context"]
 seoTitle: "Design Bounded Contexts by One-Way Sticky Flow"
 ---
 

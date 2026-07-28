@@ -6,7 +6,7 @@ question: "How can one foster objective discussion and collaboration without per
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["Sociotechnical Systems", "Cognitive Bias", "Facilitating Software Design and Architecture", "Software Architecture", "Collaborative Software Design"]
+tags: ["sociotechnical systems", "cognitive bias", "facilitating software architecture and design", "software architecture", "collaborative software design"]
 ---
 
 Avoid emotional attachment to specific ideas or initiatives by framing them as collective contributions rather than personal ownership. This detachment facilitates open discussion, reduces defensive reactions, and promotes a focus on the best outcome.

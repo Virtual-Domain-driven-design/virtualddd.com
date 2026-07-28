@@ -6,7 +6,7 @@ question: "How can we detect if our decision-making process has become dysfuncti
 type: ["design-heuristics"]
 authors: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Andrew Harmel-Law"
-tags: ["Decision-Making Process", "Decentralised Decision-Making", "Facilitating Software Design and Architecture", "Sociotechnical Systems"]
+tags: ["decision-making process", "decentralised decision-making", "facilitating software architecture and design", "sociotechnical systems"]
 ---
 
 Apply flow metrics to the decision-making process itself to identify systemic issues like paralysis or weaponisation. Track metrics such as:
