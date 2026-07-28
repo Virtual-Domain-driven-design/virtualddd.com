@@ -31,5 +31,3 @@ In this session, Emilio breaks down the architectural decisions — and the busi
 Every decision in this architecture was driven by real business constraints: SLAs with physical warehouses, perishable goods with expiration times, and logistics costs measured in thousands per minute of downtime.
 
 This is not a theoretical chaos engineering talk — it is a real-world case study of how architectural trade-offs made years earlier kept a critical business running when everything else failed.
-
-Emilio Carrión | Staff Engineer at Mercadona Tech

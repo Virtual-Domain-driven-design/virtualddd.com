@@ -21,15 +21,3 @@ We know that a system is supposed to be more than the sum of its parts, but how 
 Let us employ systems thinking to give us a holistic perspective, by adding synthesis to our analysis skills so that we can explore and understand emergence. We all know reductionism well, working on parts in isolation but holism is required to provide important insights and knowledge to handle the complexity in domains we normally work in – especially where people are involved. Only then can we build sustainable and adaptive software systems.
 
 This is an introduction to systems thinking and its importance when dealing with complexity.
-
-
-
-**About Trond**
-
-
-
-Senior IT Consultant and sociotechnical practitioner.
-
-
-
-Trond is an IT architect and open sociotechnical systems practitioner with extensive experience working with large, complex, and business-critical systems in industries such as telecom, media, TV, and the public sector. His main interests are service-orientation, domain-driven design, event-driven architectures, and open sociotechnical systems. His mantra: Great solutions emerge from collaborative sense-making and design.

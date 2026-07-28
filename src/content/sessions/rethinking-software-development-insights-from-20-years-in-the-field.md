@@ -34,8 +34,6 @@ Spoiler: Most of the time it is not about what your stakeholders, or you as some
 
 Join us for an online session with [Alexander Thurow](https://www.linkedin.com/in/alexthurow/) on deep reflections in software development.
 
-Alex is a freelance software developer, consultant, and speaker based in Überlingen, Germany. With over 20 years of experience in the software industry, he has worked as a developer, consultant, trainer, and lecturer. His main areas of interest include Clean Code, Refactoring, Technical Debt, and knowledge transfer.
-
 [In this talk](https://sessionize.com/s/alex-thurow/thoughts-on-modern-software-development-observatio/129355), he shares insights from more than two decades in software development. Through observations, patterns, and reflections, he explores what it really takes to survive and thrive in this complex and ever-changing field.
 
 If you’ve ever wondered why software development still feels so hard - despite all the experience, tools, and knowledge available - this session offers thought-provoking perspectives on why the struggle persists, and why the real challenges might not be what we usually think.

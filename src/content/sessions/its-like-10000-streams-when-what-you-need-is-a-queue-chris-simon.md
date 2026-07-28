@@ -31,13 +31,3 @@ This can lead to unnecessary complexity & operational challenges such as head of
 In this talk we'll bring that orange sticky note into the runtime of our system. We’ll start with a deep dive into the similarities and differences between event streaming platforms such as Kafka and queueing systems such as RabbitMq, Azure Service Bus & AWS SNS/SQS.
 
 We’ll then look at ways to assess your orange sticky notes to work out which messaging and persistence paradigms suit each one, helping you build more resilient, scalable and loosely coupled event-driven architectures.
-
-
-
-**About Chris Simon**
-
-
-
-Chris is a technology coach and advisor helping technology teams drive business success. His focus is on helping startups realise their vision and new CTOs flourish in their roles. He also supports executives & boards with strategic technology advice, and engineering teams with training, mentoring and consulting in architecture, quality, domain-driven design and test driven development.
-
-He is a regular meetup & conference speaker ([https://chrissimon.au/speaking/](https://chrissimon.au/speaking/)) and to support teams using Domain-Driven Design, he recently launched [https://contextive.tech](https://contextive.tech/) & co-founded the DDD Australia meetup and the ADAConf ([https://adaconf.org](https://adaconf.org/)) conference
