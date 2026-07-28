@@ -42,7 +42,14 @@ jobs:
           HANDLE: virtualddd.com
         run: |
           set -euo pipefail
+          # Strip a trailing slash before appending one. The secret carries one,
+          # which made the request `//` — Apache answers that with a redirect,
+          # and a redirect body has no posts in it, so the check concluded the
+          # page was stale every single time and would have rebuilt daily.
+          # `verify-live.mjs` has done the same `replace(/\/$/, '')` since launch,
+          # which is the hint this should have taken from the start.
           SITE="${SITE:-https://virtualddd.com}"
+          SITE="${SITE%/}"
 
           feed=$(curl -sS --max-time 20 \
             "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=$HANDLE&limit=1&filter=posts_no_replies" \
@@ -58,9 +65,20 @@ jobs:
             exit 0
           fi
 
-          if curl -sS --max-time 25 "$SITE/" | grep -q "$newest"; then
+          # -L because the apex may redirect, and a redirect body contains no
+          # posts. Counting what was found makes a wrong answer diagnosable
+          # instead of just wrong: zero posts means the page was not fetched.
+          page=$(curl -sSL --max-time 25 "$SITE/")
+          found=$(printf '%s' "$page" | grep -oE '/post/[a-z0-9]+' | wc -l)
+          echo "Newest on Bluesky: \`$newest\`. Posts on the home page: $found." >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$found" -eq 0 ]; then
+            echo "::warning::Fetched $SITE/ and found no posts at all — the feed panel is missing, or the page did not load."
+          fi
+
+          if printf '%s' "$page" | grep -q "$newest"; then
             echo "rebuild=false" >> "$GITHUB_OUTPUT"
-            echo "The home page is already showing $newest." >> "$GITHUB_STEP_SUMMARY"
+            echo "The home page is already showing it." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "rebuild=true" >> "$GITHUB_OUTPUT"
             {
