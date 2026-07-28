@@ -47,8 +47,10 @@ jobs:
       # already worth having in the summary.
       - name: What changed?
         id: shape
+        env:
+          BEFORE: ${{ github.event.before }}
         run: |
-          BASE="${{ github.event.before }}"
+          BASE="$BEFORE"
           # All-zeros on a first push or after a force push; fall back to the
           # parent, which is right in every case except the first commit.
           if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \

@@ -21,6 +21,10 @@ on:
     - cron: '40 6 * * 1'   # Mondays, early, so there is a week to act
   workflow_dispatch:
 
+# Read-only: this job asks the live site questions and writes nothing here.
+permissions:
+  contents: read
+
 jobs:
   watch:
     runs-on: ubuntu-latest

@@ -34,6 +34,12 @@ concurrency:
   group: deploy
   cancel-in-progress: false
 
+# Read-only. This job builds and rsyncs; it never writes to the repository,
+# and the token it is handed should not be able to. The repository default is
+# write, which is a 2019 default nobody chose.
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -49,11 +55,19 @@ jobs:
       # run was green, the summary named the content that had changed, and the
       # build was of the commit before it.
       - name: What is being built?
+        # Inputs arrive as environment variables rather than being pasted into
+        # the script. Nothing reaching this workflow is attacker-controlled
+        # today — every path to it needs write access — but a `${{ }}` expanded
+        # inside `run:` is expanded by the runner *before* the shell sees it,
+        # so the day an untrusted value reaches one, it is already a shell
+        # injection. Cheaper to never write the pattern.
+        env:
+          ASKED: ${{ inputs.ref }}
         run: |
           built=$(git rev-parse HEAD)
           echo "Building $built" >> "$GITHUB_STEP_SUMMARY"
           git log -1 --format='%s (%an)' >> "$GITHUB_STEP_SUMMARY"
-          asked="${{ inputs.ref }}"
+          asked="$ASKED"
           if [ -n "$asked" ] && [ "$built" != "$asked" ]; then
             echo "::error::Asked to build $asked but the tree is at $built."
             exit 1
@@ -65,10 +79,13 @@ jobs:
       # not. Better to stop and say so than to deploy it.
       - name: Did anyone hand-edit the generated content?
         if: github.event_name == 'push'
+        env:
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
         run: |
-          touched=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- src/content 2>/dev/null || true)
+          touched=$(git diff --name-only "$BEFORE" "$SHA" -- src/content 2>/dev/null || true)
           [ -z "$touched" ] && { echo "No generated content touched."; exit 0; }
-          author=$(git log -1 --format='%an' ${{ github.sha }})
+          author=$(git log -1 --format='%an' "$SHA")
           if [ "$author" = "virtualddd-sync" ]; then
             echo "Changed by the sync, which is the only thing allowed to."
             exit 0
@@ -239,6 +256,10 @@ jobs:
         env:
           HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
           TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
+          CHANGES: ${{ inputs.changes }}
+          SERVER: ${{ github.server_url }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           [ -n "$HOOK" ] || { echo "no deploy webhook configured, skipping"; exit 0; }
           # What was built, not what triggered the run — see the `ref` input.
@@ -247,9 +268,9 @@ jobs:
           built=$(git rev-parse HEAD)
           code=$(jq -n \
             --arg commit "$built" \
-            --arg url "${{ github.server_url }}/${{ github.repository }}/commit/$built" \
-            --arg changes "${{ inputs.changes }}" \
-            --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --arg url "$SERVER/$REPO/commit/$built" \
+            --arg changes "$CHANGES" \
+            --arg run "$SERVER/$REPO/actions/runs/$RUN_ID" \
             '{event:"deployed", site:"https://virtualddd.com", commit:$commit, commitUrl:$url, changes:$changes, run:$run}' \
             | curl -sS -o /dev/null -w '%{http_code}' -X POST \
                 -H 'Content-Type: application/json' \
