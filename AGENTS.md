@@ -44,8 +44,10 @@ went looking. Assume nothing is checked unless it says so here.
    sees, work out what the page and the Notion data actually do, name the
    friction, offer options with a recommendation, and let the maintainers
    decide. Recommend; do not unilaterally redesign.
-   *How we know: **nobody.** No check can see an option you did not offer. This
-   one rests entirely on whoever is doing the work.*
+   *How we know: **a reader, if one is configured.** No check can see an option
+   you did not offer, so `review.yml` asks a reviewer to look for it in the diff
+   and the commit message. Advisory, non-deterministic, and silent until an
+   `ANTHROPIC_API_KEY` exists. Treat it as resting on you.*
 5. **Tests select `[data-test]` hooks and `js-*` classes only**, never a
    styling class and never visible copy, so restyling a section cannot break
    them. A check that an editor can turn red from Notion reports; it never
@@ -54,8 +56,9 @@ went looking. Assume nothing is checked unless it says so here.
    fails on a selector naming a class the stylesheets define.*
 6. **Small steps, section by section.** Improvement is opt-in per section,
    never a big-bang rebuild. Sections ship independently.
-   *How we know: **nobody.** Size of a change is only visible in the diff, and
-   nothing here reads diffs.*
+   *How we know: **a reader, if one is configured.** `review.yml` prints how
+   many lines a push added against how many it deleted, which is the shape of
+   the change whether or not a reviewer reads it.*
 7. **Improvements can land on either side.** Sometimes the right fix is in the
    Notion schema or the editing workflow rather than in the code. Changing
    Notion is in scope.
@@ -78,6 +81,7 @@ must be about code being wrong, never about somebody's writing.
 | **Blocking** — contracts, URLs, browser behaviour, **conformance** | Every push | Yes |
 | **Conformance** — the rules above that a machine can read | Every push, inside the blocking suite | Yes |
 | **Content report** — what an editor could improve | Every push | No, `continue-on-error` |
+| **Review** — the diff, against this file | Every push touching code | No — a separate workflow |
 
 `tests/conformance.test.mjs` is where a rule from this file becomes executable.
 Every test in it names the rule it enforces. **If you add a rule here, either
@@ -86,8 +90,20 @@ is not costs more than an honest habit, because it gets assumed.
 
 What conformance cannot see is additive bias: a component that should have
 reused `TeaserCard`, a helper that duplicates one in `src/lib/`, a fourth way to
-render a card. That is only visible in a diff, by a reader, which is what the
-review step is for.
+render a card. Every one of those is *imported by something*, so every
+mechanical check calls it used. It is only visible in a diff, by a reader.
+
+That is `.github/workflows/review.yml`, which follows
+[.claude/skills/review-change](.claude/skills/review-change/SKILL.md) — the
+procedure, deliberately not a second copy of the rules above. Run the same
+review locally with `/review-change` before pushing.
+
+**It reports and does not block, and that is the design.** The reviewer is a
+language model; the standing promise in [docs/pipeline.md](docs/pipeline.md) is
+that publishing degrades to a script and a commit, never an outage. So a finding
+is a red cross on the commit and a message in Discord, and the site still ships.
+It is a separate workflow from the deploy for exactly that reason — if it is
+ever made blocking, make it a required check, never a step inside `deploy.yml`.
 
 ## Where the detail lives
 

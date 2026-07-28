@@ -1,0 +1,183 @@
+# Review a change against the brief — the half a test cannot see.
+#
+# `tests/conformance.test.mjs` enforces what a machine can read from the files.
+# This looks at the *diff*, for reuse and additive bias and the rules AGENTS.md
+# marks "nobody". The procedure is `.claude/skills/review-change/SKILL.md`; it
+# is not repeated here, and it is not repeated in the prompt below either.
+#
+# **This never blocks publishing, on purpose.** It is a separate workflow from
+# deploy.yml rather than a step inside it, because the reviewer is a language
+# model and the standing promise in docs/pipeline.md is that publishing degrades
+# to a script and a commit, never an outage. A finding here is loud — a red
+# cross on the commit and a message in Discord — and the site still ships. If
+# that turns out to be too quiet, make it a required check; do not make it a
+# step in the deploy.
+name: Review the change
+
+on:
+  push:
+    branches: [main]
+    # Not src/content/: that is the sync's, written by a bot, and deploy.yml
+    # already fails a push touching it from anyone else. Reviewing 200 files of
+    # regenerated markdown every hour would train everyone to ignore this.
+    paths:
+      - 'src/**'
+      - '!src/content/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    # The sync bot's commits are content, and content is not reviewed here.
+    if: github.actor != 'virtualddd-sync'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # the diff needs history, not just the tip
+
+      # What changed, as facts. This runs whether or not a reviewer is
+      # configured: it is the context a reader needs, and on its own it is
+      # already worth having in the summary.
+      - name: What changed?
+        id: shape
+        run: |
+          BASE="${{ github.event.before }}"
+          # All-zeros on a first push or after a force push; fall back to the
+          # parent, which is right in every case except the first commit.
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE=$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)
+          fi
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+
+          CODE_PATHS='src tests scripts .github'
+          ADDED=$(git diff --numstat "$BASE"..HEAD -- $CODE_PATHS ':(exclude)src/content' | awk '{a+=$1} END {print a+0}')
+          DELETED=$(git diff --numstat "$BASE"..HEAD -- $CODE_PATHS ':(exclude)src/content' | awk '{d+=$2} END {print d+0}')
+          NEW=$(git diff --name-status --diff-filter=A "$BASE"..HEAD -- src/components src/lib | awk '{print $2}')
+
+          {
+            echo "### What changed"
+            echo
+            echo "\`$BASE\` → \`${GITHUB_SHA:0:7}\`"
+            echo
+            echo "    $ADDED added, $DELETED deleted"
+            echo
+            if [ -n "$NEW" ]; then
+              echo "**New components or helpers** — the question for each is what already did this:"
+              echo
+              echo "$NEW" | sed 's/^/    /'
+            else
+              echo "No new components or helpers."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Additive bias is a trend, not an event, so this is context rather
+          # than a verdict — a change can legitimately be all additions.
+          echo "added=$ADDED" >> "$GITHUB_OUTPUT"
+          echo "deleted=$DELETED" >> "$GITHUB_OUTPUT"
+          echo "new_files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$NEW" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Is a reviewer configured?
+        id: cfg
+        env:
+          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            {
+              echo
+              echo "> **No reviewer configured.** Add an \`ANTHROPIC_API_KEY\` repository"
+              echo "> secret and this reads the diff against the brief. Until then the"
+              echo "> summary above is all this job does, and that is deliberate — a step"
+              echo "> that silently does nothing is worse than one that says so."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/setup-node@v5
+        if: steps.cfg.outputs.ready == 'true'
+        with:
+          node-version: 22
+
+      # The prompt says what to review and where the procedure lives. It does
+      # not restate the procedure, for the same reason the skill does not
+      # restate the rules.
+      - name: Review
+        id: review
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BASE: ${{ steps.shape.outputs.base }}
+        run: |
+          set -o pipefail
+          npx -y @anthropic-ai/claude-code@latest -p "$(cat <<PROMPT
+          Review the changes in this repository between $BASE and HEAD.
+
+          Follow .claude/skills/review-change/SKILL.md exactly. It names the
+          procedure, what is not a finding, and how to report. The rules it
+          reviews against are in AGENTS.md.
+
+          You are running in CI on a push that has already landed, so there is
+          nothing to approve — write the review a maintainer will read.
+
+          Write your review to a file called review.md. End that file with a
+          single last line, exactly one of:
+            VERDICT: clean
+            VERDICT: findings
+          Use 'findings' only for something you would ask a maintainer to change.
+          PROMPT
+          )" --output-format text 2>&1 | tail -40
+
+          if [ ! -f review.md ]; then
+            echo "::warning::the reviewer wrote no review.md; treating as clean"
+            printf 'The reviewer produced no file.\n\nVERDICT: clean\n' > review.md
+          fi
+          {
+            echo
+            echo "### Review"
+            echo
+            cat review.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if tail -5 review.md | grep -q '^VERDICT: findings'; then
+            echo "findings=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "findings=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The same road every other thing a person needs to see already takes.
+      - name: Tell the organisers
+        if: steps.review.outputs.findings == 'true'
+        env:
+          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
+          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          [ -n "$HOOK" ] || { echo "No webhook configured, so nobody was told."; exit 0; }
+          code=$(jq -n --arg run "$RUN" --arg sha "${GITHUB_SHA:0:7}" \
+                   --rawfile review review.md \
+                   '{event:"review-findings", sha:$sha, run:$run, review:$review}' \
+                 | curl -sS -o /dev/null -w '%{http_code}' -X POST \
+                     -H 'Content-Type: application/json' \
+                     -H "X-VirtualDDD-Token: $TOKEN" -d @- "$HOOK")
+          case "$code" in
+            2*) echo "Raised with the organisers ($code)." ;;
+            *)  echo "::warning::n8n answered $code; the review reached nobody but this log." ;;
+          esac
+
+      # Last, so the summary and the Discord message exist before the red cross.
+      - name: Fail on findings
+        if: steps.review.outputs.findings == 'true'
+        run: |
+          echo "::error::the review found something worth changing — see the job summary"
+          exit 1
