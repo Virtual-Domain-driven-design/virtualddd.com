@@ -7,7 +7,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { samePerson, anySamePerson, profileLinks } from '../../src/lib/people.ts';
+import { samePerson, anySamePerson, guestsToName, profileLinks } from '../../src/lib/people.ts';
 
 describe('samePerson', () => {
   test('matches the same name written the same way', () => {
@@ -73,5 +73,51 @@ describe('profileLinks', () => {
     assert.deepEqual(profileLinks({ website: 'https://example.com' }),
       [{ label: 'Website', href: 'https://example.com' }]);
     assert.deepEqual(profileLinks({}), []);
+  });
+});
+
+describe('naming guests on a card', () => {
+  // The defect this guards against is a stutter: most session titles end in
+  // "… with Nick Tune", and a card that then adds "with Nick Tune" underneath
+  // reads as a mistake. 53 of the 67 sessions with guests are in that shape.
+  test('says nothing when the title already names everyone', () => {
+    assert.deepEqual(
+      guestsToName('See the Forest for the Trees - Trond Hjorteland', ['Trond Hjorteland']),
+      { shown: [], extra: 0 });
+    assert.deepEqual(
+      guestsToName('Introducing DDD to your Company with Barry O Sullivan', ["Barry O'Sullivan"]),
+      { shown: [], extra: 0 });
+  });
+
+  test('names the guest a title leaves out', () => {
+    assert.deepEqual(
+      guestsToName('Collaborating and Communicating with Wardley Maps', ['Ben Mosior']),
+      { shown: ['Ben Mosior'], extra: 0 });
+  });
+
+  test('finishes a half-introduction', () => {
+    // "a conversation with Rebecca" does not tell a browser which Rebecca.
+    assert.deepEqual(
+      guestsToName('Critically Engaging with Models a conversation with Rebecca', ['Rebecca Wirfs-Brock']),
+      { shown: ['Rebecca Wirfs-Brock'], extra: 0 });
+  });
+
+  test('names some of a panel and counts the rest', () => {
+    const panel = ['Dawn Ahukanna', 'Nivia Henry', 'Jessica Kerr', 'Ruth Malan', 'Rebecca Wirfs-Brock'];
+    assert.deepEqual(guestsToName('Effective team collaboration', panel),
+      { shown: ['Dawn Ahukanna', 'Nivia Henry'], extra: 3 });
+  });
+
+  test('drops only the guests the title carries, keeping the others', () => {
+    assert.deepEqual(
+      guestsToName('Design better products with real cross-functional teams - Jutta Eckstein',
+        ['Jutta Eckstein', 'Maryse Meinen']),
+      { shown: ['Maryse Meinen'], extra: 0 });
+  });
+
+  test('a hyphenated surname in the title still counts as named', () => {
+    assert.deepEqual(
+      guestsToName('Free Trial Workshop with Andrew Harmel-Law', ['Andrew Harmel-Law']),
+      { shown: [], extra: 0 });
   });
 });

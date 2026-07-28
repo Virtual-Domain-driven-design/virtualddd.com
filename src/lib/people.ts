@@ -54,3 +54,32 @@ export const profileLinks = (p: Profiles): { label: string; href: string }[] =>
   ] as const)
     .filter(([, href]) => !!href)
     .map(([label, href]) => ({ label, href: href as string }));
+
+/** Which guests a card should name, and how many it leaves unsaid.
+ *
+ * Session titles routinely end in "… with Nick Tune", so naming the guests
+ * again would read as a stutter — on 53 of the 67 sessions that have guests,
+ * the title already carries every name. A guest counts as *already named* only
+ * when both their first name and their surname appear: "a conversation with
+ * Rebecca" does not introduce Rebecca Wirfs-Brock, it half-introduces her, and
+ * the card is the place to finish the job.
+ *
+ * Capped because a panel can have seven guests and a card is a small box; the
+ * remainder is returned rather than dropped so the card can say how many are
+ * missing instead of implying it listed everybody.
+ */
+export function guestsToName(
+  title: string,
+  names: string[],
+  cap = 2,
+): { shown: string[]; extra: number } {
+  const inTitle = tokens(title);
+  const worth = names.filter((n) => {
+    const t = tokens(n);
+    if (!t.length) return false;
+    const first = t[0], last = t[t.length - 1];
+    const has = (w: string) => inTitle.some((x) => x === w || x.includes(w) || w.includes(x));
+    return !(has(first) && has(last));
+  });
+  return { shown: worth.slice(0, cap), extra: Math.max(0, worth.length - cap) };
+}

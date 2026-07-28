@@ -3,6 +3,8 @@ import type { CollectionEntry } from 'astro:content';
 import TeaserCard from './TeaserCard.astro';
 import { iso, shortDate } from '../lib/dates';
 import { packFacet } from '../lib/card-filter';
+import { guestsById, resolveRefs } from '../lib/collections';
+import { guestsToName } from '../lib/people';
 
 interface Props {
   session: CollectionEntry<'sessions'>;
@@ -13,6 +15,16 @@ const d = session.data;
 // All three levels means "come as you are" — say that rather than listing them.
 const LEVELS = 3;
 const level = d.level.length === LEVELS ? 'All levels' : d.level.join(', ');
+
+// "Who is this with?" is what somebody browsing an archive is asking. Most
+// titles already answer it — 53 of the 67 sessions with guests name every one
+// of them — so the card only adds the names the title leaves out, and counts
+// the rest rather than growing to fit a seven-person panel.
+const guestNames = resolveRefs(d.guests, await guestsById()).map((g) => g.data.name);
+const { shown, extra } = guestsToName(d.title, guestNames);
+const withLine = shown.length
+  ? `with ${shown.join(', ')}${extra ? ` +${extra} more` : ''}`
+  : undefined;
 ---
 
 <TeaserCard
@@ -24,8 +36,11 @@ const level = d.level.length === LEVELS ? 'All levels' : d.level.join(', ');
   dateFallback={shortDate(d.datetime)}
   metaSuffix={level || undefined}
   sub={d.organiser ? `Hosted by ${d.organiser}` : undefined}
+  sub2={withLine}
   data={{
-    search: [d.title, d.organiser ?? '', ...d.tags].join(' ').toLowerCase(),
+    // Every guest, not just the ones on show: searching a speaker's name
+    // should find their session whether or not the title repeats it.
+    search: [d.title, d.organiser ?? '', ...guestNames, ...d.tags].join(' ').toLowerCase(),
     tags: packFacet(d.tags),
     level: packFacet(d.level ?? []),
     type: packFacet([d.typeOfSession ?? '']),

@@ -12,12 +12,22 @@ interface Props {
   name: string;
   role?: string;
   bio?: string;
+  /** Stack the bio under the name at full width, rather than beside the
+   *  portrait. For guests: none of them has a photo (a guest portrait is
+   *  borrowed from an organiser row, and no current guest has one), so the
+   *  circle is a monogram rather than a picture, and a 45–850 character bio
+   *  reading around it gains nothing from the indent. */
+  stacked?: boolean;
   photo?: ImageMetadata;
   /** A page on this site for this person, e.g. their organiser page. */
   href?: string;
   links?: { label: string; href: string }[];
 }
-const { name, role, bio, photo, href, links = [] } = Astro.props;
+const { name, role, bio, photo, href, links = [], stacked = false } = Astro.props;
+
+// Notion keeps a long bio as several paragraphs; joined into one they read as
+// a wall, which is what a 4-paragraph bio looked like on the session page.
+const paragraphs = (bio ?? '').split(/\n+/).map((p) => p.trim()).filter(Boolean);
 
 /** Initials stand in for a missing portrait, so a list of people keeps its
  *  rhythm instead of collapsing to ragged text. */
@@ -29,27 +39,34 @@ const initials = name
   .join('');
 ---
 
-<div class="person">
-  {photo
-    ? <Image class="person-photo" src={photo} alt={name} width={176} />
-    : <span class="person-photo person-ph" aria-hidden="true">{initials}</span>}
-  <div class="person-info">
-    <p class="person-name">{href ? <a href={href}>{name}</a> : name}</p>
-    {role && <p class="person-role">{role}</p>}
-    {bio && <p class="person-bio">{bio}</p>}
-    {links.length > 0 && (
-      <p class="person-links">
-        {links.map((l) => <a href={l.href}>{l.label} ↗</a>)}
-      </p>
-    )}
+<div class:list={['person', { 'person--stacked': stacked }]}>
+  <div class="person-head">
+    {photo
+      ? <Image class="person-photo" src={photo} alt={name} width={176} />
+      : <span class="person-photo person-ph" aria-hidden="true">{initials}</span>}
+    <div class="person-info">
+      <p class="person-name">{href ? <a href={href}>{name}</a> : name}</p>
+      {role && <p class="person-role">{role}</p>}
+      {!stacked && paragraphs.map((p) => <p class="person-bio">{p}</p>)}
+      {links.length > 0 && (
+        <p class="person-links">
+          {links.map((l) => <a href={l.href}>{l.label} ↗</a>)}
+        </p>
+      )}
+    </div>
   </div>
+  {stacked && paragraphs.length > 0 && (
+    <div class="person-story" data-test="person-bio">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  )}
 </div>
 
 <style>
-  .person { display: flex; gap: var(--space-4); align-items: center; }
+  .person-head { display: flex; gap: var(--space-4); align-items: center; }
   /* A bio makes the text column tall; a centred portrait then floats beside
      its middle instead of introducing the person. */
-  .person:has(.person-bio) { align-items: flex-start; }
+  .person-head:has(.person-bio) { align-items: flex-start; }
   .person-photo { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow); }
   .person-ph {
     display: grid; place-items: center;
@@ -62,4 +79,12 @@ const initials = name
   .person-role { color: var(--color-accent-dark); margin: 0 0 var(--space-2); }
   .person-bio { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-2); }
   .person-links { display: flex; flex-wrap: wrap; gap: var(--space-4); margin: 0; font-size: var(--text-sm); }
+
+  /* Stacked: the monogram and the name introduce the person, and the bio is
+     prose underneath — body size, body colour, and a measure that stops at
+     something readable rather than running the width of the panel. */
+  .person--stacked .person-head { align-items: center; }
+  .person-story { margin-top: var(--space-3); max-width: 62ch; }
+  .person-story p { margin: 0 0 var(--space-3); }
+  .person-story p:last-child { margin-bottom: 0; }
 </style>

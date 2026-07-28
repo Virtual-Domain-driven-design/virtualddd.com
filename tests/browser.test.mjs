@@ -480,6 +480,61 @@ describe('progressive enhancement', () => {
   });
 });
 
+describe('people on a session', () => {
+  test('a multi-paragraph bio reads as paragraphs, not one wall', async () => {
+    // Notion keeps a long bio as several paragraphs. Joined into one they made
+    // the longest prose on the page — 850 characters — a single grey block set
+    // smaller than the abstract above it.
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/patterns-of-bdd-automation-a-fireside-chat-with-seb-rose-and-gaspar-nagy/`, { waitUntil: 'load' });
+    const paras = await page.$$eval('[data-test="guest"] [data-test="person-bio"] p', (els) => els.map((e) => e.textContent.trim()));
+    assert.ok(paras.length >= 4, `expected the bio to keep its paragraphs, got ${paras.length}`);
+    assert.ok(paras.every((p) => p.length), 'an empty paragraph was rendered');
+    // Body size and body colour: a bio this long is prose, not a caption.
+    const size = await page.$eval('[data-test="person-bio"] p', (el) => parseFloat(getComputedStyle(el).fontSize));
+    assert.ok(size >= 15, `bio is set at ${size}px`);
+    await page.close();
+  });
+
+  test('a card names the guests its title does not', async () => {
+    // The rule, and the stutter it exists to prevent: most session titles end
+    // in "… with Nick Tune", and repeating that under the title reads as a bug.
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/`, { waitUntil: 'load' });
+    const cards = await page.$$eval('[data-test="card"]', (els) =>
+      els.map((e) => ({
+        title: e.querySelector('.card-title')?.textContent?.trim() ?? '',
+        guests: e.querySelector('[data-test="card-guests"]')?.textContent?.trim() ?? '',
+      })));
+    const naming = cards.filter((c) => c.guests);
+    assert.ok(naming.length > 5, `only ${naming.length} cards name a guest`);
+
+    // Nobody named on a card is already named in its title.
+    const stutters = naming.filter((c) => {
+      const names = c.guests.replace(/^with /, '').replace(/ \+\d+ more$/, '').split(', ');
+      const title = c.title.toLowerCase();
+      return names.some((n) => {
+        const parts = n.toLowerCase().split(/\s+/);
+        return title.includes(parts[0]) && title.includes(parts[parts.length - 1]);
+      });
+    });
+    assert.deepEqual(stutters, [], 'a card repeated a name its title already carries');
+    await page.close();
+  });
+
+  test('searching a speaker finds their sessions', async () => {
+    // The archive searched titles, hosts and tags — so a guest whose name the
+    // title never mentions was unfindable by name.
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
+    await page.fill('[data-test="filter-search"]', 'mosior');
+    await page.waitForTimeout(250);
+    const count = Number((await page.textContent('[data-test="result-count"]')).match(/\d+/)[0]);
+    assert.ok(count >= 1, 'searching a guest by name found nothing');
+    await page.close();
+  });
+});
+
 describe('accessibility basics', () => {
   // A whole-page audit, run on one page of each shape. This exists because a
   // pre-launch review found contrast, target-size and heading defects by hand

@@ -186,7 +186,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
           <ul class="people">
             {guests.map((g) => (
               <li data-test="guest">
-                <PersonRow name={g.name} bio={g.bio} photo={g.photo} href={g.href} links={g.links} />
+                <PersonRow name={g.name} bio={g.bio} photo={g.photo} href={g.href} links={g.links} stacked />
               </li>
             ))}
           </ul>
@@ -240,6 +240,9 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     .people-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
     .people-card h2 { margin-top: 0; }
     .people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+    /* With the bio running full width, one guest ends where the next begins
+       and the gap alone stops saying which paragraph belongs to whom. */
+    .people li + li { border-top: 1px solid var(--color-border); padding-top: var(--space-6); }
     .org-co { color: var(--color-text-muted); font-size: var(--text-sm); margin: var(--space-4) 0 0; }
   </style>
 </BaseLayout>

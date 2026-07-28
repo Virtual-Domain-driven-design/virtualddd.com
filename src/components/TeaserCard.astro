@@ -34,6 +34,9 @@ interface Props {
   metaSuffix?: string;
   /** Line under the title — host, authors. */
   sub?: string;
+  /** A second line under that one, kept separate so a card can credit the
+   *  host and the people who spoke without running them into one sentence. */
+  sub2?: string;
   excerpt?: string;
   /** Read-more affordance, e.g. "Read more →". */
   more?: string;
@@ -45,7 +48,7 @@ interface Props {
 
 const {
   href, title, img, imgWidth = 480, imgSizes, badge, iso, dateFallback, accentMeta = false,
-  metaSuffix, sub, excerpt, more, data = {}, class: className, loading = 'lazy',
+  metaSuffix, sub, sub2, excerpt, more, data = {}, class: className, loading = 'lazy',
 } = Astro.props;
 
 const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
@@ -69,6 +72,7 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
     )}
     <h3 class="card-title">{title}</h3>
     {sub && <p class="card-sub">{sub}</p>}
+    {sub2 && <p class="card-sub card-sub--guests" data-test="card-guests">{sub2}</p>}
     {excerpt && <p class="card-excerpt">{excerpt}</p>}
     {more && <span class="card-more">{more}</span>}
   </div>
@@ -87,5 +91,7 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
     overflow: hidden;
   }
   .card-body { display: flex; flex-direction: column; flex: 1; }
+  /* Tight under the host line: the two are one credit, not two facts. */
+  .card-sub--guests { margin-top: var(--space-1); color: var(--color-text); }
   .card-meta-suffix { font-weight: 500; opacity: 0.85; margin-left: 0.35em; }
 </style>
