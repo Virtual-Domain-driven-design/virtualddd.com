@@ -36,6 +36,15 @@ Anything not covered here is open. The brand is the fixed point, not the layout.
   everything else demoted. Join links are marked `.js-live` and appear only from
   two hours before the start (before that they are noise), and the page still
   shows them if JavaScript is off.
+- **`&` in a title, `and` in a sentence.** The stories series is named in seven
+  places and was split four ways to three, which is the sort of thing nobody
+  notices individually and everybody feels. So: the h1, the podcast card and
+  the 404 suggestion are labels and take `&`; the meta description, `llms.txt`,
+  the AI-usage copy and the README are prose and take `and`. The series is
+  **Stories of Facilitating Software Architecture & Design** — architecture
+  first, and *of* rather than *on*. The community tagline is a different phrase
+  ("Domain-Driven Design, software architecture and design") and is prose
+  wherever it appears, including the footer.
 - **Text on a brand fill is ink, not white.** The brand colours are bright:
   white on cyan measured 2.22:1 and white on pink 3.11:1, both under the 4.5:1
   small text needs, and the pink one was the RSVP button. So there are two
