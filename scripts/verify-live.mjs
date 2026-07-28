@@ -95,10 +95,28 @@ for (const r of results) {
   bad.push(`${r.path} — unexpected status ${r.first}`);
 }
 
+// One hostname. Only meaningful for the bare domain — a staging subdomain has
+// no www of its own — so anything with a subdomain skips this silently.
+const host = new URL(base).host;
+let wwwNote = '';
+if (host.split('.').length === 2) {
+  const wwwUrl = `https://www.${host}/`;
+  try {
+    const res = await fetch(wwwUrl, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
+    const to = res.headers.get('location');
+    if (res.status !== 301) bad.push(`${wwwUrl} — ${res.status}, expected a 301 to https://${host}/`);
+    else if (new URL(to, wwwUrl).host !== host) bad.push(`${wwwUrl} — 301 to ${to}, which is not ${host}`);
+    else wwwNote = `  www → apex  : 301 ${to}`;
+  } catch (e) {
+    bad.push(`${wwwUrl} — request failed: ${e.message}`);
+  }
+}
+
 const count = (p) => results.filter(p).length;
 console.log(`  200 OK        : ${count((r) => r.first === 200)}`);
 console.log(`  301 redirect  : ${count((r) => r.first === 301 || r.first === 308)}`);
 console.log(`  410 Gone      : ${count((r) => r.first === 410)}`);
+if (wwwNote) console.log(wwwNote);
 console.log(`  problems      : ${bad.length}`);
 
 if (bad.length) {

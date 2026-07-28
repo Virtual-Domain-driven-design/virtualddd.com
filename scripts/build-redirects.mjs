@@ -139,6 +139,19 @@ L.push('');
 L.push('<IfModule mod_rewrite.c>');
 L.push('RewriteEngine On');
 
+section('0. One hostname');
+// WordPress sent www to the bare domain; a static site does not, so after the
+// cutover both hostnames answered 200 with the same 328 pages. The canonical
+// tags said which one counts, but two addresses for every page is a thing to
+// state in a rule rather than leave to a crawler's judgement.
+//
+// First, so a www request is normalised before any path rule sees it, and
+// absolute because the host is the part being changed. The 967 inherited
+// addresses are all bare-domain, so nothing in the URL contract goes through
+// here — check-redirects.mjs skips host-conditional rules for that reason.
+L.push('RewriteCond %{HTTP_HOST} ^www\\.virtualddd\\.com$ [NC]');
+L.push('RewriteRule ^(.*)$ https://virtualddd.com/$1 [R=301,L]');
+
 section('1. Legacy rules carried over from the Redirection plugin');
 L.push(`# ${legacy.length} rules, normalised to a trailing slash so each is a single hop.`);
 for (const r of legacy) {

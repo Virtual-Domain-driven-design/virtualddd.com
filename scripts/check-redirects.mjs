@@ -15,9 +15,16 @@ const urls = readFileSync('data/live-urls.txt', 'utf8').trim().split('\n');
 
 // Parse: RewriteRule <pattern> <target> [flags]
 const rules = [];
+let hostCond = false;
 for (const line of htaccess.split('\n')) {
+  // The inventory is 967 *paths*, all of them requested from the bare domain.
+  // A rule guarded by a host condition — the www canonicalisation — therefore
+  // never fires for anything here, and replaying it would be a lie: its
+  // catch-all pattern matches every path in the list.
+  if (/^RewriteCond\s+%\{HTTP_HOST\}/.test(line)) { hostCond = true; continue; }
   const m = line.match(/^RewriteRule\s+(\S+)\s+(\S+)\s+\[([^\]]*)\]/);
-  if (!m) continue;
+  if (!m) { if (line.trim() && !line.startsWith('#')) hostCond = false; continue; }
+  if (hostCond) { hostCond = false; continue; }
   const [, pattern, target, flags] = m;
   rules.push({
     re: new RegExp(pattern),

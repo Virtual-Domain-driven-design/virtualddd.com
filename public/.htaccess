@@ -13,6 +13,10 @@ AddCharset UTF-8 .md
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# --- 0. One hostname -----------------------------------------------
+RewriteCond %{HTTP_HOST} ^www\.virtualddd\.com$ [NC]
+RewriteRule ^(.*)$ https://virtualddd.com/$1 [R=301,L]
+
 # --- 1. Legacy rules carried over from the Redirection plugin ------
 # 35 rules, normalised to a trailing slash so each is a single hop.
 RewriteRule ^learning-ddd/?$ / [R=301,L]

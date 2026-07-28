@@ -10,6 +10,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 test('every inherited URL is served, redirected or Gone', () => {
   let out;
@@ -29,4 +30,22 @@ test('every inherited URL is served, redirected or Gone', () => {
   // bucket means a rule stopped matching.
   assert.ok(served >= 290, `only ${served} URLs are served by a page`);
   assert.ok(redirected >= 400, `only ${redirected} URLs redirect`);
+});
+
+test('www redirects to the bare domain, once, before anything else', () => {
+  // After the cutover both hostnames served every page with a 200. This rule
+  // is the site's answer to "which address is the site", and it has two
+  // properties worth pinning: it is guarded by a host condition (or its
+  // catch-all pattern would swallow every path), and it comes first (or a www
+  // request would take a path hop before being sent home, making two).
+  const lines = readFileSync('public/.htaccess', 'utf8').split('\n');
+  const i = lines.findIndex((l) => /^RewriteCond\s+%\{HTTP_HOST\}\s+\^www\\?\./.test(l));
+  assert.ok(i >= 0, 'no host condition for www in public/.htaccess');
+
+  const rule = lines[i + 1];
+  assert.match(rule, /^RewriteRule\s+\^\(\.\*\)\$\s+https:\/\/virtualddd\.com\/\$1\s+\[R=301,L\]/,
+    `the line after the www condition is not the redirect: ${rule}`);
+
+  const first = lines.findIndex((l) => l.startsWith('RewriteRule'));
+  assert.equal(first, i + 1, 'a path rule runs before the www redirect, which costs a second hop');
 });
