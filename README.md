@@ -106,8 +106,8 @@ Everyday:
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Local dev server |
-| `npm run build` | Static build to `dist/` |
+| `npm run dev` | Local dev server. No search index — `/search/` says so |
+| `npm run build` | Static build to `dist/`, pruned, then indexed for search |
 | `npm run preview` | Serve the built site |
 | `npm test` | The blocking suite: unit rules, build, URLs, browser |
 | `npm run test:quick` | Unit rules and contracts only, for a fast loop |

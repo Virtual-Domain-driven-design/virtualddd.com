@@ -1,0 +1,239 @@
+---
+/** Search across everything the site publishes.
+ *
+ * There are 280-odd content pages and, until this existed, no way across them:
+ * each archive carries its own filter over its own cards, so somebody who half
+ * remembered a phrase had to guess which section it was in first. Heuristics,
+ * sessions and stories cite each other constantly, and following a thread that
+ * crosses sections was the one thing the site could not do.
+ *
+ * **Pagefind indexes the built output, not the source.** `npm run build` runs
+ * it after Astro, over `dist`, so what is searchable is exactly what shipped —
+ * there is no second description of the content to keep in step, which is why
+ * this needs no backend and no build-time index of our own. What gets indexed
+ * is decided in BaseLayout (`data-pagefind-body`) and by the cards opting out
+ * (`data-pagefind-ignore`), because a card is a pointer to a page that is
+ * already in here on its own account.
+ *
+ * The results are the site's own markup rather than Pagefind's bundled widget:
+ * its JS API returns plain data, and the brand is the fixed point.
+ *
+ * `?q=` is honoured on load, so a search is a link somebody can share.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd, pageTitle, topTrail } from '../lib/seo';
+
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const description =
+  'Search every session, story, heuristic and open space Virtual DDD has published.';
+
+// `noindex` and a breadcrumb are not in tension: a search engine is asked not
+// to list this page, and told where it sits if it looks anyway. Every page but
+// the home page and /410/ says where it sits, and a test holds that line.
+const jsonLd = pageJsonLd(Astro.site, {
+  url: `${site}/search/`,
+  name: 'Search',
+  description,
+  trail: topTrail('Search', '/search/'),
+});
+---
+
+<BaseLayout
+  title={pageTitle('Search')}
+  description={description}
+  canonical={`${site}/search/`}
+  jsonLd={jsonLd}
+  noindex
+>
+  <div class="wrap search">
+    <div class="search-head">
+      <p class="eyebrow eyebrow--cyan">Search</p>
+      <h1>Search Virtual DDD</h1>
+      <p class="lede">
+        Every session, story, heuristic and open space in one place. These pages
+        cite each other constantly, so a phrase you half remember is usually
+        enough to pick up the thread.
+      </p>
+    </div>
+
+    <!-- A real form, so pressing enter with scripting off still lands
+         somewhere sensible: this same page, with ?q= set, saying what it
+         cannot do. -->
+    <form class="search-form" role="search" method="get" action="/search/" data-test="search-form">
+      <input
+        type="search" id="q" name="q" data-test="search-input"
+        aria-label="Search this site"
+        placeholder="collaborative modelling, bounded context, facilitation…"
+        autocomplete="off" autocapitalize="off" spellcheck="false"
+      />
+      <button class="btn btn--primary" type="submit">Search</button>
+    </form>
+
+    <!-- The count is the only feedback a screen-reader user gets while typing,
+         so it is a live region, exactly as the archive filters are. -->
+    <p class="search-count" data-test="search-count" role="status" aria-live="polite"></p>
+
+    <div class="search-results" data-test="search-results"></div>
+
+    <noscript>
+      <p class="search-note">
+        Search needs JavaScript, because the index is fetched a piece at a time
+        rather than downloaded whole. Without it, every section has its own
+        filtered archive: <a href="/sessions/">sessions</a>,{' '}
+        <a href="/facilitating-archdes/">stories</a>,{' '}
+        <a href="/heuristics/">heuristics</a> and{' '}
+        <a href="/open-space/">open spaces</a>.
+      </p>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<!--
+  `is:inline` and plain JavaScript on purpose, so this ships exactly as written.
+
+  Pagefind's module lives at /pagefind/, which Pagefind creates *after* Astro
+  has finished — it is not in the source tree and never will be. A processed
+  Astro script goes through Vite, which rewrites `import()` into its own
+  preload helper and, for a path it cannot resolve at build time, emits a
+  reference to `__VITE_PRELOAD__` that nothing ever defines. The page then
+  throws at the first keystroke and the catch below reports, quite truthfully,
+  that search is unavailable. It took a browser to see it, because the build
+  is perfectly happy.
+
+  The cost of `is:inline` is no TypeScript and no bundling here. Both are worth
+  paying for a script whose whole job is to load something the bundler must not
+  touch.
+-->
+<script is:inline>
+  // Written by `pagefind --site dist`, which `npm run build` runs after Astro.
+  // `astro dev` deliberately does not: re-indexing on every hot reload costs
+  // more than it is worth, so in dev this says so rather than looking broken.
+  const INDEX = '/pagefind/pagefind.js';
+
+  const form = document.querySelector('[data-test="search-form"]');
+  const input = document.querySelector('[data-test="search-input"]');
+  const countEl = document.querySelector('[data-test="search-count"]');
+  const resultsEl = document.querySelector('[data-test="search-results"]');
+
+  if (form && input && countEl && resultsEl) {
+    // Progressive enhancement: the form submits without this, and the button
+    // is only needed by the version that does. Hiding it here rather than in
+    // the markup means it is present for anyone the script never reaches.
+    form.querySelector('button')?.setAttribute('hidden', '');
+    form.addEventListener('submit', (e) => e.preventDefault());
+
+    let pagefind;
+    let token = 0;
+
+    const load = async () => {
+      if (pagefind) return pagefind;
+      try {
+        pagefind = await import(INDEX);
+        await pagefind.options({ excerptLength: 25 });
+        return pagefind;
+      } catch {
+        countEl.textContent = 'Search is not available on this build. It is generated by `npm run build`.';
+        return null;
+      }
+    };
+
+    const escape = (s) =>
+      String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+    const render = (hits) => {
+      resultsEl.innerHTML = hits
+        .map((h) => {
+          const section = h.meta?.section;
+          // Pagefind's excerpt already carries <mark> around the terms it
+          // matched, which is the whole reason to show one; everything else is
+          // escaped, because a page title comes from Notion.
+          return `
+            <article class="search-hit" data-test="search-hit">
+              ${section ? `<p class="eyebrow eyebrow--pink">${escape(section)}</p>` : ''}
+              <h2><a href="${escape(h.url)}">${escape(h.meta?.title ?? h.url)}</a></h2>
+              <p class="search-excerpt">${h.excerpt}</p>
+            </article>`;
+        })
+        .join('');
+    };
+
+    const run = async (term) => {
+      const mine = ++token;
+      const q = term.trim();
+      if (!q) {
+        countEl.textContent = '';
+        resultsEl.innerHTML = '';
+        return;
+      }
+      const pf = await load();
+      if (!pf || mine !== token) return;
+
+      const search = await pf.search(q);
+      if (mine !== token) return; // a later keystroke already won
+
+      // Ten is what fits before the page turns into a list to scroll rather
+      // than read. The count says how many there were, so nothing is hidden
+      // silently.
+      const hits = await Promise.all(search.results.slice(0, 10).map((r) => r.data()));
+      if (mine !== token) return;
+
+      const n = search.results.length;
+      countEl.textContent = n === 0
+        ? `Nothing matches “${q}”.`
+        : n === 1 ? '1 result.' : `${n} results${n > hits.length ? `, showing the first ${hits.length}` : ''}.`;
+      render(hits);
+    };
+
+    // Warm the wasm on first focus so the first keystroke is not the thing
+    // that pays for it.
+    input.addEventListener('focus', load, { once: true });
+
+    let timer;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => run(input.value), 120);
+    });
+
+    // A shared link lands here with the term already set.
+    const initial = new URLSearchParams(location.search).get('q');
+    if (initial) {
+      input.value = initial;
+      run(initial);
+    }
+    input.focus();
+  }
+</script>
+
+<style>
+  .search { max-width: 52rem; }
+  .search-head { margin-bottom: var(--space-8); }
+  .lede { color: var(--color-text-muted); }
+  .search-form { display: flex; gap: var(--space-3); margin-bottom: var(--space-4); }
+  .search-form input {
+    flex: 1; padding: var(--space-3) var(--space-4); font-size: var(--text-base);
+    background: var(--color-surface); color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+  .search-form input:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 1px; }
+  .search-count { color: var(--color-text-muted); font-size: var(--text-sm); min-height: 1.5em; margin: 0 0 var(--space-6); }
+
+  /* Results are built by the script, so they never carry the scoping
+     attribute Astro stamps on server-rendered markup — a plain `.search-hit`
+     rule here compiles to `.search-hit[data-astro-cid-…]` and matches nothing.
+     `.search-results` *is* server-rendered, so scoping it and going global
+     inside keeps the styles bounded to this page without relying on an
+     attribute that will not be there. Written as one selector list because the
+     failure is silent: it renders, it is simply unstyled. */
+  .search-results :global(.search-hit) {
+    padding-bottom: var(--space-6); margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .search-results :global(.search-hit:last-child) { border-bottom: 0; margin-bottom: 0; }
+  .search-results :global(.search-hit h2) { font-size: var(--text-lg); margin: 0 0 var(--space-2); }
+  .search-results :global(.search-hit .eyebrow) { margin-bottom: var(--space-2); }
+  .search-results :global(.search-excerpt) { color: var(--color-text-muted); margin: 0; }
+  /* Pagefind marks the matched terms inside the excerpt it returns. The
+     browser default is a yellow highlighter, which belongs to no palette. */
+  .search-results :global(mark) { background: none; color: var(--color-primary); font-weight: 600; }
+  .search-note { color: var(--color-text-muted); }
+</style>

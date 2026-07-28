@@ -15,7 +15,7 @@ const fallback = new Date(d.datetime).toLocaleString('en-GB', {
 });
 ---
 
-<section class="feat">
+<section class="feat" data-pagefind-ignore>
   <div class="feat-card">
     <div class="feat-media">
       {d.featuredImage ? <Image src={d.featuredImage} alt="" width={900} /> : <div class="feat-ph"></div>}

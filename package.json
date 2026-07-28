@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/prune-dist.mjs",
+    "build": "astro build && node scripts/prune-dist.mjs && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "test": "npm run test:unit && npm run build && node --test \"tests/*.test.mjs\"",
@@ -43,6 +43,7 @@
     "@astrojs/check": "^0.9.9",
     "@types/node": "^26.1.1",
     "axe-core": "^4.12.1",
+    "pagefind": "^1.5.2",
     "playwright": "^1.61.1",
     "sharp": "^0.35.3",
     "tsx": "^4.23.1",

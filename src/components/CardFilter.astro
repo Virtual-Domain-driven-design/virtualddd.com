@@ -45,7 +45,12 @@ const {
      data-page-size={pageSize ? String(pageSize) : undefined}>
   <slot name="controls" />
 
-  <div class="filters">
+  <!-- Kept out of the site's own search index. The tag `<select>` lists every
+       tag in the archive, and Pagefind reads option text: without this the
+       sessions index matched almost any topical query, and its excerpt was
+       ninety tags run together with no spaces between them. A control is not
+       content, and the cards below say the same words properly. -->
+  <div class="filters" data-pagefind-ignore>
     <input type="search" data-test="filter-search" data-filter-search
            placeholder={searchPlaceholder} aria-label={searchLabel} />
     {facets.map((f) => (

@@ -318,6 +318,84 @@ describe('filters and search', () => {
   });
 });
 
+/** Site-wide search — the Pagefind index, not the per-archive filters above.
+ *
+ * These need the index that `pagefind --site dist` writes at the end of
+ * `npm run build`, so they fail loudly if that step is ever dropped from the
+ * build script rather than quietly testing nothing.
+ */
+describe('search across the site', () => {
+  const hits = (page) => page.locator('[data-test="search-hit"]');
+
+  test('finds pages in more than one section for one query', async () => {
+    // The whole reason this exists: heuristics, sessions and stories cite each
+    // other, and no per-archive filter can follow a thread across them.
+    const page = await browser.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(String(e)));
+    await page.goto(`${base}/search/`, { waitUntil: 'networkidle' });
+
+    await page.fill('[data-test="search-input"]', 'bounded context');
+    await hits(page).first().waitFor({ timeout: 20_000 });
+
+    const urls = await hits(page).evaluateAll((els) =>
+      els.map((e) => e.querySelector('h2 a')?.getAttribute('href') ?? ''));
+    assert.ok(urls.length > 1, `one query returned ${urls.length} results`);
+    const sections = new Set(urls.map((u) => u.split('/')[1]));
+    assert.ok(sections.size > 1,
+      `every result came from /${[...sections][0]}/ — search is not crossing sections`);
+    assert.deepEqual(errors, [], `the page threw: ${errors.join('; ')}`);
+    await page.close();
+  });
+
+  test('a search is a link somebody can share', async () => {
+    const page = await browser.newPage();
+    await page.goto(`${base}/search/?q=eventstorming`, { waitUntil: 'networkidle' });
+    await hits(page).first().waitFor({ timeout: 20_000 });
+    assert.equal(await page.inputValue('[data-test="search-input"]'), 'eventstorming',
+      'the shared term did not reach the box');
+    assert.ok(await hits(page).count() > 0, 'a shared link showed no results');
+    await page.close();
+  });
+
+  test('says so rather than sitting silent when nothing matches', async () => {
+    const page = await browser.newPage();
+    await page.goto(`${base}/search/`, { waitUntil: 'networkidle' });
+    await page.fill('[data-test="search-input"]', 'qwertyuiopnotaword');
+    await page.waitForFunction(
+      () => /Nothing matches/.test(document.querySelector('[data-test="search-count"]')?.textContent ?? ''),
+      null, { timeout: 20_000 });
+    assert.equal(await hits(page).count(), 0, 'no matches, but results were rendered');
+    await page.close();
+  });
+
+  test('a card is not indexed, because the page it points at is', async () => {
+    // Without this the archives matched almost any topical query: an index
+    // page carries a hundred card titles and, before the filter bar opted out,
+    // every tag in the collection run together as `<option>` text.
+    const page = await browser.newPage();
+    await page.goto(`${base}/search/`, { waitUntil: 'networkidle' });
+    const top = await page.evaluate(async () => {
+      const pf = await import('/pagefind/pagefind.js');
+      const r = await pf.search('collaborative modelling');
+      const data = await Promise.all(r.results.slice(0, 5).map((x) => x.data()));
+      return data.map((d) => d.url);
+    });
+    assert.ok(top.length > 0, 'the index answered nothing at all');
+    const archives = top.filter((u) => /^\/(sessions|facilitating-archdes|heuristics)\/$/.test(u));
+    assert.deepEqual(archives, [],
+      `an archive index outranked real pages: ${archives.join(', ')}`);
+    await page.close();
+  });
+
+  test('every page reachable from the nav can be searched from it', async () => {
+    const page = await browser.newPage();
+    await page.goto(`${base}/sessions/`, { waitUntil: 'networkidle' });
+    assert.equal(await page.getAttribute('[data-test="nav-search"]', 'href'), '/search/');
+    await page.close();
+  });
+});
+
 describe('time', () => {
   test('dates render in the visitor timezone, over a server-rendered fallback', async () => {
     const tz = 'Pacific/Auckland'; // far from UTC, so a swap is unambiguous

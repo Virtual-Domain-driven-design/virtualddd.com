@@ -13,9 +13,13 @@ export default defineConfig({
       // The three heuristic type indexes are filtered views of /heuristics/;
       // listing them invites duplicate-content warnings. /410/ is the body of
       // an error response, not a page anyone should be sent to from search.
+      // /search/ is a tool for people already here, and an empty results page
+      // is the last thing worth offering someone as an answer; it is `noindex`
+      // for the same reason, and a test checks the two agree.
       filter: (page) =>
         !/\/heuristics\/(design|guiding|value-based)-heuristics\/$/.test(page) &&
-        !/\/410\/$/.test(page),
+        !/\/410\/$/.test(page) &&
+        !/\/search\/$/.test(page),
       serialize(item) {
         // Sessions and stories are the pages worth recrawling often.
         if (/\/(sessions|facilitating-archdes)\/[^/]+\/$/.test(item.url)) {

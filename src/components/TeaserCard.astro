@@ -54,7 +54,7 @@ const {
 const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data-${k}`, v]));
 ---
 
-<a class:list={['card', className]} href={href} data-test="card" {...dataAttrs}>
+<a class:list={['card', className]} href={href} data-test="card" data-pagefind-ignore {...dataAttrs}>
   <div class="card-thumb">
     {img ? (
       imgSizes

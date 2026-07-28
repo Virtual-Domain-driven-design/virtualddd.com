@@ -28,7 +28,7 @@ const links = profileLinks(d)
   .map((l) => ({ ...l, path: ICONS[l.label] }));
 ---
 
-<div class="org-card">
+<div class="org-card" data-pagefind-ignore>
   <div class="org-photo">
     {d.photo ? <Image src={d.photo} alt={d.name} width={320} /> : <div class="org-ph"></div>}
   </div>

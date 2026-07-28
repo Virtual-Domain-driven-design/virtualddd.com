@@ -64,6 +64,15 @@ for:
   originals Astro emits alongside its `.webp`. That is around 22 MB a build.
   `dist` is asserted under a 50 MB ceiling, so a silent prune failure surfaces
   as a failing test rather than a slow rsync.
+- **`npm run build`** then runs **`pagefind --site dist`**, which indexes the
+  built HTML into `dist/pagefind/` for `/search/`. It indexes the *output*, so
+  there is no second copy of the content to keep in step — but it also means
+  **`astro dev` has no search index**, and `/search/` says so rather than
+  looking broken. Two rules decide what is in it, both in the markup:
+  `data-pagefind-body` in `BaseLayout` (tied to `noindex`, so a page kept out
+  of Google is kept out of ours), and `data-pagefind-ignore` on cards and
+  filter bars, because a card is a pointer to a page that is already indexed on
+  its own account. Adding ~3 MB, so watch the ceiling above.
 - **`npm run sync`** does guests **before** sessions, because sessions
   reference them. `--strict` fails on a dangling relation. `--full` ignores
   `data/sync-state.json` and re-fetches every body.

@@ -14,7 +14,7 @@ const { type, items } = Astro.props;
 
 <section class="t-hero scrim" style={`background-image: url(${type.bg.src})`}>
   <div class="wrap t-hero-inner">
-    <p class="detail-back"><a href="/heuristics/">← All heuristics</a></p>
+    <p class="detail-back" data-pagefind-ignore><a href="/heuristics/">← All heuristics</a></p>
     <h1>{type.title}</h1>
     <p>{type.text}</p>
   </div>

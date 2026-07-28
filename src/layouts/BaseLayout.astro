@@ -78,6 +78,21 @@ const sections = nav.filter((n) => n.section);
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 
+// Which section a page belongs to, read off the same list as the header and
+// footer so a new section is named once and /search/ labels its results
+// without a second table to keep in step. Longest prefix wins; the home page
+// belongs to no section.
+const section = nav
+  .filter((n) => n.href !== '/' && path.startsWith(n.href))
+  .sort((a, b) => b.href.length - a.href.length)[0]?.label;
+
+// What the site's own search indexes, tied to what a search engine is allowed
+// to index: a page thin or duplicate enough to keep out of Google is not one
+// to offer a visitor either. Pagefind treats the first `data-pagefind-body` it
+// finds as opting *every* page in — so a page without one is skipped whole,
+// which is exactly what /404/, /410/ and /search/ want.
+const searchable = !noindex;
+
 // Latest sessions for the footer (most recent first, upcoming included).
 const { all } = await splitSessions();
 const latest = [...all].sort((a, b) => +new Date(b.data.datetime) - +new Date(a.data.datetime)).slice(0, 3);
@@ -160,11 +175,23 @@ const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_
         </button>
         <nav class="site-nav" id="site-nav" data-test="nav">
           {mainNav.map((n) => <a href={n.href} class:list={[{ current: isCurrent(n.href) }]}>{n.label}</a>)}
+          <!-- A magnifier rather than a tenth word: the bar is already full,
+               and this is the one item whose meaning does not need spelling. -->
+          <a href="/search/" data-test="nav-search" aria-label="Search this site" title="Search"
+             class:list={['nav-search', { current: isCurrent('/search/') }]}>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+            </svg>
+            <span class="nav-search-label">Search</span>
+          </a>
         </nav>
       </div>
     </header>
 
-    <main id="main" tabindex="-1">
+    <main id="main" tabindex="-1"
+          data-pagefind-body={searchable ? true : undefined}
+          data-pagefind-meta={searchable && section ? `section:${section}` : undefined}>
       <slot />
     </main>
 
@@ -236,6 +263,12 @@ const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_
       .site-nav a { color: var(--color-text); padding-bottom: 2px; border-bottom: 2px solid transparent; }
       .site-nav a:hover { color: var(--color-primary); text-decoration: none; }
       .site-nav a.current { border-bottom-color: var(--color-accent); color: var(--color-primary); }
+      /* An icon on the wide bar, where the row is full and a magnifier is
+         unambiguous; a worded link in the stacked mobile menu, where a lone
+         icon among eight words reads as a mistake. 24px minimum target around
+         a 20px glyph (WCAG 2.5.8), same as the organiser cards. */
+      .nav-search { display: inline-flex; align-items: center; gap: var(--space-2); min-width: 24px; min-height: 24px; }
+      .nav-search-label { display: none; }
 
       /* shrink on scroll → slim horizontal bar */
       .site-header.scrolled .topbar { max-height: 0; padding: 0; }
@@ -259,6 +292,7 @@ const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_
           width: 100%; display: flex; flex-direction: column; align-items: flex-start;
           gap: var(--space-3); padding-top: var(--space-3);
         }
+        .nav-search-label { display: inline; }
 
         /* With JavaScript, collapse it behind the hamburger as before. */
         :global(html.js) .nav-toggle { display: inline-flex; }

@@ -19,6 +19,7 @@ const info = heuristicType(type);
 <a
   class="card card--heuristic"
   data-test="card"
+  data-pagefind-ignore
   href={`/heuristics/${heuristic.id}/`}
   data-search={[d.title, d.question ?? '', ...d.tags].join(' ').toLowerCase()}
   data-type={packFacet([type])}

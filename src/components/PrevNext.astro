@@ -17,7 +17,7 @@ const { prev, next, noun } = Astro.props;
 ---
 
 {(prev || next) && (
-  <nav class="prevnext" aria-label={`Previous and next ${noun}`}>
+  <nav class="prevnext" aria-label={`Previous and next ${noun}`} data-pagefind-ignore>
     {prev ? (
       <a class="pn" data-test="prev" href={prev.href}>
         <span class="pn-label">← Previous {noun}</span>

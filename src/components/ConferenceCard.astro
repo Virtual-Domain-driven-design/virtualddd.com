@@ -36,6 +36,7 @@ const NO_DATES = 'No new dates announced yet';
   class="card conf"
   href={d.website}
   data-test="conference-card"
+  data-pagefind-ignore
   data-start={iso(d.start)}
   data-end={d.end ? iso(d.end) : undefined}
 >

@@ -119,7 +119,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
 >
   <article class="session detail wrap">
     <div class="detail-head">
-      <p class="detail-back"><a href="/sessions/">← All sessions</a></p>
+      <p class="detail-back" data-pagefind-ignore><a href="/sessions/">← All sessions</a></p>
       <div class="chips">
         {d.typeOfSession && <span class="chip chip--label chip--primary">{d.typeOfSession}</span>}
         {d.level?.map((l) => <span class="chip chip--label">{l}</span>)}

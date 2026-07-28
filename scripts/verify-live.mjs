@@ -112,6 +112,23 @@ if (host.split('.').length === 2) {
   }
 }
 
+// Site search, which nothing else can prove is live. `check:urls` works from
+// `dist`, where the index plainly exists; the question is whether the *host*
+// hands it over. Pagefind's payload is not `.js` and `.json` but `.pagefind`,
+// `.pf_meta` and `.pf_fragment`, and a host that will not serve an extension it
+// does not recognise breaks search while every page still renders perfectly.
+// Not in data/live-urls.txt on purpose: that file is the promise inherited from
+// the old site, not a list of everything the deploy contains.
+const SEARCH_ASSETS = ['/search/', '/pagefind/pagefind.js', '/pagefind/pagefind-entry.json'];
+for (const path of SEARCH_ASSETS) {
+  try {
+    const res = await fetch(base + path, { signal: AbortSignal.timeout(20000) });
+    if (!res.ok) bad.push(`${path} — ${res.status}; site search will not work`);
+  } catch (e) {
+    bad.push(`${path} — request failed: ${e.message}; site search will not work`);
+  }
+}
+
 const count = (p) => results.filter(p).length;
 console.log(`  200 OK        : ${count((r) => r.first === 200)}`);
 console.log(`  301 redirect  : ${count((r) => r.first === 301 || r.first === 308)}`);
