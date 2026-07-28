@@ -766,7 +766,20 @@ Do not delete it on the strength of the site looking fine.
 **The certificate** is a Let's Encrypt *wildcard* (`*.virtualddd.com`), which
 renews over DNS-01 rather than the HTTP challenge — so `public/.well-known/
 acme-challenge/` matters only if it is ever replaced by a per-domain AutoSSL
-cert. Keep the directory; do not rely on it. Check the expiry each autumn.
+cert. Keep the directory; do not rely on it.
+
+### Watching it, once a week
+
+`watch.yml` asks the deployed site on Mondays what no test in this repository
+can: whether all 967 addresses are still answered by real Apache, and how long
+the certificate has left. Both rot without anyone touching this repository — a
+host config change, a restore that loses the `.htaccess`, a renewal that
+quietly stopped — so neither can fail a build.
+
+It posts to Discord only when something is wrong, and fails the run. A weekly
+"still fine" is a message people learn to skip, and the run is already the
+record. Weekly rather than daily because 967 requests is a real load on a
+shared host, and neither failure is one you would fix within the hour.
 
 ## Commands
 

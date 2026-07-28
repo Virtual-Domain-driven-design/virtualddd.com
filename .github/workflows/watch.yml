@@ -1,0 +1,101 @@
+# Ask the live site, once a week, whether it is still keeping its promises.
+#
+# Every deploy already samples the redirect map, and the blocking suite proves
+# the *build* is right. Neither can see the two things that rot on their own,
+# without anybody touching this repository:
+#
+#   - the URL contract, all 967 addresses, against real Apache. A host config
+#     change, an .htaccess lost to a restore, a docroot pointed somewhere new —
+#     none of those are a commit, so none of them fail a build.
+#   - the certificate. It is a wildcard, so it renews over DNS rather than the
+#     challenge directory this repo ships, which means renewal is somebody
+#     else's automation and its failure mode is silence until the day it
+#     expires.
+#
+# Weekly rather than daily on purpose: 967 requests is a real load to put on a
+# shared host, and neither failure is one you would fix within the hour.
+name: Watch the live site
+
+on:
+  schedule:
+    - cron: '40 6 * * 1'   # Mondays, early, so there is a week to act
+  workflow_dispatch:
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      # No `npm ci`: verify-live.mjs reads data/live-urls.txt and calls fetch,
+      # both of which node has already.
+      - name: Is every inherited address still answered?
+        id: urls
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: |
+          : > detail.txt   # so the notification step always has something to read
+          [ -n "$SITE_URL" ] || { echo "No SITE_URL secret, so there is nothing to check."; exit 0; }
+          if node scripts/verify-live.mjs "$SITE_URL" --all > urls.log 2>&1; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+          cat urls.log
+          cat urls.log >> "$GITHUB_STEP_SUMMARY"
+          # The counts and the first problems — enough to tell one dead page
+          # from the whole map gone. A file rather than a step output, because
+          # this is many lines of somebody else's text and it has no business
+          # being interpolated into a shell command.
+          {
+            grep -E '^\s+(200|301|410|problems|www)' urls.log || true
+            grep -A 12 '^problems:' urls.log | head -12 || true
+          } > detail.txt
+
+      - name: How long has the certificate got?
+        id: cert
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: |
+          [ -n "$SITE_URL" ] || exit 0
+          host=$(echo "$SITE_URL" | sed -E 's#^https?://##; s#/.*##')
+          end=$(echo | openssl s_client -connect "$host:443" -servername "$host" 2>/dev/null \
+                | openssl x509 -noout -enddate | cut -d= -f2)
+          days=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
+          echo "Certificate for $host expires in $days days ($end)." >> "$GITHUB_STEP_SUMMARY"
+          echo "days=$days" >> "$GITHUB_OUTPUT"
+          echo "expires=$end" >> "$GITHUB_OUTPUT"
+
+      # CI sends facts; n8n decides the wording. Nothing is posted when all is
+      # well — a weekly "still fine" is a message people learn to skip, and the
+      # run itself is the record.
+      - name: Say so, if anything is wrong
+        if: always()
+        env:
+          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
+          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
+        run: |
+          [ -n "$HOOK" ] || { echo "No webhook configured, so nobody was told."; exit 0; }
+          code=$(jq -n \
+            --arg site "${{ secrets.SITE_URL }}" \
+            --argjson urlsOk ${{ steps.urls.outputs.ok || 'true' }} \
+            --rawfile detail detail.txt \
+            --argjson certDays ${{ steps.cert.outputs.days || 0 }} \
+            --arg certExpires "${{ steps.cert.outputs.expires }}" \
+            --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{event:"site-check", site:$site, urlsOk:$urlsOk, detail:$detail, certDays:$certDays, certExpires:$certExpires, run:$run}' \
+            | curl -sS -o /dev/null -w '%{http_code}' -X POST \
+                -H 'Content-Type: application/json' \
+                -H "X-VirtualDDD-Token: $TOKEN" \
+                -d @- "$HOOK")
+          case "$code" in
+            2*) echo "Told n8n ($code)." ;;
+            *)  echo "::warning::n8n answered $code; if anything was wrong, nobody has been told." ;;
+          esac
+
+      - name: Fail the run if the site is not keeping its promises
+        if: steps.urls.outputs.ok == 'false'
+        run: |
+          echo "::error::The deployed site no longer answers every address it promises. See the summary."
+          exit 1

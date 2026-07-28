@@ -178,6 +178,17 @@ jobs:
           # else makes a rollback pick the wrong site.
           RELEASE="releases/$(git rev-parse HEAD)"
 
+          # DOCROOT is interpolated into single quotes in a shell on the host,
+          # so nothing in it is ever expanded. A value starting with ~ used to
+          # get all the way to the final `ln` before failing with "No such file
+          # or directory", after a green build and a complete upload, because
+          # the host was looking for a directory literally called "~".
+          case "$DOCROOT" in
+            /*) ;;
+            "~"*) echo "::error::KUALO_PATH starts with ~, which is never expanded — it is used inside single quotes in a shell on the host. Use the absolute path, e.g. /home/<user>/virtualddd.com."; exit 1 ;;
+            *)  echo "::error::KUALO_PATH must be an absolute path beginning with /."; exit 1 ;;
+          esac
+
           # Never replace a real directory. If the document root is not already
           # a symlink it may be a live site put there by someone else, and CI
           # is not the place to find out. Switching it over is a deliberate,
@@ -187,6 +198,14 @@ jobs:
             if [ -e '$DOCROOT' ] && [ ! -L '$DOCROOT' ]; then
               echo '$DOCROOT exists and is a real directory, not a symlink.'
               echo 'Refusing to touch it. See AGENTS.md, \"The live site\".'
+              exit 1
+            fi
+            # Said here rather than at the swap, where it is one opaque line
+            # from ln at the very end of a deploy that otherwise worked.
+            if [ ! -d \"\$(dirname '$DOCROOT')\" ]; then
+              echo \"KUALO_PATH's parent directory does not exist on this host:\"
+              echo \"  \$(dirname '$DOCROOT')\"
+              echo 'Check the value against \$HOME on the host — the cPanel user is often not what the domain suggests.'
               exit 1
             fi
             mkdir -p '$RELEASE'
