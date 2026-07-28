@@ -66,12 +66,19 @@ jobs:
           # share across tenants and would otherwise hit at random.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FULL: ${{ (github.event.schedule == '17 3 * * *' || inputs.full) && '--full' || '' }}
+        # This list must match `sync:notion` in package.json. It is not that
+        # script because only the content collections take --full, and adding a
+        # collection here and forgetting there (or the other way round) is a
+        # collection that silently never updates: conferences shipped that way
+        # and would have frozen at whatever was first committed.
         run: |
           npx tsx scripts/sync-notion.ts guests --write
           for c in sessions open-spaces stories heuristics; do
             npx tsx scripts/sync-notion.ts content --collection=$c --write $FULL
           done
-          npx tsx scripts/sync-notion.ts organisers --write
+          for r in organisers conferences; do
+            npx tsx scripts/sync-notion.ts $r --write
+          done
           # Someone else's repositories, so there is nothing to be incremental
           # about — but it is cheap, and only the nightly run needs it.
           if [ -n "$FULL" ]; then npx tsx scripts/sync-ddd-crew.ts --write; fi
