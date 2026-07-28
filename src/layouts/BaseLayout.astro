@@ -301,10 +301,12 @@ const analyticsDomain = import.meta.env.PROD ? import.meta.env.PUBLIC_ANALYTICS_
       import { initHeader } from '../scripts/header';
       import { initLocalTime } from '../scripts/local-time';
       import { initSessionTiming } from '../scripts/session-timing';
+      import { initConferenceTiming } from '../scripts/conference-timing';
 
       initHeader();
       initLocalTime();
       initSessionTiming();
+      initConferenceTiming();
     </script>
   </body>
 </html>

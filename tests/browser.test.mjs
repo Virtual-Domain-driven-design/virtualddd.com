@@ -128,6 +128,60 @@ describe('the next session', () => {
   }
 });
 
+describe('the conferences row', () => {
+  // The ordering rule is proved in tests/unit/conferences.test.mjs, because
+  // every conference in Notion is in the future and will be for months. What is
+  // proved here is the wiring: that a card stops claiming its dates from the
+  // clock rather than from a rebuild, which is the case that actually happens —
+  // a conference ending is not a Notion edit, so nothing rebuilds.
+  const cards = (page) =>
+    page.$$eval('[data-test="conference-card"]', (els) => els.map((e) => ({
+      over: e.classList.contains('is-over'),
+      date: e.querySelector('.js-conf-date')?.textContent?.trim(),
+    })));
+
+  test('a conference that has been drops to the end and stops naming dates', async () => {
+    const page = await browser.newPage();
+    await page.goto(base + '/', { waitUntil: 'load' });
+    const ends = await page.$$eval('[data-test="conference-card"]',
+      (els) => els.map((e) => e.dataset.end ?? e.dataset.start));
+    if (ends.length < 2) { await page.close(); return; }
+
+    // Two days after the *first* one finishes: it should be the only stale one.
+    const first = Math.min(...ends.map((e) => +new Date(e)));
+    await page.clock.install({ time: new Date(first + 2 * 86400000) });
+    await page.goto(base + '/', { waitUntil: 'load' });
+    await page.clock.runFor(1000);
+
+    const shown = await cards(page);
+    assert.equal(shown.filter((c) => c.over).length, 1,
+      'exactly the conference that has finished should be marked stale');
+    assert.equal(shown.at(-1).over, true, 'the stale conference is not last in the row');
+    assert.match(shown.at(-1).date, /no new dates/i,
+      'a stale card is still advertising dates that have been and gone');
+    assert.equal(shown.filter((c) => !c.over).every((c) => !/no new dates/i.test(c.date)), true,
+      'a conference still to come has lost its dates');
+    await page.close();
+  });
+
+  test('nothing is dropped when every edition has been', async () => {
+    // The row stays full on purpose. Hiding them would empty the section and
+    // say less than a card saying no dates are announced.
+    const page = await browser.newPage();
+    await page.goto(base + '/', { waitUntil: 'load' });
+    const before = (await cards(page)).length;
+    if (!before) { await page.close(); return; }
+
+    await page.clock.install({ time: new Date('2099-01-01T00:00:00Z') });
+    await page.goto(base + '/', { waitUntil: 'load' });
+    await page.clock.runFor(1000);
+    const after = await cards(page);
+    assert.equal(after.length, before, 'the row lost a conference once its dates passed');
+    assert.equal(after.every((c) => c.over), true);
+    await page.close();
+  });
+});
+
 describe('filters and search', () => {
   test('the session archive searches, and every card left matches', async () => {
     const page = await browser.newPage();

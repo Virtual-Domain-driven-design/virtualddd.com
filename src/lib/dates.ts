@@ -21,6 +21,25 @@ export const shortDate = (value: DateLike) =>
 export const longDate = (value: DateLike) =>
   d(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
+/** `21–25 Sep 2026` — a multi-day run, with the parts both ends share said once.
+ *
+ * No `.js-local` twin, unlike every helper above: a conference runs for whole
+ * days in its own city, so there is no instant to convert and re-rendering
+ * "21–25 Sep" in the reader's timezone could only ever make it wrong.
+ */
+export function dateRange(start: DateLike, end?: DateLike): string {
+  const a = d(start);
+  if (!end) return shortDate(a);
+  const b = d(end);
+  if (a.getTime() === b.getTime()) return shortDate(a);
+
+  const day = (x: Date) => x.toLocaleDateString('en-GB', { day: 'numeric' });
+  const dayMonth = (x: Date) => x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  if (a.getUTCFullYear() !== b.getUTCFullYear()) return `${shortDate(a)} – ${shortDate(b)}`;
+  if (a.getUTCMonth() !== b.getUTCMonth()) return `${dayMonth(a)} – ${shortDate(b)}`;
+  return `${day(a)}–${day(b)} ${b.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}`;
+}
+
 /** `Wednesday, 5 August 2026, 08:00 GMT+2` — the featured/next session. `data-format="datetime"` */
 export const longDateTime = (value: DateLike) =>
   d(value).toLocaleString('en-GB', {

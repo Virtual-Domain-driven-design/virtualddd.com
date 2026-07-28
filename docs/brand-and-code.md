@@ -91,13 +91,17 @@ shared layer, never copied into a second page. Copying is what once made
   injected. Pure enough to unit-test, which matters because this module decides
   what every generated page says.
 - **`src/components/`**: `TeaserCard` is *the* card; `SessionCard` and
-  `StoryCard` are thin wrappers. `PersonRow` is *the* person (portrait, name,
+  `StoryCard` are thin wrappers. `ConferenceCard` is deliberately **not** one:
+  a teaser leads with a photograph cropped to 16/9, and a logo is the one image
+  you must never crop. It keeps `.card` for the surface and swaps the thumbnail
+  for a fixed-height plate the logo is contained on. `PersonRow` is *the* person (portrait, name,
   role, bio, links), used for a session's host and its guests. `CardFilter` is
   *the* filter: search, facets, result count, empty state and "load more" over
   any grid of cards carrying the `data-search` / `data-<facet>` contract.
 - **`src/scripts/`**: the client-side behaviour, one module per concern
-  (`header`, `local-time`, `session-timing`), imported by `BaseLayout`'s single
-  script. Anything a page needs on the client goes here, not into a page's
+  (`header`, `local-time`, `session-timing`, `conference-timing`), imported by
+  `BaseLayout`'s single script. The last two exist for the same reason: the
+  site rebuilds on a Notion diff, and time passing is not a diff. Anything a page needs on the client goes here, not into a page's
   `<script>`, so it can be read on its own.
 - **The shared card grid is a default, not an obligation.** `.grid-cards` suits
   cards you scan; the stories archive is a single 52rem column because a story
@@ -136,9 +140,9 @@ order; each step is small.
 1. **`src/content.config.ts`**: a `defineCollection` with a Zod schema
    mirroring the Notion properties. Relations become `reference()`.
 2. **`scripts/sync-notion.ts`**: add a `CONTENT_SPECS` entry (a collection with
-   a markdown body) or a `PEOPLE_SPECS` entry (structured data, no body). Both
-   are tables: say what is different about the new collection, not how to fetch
-   it.
+   a markdown body) or a `ROW_SPECS` entry (structured data, no body — the
+   organisers, guests and conferences shape). Both are tables: say what is
+   different about the new collection, not how to fetch it.
 3. **`package.json`**: a `sync:<name>` script, and add it to `sync:notion`. If
    another collection references it, sync it **first**.
 4. **Routes**: `src/pages/<section>/index.astro` and `[slug].astro`.

@@ -20,6 +20,9 @@ import {
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
+// The same rule the cards use, so the sync cannot decide a conference is over
+// on a different day from the page that renders it.
+import { hasPassed } from '../src/lib/conferences';
 
 dotenv.config({ path: 'local.env' });
 
@@ -88,6 +91,7 @@ import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 
 const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
 const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (speakers, panellists)
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
+const CONFERENCES_DS = 'c5b9e231-6766-4589-a179-c70d20db3e34'; // DDD conferences and camps, on the home page
 
 // --- what the last sync saw -------------------------------------------------
 //
@@ -163,8 +167,11 @@ interface Alert {
    *  has no address at all, so nothing will ever render it.
    *  `image-source-gone` — the picture in Notion points somewhere that no
    *  longer answers; the site is showing the last copy it downloaded, and only
-   *  an editor can re-upload it. */
-  kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone';
+   *  an editor can re-upload it.
+   *  `dates-passed` — a conference edition that has been and gone. The card
+   *  now says no new dates are announced, which is true but is not what anyone
+   *  wants it to say for long; only a person can go and find the next edition. */
+  kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -824,42 +831,64 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   if (!write) console.log(`\n  (preview only — files in ${outDir}, nothing under src/content/)`);
 }
 
-// --- people: Notion -> JSON data collections --------------------------------
+// --- rows: Notion -> JSON data collections -----------------------------------
 //
-// Two databases, one shape: a row with no body, a portrait, and some links.
-// They were two hand-written functions duplicating the image download, the
+// Three databases, one shape: a row with no body, a picture, and some fields.
+// The first two were hand-written functions duplicating the image download, the
 // write loop and the pruning, because the table above only modelled
 // collections with a markdown body. One table entry each now says what is
-// different, which is all that ever was.
+// different, which is all that ever was — and the third one cost a row rather
+// than a fourth copy of the same loop.
 //
-// The split itself is deliberate, and explained in docs/content-model.md:
+// The people split is deliberate, and explained in docs/content-model.md:
 // organisers is an
 // operational database (who runs what), guests exists to make a good `Person`.
+// Conferences are here rather than in CONTENT_SPECS because they have no page,
+// no slug and no address of ours: the card *is* the content, and it links out.
 
-interface PeopleSpec {
+interface RowSpec {
   dataSourceId: string;
   /** What to call this in the log. */
   label: string;
   /** The entry's file name — never a URL for guests, a URL for organisers. */
-  slugOf: (name: string, h: PeopleHelpers) => string;
-  fields: (name: string, h: PeopleHelpers) => Record<string, unknown>;
+  slugOf: (name: string, h: RowHelpers) => string;
+  fields: (name: string, h: RowHelpers) => Record<string, unknown>;
+  /** Where the row's one picture comes from. Organisers and guests upload a
+   *  file to Notion; a conference logo is a link to the conference's own asset,
+   *  because it is their artwork and their server already serves it. */
+  image: {
+    of: (h: RowHelpers) => string | undefined;
+    /** Names the file on disk (`<slug>-<label>.png`) and the log line. */
+    label: string;
+    /** The JSON field the relative path is written to. */
+    key: string;
+  };
+  /** Anything this collection wants a person to look at. Only conferences have
+   *  one so far: dates that have been and gone. */
+  alerts?: (rows: Record<string, unknown>[]) => Alert[];
 }
 
-interface PeopleHelpers {
+interface RowHelpers {
   text: (n: string) => string;
   url: (n: string) => string | undefined;
   select: (n: string) => string | undefined;
   multi: (n: string) => string[];
   checkbox: (n: string) => boolean;
+  /** Start of a date property; `dateEnd` is the other end of a range. */
+  date: (n: string) => string | undefined;
+  dateEnd: (n: string) => string | undefined;
+  /** First file attached to a files property, as a URL. */
+  file: (n: string) => string | undefined;
 }
 
-const PEOPLE_SPECS: Record<string, PeopleSpec> = {
+const ROW_SPECS: Record<string, RowSpec> = {
   organisers: {
     dataSourceId: PEOPLE_DS,
     label: 'organisers',
     // An organiser has a page, so this slug *is* a URL: changing a name
     // changes an address and needs a redirect.
     slugOf: (name) => kebab(name),
+    image: { of: (h) => h.file('Photo'), label: 'photo', key: 'photo' },
     fields: (name, h) => ({
       name,
       slug: kebab(name),
@@ -877,6 +906,7 @@ const PEOPLE_SPECS: Record<string, PeopleSpec> = {
     // A guest has no page: the file name exists only so a session's `guests`
     // relation resolves, so renaming one in Notion costs nothing.
     slugOf: (name) => kebab(name),
+    image: { of: (h) => h.file('Photo'), label: 'photo', key: 'photo' },
     fields: (name, h) => ({
       name,
       bio: h.text('Bio') || undefined,
@@ -887,11 +917,45 @@ const PEOPLE_SPECS: Record<string, PeopleSpec> = {
       alsoAnOrganiser: h.checkbox('Also an organiser'),
     }),
   },
+  conferences: {
+    dataSourceId: CONFERENCES_DS,
+    label: 'conferences',
+    slugOf: (name) => kebab(name),
+    image: { of: (h) => h.url('Logo'), label: 'logo', key: 'logo' },
+    fields: (name, h) => ({
+      name,
+      start: h.date('Dates'),
+      end: h.dateEnd('Dates'),
+      location: h.text('Location') || undefined,
+      description: h.text('Description') || undefined,
+      website: h.url('Website'),
+      logoBackground: h.text('Logo background') || undefined,
+      // Not written to the entry: it decides whether there is an entry at all.
+      showOnSite: h.checkbox('Show on site'),
+    }),
+    // A conference recurs, so every date here goes stale on its own, without
+    // anybody touching Notion. The card stops claiming the old dates by itself
+    // — see src/lib/conferences.ts — but only a person can go and find the new
+    // ones, so say so once, here, rather than waiting to be noticed.
+    alerts: (rows) => rows
+      .filter((r) => {
+        const start = r.start as string | undefined;
+        if (!start) return false;
+        const end = r.end as string | undefined;
+        return hasPassed(Date.parse(start), end ? Date.parse(end) : undefined, Date.now());
+      })
+      .map((r) => ({
+        kind: 'dates-passed' as const,
+        section: 'conferences',
+        title: `${r.name} last ran ${r.end ?? r.start}, so its card now says no new dates are announced`,
+        url: (r.website as string) ?? '',
+      })),
+  },
 };
 
-async function runPeople(key: string, outDir: string, write: boolean) {
-  const spec = PEOPLE_SPECS[key];
-  if (!spec) { console.error(`unknown people collection: ${key}`); process.exit(1); }
+async function runRows(key: string, outDir: string, write: boolean) {
+  const spec = ROW_SPECS[key];
+  if (!spec) { console.error(`unknown row collection: ${key}`); process.exit(1); }
 
   const pages = await queryAll(spec.dataSourceId);
   const assetDir = `${outDir}/_assets`;
@@ -899,15 +963,20 @@ async function runPeople(key: string, outDir: string, write: boolean) {
   console.log(`${spec.label}: ${pages.length} -> ${outDir}\n`);
 
   const written = new Set<string>();
+  /** What was written, for the collection's own alert rule to read. */
+  const rows: Record<string, unknown>[] = [];
   for (const page of pages) {
     const P = page.properties;
     const get = (n: string) => P[n];
-    const h: PeopleHelpers = {
+    const h: RowHelpers = {
       text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
       url: (n) => get(n)?.url ?? undefined,
       select: (n) => get(n)?.select?.name ?? undefined,
       multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
       checkbox: (n) => get(n)?.checkbox ?? false,
+      date: (n) => get(n)?.date?.start ?? undefined,
+      dateEnd: (n) => get(n)?.date?.end ?? undefined,
+      file: (n) => fileUrl((get(n)?.files ?? [])[0]),
     };
     const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
     const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
@@ -920,16 +989,24 @@ async function runPeople(key: string, outDir: string, write: boolean) {
       continue;
     }
 
-    const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
-    const photoUrl = fileUrl((get('Photo')?.files ?? [])[0]);
-    const photo = photoUrl ? await downloadImage(photoUrl, ctx, 'photo') : null;
+    const data: Record<string, unknown> = { ...spec.fields(name, h) };
+    // A publish gate, like every other collection's, but spelled as a field so
+    // the table stays a table. Taking a conference off the site is a tick, not
+    // a deletion, so the row and its dates survive to be put back.
+    if (data.showOnSite === false) { delete data.showOnSite; continue; }
+    delete data.showOnSite;
 
-    const data: Record<string, unknown> = { ...spec.fields(name, h), photo: photo ?? undefined };
+    const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
+    const imgUrl = spec.image.of(h);
+    const img = imgUrl ? await downloadImage(imgUrl, ctx, spec.image.label) : null;
+    data[spec.image.key] = img ?? undefined;
+
     Object.keys(data).forEach((k) => data[k] === undefined && delete data[k]);
 
     written.add(file);
+    rows.push(data);
     writeFileSync(`${outDir}/${file}`, JSON.stringify(data, null, 2) + '\n');
-    console.log(`  ✓ ${file}${photo ? ' (photo)' : ''}`);
+    console.log(`  ✓ ${file}${img ? ` (${spec.image.label})` : ''}`);
   }
 
   // A row deleted or renamed in Notion must not leave an entry behind: a
@@ -938,11 +1015,11 @@ async function runPeople(key: string, outDir: string, write: boolean) {
     unlinkSync(`${outDir}/${f}`);
     console.log(`  – removed ${f} (no longer in the database)`);
   }
-  pruneAssets(outDir, 'photo');
+  pruneAssets(outDir, spec.image.label);
 
   // Unconditional, like the content sync's: re-uploading the last picture in
   // Notion has to be able to empty this list, not just stop adding to it.
-  if (write) writeAlert(spec.label, strandedAlerts(spec.label));
+  if (write) writeAlert(spec.label, [...strandedAlerts(spec.label), ...(spec.alerts?.(rows) ?? [])]);
 
   if (!write) console.log(`\n  (preview only — files in ${outDir})`);
 }
@@ -956,11 +1033,11 @@ async function run() {
   const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
   const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
 
-  if (cmd === 'organisers' || cmd === 'guests') {
-    const dir = cmd === 'guests' ? 'session-guests' : 'organisers';
+  if (cmd === 'organisers' || cmd === 'guests' || cmd === 'conferences') {
+    const dir = cmd === 'guests' ? 'session-guests' : cmd;
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
       ?? (write ? `src/content/${dir}` : `preview/${dir}`);
-    return runPeople(cmd, outDir, write);
+    return runRows(cmd, outDir, write);
   }
   if (cmd === 'content') {
     const target = only ?? 'sessions';
@@ -968,7 +1045,7 @@ async function run() {
       ?? (write ? `src/content/${target}` : `preview/${target}`);
     return runContent(target, limit, outDir, write, args.includes('--strict'), args.includes('--full'));
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict] [--full]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n\n  --full    re-fetch every body, ignoring data/sync-state.json\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
+  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict] [--full]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n  tsx scripts/sync-notion.ts conferences [--write]\n\n  --full    re-fetch every body, ignoring data/sync-state.json\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
   process.exit(1);
 }
 

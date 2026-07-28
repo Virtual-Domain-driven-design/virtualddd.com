@@ -294,6 +294,56 @@ describe('the upcoming/past split', () => {
   });
 });
 
+describe('the conferences row', () => {
+  const home = () => all.find((p) => p.path === '/');
+  const region = () => {
+    const html = home().html;
+    const start = html.indexOf('data-test="conferences"');
+    return start > 0 ? html.slice(start, html.indexOf('</section>', start)) : '';
+  };
+
+  test('every conference in the collection gets a card', () => {
+    // The directory is absent until the first sync writes it, which is a
+    // legitimate state and not a failure: the collection is generated, so it
+    // does not exist in a checkout that has never synced.
+    let onDisk = 0;
+    try { onDisk = published('conferences', '.json'); } catch { return; }
+    if (!onDisk) return; // the database is empty, or every row is unticked
+    assert.equal(countHook(home().html, 'conference-card'), onDisk,
+      'the home page dropped a conference the collection has');
+  });
+
+  test('each card links out, and carries the dates the sweep re-reads', () => {
+    // The card is the whole of a conference here — there is no page of ours to
+    // land on — so a card that does not leave the site is a dead card.
+    const cards = [...region().matchAll(/<a class="card conf" href="([^"]*)"[^>]*data-start="([^"]*)"/g)];
+    if (!cards.length) return;
+    for (const [, href, start] of cards) {
+      assert.match(href, /^https:\/\//, `a conference card links to "${href}" rather than out to the conference`);
+      assert.ok(!Number.isNaN(+new Date(start)), `a conference card carries an unreadable start date "${start}"`);
+    }
+  });
+
+  test('is ordered soonest first, with editions that have been at the end', () => {
+    // The browser re-applies this rule as time passes, but it has to be right
+    // in the HTML too: that is what a reader without JavaScript sees.
+    const starts = [...region().matchAll(/data-start="([^"]+)"/g)].map((m) => +new Date(m[1]));
+    const ends = [...region().matchAll(/data-end="([^"]+)"/g)].map((m) => +new Date(m[1]));
+    if (starts.length < 2) return;
+    const day = 86400000;
+    const past = starts.map((s, i) => (ends[i] ?? s) + day <= Date.now());
+    const firstPast = past.indexOf(true);
+    if (firstPast >= 0) {
+      assert.ok(past.slice(firstPast).every(Boolean),
+        'a conference still to come is sitting behind one that has been');
+    }
+    const live = starts.filter((_, i) => !past[i]);
+    for (let i = 1; i < live.length; i++) {
+      assert.ok(live[i] >= live[i - 1], `conferences out of order at ${i}`);
+    }
+  });
+});
+
 describe('sessions in their two states', () => {
   // One template renders both. Getting this wrong means either advertising an
   // event that has been, or hiding the joining details for one that has not.

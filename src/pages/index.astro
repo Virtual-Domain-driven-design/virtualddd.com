@@ -4,9 +4,11 @@ import FeaturedSession from '../components/FeaturedSession.astro';
 import SessionCard from '../components/SessionCard.astro';
 import StoryCard from '../components/StoryCard.astro';
 import OrganiserCard from '../components/OrganiserCard.astro';
+import ConferenceCard from '../components/ConferenceCard.astro';
 import Carousel from '../components/Carousel.astro';
 import { getCollection } from 'astro:content';
 import { splitSessions } from '../lib/collections';
+import { orderConferences } from '../lib/conferences';
 import { iso } from '../lib/dates';
 import { HEURISTIC_TYPES } from '../lib/heuristics';
 import { graph, organization, SITE_NAME, SITE_TAGLINE } from '../lib/seo';
@@ -17,6 +19,18 @@ import { graph, organization, SITE_NAME, SITE_TAGLINE } from '../lib/seo';
 const { upcoming, past } = await splitSessions();
 const latest = past.slice(0, 8);
 const team = (await getCollection('organisers')).filter((o) => o.data.showOnTeam);
+
+// Soonest first, with editions that have been at the end. Ordered again in the
+// browser, because a conference finishing rebuilds nothing — see
+// src/scripts/conference-timing.ts.
+const conferences = orderConferences(
+  (await getCollection('conferences')).map((c) => ({
+    ...c,
+    startMs: c.data.start.getTime(),
+    endMs: c.data.end?.getTime(),
+  })),
+  Date.now(),
+);
 
 const stories = (await getCollection('stories'))
   .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
@@ -189,6 +203,15 @@ try {
       </div>
     </section>
 
+    {conferences.length > 0 && (
+      <section class="home-section">
+        <div class="section-head"><h2>Conferences &amp; camps</h2></div>
+        <div class="conf-grid" data-test="conferences">
+          {conferences.map((c) => <ConferenceCard conference={c} />)}
+        </div>
+      </section>
+    )}
+
     {team.length > 0 && (
       <section class="home-section">
         <div class="section-head"><h2>Organisers</h2></div>
@@ -233,6 +256,13 @@ try {
     @media (min-width: 900px) { .heur-stories { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
     .heur-links { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
     /* The type tiles come from patterns.css (.tbanner--compact). */
+
+    /* Four conferences, all visible. A carousel would hide content and move on
+       its own for a set that is stable at four. */
+    .conf-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 640px) { .conf-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px) { .conf-grid { grid-template-columns: repeat(4, 1fr); } }
+    .conf-grid > * { min-width: 0; }
 
     /* Organiser cards sit a little narrower than the carousel default. */
     .org-carousel :global(.carousel > *) { flex: 0 0 clamp(200px, 42%, 250px); }

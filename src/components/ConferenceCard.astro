@@ -1,0 +1,105 @@
+---
+/** A conference or camp, as a card that links straight out to it.
+ *
+ * Not a `TeaserCard`: that card leads with a photograph cropped to 16/9, and a
+ * logo is the one image you must never crop. So this one keeps `.card` for the
+ * surface, the border and the hover, and replaces the thumbnail with a plate
+ * the logo is centred on without being touched.
+ *
+ * The plate's colour comes from Notion per row, because these are four other
+ * people's logos and they do not agree with each other: three are dark type on
+ * transparent, DDD Europe's is light type on its own navy. Hard-coding white
+ * would sink one of them, and picking the colour in CSS would mean a code
+ * change every time a fifth conference is added.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { dateRange, iso } from '../lib/dates';
+import { hasPassed } from '../lib/conferences';
+
+interface Props {
+  conference: CollectionEntry<'conferences'>;
+}
+const { conference } = Astro.props;
+const d = conference.data;
+
+const startMs = d.start.getTime();
+const endMs = d.end?.getTime();
+// True as of *this build*. The card carries its raw dates so the browser can
+// re-apply the same rule later without one, which is the case that actually
+// happens: a conference finishing is not a Notion edit, so it rebuilds nothing.
+const over = hasPassed(startMs, endMs, Date.now());
+const NO_DATES = 'No new dates announced yet';
+---
+
+<a
+  class="card conf"
+  href={d.website}
+  data-test="conference-card"
+  data-start={iso(d.start)}
+  data-end={d.end ? iso(d.end) : undefined}
+>
+  <div class="conf-plate" style={`background: ${d.logoBackground ?? '#ffffff'}`}>
+    {d.logo
+      ? <Image src={d.logo} alt={`${d.name} logo`} width={360} loading="lazy" />
+      : <span class="conf-plate-name">{d.name}</span>}
+  </div>
+  <div class="card-body conf-body">
+    <p class="card-meta card-meta--accent js-conf-date" data-dates={dateRange(d.start, d.end)}>
+      {over ? NO_DATES : dateRange(d.start, d.end)}
+    </p>
+    <h3 class="card-title">{d.name}</h3>
+    {d.location && <p class="card-sub">{d.location}</p>}
+    {d.description && <p class="conf-desc">{d.description}</p>}
+  </div>
+</a>
+
+<style>
+  /* The plate. A fixed height rather than an aspect ratio, so all four line up
+     and the dates below them share a baseline whatever shape the logos are.
+     `aspect-ratio` was the first try and does not hold: a logo taller than the
+     ratio pushes the box open, because `max-height: 100%` on the image has
+     nothing definite to resolve against and so constrains nothing. These four
+     logos range from 360×94 to 300×139, which is exactly that case. */
+  .conf-plate {
+    display: grid;
+    place-items: center;
+    height: 8rem;
+    padding: var(--space-5);
+    overflow: hidden;
+  }
+  /* Contained, never cropped and never stretched: it is somebody else's mark. */
+  .conf-plate :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+  /* No logo yet, or the download failed. The name on the plate still reads as
+     the conference, which an empty box does not. Ink rather than white,
+     because the plate is a light fill far more often than not. */
+  .conf-plate-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-lg);
+    text-align: center;
+    color: var(--on-brand);
+  }
+
+  .conf-body { display: flex; flex-direction: column; flex: 1; }
+  .conf-desc {
+    color: var(--color-text-muted);
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* A card whose dates have gone says so in the muted voice, not the cyan one
+     that means "this is when it is". */
+  .conf.is-over .card-meta--accent { color: var(--color-text-muted); }
+</style>

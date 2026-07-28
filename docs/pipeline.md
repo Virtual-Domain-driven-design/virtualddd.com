@@ -181,9 +181,15 @@ took the "already raised" branch and reached nobody, including eight organiser
 photos on launch day. The step now fails outright if the file is ignored,
 because that failure is silent and looks exactly like having nothing to say.
 
-A third kind joins the two above:
+Two more kinds join the two above:
 
 - **`image-source-gone`**: the picture in Notion points somewhere that stopped
   answering. The sync keeps the copy it downloaded last time rather than
   dropping the image, so the page is still right; only an editor can re-upload
   the original. See "Images", earlier in this document.
+- **`dates-passed`**: a conference edition that has been and gone. The card
+  looks after itself, dropping to the end of the row and saying no new dates
+  are announced, so nothing on the page is wrong. But it will keep saying that
+  until somebody goes and finds the next edition, and this is the one alert
+  that fires without anyone having touched Notion at all: a date going by is
+  not an edit. See [content-model.md](content-model.md), "Conferences".

@@ -23,6 +23,7 @@ purpose: content history in git, offline builds, and diffs you can review.
 | heuristics | `e7743290-3850-404e-ae98-23a4caf0488e` |
 | organisers | `cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6` |
 | session guests | `d82910e0-cac0-46f8-8a20-cb3a3376d5eb` |
+| conferences | `c5b9e231-6766-4589-a179-c70d20db3e34` |
 
 ddd-crew content comes from GitHub, not Notion (`npm run sync:ddd-crew`).
 
@@ -71,6 +72,44 @@ moment somebody improves the copy there, and nothing in the tool can tell. If
 another bulk pass is ever wanted, `git log -- data/guest-profiles.csv` has the
 workings.
 
+## Conferences
+
+The DDD conferences and camps on the home page. **Not a content type**: there is
+no page, no slug and no address of ours. The card *is* the content and it links
+straight out, which is why this sits with organisers and guests in the sync's
+row table rather than with sessions.
+
+**The dates go stale on their own, and that is the whole design problem.** A
+conference recurs annually, so every date in this database expires without
+anybody touching Notion — and a date going by is not a diff, so it triggers no
+sync, no build and no deploy. Three things follow, and they are the reason the
+code looks the way it does:
+
+- **The card decides in the browser, not at build time.** `src/lib/conferences.ts`
+  holds the rule; the build orders the row with it and
+  `src/scripts/conference-timing.ts` applies the same rule again from the
+  clock. This is the same shape as the upcoming/past session split, for the
+  same reason, and the two must not disagree.
+- **An edition that has been sinks to the end of the row and says "No new dates
+  announced yet"** rather than disappearing. Hiding it would empty the section
+  and say less than a card saying so, and the conference has not gone anywhere.
+- **The sync raises `dates-passed`** so Discord asks somebody to find the new
+  dates. Nothing on the page is wrong in the meantime; it is just less useful
+  than it should be.
+
+**`Show on site`** is the publish gate: untick it to take a conference off the
+home page without losing the row.
+
+**The logo is a link, not an upload**, unlike an organiser's photo. It points at
+the conference's own asset; the sync downloads it, shrinks it and commits the
+copy, so the site never depends on their server at build or at run time. If the
+link stops answering, the last good copy stands and `image-source-gone` says so.
+
+**`Logo background` is a hex colour per row**, because these are four other
+people's marks and they do not agree with each other: three are dark type on
+transparent and DDD Europe's is light type on its own navy. A colour in the
+data is what lets a fifth conference look right without a code change.
+
 ## Publish gates (per database, not global)
 
 - **Sessions** render in two states, derived from `Datetime`, not from a manual
@@ -90,6 +129,7 @@ workings.
   the browser; `tests/unit/upcoming.test.mjs` is its specification.
 
 - **Open spaces, stories, heuristics**: `Status = Published`.
+- **Conferences**: `Show on site` ticked.
 - Only rows passing their gate produce files.
 
 ## Relations
