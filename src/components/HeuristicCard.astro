@@ -27,6 +27,6 @@ const info = heuristicType(type);
 >
   {showType && type && <span class:list={['chip', 'chip--label', chipTone(type)]}>{info?.label ?? 'Heuristic'}</span>}
   {d.question && <p class="card-q">{d.question}</p>}
-  <h3 class="card-title">{d.title}</h3>
+  <h3 class="card-title" data-test="card-title">{d.title}</h3>
   <span class="card-more">More info →</span>
 </a>

@@ -28,8 +28,9 @@ export interface MarkdownPage {
 const yaml = (v: string) => `"${v.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 const list = (v: string[]) => `[${v.map(yaml).join(', ')}]`;
 
-/** A `text/markdown` response: front matter, then the body. */
-export function markdownResponse(context: APIContext, page: MarkdownPage): Response {
+/** A `text/markdown` response: front matter, then the body.
+ *  Module-private: `markdownFor` is the only caller. */
+function markdownResponse(context: APIContext, page: MarkdownPage): Response {
   const url = new URL(page.path, context.site ?? 'https://virtualddd.com').toString();
   const lines = [
     '---',

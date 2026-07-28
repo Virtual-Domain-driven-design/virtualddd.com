@@ -70,7 +70,7 @@ const dataAttrs = Object.fromEntries(Object.entries(data).map(([k, v]) => [`data
         {metaSuffix && <span class="card-meta-suffix">· {metaSuffix}</span>}
       </p>
     )}
-    <h3 class="card-title">{title}</h3>
+    <h3 class="card-title" data-test="card-title">{title}</h3>
     {sub && <p class="card-sub">{sub}</p>}
     {sub2 && <p class="card-sub card-sub--guests" data-test="card-guests">{sub2}</p>}
     {excerpt && <p class="card-excerpt">{excerpt}</p>}

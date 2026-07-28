@@ -24,11 +24,22 @@ styling class, never an id the CSS also targets, never visible copy. A restyle
 then cannot break a behaviour test, which is what makes design work cheap to
 keep doing.
 
-Current hooks: `card`, `results`, `result-count`, `filter-search`, `filter-tag`,
-`filter-reset`, `type-filter`, `load-more`, `next-session`, `add-to-calendar`,
-`prev`, `next`, `nav`, `nav-toggle`, `guest`, `guest-credit`, `person-name`,
-`skip-link`, `carousel`, `carousel-prev`, `carousel-next`, `latest-sessions`.
-Add to that list rather than reaching for a class.
+**`tests/conformance.test.mjs` enforces this**, in both directions: it fails on
+a test selecting a class the stylesheets define, and on a test selecting a
+`[data-test]` hook no component emits. It is in the blocking suite, so neither
+can reach `main`. The rule went unenforced long enough for a test to start
+selecting `.card-title` — a styling class — and nobody noticed, which is why it
+is a machine's job now.
+
+There is deliberately **no list of hooks here**. One used to be, and it drifted
+to thirteen missing and two that no longer existed, because a list of things in
+a document is a second copy of the source. Ask the source instead:
+
+```sh
+grep -rho 'data-test="[a-z-]*"' src/ | sort -u
+```
+
+Add a hook by putting it on the element and using it. Nothing to update here.
 
 **A test must never be something an editor can turn red.** The blocking suite
 sits on the publish path, so it may not depend on how much content exists or on

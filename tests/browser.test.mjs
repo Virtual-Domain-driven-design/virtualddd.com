@@ -635,7 +635,7 @@ describe('people on a session', () => {
     await page.goto(`${base}/sessions/`, { waitUntil: 'load' });
     const cards = await page.$$eval('[data-test="card"]', (els) =>
       els.map((e) => ({
-        title: e.querySelector('.card-title')?.textContent?.trim() ?? '',
+        title: e.querySelector('[data-test="card-title"]')?.textContent?.trim() ?? '',
         guests: e.querySelector('[data-test="card-guests"]')?.textContent?.trim() ?? '',
       })));
     const naming = cards.filter((c) => c.guests);

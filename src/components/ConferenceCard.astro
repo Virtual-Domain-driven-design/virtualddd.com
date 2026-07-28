@@ -49,7 +49,7 @@ const NO_DATES = 'No new dates announced yet';
     <p class="card-meta card-meta--accent js-conf-date" data-dates={dateRange(d.start, d.end)}>
       {over ? NO_DATES : dateRange(d.start, d.end)}
     </p>
-    <h3 class="card-title">{d.name}</h3>
+    <h3 class="card-title" data-test="card-title">{d.name}</h3>
     {d.location && <p class="card-sub">{d.location}</p>}
     {d.description && <p class="conf-desc">{d.description}</p>}
   </div>

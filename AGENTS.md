@@ -15,34 +15,79 @@ document you need and you can do the work.
 
 ## Read this much, at minimum
 
+Each rule says **how we know** it is being kept. That line is not decoration.
+A rule with a machine behind it is a constraint; a rule with a person behind it
+is a habit, and habits drift silently — rule 5 was already broken by a test
+selecting `.card-title`, a styling class, and nothing noticed until somebody
+went looking. Assume nothing is checked unless it says so here.
+
 1. **Notion is the source of truth.** Everything under `src/content/` is
    generated and is never hand-edited. CI fails a push that touches it from
    anyone but the sync. See [docs/pipeline.md](docs/pipeline.md).
+   *How we know: **machine.** The sync re-fetches any body whose digest changed,
+   `deploy.yml` rejects the push, and CODEOWNERS puts a maintainer on the PR.*
 2. **URLs are promises.** Every address the old site answered is still served,
    redirected once, or returned as `410 Gone` on purpose. `npm run check:urls`
    is the guard, and it fails the build. Never edit `public/.htaccess`; edit
    its generator. See [docs/urls.md](docs/urls.md).
+   *How we know: **machine.** `check:urls` against `dist`, a test that the
+   committed `.htaccess` is what the generator would write, and
+   `verify-live.mjs` against the deployed host.*
 3. **The brand is the fixed point.** Layout, copy, components and structure are
    open to improvement. The colours, the logo and the feel are not.
    See [docs/brand-and-code.md](docs/brand-and-code.md).
+   *How we know: **machine, partly.** A browser test measures real contrast on
+   brand fills, and `conformance.test.mjs` keeps colour literals out of
+   components. Whether something still **feels** like Virtual DDD is a person's
+   judgement.*
 4. **Propose options, then ask.** For anything that changes what a visitor
    sees, work out what the page and the Notion data actually do, name the
    friction, offer options with a recommendation, and let the maintainers
    decide. Recommend; do not unilaterally redesign.
+   *How we know: **nobody.** No check can see an option you did not offer. This
+   one rests entirely on whoever is doing the work.*
 5. **Tests select `[data-test]` hooks and `js-*` classes only**, never a
    styling class and never visible copy, so restyling a section cannot break
    them. A check that an editor can turn red from Notion reports; it never
    blocks a deploy. See [docs/testing.md](docs/testing.md).
+   *How we know: **machine.** `conformance.test.mjs` reads the test files and
+   fails on a selector naming a class the stylesheets define.*
 6. **Small steps, section by section.** Improvement is opt-in per section,
    never a big-bang rebuild. Sections ship independently.
+   *How we know: **nobody.** Size of a change is only visible in the diff, and
+   nothing here reads diffs.*
 7. **Improvements can land on either side.** Sometimes the right fix is in the
    Notion schema or the editing workflow rather than in the code. Changing
    Notion is in scope.
+   *How we know: **n/a.** A permission, not a constraint.*
 8. **Feature ideas go to the Virtual DDD ToDo board in Notion**, not into a
    file in this repository. Code changes go here; wishes go there.
+   *How we know: **weakly.** `conformance.test.mjs` fails on a TODO file
+   appearing in the repository. It cannot tell whether the idea reached Notion.*
 
 The team is small and time is short. The constraint behind every decision here
 is *low ongoing maintenance*.
+
+## Three tiers, and what each one is for
+
+The same shape as the test suite, and for the same reason: what blocks a deploy
+must be about code being wrong, never about somebody's writing.
+
+| Tier | Runs | Fails the deploy? |
+|---|---|---|
+| **Blocking** — contracts, URLs, browser behaviour, **conformance** | Every push | Yes |
+| **Conformance** — the rules above that a machine can read | Every push, inside the blocking suite | Yes |
+| **Content report** — what an editor could improve | Every push | No, `continue-on-error` |
+
+`tests/conformance.test.mjs` is where a rule from this file becomes executable.
+Every test in it names the rule it enforces. **If you add a rule here, either
+add a test there or write "nobody" beside it** — a rule that sounds enforced and
+is not costs more than an honest habit, because it gets assumed.
+
+What conformance cannot see is additive bias: a component that should have
+reused `TeaserCard`, a helper that duplicates one in `src/lib/`, a fourth way to
+render a card. That is only visible in a diff, by a reader, which is what the
+review step is for.
 
 ## Where the detail lives
 

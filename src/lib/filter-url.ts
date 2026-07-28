@@ -10,9 +10,11 @@
  */
 
 /** The slug form those addresses used: lower case, non-alphanumerics to hyphens.
+ *  Module-private: `slugMatches` is the only caller, and an export with one
+ *  in-file caller is API surface nobody asked for.
  *  Tags are stored as prose ("Collaborative Modeling"), so both sides of the
  *  comparison have to be slugified for `?tag=collaborative-modeling` to hit. */
-export const slugify = (s: string): string =>
+const slugify = (s: string): string =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 /** True when an option on the page is the one the query string asked for. */
