@@ -1,0 +1,10 @@
+{
+  "name": "KanDDDinsky",
+  "start": "2026-10-14",
+  "end": "2026-10-16",
+  "location": "Berlin, Germany",
+  "description": "The art of business software, in Berlin: three days of talks and hands-on sessions on DDD and the craft around it.",
+  "website": "https://kandddinsky.de/",
+  "logoBackground": "#ffffff",
+  "logo": "./_assets/kandddinsky-logo.svg"
+}

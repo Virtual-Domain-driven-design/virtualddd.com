@@ -1,0 +1,10 @@
+{
+  "name": "CoMoCamp",
+  "start": "2027-05-03",
+  "end": "2027-05-06",
+  "location": "Vienna, Austria",
+  "description": "The collaborative modelling unconference: EventStorming, Domain Storytelling and Impact Mapping, run by the people who practise them.",
+  "website": "https://comocamp.org/",
+  "logoBackground": "#ffffff",
+  "logo": "./_assets/comocamp-logo.png"
+}

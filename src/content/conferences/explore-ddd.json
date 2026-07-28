@@ -1,0 +1,10 @@
+{
+  "name": "Explore DDD",
+  "start": "2026-09-21",
+  "end": "2026-09-25",
+  "location": "Denver, Colorado, USA",
+  "description": "Five days in Denver: workshops, talks, and the two-day Design Storm where attendees model a real domain together.",
+  "website": "https://exploreddd.com/",
+  "logoBackground": "#ffffff",
+  "logo": "./_assets/explore-ddd-logo.png"
+}

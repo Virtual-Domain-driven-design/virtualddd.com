@@ -1,0 +1,10 @@
+{
+  "name": "DDD Europe",
+  "start": "2027-06-01",
+  "end": "2027-06-04",
+  "location": "Amsterdam, Netherlands",
+  "description": "Europe's largest gathering for software modelling and design, with three days of workshops ahead of the two-day conference.",
+  "website": "https://dddeurope.com/",
+  "logoBackground": "#070223",
+  "logo": "./_assets/ddd-europe-logo.png"
+}
