@@ -508,13 +508,11 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       const ep = h.num('Episode'); if (ep != null) l.push(`episode: ${ep}`);
       const pd = h.date('Published Date'); if (pd) l.push(`publishedDate: ${pd.slice(0, 10)}`);
       // `Guests` and `Hosts` replaced a single `Authors` multi-select that mixed
-      // the two together. Order matters: the first guest is the one whose story
-      // it is, and two episodes in the archive are the same pair the other way
-      // round. `Authors` is still read as a fallback until it is retired in
-      // Notion, so a row nobody has curated yet still has a byline.
+      // the two together and could not tell you which was which. Order matters:
+      // the first guest is the one whose story it is, and two episodes in the
+      // archive are the same pair the other way round.
       const guests = h.guest('Guests'); if (guests.length) l.push(`guests: ${yamlList(guests)}`);
       const hosts = h.person('Hosts'); if (hosts.length) l.push(`hosts: ${yamlList(hosts)}`);
-      const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
       const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
       for (const [k, p] of [['youtube', 'YouTube'], ['podcast', 'Podcast']] as const) {
         const u = h.url(p); if (u) l.push(`${k}: ${yamlStr(u)}`);

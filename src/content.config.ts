@@ -83,9 +83,6 @@ const stories = defineCollection({
       // reference() because those rows carry the links that become `sameAs`.
       guests: z.array(reference('sessionGuests')).default([]),
       hosts: z.array(z.string()).default([]),
-      // The multi-select these two replaced. Still read so a story nobody has
-      // curated yet keeps a byline; retire it once Notion no longer has it.
-      authors: z.array(z.string()).default([]),
       tags: z.array(z.string()).default([]),
       featuredImage: image().optional(),
       featuredImageSquared: image().optional(),

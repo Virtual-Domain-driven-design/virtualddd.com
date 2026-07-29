@@ -193,13 +193,21 @@ describe('index and standalone pages', () => {
 });
 
 describe('a story', () => {
-  test('is an Article with its authors and its date', () => {
+  test('is an Article whose author is the guest and whose hosts contributed', () => {
+    // The guest told the story; the hosts asked the questions. Both are people
+    // on the page, and only one of them wrote it.
     const doc = storyJsonLd(SITE, {
-      id: 's', data: { title: 'A story', authors: ['Andrea Magnorsky'], publishedDate: new Date('2026-01-02') },
-    }, { url: 'https://virtualddd.com/facilitating-archdes/s/', trail: topTrail('x', '/x/') });
+      id: 's', data: { title: 'A story', publishedDate: new Date('2026-01-02') },
+    }, {
+      url: 'https://virtualddd.com/facilitating-archdes/s/',
+      trail: topTrail('x', '/x/'),
+      authors: [{ name: 'Michael Joyce' }],
+      contributors: [{ name: 'Andrea Magnorsky' }],
+    });
     const article = typeOf(doc, 'Article');
     assert.equal(article.headline, 'A story');
-    assert.deepEqual(article.author, [{ '@type': 'Person', name: 'Andrea Magnorsky' }]);
+    assert.deepEqual(article.author, [{ '@type': 'Person', name: 'Michael Joyce' }]);
+    assert.deepEqual(article.contributor, [{ '@type': 'Person', name: 'Andrea Magnorsky' }]);
     assert.equal(article.datePublished, '2026-01-02T00:00:00.000Z');
   });
 });

@@ -53,7 +53,7 @@ const hosts = d.hosts.map((name) => {
 // them. The sidebar is built from the same answer, so it cannot disagree with
 // the credit under the title.
 const { by: bylineBy, alongside: bylineWith } =
-  storyByline(guests.map((g) => g.name), hosts.map((h) => h.name), d.authors);
+  storyByline(guests.map((g) => g.name), hosts.map((h) => h.name));
 const credited = [...bylineBy, ...bylineWith];
 
 const asPerson = (p: typeof guests[number] | typeof hosts[number]): PersonInput => ({

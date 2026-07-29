@@ -126,7 +126,7 @@ export function creditsFor(
   guestIndex: Map<string, CollectionEntry<'sessionGuests'>>,
 ): string[] {
   const guests = resolveRefs(d.guests, guestIndex).map((g) => g.data.name);
-  const { by, alongside } = storyByline(guests, d.hosts, d.authors);
+  const { by, alongside } = storyByline(guests, d.hosts);
   return [...by, ...alongside];
 }
 

@@ -148,13 +148,10 @@ describe('who a story is by', () => {
       { by: ['Andrea Magnorsky', 'Kenny Schwegler'], alongside: [] });
   });
 
-  test('an uncurated story falls back to the old Authors multi-select', () => {
-    assert.deepEqual(
-      storyByline([], [], ['Someone Not Yet Curated']),
-      { by: ['Someone Not Yet Curated'], alongside: [] });
-  });
-
   test('a story with nobody on it credits nobody, rather than inventing a shape', () => {
-    assert.deepEqual(storyByline([], [], []), { by: [], alongside: [] });
+    // `Authors` used to stand in here and was retired from Notion on
+    // 2026-07-29. An uncurated story is now caught by the content suite, which
+    // fails the build on a published story with no author in its JSON-LD.
+    assert.deepEqual(storyByline([], []), { by: [], alongside: [] });
   });
 });

@@ -57,9 +57,10 @@ people. A name on its own is a thin card, and that is the point at which
 somebody writes a bio in Notion.
 
 Both replaced a single `Authors` multi-select that mixed the two together and
-could not tell you which was which. `authors` is still read as a fallback for
-the byline, so a story nobody has curated yet keeps its credit; retire it once
-Notion no longer has the property.
+could not tell you which was which. It was retired from Notion on 2026-07-29
+and nothing stands in for it: a story with neither a guest nor a host is
+credited to nobody, and `npm run test:content` fails the build rather than
+publishing it uncredited.
 
 **Both databases carry the same four profile links**: `URL` (`Website` on
 guests), `LinkedIn`, `Mastodon` and `Bluesky`. `profileLinks` in

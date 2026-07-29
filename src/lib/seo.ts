@@ -416,8 +416,9 @@ export function dddCrewJsonLd(
  *
  * The guest is the `author` — it is their story, and the episode exists to
  * tell it. The hosts ask the questions, which is `contributor`, not
- * authorship. When neither is given the old `Authors` multi-select stands in,
- * so a story nobody has curated yet still has a byline.
+ * authorship. Nothing stands in when neither is given: `Authors` was retired
+ * from Notion on 2026-07-29, and a story with nobody on it fails
+ * `tests/content/quality.test.mjs` rather than shipping uncredited.
  */
 export function storyJsonLd(
   site: URL | undefined,
@@ -429,9 +430,7 @@ export function storyJsonLd(
 ) {
   const d = story.data;
   const org = organization(site);
-  const authors = opts.authors?.length
-    ? opts.authors.map(person)
-    : d.authors.map((name) => ({ '@type': 'Person', name }));
+  const authors = (opts.authors ?? []).map(person);
   return graph(org, breadcrumbs(site, opts.trail), {
     '@type': 'Article',
     '@id': `${opts.url}#article`,

@@ -183,7 +183,22 @@ jobs:
           git add -A
           git commit -m "Content: ${{ steps.diff.outputs.summary }}" \
                      -m "Synced from Notion by ${{ github.event_name }}."
-          git push
+          # A sync takes a couple of minutes, and anything landing on main in
+          # that window makes this push a non-fast-forward. Twice on
+          # 2026-07-29: the run went red, its content was thrown away, and the
+          # only thing that recovered it was the next sync happening to run.
+          # Rebasing is safe here because these are whole-file rewrites of
+          # generated content, and a human editing src/content is refused by
+          # the deploy anyway.
+          for attempt in 1 2 3; do
+            if git push; then break; fi
+            if [ "$attempt" = 3 ]; then
+              echo "::error::main moved three times while this sync was working; nothing pushed."
+              exit 1
+            fi
+            echo "main moved while this run was working; rebasing and retrying"
+            git pull --rebase origin main
+          done
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   deploy:

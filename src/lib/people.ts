@@ -99,17 +99,16 @@ export function guestsToName(
  * interchangeable and a single list would say neither. An episode with no
  * outside guest is the hosts talking to each other, so it is simply by them.
  *
- * `authors` is the last resort: the multi-select `Guests` and `Hosts`
- * replaced, read only when a story has been curated into neither, so nothing
- * goes blank while the property is being retired. When it is gone in Notion,
- * this parameter and its clause go with it — and this is the only place.
+ * A story with neither is credited to nobody, and that is deliberate: it was
+ * the `Authors` multi-select that stood in here, and it is gone from Notion as
+ * of 2026-07-29. `tests/content/quality.test.mjs` fails the build if a
+ * published story has no author in its structured data, so an uncurated one is
+ * caught before it ships rather than quietly credited to no one.
  */
 export function storyByline(
   guests: string[],
   hosts: string[],
-  authors: string[] = [],
 ): { by: string[]; alongside: string[] } {
   if (guests.length) return { by: guests, alongside: hosts };
-  if (hosts.length) return { by: hosts, alongside: [] };
-  return { by: authors, alongside: [] };
+  return { by: hosts, alongside: [] };
 }
