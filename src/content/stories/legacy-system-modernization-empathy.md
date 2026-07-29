@@ -6,7 +6,6 @@ episode: 10
 publishedDate: 2026-01-06
 guests: ["michael-plod", "beija-nigl"]
 hosts: ["Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
-authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 tags: ["legacy modernisation", "software architecture", "facilitating software architecture and design", "sociotechnical systems", "social dynamics"]
 youtube: "https://youtu.be/tpE_uGhCx5g"
 podcast: "https://player.captivate.fm/episode/9e596e88-6d5a-4c61-91f2-6ae67d039f9b/"

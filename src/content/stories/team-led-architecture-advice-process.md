@@ -6,7 +6,6 @@ episode: 6
 publishedDate: 2025-11-11
 guests: ["peter-hunter", "elena-stojmilova"]
 hosts: ["Kenny Schwegler", "Andrea Magnorsky"]
-authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "software architecture", "adr", "enabling architecture", "team agency", "architecture advice process"]
 youtube: "https://youtu.be/UmG_DhtynCs"
 podcast: "https://player.captivate.fm/episode/ba3ab849-6602-4816-9e3b-68f502e5834d/"

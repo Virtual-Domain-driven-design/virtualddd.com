@@ -5,7 +5,6 @@ status: "Published"
 episode: 3
 publishedDate: 2025-09-30
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["adr", "software architecture", "social dynamics", "facilitating software architecture and design", "power dynamics"]
 youtube: "https://youtu.be/MCiO_CgEGrI"
 podcast: "https://player.captivate.fm/episode/fc4b652d-b818-4669-af76-27577cd253d6/"

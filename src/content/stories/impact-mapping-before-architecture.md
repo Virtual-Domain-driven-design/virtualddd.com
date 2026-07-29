@@ -6,7 +6,6 @@ episode: 21
 publishedDate: 2026-06-09
 guests: ["kim-kao"]
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Kim Kao", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "domain-driven design", "legacy modernisation", "stakeholder communication", "collaborative modelling", "impact mapping"]
 youtube: "https://youtu.be/td_vdQgeVwY"
 podcast: "https://player.captivate.fm/episode/abc53c50-27c3-420f-a470-be1238b3e88a/"

@@ -6,7 +6,6 @@ episode: 19
 publishedDate: 2026-05-12
 guests: ["laila-bougria"]
 hosts: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
-authors: ["Laila Bougria", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "software architecture", "conflict management", "team collaboration", "governance", "social dynamics", "sociotechnical systems"]
 youtube: "https://youtu.be/VFtM8-nhmHk"
 podcast: "https://player.captivate.fm/episode/48c52611-9542-4805-982a-2c2e2621ed48/"

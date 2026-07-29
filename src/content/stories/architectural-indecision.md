@@ -5,7 +5,6 @@ status: "Published"
 episode: 4
 publishedDate: 2025-10-14
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["software architecture", "team collaboration", "facilitating software architecture and design", "adr", "technical leadership", "collaborative software design"]
 youtube: "https://youtu.be/hYOztFDJSmM"
 podcast: "https://player.captivate.fm/episode/a6cf2188-2539-4986-8975-a44af952981d/"

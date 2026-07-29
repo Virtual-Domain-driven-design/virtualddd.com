@@ -6,7 +6,6 @@ episode: 7
 publishedDate: 2025-11-25
 guests: ["peter-hunter", "elena-stojmilova"]
 hosts: ["Kenny Schwegler", "Andrea Magnorsky"]
-authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "power dynamics", "conflict management", "technical leadership", "social dynamics"]
 youtube: "https://youtu.be/OjWax86V-M4"
 podcast: "https://player.captivate.fm/episode/c397619c-c430-460e-9e36-c36f4c632c3b/"

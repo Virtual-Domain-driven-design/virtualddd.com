@@ -5,7 +5,6 @@ status: "Published"
 episode: 22
 publishedDate: 2026-06-23
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "collaborative modelling", "sociotechnical systems", "power dynamics", "domain-driven design", "stakeholder communication"]
 youtube: "https://youtu.be/WkoCfDHOXpw"
 podcast: "https://player.captivate.fm/episode/66174b84-14ab-4adf-9911-90c4a6830138/"

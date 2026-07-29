@@ -6,7 +6,6 @@ episode: 16
 publishedDate: 2026-03-31
 guests: ["liz-fong-jones"]
 hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
-authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "psychological safety", "sociotechnical systems", "engineering culture", "team collaboration", "social dynamics", "technical leadership"]
 youtube: "https://youtu.be/URZL78DSpv4"
 podcast: "https://player.captivate.fm/episode/cae1c91a-e8c6-401d-aaf6-58f4d3eac439/"

@@ -6,7 +6,6 @@ episode: 14
 publishedDate: 2026-03-03
 guests: ["gien-verschatse", "evelyn-van-kelle"]
 hosts: ["Kenny Schwegler", "Andrea Magnorsky"]
-authors: ["Gien Verschatse", "Kenny Schwegler", "Evelyn van Kelle", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "power dynamics", "collaborative modelling", "psychological safety", "social dynamics", "engineering culture", "collaborative software design"]
 youtube: "https://youtu.be/ClUQkGbIevo"
 podcast: "https://player.captivate.fm/episode/39d4201d-1de5-4d28-92c1-2c755489223e/"

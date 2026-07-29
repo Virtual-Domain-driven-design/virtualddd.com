@@ -6,7 +6,6 @@ episode: 20
 publishedDate: 2026-05-26
 guests: ["marco-heimeshoff"]
 hosts: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
-authors: ["Marco Heimeshoff", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "collaborative modelling", "psychological safety", "sociotechnical systems", "power dynamics", "engineering culture"]
 youtube: "https://youtu.be/ACJCSAiPNgM"
 podcast: "https://player.captivate.fm/episode/f0964f9b-a8c4-4899-a380-47d842b394f5/"

@@ -5,7 +5,6 @@ status: "Published"
 episode: 5
 publishedDate: 2025-10-28
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["governance", "facilitating software architecture and design", "social dynamics", "power dynamics", "leadership"]
 youtube: "https://youtu.be/GXz-zzNyL38"
 podcast: "https://player.captivate.fm/episode/47be4840-e08e-42b6-8319-7936a9914dae/"

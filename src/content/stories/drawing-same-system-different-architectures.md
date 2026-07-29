@@ -6,7 +6,6 @@ episode: 18
 publishedDate: 2026-04-28
 guests: ["aino-corry"]
 hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
-authors: ["Aino Corry", "Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "software architecture", "collaborative modelling", "psychological safety", "social dynamics"]
 youtube: "https://youtu.be/U5NHOSBjdtE"
 podcast: "https://player.captivate.fm/episode/ada53abb-c031-43a6-97f8-c88ed0a82e13/"

@@ -5,7 +5,6 @@ status: "Published"
 episode: 2
 publishedDate: 2025-09-16
 hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
-authors: ["Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["adr", "software architecture", "social dynamics", "facilitating software architecture and design"]
 youtube: "https://youtu.be/Uy_saAvmROQ"
 podcast: "https://player.captivate.fm/episode/6b53b756-3249-44d9-b15e-7a260124d88d/"

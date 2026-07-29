@@ -6,7 +6,6 @@ episode: 17
 publishedDate: 2026-04-07
 guests: ["simon-wardley"]
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Simon Wardley", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "software architecture", "governance", "sociotechnical systems", "stakeholder communication", "power dynamics"]
 youtube: "https://youtu.be/uM_X2ypvaA0"
 podcast: "https://player.captivate.fm/episode/f124eda9-769d-442e-ac9f-b1a12d478ec6/"

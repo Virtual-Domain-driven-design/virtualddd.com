@@ -6,7 +6,6 @@ episode: 23
 publishedDate: 2026-07-07
 guests: ["larisa-feldman"]
 hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
-authors: ["Larisa Feldman", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "software architecture", "enabling architecture", "hands-on architect", "ivory-tower architect", "technical leadership"]
 youtube: "https://youtu.be/HQnvMHkssVM"
 podcast: "https://player.captivate.fm/episode/3fec96b4-f2f9-4567-8ff8-66474abc00fb/"
