@@ -1328,122 +1328,122 @@
   "stories": {
     "25aa485afafc808ba57de935666712b9": {
       "slug": "stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "b32394df15e67de8"
     },
     "261a485afafc80ce8cd3d7859609d45a": {
       "slug": "systems-change-transparency",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "920bfd51fd84c4c0"
     },
     "271a485afafc806ba089fad63d1d6dbd": {
       "slug": "misaligned-expectations-goals-dont-align",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "5ffa2829d9251e69"
     },
     "278a485afafc802abf52cc7e2666584e": {
       "slug": "slow-clap-hierarchy-kills-workshop",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "7073ffcfb3065ecf"
     },
     "278a485afafc8042be49e087c046bc74": {
       "slug": "architectural-indecision",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "dd25309ff35a7bb5"
     },
     "278a485afafc8075a642ea096246f304": {
       "slug": "loudest-voice-architectural-decisions",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "61197d4f4c3aca3f"
     },
     "278a485afafc807d87f8e58df9fa3a1a": {
       "slug": "drawing-same-system-different-architectures",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "d8a087707b01914d"
     },
     "278a485afafc809899dce7584b083b59": {
       "slug": "when-explaining-more-isnt-the-answer",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "837ca26a059e1479"
     },
     "278a485afafc80b58a07fdead3f99562": {
       "slug": "architects-disagreement-team-decision",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "2410858a13d8de46"
     },
     "278a485afafc80bd903ef978de92f29c": {
       "slug": "governance-after-incident-decision-reversal",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "3fef042191e04c4b"
     },
     "278a485afafc80e382e9d1212e87fc1d": {
       "slug": "uncovering-ghost-decisions-architecture",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "df808f644fe6e4b1"
     },
     "278a485afafc80f49d39d3370577823b": {
       "slug": "team-led-architecture-advice-process",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "4fcffb9baab0a873"
     },
     "28ea485afafc808cb7baf12a28182a17": {
       "slug": "hidden-weight-rank-improvement-sessions",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "69e49505227668ed"
     },
     "28fa485afafc8057967dfba5f1da6c57": {
       "slug": "true-cost-simplest-thing-to-do",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "5ce1ed0cf299763d"
     },
     "2aaa485afafc80f8a728d4d6eb93de51": {
       "slug": "cultural-resistance-collaborative-modeling",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "fb4f3dcee5a8b96f"
     },
     "2b5a485afafc80e28557c904e5f5faf4": {
       "slug": "workshop-agreement-without-action",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "7c38c0702b9c89fd"
     },
     "2caa485afafc807f83acd0ad9454dcb0": {
       "slug": "legacy-system-modernization-empathy",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "8abb700820827788"
     },
     "2cba485afafc8007aa70efa924f6464e": {
       "slug": "method-wars-hide-real-problem",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "d465a5f723de24c6"
     },
     "2e7a485afafc801abe1ce35873fa2263": {
       "slug": "psychological-safety-incident-response",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "397f9f9fb4cf13a4"
     },
     "302a485afafc80da9c74f651c36fc821": {
       "slug": "turning-architecture-conflict-into-collaboration",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:08:00.000Z",
       "hash": "92310947d4e6ce7b"
     },
     "314a485afafc800ba59fd51a57cf8aa9": {
       "slug": "impact-mapping-before-architecture",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:07:00.000Z",
       "hash": "dd9a5499fe6a8f41"
     },
     "350a485afafc80ffbaebfcfefdfda010": {
       "slug": "the-reluctant-architect",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-07-29T14:07:00.000Z",
       "hash": "d161f759d6a0639b"
     },
     "353a485afafc80b6a464cd294adccb23": {
       "slug": "externalising-decisions-not-alignment",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:07:00.000Z",
       "hash": "d7f27dacaa7cb977"
     },
     "367a485afafc8083b7f9c08967c8ad21": {
       "slug": "problem-isnt-technical-ddd-europe",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-07-29T14:07:00.000Z",
       "hash": "ab67df32d0d0e185"
     }
   }
