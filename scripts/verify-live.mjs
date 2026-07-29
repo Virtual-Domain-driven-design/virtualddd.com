@@ -45,6 +45,8 @@ const targets = all
 
 console.log(`checking ${targets.length} URL(s) against ${base}\n`);
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const CONCURRENCY = 6;
 const results = [];
 let index = 0;
@@ -101,14 +103,36 @@ const host = new URL(base).host;
 let wwwNote = '';
 if (host.split('.').length === 2) {
   const wwwUrl = `https://www.${host}/`;
-  try {
-    const res = await fetch(wwwUrl, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
-    const to = res.headers.get('location');
-    if (res.status !== 301) bad.push(`${wwwUrl} — ${res.status}, expected a 301 to https://${host}/`);
-    else if (new URL(to, wwwUrl).host !== host) bad.push(`${wwwUrl} — 301 to ${to}, which is not ${host}`);
-    else wwwNote = `  www → apex  : 301 ${to}`;
-  } catch (e) {
-    bad.push(`${wwwUrl} — request failed: ${e.message}`);
+  // Retried, because this runs seconds after the release symlink was swapped
+  // and Apache does not always have the new `.htaccess` in hand yet. In that
+  // window every address answers 200 from the document root — the sweep above
+  // cannot see it, since a page that is *served* is a pass there, but this is
+  // the one check that demands a redirect, so it is the only one that fails.
+  //
+  // It has done so twice, on deploys that were entirely fine, and the cost is
+  // not a red cross: `Tell n8n what shipped` is skipped when this step fails,
+  // so a good deploy ships silently. A check that cries wolf is worse than no
+  // check, because people learn to scroll past it.
+  const attempts = 3;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    if (attempt > 1) await sleep(4000);
+    try {
+      const res = await fetch(wwwUrl, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
+      const to = res.headers.get('location');
+      if (res.status === 301 && to && new URL(to, wwwUrl).host === host) {
+        wwwNote = `  www → apex  : 301 ${to}`;
+        break;
+      }
+      if (attempt < attempts) {
+        console.log(`  www answered ${res.status}; the release may still be settling, retrying…`);
+        continue;
+      }
+      if (res.status !== 301) bad.push(`${wwwUrl} — ${res.status} after ${attempts} tries, expected a 301 to https://${host}/`);
+      else bad.push(`${wwwUrl} — 301 to ${to}, which is not ${host}`);
+    } catch (e) {
+      if (attempt < attempts) { console.log(`  www request failed (${e.message}), retrying…`); continue; }
+      bad.push(`${wwwUrl} — request failed: ${e.message}`);
+    }
   }
 }
 
