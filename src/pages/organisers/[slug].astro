@@ -13,7 +13,7 @@ import TeaserCard from '../../components/TeaserCard.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { iso, shortDate } from '../../lib/dates';
-import { byDateDesc } from '../../lib/collections';
+import { byDateDesc, creditsFor, guestsById } from '../../lib/collections';
 import { anySamePerson, profileLinks, samePerson } from '../../lib/people';
 
 export async function getStaticPaths() {
@@ -30,8 +30,9 @@ const sessions = (await getCollection('sessions'))
 const coHosted = (await getCollection('sessions'))
   .filter((s) => anySamePerson(s.data.coOrganisers, d.name))
   .sort(byDateDesc);
+const storyGuestIndex = await guestsById();
 const stories = (await getCollection('stories'))
-  .filter((s) => anySamePerson(s.data.authors, d.name))
+  .filter((s) => anySamePerson(creditsFor(s.data, storyGuestIndex), d.name))
   .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0));
 const heuristics = (await getCollection('heuristics'))
   .filter((h) => anySamePerson(h.data.authors, d.name) || (h.data.submitter && samePerson(h.data.submitter, d.name)))

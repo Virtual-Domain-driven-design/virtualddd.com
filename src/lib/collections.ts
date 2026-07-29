@@ -116,3 +116,28 @@ export async function guestsById() {
   const guests = await getCollection('sessionGuests');
   return new Map(guests.map((g) => [g.id, g]));
 }
+
+/**
+ * Who is credited on a story, in reading order: the guest whose story it is,
+ * then the hosts who asked the questions.
+ *
+ * One helper rather than the same three lines in seven places, because the
+ * fallback is the interesting part. `Guests` and `Hosts` replaced an `Authors`
+ * multi-select that mixed them together; `authors` is read only when a story
+ * has neither, so an uncurated row still has a byline and so the day `Authors`
+ * is deleted in Notion nothing here goes blank. When that happens, delete the
+ * last clause and the field with it.
+ */
+export function creditsFor(
+  d: CollectionEntry<'stories'>['data'],
+  guestIndex: Map<string, CollectionEntry<'sessionGuests'>>,
+): string[] {
+  const guests = resolveRefs(d.guests, guestIndex).map((g) => g.data.name);
+  const credited = [...guests, ...d.hosts];
+  return credited.length ? credited : d.authors;
+}
+
+/** As `creditsFor`, for the one-off caller that has no index to hand. */
+export async function storyCredits(d: CollectionEntry<'stories'>['data']): Promise<string[]> {
+  return creditsFor(d, await guestsById());
+}

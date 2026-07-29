@@ -13,7 +13,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { pageJsonLd, topTrail } from '../lib/seo';
 import { getCollection } from 'astro:content';
 import { iso, shortDate } from '../lib/dates';
-import { byDateDesc } from '../lib/collections';
+import { byDateDesc, creditsFor, guestsById } from '../lib/collections';
 
 interface Episode {
   href: string;
@@ -36,6 +36,7 @@ const sessions = (await getCollection('sessions'))
     sub: s.data.organiser ? `Hosted by ${s.data.organiser}` : undefined,
   }));
 
+const storyGuestIndex = await guestsById();
 const stories = (await getCollection('stories'))
   .filter((s) => s.data.podcast)
   .sort((a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0))
@@ -45,7 +46,7 @@ const stories = (await getCollection('stories'))
     player: s.data.podcast!,
     iso: s.data.publishedDate ? iso(s.data.publishedDate) : '',
     fallback: s.data.publishedDate ? shortDate(s.data.publishedDate) : '',
-    sub: s.data.authors.slice(0, 3).join(', ') || undefined,
+    sub: creditsFor(s.data, storyGuestIndex).slice(0, 3).join(', ') || undefined,
   }));
 
 const openSpaces = (await getCollection('openSpaces'))

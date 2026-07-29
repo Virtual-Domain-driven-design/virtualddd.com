@@ -15,7 +15,7 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 import { shortDate } from '../lib/dates';
 import { SITE_NAME, SITE_TAGLINE } from '../lib/seo';
-import { guestsById, resolveRefs } from '../lib/collections';
+import { creditsFor, guestsById, resolveRefs } from '../lib/collections';
 
 export async function GET(context: APIContext) {
   const base = (context.site ?? new URL('https://virtualddd.com')).toString().replace(/\/$/, '');
@@ -64,10 +64,11 @@ export async function GET(context: APIContext) {
 
   out.push('---', '', '# Facilitating Stories', '');
   for (const s of stories) {
+    const credited = creditsFor(s.data, guests);
     entry(`/facilitating-archdes/${s.id}/`, s.data.title, [
       ...(s.data.episode != null ? [`Episode: ${s.data.episode}`] : []),
       ...(s.data.publishedDate ? [`Date: ${shortDate(s.data.publishedDate)}`] : []),
-      ...(s.data.authors.length ? [`Authors: ${s.data.authors.join(', ')}`] : []),
+      ...(credited.length ? [`Told by: ${credited.join(', ')}`] : []),
     ], s.body ?? '');
   }
 

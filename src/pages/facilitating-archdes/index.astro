@@ -3,13 +3,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrganiserCard from '../../components/OrganiserCard.astro';
 import TeaserCard from '../../components/TeaserCard.astro';
 import { getCollection } from 'astro:content';
-import { tagOptions } from '../../lib/collections';
+import { creditsFor, guestsById, tagOptions } from '../../lib/collections';
 import { packFacet } from '../../lib/card-filter';
 import CardFilter from '../../components/CardFilter.astro';
 import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
 import { collectionPage, topTrail } from '../../lib/seo';
 
+const storyGuestIndex = await guestsById();
 const stories = (await getCollection('stories')).sort(
   (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
 );
@@ -88,7 +89,8 @@ const jsonLd = collectionPage(Astro.site, {
         <div class="story-list">
           {stories.map((s) => {
             const d = s.data;
-            const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
+            const credited = creditsFor(d, storyGuestIndex);
+            const authors = credited.slice(0, 3).join(', ') + (credited.length > 3 ? ' & more' : '');
             return (
               <TeaserCard
                 class="story-card"
@@ -101,11 +103,11 @@ const jsonLd = collectionPage(Astro.site, {
                 iso={d.publishedDate ? iso(d.publishedDate) : undefined}
                 dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}
                 accentMeta
-                sub={d.authors.length > 0 ? `by ${authors}` : undefined}
+                sub={credited.length > 0 ? `by ${authors}` : undefined}
                 excerpt={excerpt(s.body ?? '', d.seoMetadescription ?? '')}
                 more="Read more →"
                 data={{
-                  search: [d.title, ...d.authors, ...d.tags].join(' ').toLowerCase(),
+                  search: [d.title, ...credited, ...d.tags].join(' ').toLowerCase(),
                   tags: packFacet(d.tags),
                 }}
               />

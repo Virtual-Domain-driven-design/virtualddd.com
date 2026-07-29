@@ -2,13 +2,15 @@
 import type { CollectionEntry } from 'astro:content';
 import TeaserCard from './TeaserCard.astro';
 import { iso, shortDate } from '../lib/dates';
+import { storyCredits } from '../lib/collections';
 
 interface Props {
   story: CollectionEntry<'stories'>;
 }
 const { story } = Astro.props;
 const d = story.data;
-const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & more' : '');
+const credits = await storyCredits(d);
+const authors = credits.slice(0, 3).join(', ') + (credits.length > 3 ? ' & more' : '');
 ---
 
 <TeaserCard
@@ -18,5 +20,5 @@ const authors = d.authors.slice(0, 3).join(', ') + (d.authors.length > 3 ? ' & m
   badge={d.episode != null ? `Ep ${d.episode}` : undefined}
   iso={d.publishedDate ? iso(d.publishedDate) : undefined}
   dateFallback={d.publishedDate ? shortDate(d.publishedDate) : undefined}
-  sub={d.authors.length > 0 ? authors : undefined}
+  sub={credits.length > 0 ? authors : undefined}
 />
