@@ -411,21 +411,35 @@ export function dddCrewJsonLd(
   );
 }
 
-/** A story: an Article with its authors. */
+/**
+ * A story: an Article with the people on it.
+ *
+ * The guest is the `author` — it is their story, and the episode exists to
+ * tell it. The hosts ask the questions, which is `contributor`, not
+ * authorship. When neither is given the old `Authors` multi-select stands in,
+ * so a story nobody has curated yet still has a byline.
+ */
 export function storyJsonLd(
   site: URL | undefined,
   story: CollectionEntry<'stories'>,
-  opts: { url: string; image?: string; trail: [string, string][] },
+  opts: {
+    url: string; image?: string; trail: [string, string][];
+    authors?: PersonInput[]; contributors?: PersonInput[];
+  },
 ) {
   const d = story.data;
   const org = organization(site);
+  const authors = opts.authors?.length
+    ? opts.authors.map(person)
+    : d.authors.map((name) => ({ '@type': 'Person', name }));
   return graph(org, breadcrumbs(site, opts.trail), {
     '@type': 'Article',
     '@id': `${opts.url}#article`,
     headline: d.title,
     ...(d.seoMetadescription ? { description: d.seoMetadescription } : {}),
     ...(d.publishedDate ? { datePublished: new Date(d.publishedDate).toISOString() } : {}),
-    author: d.authors.map((name) => ({ '@type': 'Person', name })),
+    author: authors,
+    ...(opts.contributors?.length ? { contributor: opts.contributors.map(person) } : {}),
     publisher: { '@id': org['@id'] },
     ...(opts.image ? { image: [opts.image] } : {}),
     mainEntityOfPage: opts.url,

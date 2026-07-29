@@ -4,6 +4,8 @@ slug: "when-explaining-more-isnt-the-answer"
 status: "Published"
 episode: 15
 publishedDate: 2026-03-17
+guests: ["diana-montalion"]
+hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler"]
 authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "collaborative modelling", "psychological safety", "sociotechnical systems", "domain-driven design", "engineering culture", "social dynamics", "enabling architecture"]
 youtube: "https://youtu.be/86n74wXqwZA"

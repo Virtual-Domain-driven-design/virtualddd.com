@@ -4,6 +4,8 @@ slug: "method-wars-hide-real-problem"
 status: "Published"
 episode: 17
 publishedDate: 2026-04-07
+guests: ["simon-wardley"]
+hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler", "Andrew Harmel-Law"]
 authors: ["Simon Wardley", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "software architecture", "governance", "sociotechnical systems", "stakeholder communication", "power dynamics"]
 youtube: "https://youtu.be/uM_X2ypvaA0"

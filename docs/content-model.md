@@ -37,6 +37,20 @@ ddd-crew content comes from GitHub, not Notion (`npm run sync:ddd-crew`).
   database. The fields here exist to produce good `Person` structured data, and
   the links become `sameAs`.
 
+**Stories use both, and the names are not decoration.** A story's `Guests`
+points at the same guests database as a session, and its `Hosts` at the
+organisers, so someone who has told a story and spoken at a session is one row
+with one bio. **Order is the meaning**: the first guest is the one whose story
+it is, and two episodes in the archive are the same pair the other way round.
+An episode with no outside guest is hosts only; on those the hosts are the
+`author` in the structured data rather than `contributor`, because it is their
+story being told and not an interview.
+
+Both replaced a single `Authors` multi-select that mixed the two together and
+could not tell you which was which. `authors` is still read as a fallback for
+the byline, so a story nobody has curated yet keeps its credit; retire it once
+Notion no longer has the property.
+
 **Both databases carry the same four profile links**: `URL` (`Website` on
 guests), `LinkedIn`, `Mastodon` and `Bluesky`. `profileLinks` in
 `src/lib/people.ts` is the one list that orders them, and everything that shows

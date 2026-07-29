@@ -4,6 +4,8 @@ slug: "hidden-weight-rank-improvement-sessions"
 status: "Published"
 episode: 9
 publishedDate: 2025-12-23
+guests: ["paul-rayner"]
+hosts: ["Andrew Harmel-Law", "Kenny Baas-Schwegler", "Andrea Magnorsky"]
 authors: ["Paul Rayner", "Andrew Harmel-Law", "Kenny Schwegler", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "engineering culture", "technical leadership", "power dynamics"]
 youtube: "https://youtu.be/sd8cTUMieog"

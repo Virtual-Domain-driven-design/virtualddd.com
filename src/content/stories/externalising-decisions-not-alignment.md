@@ -4,6 +4,8 @@ slug: "externalising-decisions-not-alignment"
 status: "Published"
 episode: 24
 publishedDate: 2026-07-21
+guests: ["michael-joyce"]
+hosts: ["Andrea Magnorsky", "Andrew Harmel-Law"]
 authors: ["Michael Joyce", "Andrea Magnorsky", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "collaborative modelling", "stakeholder communication", "adr", "social dynamics", "technical leadership", "decision-making process"]
 youtube: "https://youtu.be/UrdOmhWyfTs"

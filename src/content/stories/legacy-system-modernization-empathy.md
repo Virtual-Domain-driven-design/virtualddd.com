@@ -4,6 +4,8 @@ slug: "legacy-system-modernization-empathy"
 status: "Published"
 episode: 10
 publishedDate: 2026-01-06
+guests: ["michael-plod", "beija-nigl"]
+hosts: ["Kenny Baas-Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 tags: ["legacy modernisation", "software architecture", "facilitating software architecture and design", "sociotechnical systems", "social dynamics"]
 youtube: "https://youtu.be/tpE_uGhCx5g"

@@ -77,6 +77,14 @@ const stories = defineCollection({
       status: z.enum(['Ideas', 'Planning', 'Planned', 'Recorded', 'Drafting', 'Published']),
       episode: z.number().optional(),
       publishedDate: z.coerce.date().optional(),
+      // The people on an episode, in the order Notion holds them: the first
+      // guest is the one whose story it is. `hosts` are organisers and stay
+      // plain names, the same as a session's organiser; `guests` is a
+      // reference() because those rows carry the links that become `sameAs`.
+      guests: z.array(reference('sessionGuests')).default([]),
+      hosts: z.array(z.string()).default([]),
+      // The multi-select these two replaced. Still read so a story nobody has
+      // curated yet keeps a byline; retire it once Notion no longer has it.
       authors: z.array(z.string()).default([]),
       tags: z.array(z.string()).default([]),
       featuredImage: image().optional(),

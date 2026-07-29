@@ -4,6 +4,8 @@ slug: "workshop-agreement-without-action"
 status: "Published"
 episode: 12
 publishedDate: 2026-02-03
+guests: ["xin-yao"]
+hosts: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "collaborative software design", "power dynamics", "psychological safety", "enabling architecture"]
 youtube: "https://youtu.be/5Zp7eNsLFLM"

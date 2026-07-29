@@ -4,6 +4,8 @@ slug: "the-reluctant-architect"
 status: "Published"
 episode: 23
 publishedDate: 2026-07-07
+guests: ["larisa-feldman"]
+hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler", "Andrew Harmel-Law"]
 authors: ["Larisa Feldman", "Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["facilitating software architecture and design", "software architecture", "enabling architecture", "hands-on architect", "ivory-tower architect", "technical leadership"]
 youtube: "https://youtu.be/HQnvMHkssVM"

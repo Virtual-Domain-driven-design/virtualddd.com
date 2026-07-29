@@ -4,6 +4,7 @@ slug: "governance-after-incident-decision-reversal"
 status: "Published"
 episode: 5
 publishedDate: 2025-10-28
+hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler", "Andrew Harmel-Law"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["governance", "facilitating software architecture and design", "social dynamics", "power dynamics", "leadership"]
 youtube: "https://youtu.be/GXz-zzNyL38"

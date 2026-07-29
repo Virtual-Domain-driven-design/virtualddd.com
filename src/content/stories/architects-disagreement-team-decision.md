@@ -4,6 +4,8 @@ slug: "architects-disagreement-team-decision"
 status: "Published"
 episode: 7
 publishedDate: 2025-11-25
+guests: ["peter-hunter", "elena-stojmilova"]
+hosts: ["Kenny Baas-Schwegler", "Andrea Magnorsky"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "power dynamics", "conflict management", "technical leadership", "social dynamics"]
 youtube: "https://youtu.be/OjWax86V-M4"

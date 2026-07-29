@@ -4,6 +4,8 @@ slug: "misaligned-expectations-goals-dont-align"
 status: "Published"
 episode: 11
 publishedDate: 2026-01-18
+guests: ["beija-nigl", "michael-plod"]
+hosts: ["Kenny Baas-Schwegler", "Andrew Harmel-Law"]
 authors: ["Beija Nigl", "Michael Plöd", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["collaborative modelling", "software architecture", "sociotechnical systems", "facilitating software architecture and design", "stakeholder communication", "domain-driven design"]
 youtube: "https://youtu.be/P67pgiGSWfU"

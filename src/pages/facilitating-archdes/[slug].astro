@@ -2,15 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
 import DiscussedHeuristics from '../../components/DiscussedHeuristics.astro';
+import PersonRow from '../../components/PersonRow.astro';
 import PrevNext from '../../components/PrevNext.astro';
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import { youtubeEmbed } from '../../lib/embeds';
 import { excerpt } from '../../lib/excerpt';
-import { storyJsonLd, pageTitle, trail } from '../../lib/seo';
+import { storyJsonLd, pageTitle, trail, type PersonInput } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import { iso as toIso, longDate, shortDate } from '../../lib/dates';
-import { heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
+import { profileLinks, samePerson } from '../../lib/people';
+import { guestsById, heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
 
 export async function getStaticPaths() {
   const stories = await getCollection('stories');
@@ -23,6 +25,47 @@ const d = story.data;
 
 const discussed = resolveRefs(d.curatedHeuristics, await heuristicsById());
 const videoEmbed = youtubeEmbed(d.youtube);
+
+// The people on the episode. Guests are a relation to the same database the
+// sessions use, so someone who has told a story and spoken at a session is one
+// row with one bio; hosts are organisers, matched by name for the portrait and
+// the link to their page, exactly as a session matches its organiser.
+const organisers = await getCollection('organisers');
+const guests = resolveRefs(d.guests, await guestsById()).map((g) => {
+  const also = organisers.find((o) => samePerson(o.data.name, g.data.name));
+  const links = profileLinks(g.data);
+  return {
+    name: g.data.name,
+    bio: g.data.bio,
+    photo: g.data.photo ?? also?.data.photo,
+    href: also ? `/organisers/${also.id}/` : undefined,
+    links: links.length ? links : profileLinks(also?.data ?? {}),
+  };
+});
+const hosts = d.hosts.map((name) => {
+  const o = organisers.find((x) => samePerson(x.data.name, name));
+  return { name: o?.data.name ?? name, role: o?.data.role, photo: o?.data.photo,
+    href: o ? `/organisers/${o.id}/` : undefined, links: profileLinks(o?.data ?? {}) };
+});
+
+// The byline, and the only place the old `Authors` multi-select is still read:
+// a story that has not been curated into Guests and Hosts yet keeps its credit.
+const credited = [...guests, ...hosts].map((p) => p.name);
+const byline = credited.length ? credited : d.authors;
+
+// A guest we only know the name of is a credit under the title. A guest with a
+// bio is worth a block at the foot of the page, the same two levels as a
+// session — no bio, no block, and writing one in Notion makes it appear.
+const guestsIntroduced = guests.some((g) => g.bio);
+
+const asPerson = (p: typeof guests[number] | typeof hosts[number]): PersonInput => ({
+  name: p.name,
+  bio: 'bio' in p ? p.bio : undefined,
+  role: 'role' in p ? p.role : undefined,
+  url: p.links.find((l) => l.label === 'Website')?.href,
+  sameAs: p.links.map((l) => l.href),
+  page: p.href ? new URL(p.href, Astro.site).toString() : undefined,
+});
 
 // Prev / next by episode.
 const byEpisode = [...stories].sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
@@ -51,6 +94,10 @@ const jsonLd = storyJsonLd(Astro.site, story, {
   url,
   image: image ? await socialCard(Astro.site, image) : undefined,
   trail: trail('stories', d.title, `/facilitating-archdes/${story.id}/`),
+  // On the eighteen episodes with no outside guest, the hosts are the authors:
+  // it is their story being told, not an interview.
+  authors: (guests.length ? guests : hosts).map(asPerson),
+  contributors: guests.length ? hosts.map(asPerson) : [],
 });
 ---
 
@@ -67,7 +114,11 @@ const jsonLd = storyJsonLd(Astro.site, story, {
       <p class="detail-back" data-pagefind-ignore><a href="/facilitating-archdes/">← All stories</a></p>
       <p class="eyebrow eyebrow--pink">Facilitating Stories</p>
       <h1>{d.title}</h1>
-      {d.authors.length > 0 && <p class="byline">by {d.authors.join(', ')}</p>}
+      {byline.length > 0 && (
+        <p class="byline">
+          {guests.length > 0 ? 'with ' : 'by '}<strong>{byline.join(', ')}</strong>
+        </p>
+      )}
       {videoEmbed ? (
         <div class="video">
           <iframe src={videoEmbed} title={d.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -85,7 +136,7 @@ const jsonLd = storyJsonLd(Astro.site, story, {
       <div class="side-card">
         {d.episode != null && <p class="side-ep">Episode {d.episode}</p>}
         {iso && <p class="side-date"><time class="js-local" data-format="date" datetime={iso} data-iso={iso}>{dateStr}</time></p>}
-        {d.authors.length > 0 && <p class="side-authors">{d.authors.join(', ')}</p>}
+        {byline.length > 0 && <p class="side-authors">{byline.join(', ')}</p>}
         {(d.youtube || d.podcast) && (
           <div class="side-links">
             {d.youtube && <a class="btn btn--accent btn--sm btn--block" href={d.youtube}>Watch on YouTube ↗</a>}
@@ -107,6 +158,32 @@ const jsonLd = storyJsonLd(Astro.site, story, {
     <div class="detail-body">
       <div class="prose-body"><Content /></div>
 
+      {guestsIntroduced && (
+        <section class="people-card">
+          <h2>{guests.length === 1 ? 'Guest' : 'Guests'}</h2>
+          <ul class="people">
+            {guests.map((g) => (
+              <li data-test="guest">
+                <PersonRow name={g.name} bio={g.bio} photo={g.photo} href={g.href} links={g.links} stacked />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {hosts.length > 0 && (
+        <section class="people-card">
+          <h2>{hosts.length === 1 ? 'Host' : 'Hosts'}</h2>
+          <ul class="people">
+            {hosts.map((h) => (
+              <li data-test="host">
+                <PersonRow name={h.name} role={h.role} photo={h.photo} href={h.href} links={h.links} stacked />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <DiscussedHeuristics heuristics={discussed} />
 
       <PrevNext
@@ -127,6 +204,13 @@ const jsonLd = storyJsonLd(Astro.site, story, {
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .side-authors { color: var(--color-text-muted); margin: 0 0 var(--space-5); font-size: var(--text-sm); }
     .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
+
+    /* Guests and hosts — the same panels a session uses, so a person looks the
+       same wherever the community met them. */
+    .people-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); margin: var(--space-8) 0; }
+    .people-card h2 { margin-top: 0; }
+    .people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+    .people li + li { border-top: 1px solid var(--color-border); padding-top: var(--space-6); }
 
     .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
