@@ -46,6 +46,16 @@ An episode with no outside guest is hosts only; on those the hosts are the
 `author` in the structured data rather than `contributor`, because it is their
 story being told and not an interview.
 
+The byline says **"by the guest, with the hosts"**, because one flat list of
+names says neither who told the story nor who asked the questions.
+
+**Unlike a session, a story shows its guest block whether or not there is a
+bio.** Sessions hide a bio-less guest because the organiser is the constant and
+the guest is the extra. On a story it is the other way round: the guest is the
+whole episode, and hiding them while showing three hosts credits the wrong
+people. A name on its own is a thin card, and that is the point at which
+somebody writes a bio in Notion.
+
 Both replaced a single `Authors` multi-select that mixed the two together and
 could not tell you which was which. `authors` is still read as a fallback for
 the byline, so a story nobody has curated yet keeps its credit; retire it once

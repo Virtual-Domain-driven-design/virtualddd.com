@@ -48,15 +48,16 @@ const hosts = d.hosts.map((name) => {
     href: o ? `/organisers/${o.id}/` : undefined, links: profileLinks(o?.data ?? {}) };
 });
 
-// The byline, and the only place the old `Authors` multi-select is still read:
-// a story that has not been curated into Guests and Hosts yet keeps its credit.
-const credited = [...guests, ...hosts].map((p) => p.name);
-const byline = credited.length ? credited : d.authors;
-
-// A guest we only know the name of is a credit under the title. A guest with a
-// bio is worth a block at the foot of the page, the same two levels as a
-// session — no bio, no block, and writing one in Notion makes it appear.
-const guestsIntroduced = guests.some((g) => g.bio);
+// "by the guest, with the hosts". The guest told the story and the hosts asked
+// the questions, and a byline that lumps them into one list says neither. An
+// episode with no outside guest is the hosts talking to each other, so they are
+// the ones it is by. `authors` is the last resort, for a story nobody has
+// curated into Guests and Hosts yet.
+const guestNames = guests.map((g) => g.name);
+const hostNames = hosts.map((h) => h.name);
+const bylineBy = guestNames.length ? guestNames : (hostNames.length ? hostNames : d.authors);
+const bylineWith = guestNames.length ? hostNames : [];
+const credited = [...guestNames, ...hostNames];
 
 const asPerson = (p: typeof guests[number] | typeof hosts[number]): PersonInput => ({
   name: p.name,
@@ -114,9 +115,11 @@ const jsonLd = storyJsonLd(Astro.site, story, {
       <p class="detail-back" data-pagefind-ignore><a href="/facilitating-archdes/">← All stories</a></p>
       <p class="eyebrow eyebrow--pink">Facilitating Stories</p>
       <h1>{d.title}</h1>
-      {byline.length > 0 && (
+      {bylineBy.length > 0 && (
         <p class="byline">
-          {guests.length > 0 ? 'with ' : 'by '}<strong>{byline.join(', ')}</strong>
+          by <strong>{bylineBy.join(', ')}</strong>{bylineWith.length > 0 && (
+            <Fragment> with <strong>{bylineWith.join(', ')}</strong></Fragment>
+          )}
         </p>
       )}
       {videoEmbed ? (
@@ -136,7 +139,7 @@ const jsonLd = storyJsonLd(Astro.site, story, {
       <div class="side-card">
         {d.episode != null && <p class="side-ep">Episode {d.episode}</p>}
         {iso && <p class="side-date"><time class="js-local" data-format="date" datetime={iso} data-iso={iso}>{dateStr}</time></p>}
-        {byline.length > 0 && <p class="side-authors">{byline.join(', ')}</p>}
+        {credited.length > 0 && <p class="side-authors">{credited.join(', ')}</p>}
         {(d.youtube || d.podcast) && (
           <div class="side-links">
             {d.youtube && <a class="btn btn--accent btn--sm btn--block" href={d.youtube}>Watch on YouTube ↗</a>}
@@ -158,7 +161,7 @@ const jsonLd = storyJsonLd(Astro.site, story, {
     <div class="detail-body">
       <div class="prose-body"><Content /></div>
 
-      {guestsIntroduced && (
+      {guests.length > 0 && (
         <section class="people-card">
           <h2>{guests.length === 1 ? 'Guest' : 'Guests'}</h2>
           <ul class="people">
