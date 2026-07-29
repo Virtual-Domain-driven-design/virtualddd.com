@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["domain storytelling", "software architecture", "collaborative modelling"]
 video: "https://www.youtube.com/embed/HbyTUrblaN4"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "What Writing a Book Taught Us About Modelling"
 seoMetadescription: "Writing a book about Domain Storytelling forced its authors to name what they had only ever done intuitively. What that reflection changed."

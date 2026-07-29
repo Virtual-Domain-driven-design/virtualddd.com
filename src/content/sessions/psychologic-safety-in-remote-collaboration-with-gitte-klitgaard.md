@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["agile teams", "psychological safety", "remote facilitation", "remote collaboration", "collaborative modelling", "sociotechnical systems"]
 video: "https://www.youtube.com/embed/KMvEt18aO5c"
 podcastPlayer: "https://player.captivate.fm/episode/2ad696c2-a045-4c92-bbe6-cfe720b97a01/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["gitte-klitgaard"]
 seoTitle: "Psychological Safety in Remote Collaboration"

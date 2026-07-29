@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["software architecture", "tactical design", "functional programming"]
 video: "https://www.youtube.com/embed/SAjsP2igBNk"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["thomas-pierrain", "bruno-boucard"]
 seoTitle: "Beyond Hexagonal Architecture: The Functional Core"

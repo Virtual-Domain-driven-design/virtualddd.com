@@ -7,7 +7,7 @@ typeOfSession: "debate"
 level: ["Intermediate"]
 tags: ["strategic design"]
 video: "https://www.youtube.com/embed/uaRYe_bNsMg"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["zsofia-herendi"]
 seoTitle: "Transforming Business Models Under Pressure"

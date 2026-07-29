@@ -7,7 +7,7 @@ typeOfSession: "panel-discussion"
 level: ["Advanced"]
 tags: ["ddddd", "essential"]
 video: "https://www.youtube.com/embed/GimWdjmJGek"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["rebecca-wirfs-brock", "woody-zuil", "paul-rayner", "julie-lerman"]
 seoTitle: "Panel: Experimentation in Software Design"

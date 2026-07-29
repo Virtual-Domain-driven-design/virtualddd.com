@@ -8,7 +8,7 @@ level: ["Beginner"]
 tags: ["testing", "collaborative modelling", "essential"]
 video: "https://www.youtube.com/embed/7_KZ8_R4oOU"
 podcastPlayer: "https://player.captivate.fm/episode/6cd8bd2e-2c42-4166-ad54-502c53cf81dd/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Make Your Tests Tell the Story of Your Domain"
 seoMetadescription: "Anne Landro and Mads Opheim on writing tests that carry the nuance perfect naming cannot — so the domain is still readable months later."

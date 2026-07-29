@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["software architecture", "tactical design"]
 video: "https://www.youtube.com/embed/gX_Nx1vqeBQ"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["francesco-strazzullo"]
 seoMetadescription: "Francesco Strazzullo on applying bounded contexts and DDD thinking to the frontend, which is now as much of the architecture as anything behind it."

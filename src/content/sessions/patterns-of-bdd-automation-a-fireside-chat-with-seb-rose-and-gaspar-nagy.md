@@ -8,7 +8,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["behaviour-driven development", "collaborative modelling", "design patterns"]
 video: "https://youtu.be/TP-qyFnN13s"
 podcastPlayer: "https://player.captivate.fm/episode/d2283fab-51bb-40bb-be23-c2cd868011f2/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["seb-rose", "gaspar-nagy"]
 seoTitle: "Patterns of BDD Automation: Seb Rose and Gáspár Nagy"

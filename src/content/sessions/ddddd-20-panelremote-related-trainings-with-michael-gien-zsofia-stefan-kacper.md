@@ -7,7 +7,7 @@ typeOfSession: "panel-discussion"
 level: ["Beginner"]
 tags: ["ddddd", "remote facilitation"]
 video: "https://www.youtube.com/embed/q3Oh9zVKHKo"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["michael-plod", "gien-verschatse", "zsofia-herendi", "stefan-hofer"]
 seoTitle: "Panel: Remote Training in the DDD Community"

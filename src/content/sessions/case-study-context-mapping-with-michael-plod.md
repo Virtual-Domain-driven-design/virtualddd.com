@@ -7,7 +7,7 @@ typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["collaborative modelling", "context mapping"]
 video: "https://www.youtube.com/embed/OthhRfqp-44"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["michael-plod"]
 seoMetadescription: "Michael Plöd walks a real case study through context mapping — applying the patterns to actual bounded contexts rather than discussing the theory."

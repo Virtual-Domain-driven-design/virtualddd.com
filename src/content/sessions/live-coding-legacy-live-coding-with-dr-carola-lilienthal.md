@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["legacy", "refactoring", "tactical design"]
 video: "https://www.youtube.com/embed/Ut3H8oh892A"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["carola-lilienthal"]
 seoMetadescription: "Dr Carola Lilienthal refactors a legacy example live, using DDD to work through large entities and the other monstrosities legacy code is made of."

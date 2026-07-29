@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["bounded context", "strategic design"]
 video: "https://www.youtube.com/embed/u-5sKvh48-g"
 podcastPlayer: "https://player.captivate.fm/episode/e2a78f6d-cbd4-47e0-bf7a-ebd4523767e9/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["julie-lerman", "indu-alagarsamy", "michael-plod", "nick-tune"]
 seoTitle: "Lost in Bounded Context Translation"

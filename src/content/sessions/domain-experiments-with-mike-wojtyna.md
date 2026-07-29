@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["software design", "software architecture"]
 video: "https://www.youtube.com/embed/bl0E7-ov4gw"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["mike-wojtyna"]
 seoMetadescription: "Mike Wojtyna on designing for requirements nobody can foresee: treating the domain as something to experiment against rather than specify up front."

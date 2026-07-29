@@ -5,7 +5,7 @@ status: "Published"
 episode: 8
 publishedDate: 2025-12-09
 guests: ["krisztina-hirth"]
-hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler"]
+hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "strategic design", "technical debt", "legacy modernisation", "engineering culture", "event-driven architecture"]
 youtube: "https://youtu.be/eyJhUqGJgbA"

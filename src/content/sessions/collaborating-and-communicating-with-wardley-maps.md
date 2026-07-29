@@ -7,7 +7,7 @@ typeOfSession: "hands-on"
 level: ["Intermediate"]
 tags: ["collaborative modelling", "wardley mapping", "facilitation"]
 video: "https://www.youtube.com/embed/bobkuufKPoQ"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["ben-mosior"]
 seoMetadescription: "Wardley Mapping in the DDD toolkit: explore and define bounded contexts, weigh strategic options, and design the team topologies to support them."

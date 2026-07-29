@@ -8,7 +8,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["adr", "software design", "long term impact"]
 video: "https://www.youtube.com/embed/WNQ3ZLcW4Mw"
 podcastPlayer: "https://player.captivate.fm/episode/975db4f3-d3f7-4a72-b7fb-ef5907782097/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["dawn-ahukanna", "nivia-henry", "jessica-kerr", "ruth-malan", "rebecca-wirfs-brock", "mathias-verraes", "trond-hjorteland"]
 seoTitle: "Team Collaboration for Modern Product Experiences"

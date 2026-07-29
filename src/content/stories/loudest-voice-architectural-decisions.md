@@ -5,7 +5,7 @@ status: "Published"
 episode: 14
 publishedDate: 2026-03-03
 guests: ["gien-verschatse", "evelyn-van-kelle"]
-hosts: ["Kenny Baas-Schwegler", "Andrea Magnorsky"]
+hosts: ["Kenny Schwegler", "Andrea Magnorsky"]
 authors: ["Gien Verschatse", "Kenny Schwegler", "Evelyn van Kelle", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "power dynamics", "collaborative modelling", "psychological safety", "social dynamics", "engineering culture", "collaborative software design"]
 youtube: "https://youtu.be/ClUQkGbIevo"

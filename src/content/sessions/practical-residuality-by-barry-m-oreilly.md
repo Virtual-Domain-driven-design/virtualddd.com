@@ -6,7 +6,7 @@ datetime: 2023-08-29T17:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["software design", "software architecture", "complexity theory", "event-driven architecture"]
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["barry-o-reilly"]
 seoMetadescription: "Barry M O'Reilly on residuality theory in practice — hands-on work with matrices to stress-test the architectures participants are building now."

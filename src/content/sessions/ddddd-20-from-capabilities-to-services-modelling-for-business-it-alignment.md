@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["ddddd", "software architecture", "strategic design"]
 video: "https://www.youtube.com/embed/rH7On4Z_Lzo"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "From Capabilities to Services: Business-IT Alignment"
 seoMetadescription: "Service orientation is still hard, and getting it wrong ends in a distributed monolith. Modelling from business capabilities towards services instead."

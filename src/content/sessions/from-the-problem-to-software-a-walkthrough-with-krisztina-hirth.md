@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["product design", "organisational design"]
 video: "https://www.youtube.com/embed/zI31Dh-lU8o"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["krisztina-hirth"]
 seoTitle: "From Problem to Software: A Walkthrough"

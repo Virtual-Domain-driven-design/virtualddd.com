@@ -7,7 +7,7 @@ typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["collaborative modelling"]
 video: "https://www.youtube.com/embed/1XA4bUcgp8Q"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["steve-pereira"]
 seoMetadescription: "Steve Pereira on why 70% of transformations fail for want of clarity, and how outcome mapping gets eight people to one understanding of the problem."

@@ -4,7 +4,7 @@ slug: "architectural-indecision"
 status: "Published"
 episode: 4
 publishedDate: 2025-10-14
-hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler", "Andrew Harmel-Law"]
+hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["software architecture", "team collaboration", "facilitating software architecture and design", "adr", "technical leadership", "collaborative software design"]
 youtube: "https://youtu.be/hYOztFDJSmM"

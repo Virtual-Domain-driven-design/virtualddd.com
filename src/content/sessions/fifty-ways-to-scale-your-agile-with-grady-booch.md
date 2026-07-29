@@ -8,7 +8,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["agile", "software architecture"]
 video: "https://www.youtube.com/embed/UcCifzd-xzk"
 podcastPlayer: "https://player.captivate.fm/episode/adcdf3fc-1679-4e9f-bf62-ce05c64b7392/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["grady-booch"]
 seoMetadescription: "Grady Booch on scaling agile beyond a single team, between those who say do not try and those who say it cannot be done."

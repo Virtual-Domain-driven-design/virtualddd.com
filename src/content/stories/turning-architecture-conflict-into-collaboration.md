@@ -5,7 +5,7 @@ status: "Published"
 episode: 19
 publishedDate: 2026-05-12
 guests: ["laila-bougria"]
-hosts: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Baas-Schwegler"]
+hosts: ["Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 authors: ["Laila Bougria", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "software architecture", "conflict management", "team collaboration", "governance", "social dynamics", "sociotechnical systems"]
 youtube: "https://youtu.be/VFtM8-nhmHk"

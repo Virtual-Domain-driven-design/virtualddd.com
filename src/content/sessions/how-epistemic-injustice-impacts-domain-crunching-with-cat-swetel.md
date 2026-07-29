@@ -8,7 +8,7 @@ level: ["Advanced"]
 tags: ["inclusion", "diversity", "collaborative modelling", "power dynamics"]
 video: "https://www.youtube.com/embed/tRgqD2ztHpk"
 podcastPlayer: "https://player.captivate.fm/episode/1deef386-7e8c-443d-9f70-8c29c1bd2695/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["cat-swetel"]
 seoTitle: "Epistemic Injustice and Domain Crunching"

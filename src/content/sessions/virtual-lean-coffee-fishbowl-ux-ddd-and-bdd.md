@@ -8,7 +8,7 @@ level: ["Advanced"]
 tags: ["ux", "behaviour-driven development", "sociotechnical systems"]
 video: "https://www.youtube.com/embed/QelbEUblpLo"
 podcastPlayer: "https://player.captivate.fm/episode/da4527db-b269-48c4-a7da-4538f142d2f4/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "A lean coffee fishbowl on UX, DDD and BDD, prompted by how little three communities doing similar work know about each other."
 featuredImage: "./_assets/virtual-lean-coffee-fishbowl-ux-ddd-and-bdd-featured.jpeg"

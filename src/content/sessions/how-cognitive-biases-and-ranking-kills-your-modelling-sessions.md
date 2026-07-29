@@ -8,7 +8,7 @@ level: ["Advanced"]
 tags: ["sociotechnical systems", "cognitive bias", "deep democracy"]
 video: "https://www.youtube.com/embed/djbbZnOIGE0"
 podcastPlayer: "https://player.captivate.fm/episode/56044b17-a51e-4680-a2c4-0b16dfd654e7/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["evelyn-van-kelle", "romeu-moura"]
 seoTitle: "How Cognitive Bias and Rank Kill Modelling Sessions"

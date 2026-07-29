@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["strategic design", "design heuristics", "team topologies"]
 video: "https://www.youtube.com/embed/UQq-Ayml0iI"
 podcastPlayer: "https://player.captivate.fm/episode/1679d2d4-444e-419f-9f8b-6a959ea07d4c/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["matthew-skelton"]
 seoTitle: "DDD-Lite: Independent Service Heuristics, Matthew Skelton"

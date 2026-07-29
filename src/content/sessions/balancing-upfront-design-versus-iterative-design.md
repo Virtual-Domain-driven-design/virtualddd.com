@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["software architecture", "strategic design", "ux"]
 video: "https://www.youtube.com/embed/6Mzff5zbQ6c"
 podcastPlayer: "https://player.captivate.fm/episode/af9c47d1-45c0-4dd6-99f0-07e978ec6f6d/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["dawn-ahukanna", "rebecca-wirfs-brock", "vladik-khononov", "trond-hjorteland"]
 seoMetadescription: "How much design belongs up front? A discussion on getting early feedback on load-bearing decisions without building on a flawed model."

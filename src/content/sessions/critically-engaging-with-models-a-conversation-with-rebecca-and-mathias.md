@@ -11,7 +11,7 @@ podcastPlayer: "https://player.captivate.fm/episode/2c4a7834-e3e0-4944-8fb9-1725
 meet: "https://meet.google.com/wqd-wiox-dbt"
 humanitix: "https://events.humanitix.com/critically-engaging-with-models-a-conversation-with-rebecca-and-mathias"
 organiser: "Andrea Magnorsky"
-coOrganisers: ["Krisztina Hirth", "Kenny Baas-Schwegler"]
+coOrganisers: ["Krisztina Hirth", "Kenny Schwegler"]
 guests: ["rebecca-wirfs-brock"]
 curatedHeuristics: ["study-models-extract-building-blocks-values"]
 seoTitle: "Critically Engaging With Models: Rebecca Wirfs-Brock"

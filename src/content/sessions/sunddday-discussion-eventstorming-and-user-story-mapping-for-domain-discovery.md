@@ -8,7 +8,7 @@ level: ["Beginner"]
 tags: ["eventstorming", "collaborative modelling"]
 video: "https://www.youtube.com/embed/H553KZPCJQk"
 podcastPlayer: "https://player.captivate.fm/episode/c276384c-1f86-4b4f-9210-fe1b3b157d79/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "EventStorming and User Story Mapping for Domain Discovery"
 seoMetadescription: "A panel on using EventStorming and user story mapping together to discover a domain, with Marco Heimeshoff and guests taking questions from the room."

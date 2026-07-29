@@ -7,7 +7,7 @@ typeOfSession: "panel-discussion"
 level: ["Beginner"]
 tags: ["ddddd", "event sourcing"]
 video: "https://www.youtube.com/embed/uB0SkrElPRo"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["alexey-zimarev"]
 seoMetadescription: "Alexey Zimarev on building several production, customer-facing systems with event sourcing at their heart — what drove the choice, and what it cost."

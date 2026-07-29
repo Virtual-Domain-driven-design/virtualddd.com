@@ -7,7 +7,7 @@ typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["behavioural science", "team dynamics", "software development", "agile coaching"]
 video: "https://www.youtube.com/embed/Xof9iz2uOms"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "The Power of Personal Engagement"
 seoMetadescription: "Rozemarijn Bergevoet and Evelien Roos on what makes a team thrive, and how personal engagement changes what a team is able to do together."

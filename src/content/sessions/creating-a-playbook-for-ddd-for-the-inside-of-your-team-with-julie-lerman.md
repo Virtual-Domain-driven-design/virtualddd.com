@@ -7,7 +7,7 @@ typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["sociotechnical systems", "essential"]
 video: "https://www.youtube.com/embed/GVa5vI19kZo"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["julie-lerman"]
 seoTitle: "Creating a DDD Playbook for Your Team, with Julie Lerman"

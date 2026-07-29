@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["sociotechnical systems", "strategic design"]
 video: "https://www.youtube.com/embed/YqbXEhO237w"
 podcastPlayer: "https://player.captivate.fm/episode/2d26b610-4422-4474-b4d5-89551a4881d5/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["ora-egozi-barzilai", "evelyn-van-kelle"]
 seoTitle: "Socio-Technical Architecture in Practice"

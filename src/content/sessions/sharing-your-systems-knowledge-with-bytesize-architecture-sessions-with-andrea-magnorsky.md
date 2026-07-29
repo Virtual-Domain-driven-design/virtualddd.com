@@ -8,7 +8,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["software design", "software architecture", "diagramming", "software modelling"]
 video: "https://www.youtube.com/embed/uJ0f8fLU2Vw"
 podcastPlayer: "https://player.captivate.fm/episode/5e578f21-318d-46d5-ad24-a395c4ea79a2/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Bytesize Architecture Sessions with Andrea Magnorsky"
 seoMetadescription: "Andrea Magnorsky on Bytesize Architecture Sessions: a short, repeatable format for teams with inconsistent views of their own systems."

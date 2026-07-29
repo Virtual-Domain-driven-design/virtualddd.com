@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["essential", "strategic design", "software architecture", "distributed systems"]
 video: "https://www.youtube.com/embed/h-7-lMJ_jdw"
 podcastPlayer: "https://player.captivate.fm/episode/9793d0be-efdf-4f66-9380-8bcf73934d42/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Splitting Systems into Bounded Contexts and Microservices"
 seoMetadescription: "Why split a large system into smaller services with their own model and language — decoupling teams and giving them real autonomy over what they own."

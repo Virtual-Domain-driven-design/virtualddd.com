@@ -8,7 +8,7 @@ level: ["Advanced"]
 tags: ["strategic design", "leadership", "engineering culture"]
 video: "https://www.youtube.com/embed/kdpGPDGcbxA"
 podcastPlayer: "https://player.captivate.fm/episode/1a6ae063-4d56-4f6b-9a6e-a12a3fbae506/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["marc-burgauer", "trond-hjorteland"]
 seoMetadescription: "Collaborative modelling needs autonomous teams, and autonomous teams need a particular kind of leadership. On the culture that makes the modelling work."

@@ -8,7 +8,7 @@ level: ["Advanced"]
 tags: ["ux", "bounded context", "team topologies", "sociotechnical systems", "strategic design"]
 video: "https://www.youtube.com/embed/wMX9PdRYuRo"
 podcastPlayer: "https://player.captivate.fm/episode/e90c9e07-cd17-4106-b2d3-7fed3fbbebf7/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Products, Teams and Bounded Contexts"
 seoMetadescription: "We talk about independent bounded contexts and independent teams, then couple everything back together through one user. Where the model breaks down."

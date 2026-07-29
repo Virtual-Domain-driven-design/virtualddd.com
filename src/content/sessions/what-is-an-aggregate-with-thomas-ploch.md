@@ -8,7 +8,7 @@ level: ["Advanced"]
 tags: ["aggregate", "functional programming", "tactical design"]
 video: "https://www.youtube.com/embed/7h3DqZmvF9A"
 podcastPlayer: "https://player.captivate.fm/episode/87fc900d-ffd7-4688-b13f-46ef145731df/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["thomas-ploch"]
 seoMetadescription: "Thomas Ploch on the long-running argument about aggregates: Eric Evans's consistency boundary, and what the community has made of it since."

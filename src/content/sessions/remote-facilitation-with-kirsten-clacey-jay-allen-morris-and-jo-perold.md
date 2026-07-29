@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["agile teams", "cross-functional", "remote facilitation", "remote collaboration", "collaborative modelling", "sociotechnical systems"]
 video: "https://www.youtube.com/embed/hi_DlT_dNg4"
 podcastPlayer: "https://player.captivate.fm/episode/3795e781-a972-45c8-9a7f-dc8741e16be8/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["kirsten-clacey", "jay-allen-morris", "jo-perold"]
 seoTitle: "Remote Facilitation: Making Distributed Meetings Work"

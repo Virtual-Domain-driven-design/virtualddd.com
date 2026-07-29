@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 video: "https://www.youtube.com/embed/BpMzn9AxNcw"
 podcastPlayer: "https://player.captivate.fm/episode/43ddc27f-c3ca-42aa-8180-88f1ca8ece75/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["dan-bergh"]
 seoTitle: "Secure by Domain-Driven Design"

@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["design patterns"]
 video: "https://www.ustream.tv/embed/recorded/120901497"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["kevlin-henney"]
 seoMetadescription: "Kevlin Henney on patterns as a way of improving habits and conversations, rather than the catalogue of solutions most people remember them as."

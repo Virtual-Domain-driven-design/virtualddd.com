@@ -9,7 +9,7 @@ tags: ["systems thinking", "quality"]
 video: "https://youtu.be/5hk-vUEa9t0"
 podcastPlayer: "https://player.captivate.fm/episode/cc1e9a98-d57f-4ae1-a875-b7f5878b17d2/"
 organiser: "Andrea Magnorsky"
-coOrganisers: ["Kenny Baas-Schwegler"]
+coOrganisers: ["Kenny Schwegler"]
 guests: ["anne-marie-charrett"]
 curatedHeuristics: ["modulate-quality-investment-by-domain-importance", "frame-testing-as-an-information-gathering-activity", "design-for-modern-quality-attributes", "prioritise-recoverability-over-flawless-deployment", "treat-quality-as-an-emergent-property", "align-quality-strategy-with-product-lifecycle-phase", "make-implicit-quality-perspectives-explicit", "define-quality-as-value-to-a-prioritised-persona"]
 seoTitle: "Escaping the Enshittification Trap"

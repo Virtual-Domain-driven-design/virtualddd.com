@@ -6,7 +6,7 @@ datetime: 2020-07-21T17:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Advanced"]
 tags: ["sociotechnical systems", "decision-making"]
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["diana-montalion"]
 seoTitle: "Speaking Truth to Power: Practising Argumentation"

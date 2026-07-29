@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["strategic design", "software architecture"]
 video: "https://www.youtube.com/embed/WSAHL7oHGUw"
 podcastPlayer: "https://player.captivate.fm/episode/e539d317-60af-4158-8c3e-4c2a1855e6ce/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["trond-hjorteland"]
 seoTitle: "Are Business Capabilities Useful in DDD? Trond Hjorteland"

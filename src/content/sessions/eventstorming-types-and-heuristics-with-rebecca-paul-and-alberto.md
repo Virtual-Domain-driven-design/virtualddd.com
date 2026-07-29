@@ -8,7 +8,7 @@ level: ["Beginner"]
 tags: ["eventstorming", "design heuristics"]
 video: "https://www.youtube.com/embed/jFEC7Pb1FtM"
 podcastPlayer: "https://player.captivate.fm/episode/da917046-4c87-44c6-948b-e2c0471fe24b/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["rebecca-wirfs-brock", "paul-rayner"]
 seoTitle: "EventStorming Types and Heuristics"

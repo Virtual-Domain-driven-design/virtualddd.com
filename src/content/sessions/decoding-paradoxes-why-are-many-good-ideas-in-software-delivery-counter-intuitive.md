@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["complexity thinking", "sociotechnical systems", "systems thinking", "agile coaching", "team topologies", "complexity theory"]
 video: "https://youtu.be/sN3kabXr2wk"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 seoTitle: "Decoding the Paradoxes of Software Delivery"
 seoMetadescription: "Why does deploying more often improve quality? Why does slack time make a team more reliable? On the counter-intuitive ideas that keep turning out to be right."
 featuredImage: "./_assets/decoding-paradoxes-why-are-many-good-ideas-in-software-delivery-counter-intuitive-featured.jpg"

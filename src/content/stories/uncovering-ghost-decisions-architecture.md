@@ -4,7 +4,7 @@ slug: "uncovering-ghost-decisions-architecture"
 status: "Published"
 episode: 3
 publishedDate: 2025-09-30
-hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler", "Andrew Harmel-Law"]
+hosts: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler", "Andrew Harmel-Law"]
 tags: ["adr", "software architecture", "social dynamics", "facilitating software architecture and design", "power dynamics"]
 youtube: "https://youtu.be/MCiO_CgEGrI"

@@ -7,7 +7,7 @@ typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["remote work", "eventstorming", "design heuristics"]
 video: "https://www.youtube.com/embed/CbPEibNUe0s"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["indu-alagarsamy", "maxime-sanglan-charlier", "barry-o-sullivan"]
 seoMetadescription: "EventStorming taken online: the DDD community's go-to tool for collaborating across silo boundaries, and what changes when the wall is virtual."

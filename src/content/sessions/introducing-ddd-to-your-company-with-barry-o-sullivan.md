@@ -8,7 +8,7 @@ level: ["Beginner"]
 tags: ["essential"]
 video: "https://www.youtube.com/embed/Vb7ZwYQPqqQ"
 podcastPlayer: "https://player.captivate.fm/episode/b48e5375-50d9-4f7d-81dd-688f7955d537/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["barry-o-sullivan"]
 seoMetadescription: "Barry O'Sullivan on introducing DDD to a company — getting developers and business owners onto a shared model without drowning them in acronyms."

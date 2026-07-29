@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["strategic design"]
 video: "https://www.youtube.com/embed/3CFyA4iecng"
 podcastPlayer: "https://player.captivate.fm/episode/e3b384de-b2d7-449b-a211-521090c7f707/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "Why DDD techniques that work for one team fail at scale, and how to recognise the near enemies — the practices that look like DDD but are not."
 featuredImage: "./_assets/combatting-the-near-enemies-of-domain-driven-design-at-scale-featured.jpeg"

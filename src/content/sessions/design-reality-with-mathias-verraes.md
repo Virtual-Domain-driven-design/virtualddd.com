@@ -8,7 +8,7 @@ level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["essential", "software design", "domain-driven design"]
 video: "https://www.youtube.com/embed/s_ihqdfcHDY"
 podcastPlayer: "https://player.captivate.fm/episode/416d2114-29e9-4485-b57f-242ede4f2558/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["mathias-verraes"]
 seoMetadescription: "Mathias Verraes on models driven by the domain but not constrained by it — because domain language is messy, organic, ambiguous and incomplete."

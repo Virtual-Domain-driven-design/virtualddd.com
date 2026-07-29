@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["ddddd", "context mapping", "strategic design", "eventstorming"]
 video: "https://www.youtube.com/embed/yaiDzBLi1-A"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["alberto-brandolini"]
 seoMetadescription: "Context mapping used in unconventional ways: multiple business lines, a fragmented technology stack, and what the format reveals under strain."

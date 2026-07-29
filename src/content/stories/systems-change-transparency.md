@@ -4,7 +4,7 @@ slug: "systems-change-transparency"
 status: "Published"
 episode: 2
 publishedDate: 2025-09-16
-hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler"]
+hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["adr", "software architecture", "social dynamics", "facilitating software architecture and design"]
 youtube: "https://youtu.be/Uy_saAvmROQ"

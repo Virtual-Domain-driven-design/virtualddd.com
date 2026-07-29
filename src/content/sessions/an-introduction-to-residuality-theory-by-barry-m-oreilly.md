@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced"]
 tags: ["software design", "software architecture", "complexity theory"]
 video: "https://www.youtube.com/embed/ZAoHBOVgmr4"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Residuality Theory: An Introduction"
 seoMetadescription: "Barry M O'Reilly introduces residuality theory, which models software as interconnected residues — an alternative way to design for complex business environments."

@@ -4,7 +4,7 @@ slug: "stories-on-facilitating-software-architecture-design-because-the-old-ways
 status: "Published"
 episode: 1
 publishedDate: 2025-09-02
-hosts: ["Andrea Magnorsky", "Kenny Baas-Schwegler"]
+hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
 authors: ["Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["software architecture", "ivory-tower architect", "hands-on architect", "facilitating software architecture and design"]
 youtube: "https://youtu.be/X4iUO_3Qebk"

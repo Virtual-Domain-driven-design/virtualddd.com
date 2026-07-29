@@ -6,7 +6,7 @@ datetime: 2020-07-20T14:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["hands-on", "essential"]
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["andrew-harmel-law"]
 seoTitle: "First Steps in DDD: A Free Workshop with Andrew Harmel-Law"

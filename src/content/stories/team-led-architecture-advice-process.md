@@ -5,7 +5,7 @@ status: "Published"
 episode: 6
 publishedDate: 2025-11-11
 guests: ["peter-hunter", "elena-stojmilova"]
-hosts: ["Kenny Baas-Schwegler", "Andrea Magnorsky"]
+hosts: ["Kenny Schwegler", "Andrea Magnorsky"]
 authors: ["Peter Hunter", "Elena Stojmilova", "Kenny Schwegler", "Andrea Magnorsky"]
 tags: ["facilitating software architecture and design", "software architecture", "adr", "enabling architecture", "team agency", "architecture advice process"]
 youtube: "https://youtu.be/UmG_DhtynCs"

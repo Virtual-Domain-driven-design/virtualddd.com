@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["systems thinking", "software architecture", "organisational change"]
 video: "https://www.youtube.com/embed/QwqNdQSgjeM"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["diana-montalion"]
 seoMetadescription: "Diana Montalion on the shift from building software to building information systems — data platforms, decoupled frontends, event streams, all interdependent."

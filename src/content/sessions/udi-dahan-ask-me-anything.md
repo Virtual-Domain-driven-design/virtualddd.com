@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["event-driven architecture", "cqrs", "event sourcing", "bounded context"]
 video: "https://www.youtube.com/embed/c07zWlLBvVg"
 podcastPlayer: "https://player.captivate.fm/episode/e15ddbfa-4038-4182-b163-0a43a8bfdee7/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["udi-dahan"]
 seoTitle: "Udi Dahan: Ask Me Anything on DDD and Architecture"

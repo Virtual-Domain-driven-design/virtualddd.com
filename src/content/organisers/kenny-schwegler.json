@@ -1,6 +1,6 @@
 {
-  "name": "Kenny Baas-Schwegler",
-  "slug": "kenny-baas-schwegler",
+  "name": "Kenny Schwegler",
+  "slug": "kenny-schwegler",
   "role": "Collaborative Software Designer",
   "website": "https://weave-it.org/",
   "linkedin": "https://www.linkedin.com/in/kenny-baas/",
@@ -13,5 +13,5 @@
     "Open-Space"
   ],
   "showOnTeam": true,
-  "photo": "./_assets/kenny-baas-schwegler-photo.jpg"
+  "photo": "./_assets/kenny-schwegler-photo.jpg"
 }

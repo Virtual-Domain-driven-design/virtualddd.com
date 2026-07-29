@@ -7,7 +7,7 @@ typeOfSession: "debate"
 level: ["Beginner"]
 tags: ["essential"]
 video: "https://www.youtube.com/embed/1aICKlpQRoc"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "A DDD London brainstorm: cataloguing the techniques newcomers can use to help their organisation see the value of Domain-Driven Design."
 featuredImage: "./_assets/ddd-london-creating-a-playbook-for-ddd-newcomers-featured.jpg"

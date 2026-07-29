@@ -7,7 +7,7 @@ typeOfSession: "hands-on"
 level: ["Beginner"]
 tags: ["ddddd", "context mapping", "strategic design", "collaborative modelling"]
 video: "https://www.youtube.com/embed/8TDiuQ3vdh0"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "Context maps applied hands-on: not only the supply and service relationships between bounded contexts, but the organisational aspects and team dynamics."
 featuredImage: "./_assets/ddddd-20-context-maps-practically-applied-featured.jpeg"

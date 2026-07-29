@@ -7,7 +7,7 @@ typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
 tags: ["strategic design", "software architecture", "tactical design", "behavioural science", "design patterns"]
 video: "https://www.youtube.com/embed/6hvuLjQpfx4"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Strategic Design or Tactical Design: When to Invest"
 seoMetadescription: "Most people meet DDD as a programming discipline and find strategic design later. On knowing which one the problem in front of you actually needs."

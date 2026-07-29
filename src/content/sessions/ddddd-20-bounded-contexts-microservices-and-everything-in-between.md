@@ -8,7 +8,7 @@ level: ["Beginner"]
 tags: ["ddddd", "bounded context", "sociotechnical systems", "microservices", "software architecture"]
 video: "https://www.youtube.com/embed/Z0RgR9xIQE4"
 podcastPlayer: "https://player.captivate.fm/episode/2a705aac-63ab-4d24-8f9b-cb3eaec65568/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["vladik-khononov"]
 seoTitle: "Bounded Contexts, Microservices and Everything Between"

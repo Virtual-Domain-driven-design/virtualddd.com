@@ -8,7 +8,7 @@ level: ["Intermediate"]
 tags: ["strategic design"]
 video: "https://www.youtube.com/embed/jZo44tbff1c"
 podcastPlayer: "https://player.captivate.fm/episode/de271f64-2f37-48e9-8530-0648f0a685d3/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["mathias-verraes"]
 seoTitle: "How to Read the Blue Book: Strategic Design"

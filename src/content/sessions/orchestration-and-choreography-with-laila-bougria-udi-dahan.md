@@ -8,7 +8,7 @@ level: ["Beginner", "Intermediate", "Advanced"]
 tags: ["software design", "software architecture", "event-driven architecture"]
 video: "https://www.youtube.com/embed/YaEbDVg_z_w"
 podcastPlayer: "https://player.captivate.fm/episode/f5d42669-4533-442f-84c1-7450b6d7ea2d/"
-organiser: "Kenny Baas-Schwegler"
+organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["laila-bougria", "udi-dahan"]
 seoTitle: "Orchestration and Choreography in Event-Driven Systems"
