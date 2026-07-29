@@ -17,7 +17,7 @@ import { normaliseTags } from '../src/lib/tags';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
-  createBlocksToMd, assetRefs, fileUrl, isAssetFor, kebab, plainTitle,
+  createBlocksToMd, assetRefs, fileUrl, isAssetFor, kebab, movedSlugs, plainTitle,
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
@@ -1058,9 +1058,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
   // person has no `Retire URL` checkbox, and the run that renamed them is the
   // only thing that ever knew both addresses. So the run that breaks the URL
   // is the run that keeps the promise, exactly as the content sync does.
-  const moved = Object.entries(now)
-    .filter(([id, e]) => was[id] && was[id].slug !== e.slug)
-    .map(([id, e]) => ({ from: was[id].slug, to: e.slug, id }));
+  const moved = movedSlugs(was, now);
 
   for (const m of moved) {
     console.log(`  → ${m.from} is now ${m.to}; recording a redirect`);

@@ -224,3 +224,25 @@ export function resolveRelation(
   if (p) return { kind: 'pending', title: p.title, status: p.status };
   return { kind: 'dangling' };
 }
+
+/**
+ * Rows whose slug has moved since the last run.
+ *
+ * A slug that changes is an *address* that changes, for any collection whose
+ * rows have pages of their own. Nothing else in the pipeline can see it: an
+ * organiser is a row rather than a page, so there is no `Retire URL` box to
+ * tick and no editorial act to notice, and the run that renames somebody is
+ * the only thing that ever holds both the old name and the new one.
+ *
+ * Keyed on the Notion page id rather than the slug, because the slug is the
+ * thing that moved: matching on it would see a rename as one row leaving and
+ * another arriving, which is a 410 and a new page rather than a redirect.
+ */
+export function movedSlugs(
+  was: Record<string, { slug: string }>,
+  now: Record<string, { slug: string }>,
+): { id: string; from: string; to: string }[] {
+  return Object.entries(now)
+    .filter(([id, e]) => was[id] && was[id].slug !== e.slug)
+    .map(([id, e]) => ({ id, from: was[id].slug, to: e.slug }));
+}

@@ -47,6 +47,23 @@ slug, the page stops existing on the next sync and `npm run check:urls` says
 so. Add
 the old → new pair to `RETIRED` in `scripts/build-redirects.mjs`.
 
+**A person's name is a URL.** An organiser's address is `kebab(their name)`,
+so renaming the row in Notion republishes their page somewhere else. This is
+the one URL change nobody performs deliberately: a session or a story has a
+`Retire URL` checkbox and an editor ticking it, but a person is a row in a
+table and correcting a spelling looks like correcting a spelling. Kenny
+Baas-Schwegler became Kenny Schwegler on 2026-07-29 and the deploy failed, an
+hour later, on an inherited WordPress address that had pointed at the old one
+since the migration.
+
+The sync now handles it: `runRows` remembers each row's slug, and a slug that
+moves records a 301 in `data/retired-urls.csv` and raises a `person-renamed`
+alert so Discord says so. Nothing is needed from you. Two things are worth
+knowing anyway — the old address keeps working through a redirect rather than
+being the address, so anywhere it is written down outside this site is now one
+hop stale; and this applies only to a collection whose rows have pages, which
+is why `RowSpec.section` exists. Guests have no page, so renaming one is free.
+
 **One hostname.** `www.virtualddd.com` redirects to the bare domain. It is
 first in the generated `.htaccess`, so it costs a single hop rather than a path
 redirect on the wrong host followed by another.

@@ -6,6 +6,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { iso, shortDate } from './dates';
 import { hasFinished } from './upcoming';
+import { storyByline } from './people';
 
 type Session = CollectionEntry<'sessions'>;
 
@@ -117,24 +118,16 @@ export async function guestsById() {
   return new Map(guests.map((g) => [g.id, g]));
 }
 
-/**
- * Who is credited on a story, in reading order: the guest whose story it is,
- * then the hosts who asked the questions.
- *
- * One helper rather than the same three lines in seven places, because the
- * fallback is the interesting part. `Guests` and `Hosts` replaced an `Authors`
- * multi-select that mixed them together; `authors` is read only when a story
- * has neither, so an uncurated row still has a byline and so the day `Authors`
- * is deleted in Notion nothing here goes blank. When that happens, delete the
- * last clause and the field with it.
- */
+/** A story's credits as one flat list, for a card, the search index or a feed.
+ *  `storyByline` in people.ts holds the rule; this only resolves the relation
+ *  to names first, which needs the collection and so cannot live there. */
 export function creditsFor(
   d: CollectionEntry<'stories'>['data'],
   guestIndex: Map<string, CollectionEntry<'sessionGuests'>>,
 ): string[] {
   const guests = resolveRefs(d.guests, guestIndex).map((g) => g.data.name);
-  const credited = [...guests, ...d.hosts];
-  return credited.length ? credited : d.authors;
+  const { by, alongside } = storyByline(guests, d.hosts, d.authors);
+  return [...by, ...alongside];
 }
 
 /** As `creditsFor`, for the one-off caller that has no index to hand. */

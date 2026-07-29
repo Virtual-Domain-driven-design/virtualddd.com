@@ -7,7 +7,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { samePerson, anySamePerson, guestsToName, profileLinks } from '../../src/lib/people.ts';
+import { samePerson, anySamePerson, guestsToName, profileLinks, storyByline } from '../../src/lib/people.ts';
 
 describe('samePerson', () => {
   test('matches the same name written the same way', () => {
@@ -119,5 +119,42 @@ describe('naming guests on a card', () => {
     assert.deepEqual(
       guestsToName('Free Trial Workshop with Andrew Harmel-Law', ['Andrew Harmel-Law']),
       { shown: [], extra: 0 });
+  });
+});
+
+describe('who a story is by', () => {
+  // The guest told the story and the hosts asked the questions. One flat list
+  // would say neither, and it is the distinction the Guests/Hosts split exists
+  // for — see docs/content-model.md.
+  test('the guest is the author and the hosts came along', () => {
+    assert.deepEqual(
+      storyByline(['Michael Joyce'], ['Andrea Magnorsky', 'Andrew Harmel-Law']),
+      { by: ['Michael Joyce'], alongside: ['Andrea Magnorsky', 'Andrew Harmel-Law'] });
+  });
+
+  test('two guests both keep their billing, in the order Notion holds them', () => {
+    // Two episodes in the archive are the same pair the other way round: the
+    // one telling the story is first, and that is data, not presentation.
+    assert.deepEqual(
+      storyByline(['Beija Nigl', 'Michael Plöd'], ['Kenny Schwegler']),
+      { by: ['Beija Nigl', 'Michael Plöd'], alongside: ['Kenny Schwegler'] });
+  });
+
+  test('an episode with no outside guest is simply by its hosts', () => {
+    // Six of the published stories are the hosts talking to each other. Calling
+    // them contributors to a story with no author would credit nobody.
+    assert.deepEqual(
+      storyByline([], ['Andrea Magnorsky', 'Kenny Schwegler']),
+      { by: ['Andrea Magnorsky', 'Kenny Schwegler'], alongside: [] });
+  });
+
+  test('an uncurated story falls back to the old Authors multi-select', () => {
+    assert.deepEqual(
+      storyByline([], [], ['Someone Not Yet Curated']),
+      { by: ['Someone Not Yet Curated'], alongside: [] });
+  });
+
+  test('a story with nobody on it credits nobody, rather than inventing a shape', () => {
+    assert.deepEqual(storyByline([], [], []), { by: [], alongside: [] });
   });
 });

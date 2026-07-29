@@ -84,3 +84,32 @@ export function guestsToName(
   });
   return { shown: worth.slice(0, cap), extra: Math.max(0, worth.length - cap) };
 }
+
+/**
+ * Who a story is credited to, and in what role.
+ *
+ * One rule in one place, because it has three readers that would otherwise
+ * each keep a copy: the byline under the title, the credit beside it in the
+ * sidebar, and the flat list on every card, in the search index and in the
+ * `.md` view. It lives here rather than in `collections.ts` so it can be
+ * tested — that module imports `astro:content` at runtime and cannot be loaded
+ * outside a build.
+ *
+ * The guest told the story and the hosts asked the questions, so they are not
+ * interchangeable and a single list would say neither. An episode with no
+ * outside guest is the hosts talking to each other, so it is simply by them.
+ *
+ * `authors` is the last resort: the multi-select `Guests` and `Hosts`
+ * replaced, read only when a story has been curated into neither, so nothing
+ * goes blank while the property is being retired. When it is gone in Notion,
+ * this parameter and its clause go with it — and this is the only place.
+ */
+export function storyByline(
+  guests: string[],
+  hosts: string[],
+  authors: string[] = [],
+): { by: string[]; alongside: string[] } {
+  if (guests.length) return { by: guests, alongside: hosts };
+  if (hosts.length) return { by: hosts, alongside: [] };
+  return { by: authors, alongside: [] };
+}

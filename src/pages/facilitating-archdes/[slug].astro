@@ -11,7 +11,7 @@ import { excerpt } from '../../lib/excerpt';
 import { storyJsonLd, pageTitle, trail, type PersonInput } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import { iso as toIso, longDate, shortDate } from '../../lib/dates';
-import { profileLinks, samePerson } from '../../lib/people';
+import { profileLinks, samePerson, storyByline } from '../../lib/people';
 import { guestsById, heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
 
 export async function getStaticPaths() {
@@ -48,18 +48,12 @@ const hosts = d.hosts.map((name) => {
     href: o ? `/organisers/${o.id}/` : undefined, links: profileLinks(o?.data ?? {}) };
 });
 
-// "by the guest, with the hosts". The guest told the story and the hosts asked
-// the questions, and a byline that lumps them into one list says neither. An
-// episode with no outside guest is the hosts talking to each other, so they are
-// the ones it is by. `authors` is the last resort, for a story nobody has
-// curated into Guests and Hosts yet.
-const guestNames = guests.map((g) => g.name);
-const hostNames = hosts.map((h) => h.name);
-const bylineBy = guestNames.length ? guestNames : (hostNames.length ? hostNames : d.authors);
-const bylineWith = guestNames.length ? hostNames : [];
-// Built from the byline rather than from the relations, so the sidebar cannot
-// disagree with the credit under the title: on an uncurated story both fall
-// back to `authors` together.
+// "by the guest, with the hosts" — the rule is `storyByline` in lib/people.ts,
+// shared with the cards and the search index so the page cannot drift from
+// them. The sidebar is built from the same answer, so it cannot disagree with
+// the credit under the title.
+const { by: bylineBy, alongside: bylineWith } =
+  storyByline(guests.map((g) => g.name), hosts.map((h) => h.name), d.authors);
 const credited = [...bylineBy, ...bylineWith];
 
 const asPerson = (p: typeof guests[number] | typeof hosts[number]): PersonInput => ({

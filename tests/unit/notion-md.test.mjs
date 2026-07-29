@@ -8,7 +8,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  assetRefs, createBlocksToMd, isAssetFor, kebab, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  assetRefs, createBlocksToMd, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -276,5 +276,36 @@ describe('finding the pictures an entry refers to', () => {
 
   test('says nothing about an entry with no pictures', () => {
     assert.deepEqual(assetRefs('title: "no images here"'), []);
+  });
+});
+
+describe('a slug that moved is an address that moved', () => {
+  const was = { aaa: { slug: 'kenny-baas-schwegler' }, bbb: { slug: 'andrea-magnorsky' } };
+
+  test('a renamed row is reported with both addresses', () => {
+    // This is the whole point: only this comparison knows the old name. An
+    // organiser has no Retire URL checkbox, so nothing else in the pipeline
+    // can tell that a page moved rather than appeared.
+    assert.deepEqual(
+      movedSlugs(was, { aaa: { slug: 'kenny-schwegler' }, bbb: { slug: 'andrea-magnorsky' } }),
+      [{ id: 'aaa', from: 'kenny-baas-schwegler', to: 'kenny-schwegler' }]);
+  });
+
+  test('an unchanged run reports nothing', () => {
+    assert.deepEqual(movedSlugs(was, was), []);
+  });
+
+  test('a new row is not a move, so it gets no redirect', () => {
+    assert.deepEqual(movedSlugs(was, { ...was, ccc: { slug: 'someone-new' } }), []);
+  });
+
+  test('a deleted row is not a move either', () => {
+    // Its page stops being built, which is a 404 rather than a 301. Redirecting
+    // it would need somewhere to redirect *to*, and there is nowhere.
+    assert.deepEqual(movedSlugs(was, { bbb: { slug: 'andrea-magnorsky' } }), []);
+  });
+
+  test('the first run has nothing to compare against', () => {
+    assert.deepEqual(movedSlugs({}, was), []);
   });
 });
