@@ -113,9 +113,11 @@ if (host.split('.').length === 2) {
   // not a red cross: `Tell n8n what shipped` is skipped when this step fails,
   // so a good deploy ships silently. A check that cries wolf is worse than no
   // check, because people learn to scroll past it.
-  const attempts = 3;
+  // Second line of defence behind the settle pause in deploy.yml: five
+  // tries over forty seconds, because the window measured close to a minute.
+  const attempts = 5;
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    if (attempt > 1) await sleep(4000);
+    if (attempt > 1) await sleep(10000);
     try {
       const res = await fetch(wwwUrl, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
       const to = res.headers.get('location');

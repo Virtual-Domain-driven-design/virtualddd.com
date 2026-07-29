@@ -275,6 +275,19 @@ jobs:
       # The check that cannot be done locally: only the real server proves the
       # .htaccess is honoured, that a 410 is a 410, and that a .md file is
       # served as markdown rather than downloaded.
+      # Apache does not pick the new release up the instant the symlink moves.
+      # For the best part of a minute afterwards every address answers 200 from
+      # the document root — measured: 105 of 105 sampled URLs, no redirects and
+      # no 410s at all, then entirely correct a minute later. Verifying inside
+      # that window fails a deploy that shipped perfectly well, and takes the
+      # Discord notice down with it, because the notice waits on this step.
+      #
+      # So wait, rather than teach the check to tolerate a wrong answer. What is
+      # being verified is the live site, and the live site is not ready yet.
+      - name: Let the release settle
+        if: steps.target.outputs.ready == 'true' && steps.target.outputs.verify == 'true'
+        run: sleep 60
+
       - name: Verify the deployed host
         if: steps.target.outputs.ready == 'true' && steps.target.outputs.verify == 'true'
         run: npm run verify:live "${{ secrets.SITE_URL }}"
