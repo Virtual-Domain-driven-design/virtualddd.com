@@ -45,16 +45,25 @@ const legacy = readCsv('data/legacy-redirects.csv');
 const recordings = videos.filter((v) => sessionSlugs.has(v.slug));
 const foreign = videos.length - recordings.length;
 
-// The eight retired team pages map onto the organisers collection.
+// The eight retired team pages map onto the organisers collection. The two
+// sides are separate on purpose: the left is a WordPress slug, frozen forever,
+// and the right is whatever the organiser's row in Notion is called today. A
+// rename in Notion moves the right-hand side, never the left.
 const TEAM = {
   'andrea-magnorsky': 'andrea-magnorsky',
   'andrew-harmel-law': 'andrew-harmel-law',
   'diana-montalion': 'diana-montalion',
-  'kenny-baas-schwegler': 'kenny-baas-schwegler',
+  'kenny-baas-schwegler': 'kenny-schwegler',
   'krisztina-hirth': 'krisztina-hirth',
   'marco-heimeshoff': 'marco-heimeshoff',
   'maxime-sanglan-charlier': 'maxime',
   'zsofia-herendi': 'zsofia-herendi',
+};
+
+// Organisers who have been renamed in Notion since this site went live.
+// Kenny Baas-Schwegler became Kenny Schwegler on 2026-07-29.
+const ORGANISER_MOVES = {
+  'kenny-baas-schwegler': 'kenny-schwegler',
 };
 
 // Nav landing pages that were separate pages once. This site
@@ -182,6 +191,15 @@ for (const [from, to] of Object.entries(TEAM)) {
   L.push(`RewriteRule ^dipl-team-member/${esc(from)}/?$ /organisers/${to}/ [R=301,L]`);
 }
 L.push('RewriteRule ^dipl-team-member/?$ /organisers/ [R=301,L]');
+
+section('5b. Organiser pages this site has moved');
+L.push('# Not inherited from WordPress: addresses this site published itself and');
+L.push('# then moved when somebody renamed their row in Notion. An organiser slug');
+L.push('# comes from their name, so a rename is a URL change, and nothing else');
+L.push('# notices — a person is a row, not a page with a Retire URL checkbox.');
+for (const [from, to] of Object.entries(ORGANISER_MOVES)) {
+  L.push(`RewriteRule ^organisers/${esc(from)}/?$ /organisers/${to}/ [R=301,L]`);
+}
 
 section(`6. Session recordings (${recordings.length} of ${videos.length} videos)`);
 L.push('# Same slug as a session: the session page has the video and the write-up.');

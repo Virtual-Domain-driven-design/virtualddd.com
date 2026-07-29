@@ -90,12 +90,19 @@ RewriteRule ^github-repositories/welcome-to-domain-driven-design-ddd/?$ /ddd-cre
 RewriteRule ^dipl-team-member/andrea-magnorsky/?$ /organisers/andrea-magnorsky/ [R=301,L]
 RewriteRule ^dipl-team-member/andrew-harmel-law/?$ /organisers/andrew-harmel-law/ [R=301,L]
 RewriteRule ^dipl-team-member/diana-montalion/?$ /organisers/diana-montalion/ [R=301,L]
-RewriteRule ^dipl-team-member/kenny-baas-schwegler/?$ /organisers/kenny-baas-schwegler/ [R=301,L]
+RewriteRule ^dipl-team-member/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
 RewriteRule ^dipl-team-member/krisztina-hirth/?$ /organisers/krisztina-hirth/ [R=301,L]
 RewriteRule ^dipl-team-member/marco-heimeshoff/?$ /organisers/marco-heimeshoff/ [R=301,L]
 RewriteRule ^dipl-team-member/maxime-sanglan-charlier/?$ /organisers/maxime/ [R=301,L]
 RewriteRule ^dipl-team-member/zsofia-herendi/?$ /organisers/zsofia-herendi/ [R=301,L]
 RewriteRule ^dipl-team-member/?$ /organisers/ [R=301,L]
+
+# --- 5b. Organiser pages this site has moved -----------------------
+# Not inherited from WordPress: addresses this site published itself and
+# then moved when somebody renamed their row in Notion. An organiser slug
+# comes from their name, so a rename is a URL change, and nothing else
+# notices — a person is a row, not a page with a Retire URL checkbox.
+RewriteRule ^organisers/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
 
 # --- 6. Session recordings (95 of 536 videos) ----------------------
 # Same slug as a session: the session page has the video and the write-up.
