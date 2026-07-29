@@ -57,7 +57,10 @@ const guestNames = guests.map((g) => g.name);
 const hostNames = hosts.map((h) => h.name);
 const bylineBy = guestNames.length ? guestNames : (hostNames.length ? hostNames : d.authors);
 const bylineWith = guestNames.length ? hostNames : [];
-const credited = [...guestNames, ...hostNames];
+// Built from the byline rather than from the relations, so the sidebar cannot
+// disagree with the credit under the title: on an uncurated story both fall
+// back to `authors` together.
+const credited = [...bylineBy, ...bylineWith];
 
 const asPerson = (p: typeof guests[number] | typeof hosts[number]): PersonInput => ({
   name: p.name,
