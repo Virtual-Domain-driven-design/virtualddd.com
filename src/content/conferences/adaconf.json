@@ -1,0 +1,10 @@
+{
+  "name": "ADAConf",
+  "start": "2026-11-19",
+  "end": "2026-11-20",
+  "location": "Melbourne, Australia",
+  "description": "Analysis, design and architecture in Melbourne: a day of talks followed by an unconference day, run by the DDD Australia community.",
+  "website": "https://adaconf.org",
+  "logoBackground": "#ffffff",
+  "logo": "./_assets/adaconf-logo.png"
+}
