@@ -9,17 +9,28 @@ import CardFilter from '../../components/CardFilter.astro';
 import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
 import { collectionPage, topTrail } from '../../lib/seo';
+import { samePerson } from '../../lib/people';
 
 const storyGuestIndex = await guestsById();
 const stories = (await getCollection('stories')).sort(
   (a, b) => (b.data.episode ?? 0) - (a.data.episode ?? 0),
 );
 
-// The three stable hosts of the series (fixed order).
+// The hosts of the series, taken from the episodes themselves.
+//
+// This was a hardcoded list of three organiser ids, and an organiser's id comes
+// from their name: renaming Kenny Baas-Schwegler to Kenny Schwegler in Notion
+// on 2026-07-29 stopped one of the three resolving, and `.filter(Boolean)`
+// dropped him off this page without a word. Reading the `Hosts` relation off
+// the stories cannot go stale that way, and it is the same source the byline
+// on each episode uses.
+//
+// Sorted by name so the order does not shuffle when somebody hosts one more
+// than the others. Today that is the order the hardcoded list had.
 const organisers = await getCollection('organisers');
-const byId = new Map(organisers.map((o) => [o.id, o]));
-const hosts = ['andrea-magnorsky', 'andrew-harmel-law', 'kenny-baas-schwegler']
-  .map((id) => byId.get(id))
+const hosts = [...new Set(stories.flatMap((s) => s.data.hosts))]
+  .sort((a, b) => a.localeCompare(b))
+  .map((name) => organisers.find((o) => samePerson(o.data.name, name)))
   .filter(Boolean) as typeof organisers;
 
 const tags = tagOptions(stories);
