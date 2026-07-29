@@ -783,6 +783,38 @@
       "hash": "5258a4483a67b91c"
     }
   },
+  "organisers": {
+    "276a485afafc8088aa7df0adc80a5c35": {
+      "slug": "andrew-harmel-law"
+    },
+    "276a485afafc80bca5b8fe8cbaaa34fb": {
+      "slug": "tobias-goeschel"
+    },
+    "3e9ead2293914aeda00c27bbc8cb2ae7": {
+      "slug": "krisztina-hirth"
+    },
+    "422d771fa59e4382871bbc54fe79cea1": {
+      "slug": "kim-kao"
+    },
+    "6deecd089f954e208f7f7454dec6d561": {
+      "slug": "kenny-schwegler"
+    },
+    "6e730f6491f14c4e9a7adfcedc0db966": {
+      "slug": "diana-montalion"
+    },
+    "789e3293b68346a8ab43f1b8795307e7": {
+      "slug": "andrea-magnorsky"
+    },
+    "a94d70310c254271a4ceff03e2a2ddb9": {
+      "slug": "maxime"
+    },
+    "d7bb6ae7c2454fceb91d2ec40be969f6": {
+      "slug": "marco-heimeshoff"
+    },
+    "e82151f7c7e346d18e65f245d61e6859": {
+      "slug": "zsofia-herendi"
+    }
+  },
   "sessions": {
     "0314bc1384624cd9b06135c1d24f878d": {
       "slug": "beyond-the-hexagonal-architecture-functional-core",

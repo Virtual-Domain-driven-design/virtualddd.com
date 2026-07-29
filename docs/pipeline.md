@@ -181,6 +181,12 @@ file is the promise, not a record of what happens to be built.
 `data/sync-alerts.json` collects what the sync can see but must not act on. Two
 kinds, both *published in Notion, not true on the site*:
 
+- **`person-renamed`**: an organiser's row was renamed in Notion. Their slug
+  comes from their name, so the page moved; the 301 is recorded in
+  `data/retired-urls.csv` by the same run, and the alert exists because a
+  person has no `Retire URL` checkbox and nobody decided this. Unlike the
+  others it is an *event*, not a condition, so it clears on the next sync
+  whether or not anyone read it.
 - **`unpublished-but-live`**: the quarantine above.
 - **`published-without-a-slug`**: a page Notion calls published that has no
   slug, and therefore no address. Skipping it is right; there is nothing to

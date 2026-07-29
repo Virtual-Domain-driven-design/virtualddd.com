@@ -60,12 +60,6 @@ const TEAM = {
   'zsofia-herendi': 'zsofia-herendi',
 };
 
-// Organisers who have been renamed in Notion since this site went live.
-// Kenny Baas-Schwegler became Kenny Schwegler on 2026-07-29.
-const ORGANISER_MOVES = {
-  'kenny-baas-schwegler': 'kenny-schwegler',
-};
-
 // Nav landing pages that were separate pages once. This site
 // serves the curated experience at the archive path, so these collapse.
 const LANDING = {
@@ -191,15 +185,6 @@ for (const [from, to] of Object.entries(TEAM)) {
   L.push(`RewriteRule ^dipl-team-member/${esc(from)}/?$ /organisers/${to}/ [R=301,L]`);
 }
 L.push('RewriteRule ^dipl-team-member/?$ /organisers/ [R=301,L]');
-
-section('5b. Organiser pages this site has moved');
-L.push('# Not inherited from WordPress: addresses this site published itself and');
-L.push('# then moved when somebody renamed their row in Notion. An organiser slug');
-L.push('# comes from their name, so a rename is a URL change, and nothing else');
-L.push('# notices — a person is a row, not a page with a Retire URL checkbox.');
-for (const [from, to] of Object.entries(ORGANISER_MOVES)) {
-  L.push(`RewriteRule ^organisers/${esc(from)}/?$ /organisers/${to}/ [R=301,L]`);
-}
 
 section(`6. Session recordings (${recordings.length} of ${videos.length} videos)`);
 L.push('# Same slug as a session: the session page has the video and the write-up.');

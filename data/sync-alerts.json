@@ -1,3 +1,10 @@
 {
-  "items": []
+  "items": [
+    {
+      "kind": "person-renamed",
+      "section": "/organisers/",
+      "title": "kenny-baas-schwegler → kenny-schwegler",
+      "url": "https://virtualddd.com/organisers/kenny-schwegler/"
+    }
+  ]
 }

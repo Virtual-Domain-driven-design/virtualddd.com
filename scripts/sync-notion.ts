@@ -111,11 +111,13 @@ const STATE_FILE = 'data/sync-state.json';
 
 interface EntryState {
   slug: string;
-  /** Notion's `last_edited_time` when we last rendered this body. */
-  edited: string;
+  /** Notion's `last_edited_time` when we last rendered this body. Absent for a
+   *  row collection, which has no body to be stale: the slug is the whole
+   *  point of remembering it. */
+  edited?: string;
   /** Digest of the body we wrote, so an edit made here rather than in Notion
    *  is noticed and refetched instead of being quietly kept. */
-  hash: string;
+  hash?: string;
 }
 
 /** Short, stable digest of a body. Only ever compared with itself. */
@@ -171,8 +173,14 @@ interface Alert {
    *  an editor can re-upload it.
    *  `dates-passed` — a conference edition that has been and gone. The card
    *  now says no new dates are announced, which is true but is not what anyone
-   *  wants it to say for long; only a person can go and find the next edition. */
-  kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed';
+   *  wants it to say for long; only a person can go and find the next edition.
+   *  `person-renamed` — somebody's row was renamed in Notion, and an
+   *  organiser's slug comes from their name, so their page has moved. The
+   *  redirect is already recorded; this says so out loud, because a person is
+   *  a row rather than a page and has no `Retire URL` checkbox to tick, so
+   *  nobody decided this and nobody would otherwise know it happened. */
+  kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed'
+    | 'person-renamed';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -866,6 +874,10 @@ interface RowSpec {
   dataSourceId: string;
   /** What to call this in the log. */
   label: string;
+  /** URL section, when this row has a page of its own. Set it and a rename is
+   *  treated as a URL change: a 301 is recorded and somebody is told. Leave it
+   *  off and the file name is only a file name. */
+  section?: string;
   /** The entry's file name — never a URL for guests, a URL for organisers. */
   slugOf: (name: string, h: RowHelpers) => string;
   fields: (name: string, h: RowHelpers) => Record<string, unknown>;
@@ -902,7 +914,9 @@ const ROW_SPECS: Record<string, RowSpec> = {
     dataSourceId: PEOPLE_DS,
     label: 'organisers',
     // An organiser has a page, so this slug *is* a URL: changing a name
-    // changes an address and needs a redirect.
+    // changes an address and needs a redirect. `section` is what says so;
+    // guests and conferences have none, because renaming those costs nothing.
+    section: '/organisers/',
     slugOf: (name) => kebab(name),
     image: { of: (h) => h.file('Photo'), label: 'photo', key: 'photo' },
     fields: (name, h) => ({
@@ -983,6 +997,10 @@ async function runRows(key: string, outDir: string, write: boolean) {
   const written = new Set<string>();
   /** What was written, for the collection's own alert rule to read. */
   const rows: Record<string, unknown>[] = [];
+  /** Slug per Notion row, kept only for a collection whose rows have pages. */
+  const state = loadState();
+  const was = state[key] ?? {};
+  const now: Record<string, EntryState> = {};
   for (const page of pages) {
     const P = page.properties;
     const get = (n: string) => P[n];
@@ -1001,6 +1019,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
     if (!name) { console.log(`  ! a ${spec.label} row has no name, skipping`); continue; }
 
     const slug = spec.slugOf(name, h);
+    if (spec.section) now[page.id.replace(/-/g, '')] = { slug };
     const file = `${slug}.json`;
     if (written.has(file)) {
       console.log(`  ! two rows are both named "${name}"; keeping the first. Rename one in Notion.`);
@@ -1035,9 +1054,40 @@ async function runRows(key: string, outDir: string, write: boolean) {
   }
   pruneAssets(outDir, spec.image.label);
 
+  // A row whose slug changed is a page that moved. Nothing else notices: a
+  // person has no `Retire URL` checkbox, and the run that renamed them is the
+  // only thing that ever knew both addresses. So the run that breaks the URL
+  // is the run that keeps the promise, exactly as the content sync does.
+  const moved = Object.entries(now)
+    .filter(([id, e]) => was[id] && was[id].slug !== e.slug)
+    .map(([id, e]) => ({ from: was[id].slug, to: e.slug, id }));
+
+  for (const m of moved) {
+    console.log(`  → ${m.from} is now ${m.to}; recording a redirect`);
+  }
+
+  if (write && spec.section) {
+    recordRedirects(moved.map((m) => ({
+      from: `${spec.section}${m.from}/`,
+      to: `${spec.section}${m.to}/`,
+      kind: '301' as const,
+    })));
+    state[key] = now;
+    saveState(state);
+  }
+
   // Unconditional, like the content sync's: re-uploading the last picture in
   // Notion has to be able to empty this list, not just stop adding to it.
-  if (write) writeAlert(spec.label, [...strandedAlerts(spec.label), ...(spec.alerts?.(rows) ?? [])]);
+  if (write) writeAlert(spec.label, [
+    ...strandedAlerts(spec.label),
+    ...(spec.alerts?.(rows) ?? []),
+    ...moved.map((m) => ({
+      kind: 'person-renamed' as const,
+      section: spec.section!,
+      title: `${m.from} → ${m.to}`,
+      url: `https://virtualddd.com${spec.section}${m.to}/`,
+    })),
+  ]);
 
   if (!write) console.log(`\n  (preview only — files in ${outDir})`);
 }

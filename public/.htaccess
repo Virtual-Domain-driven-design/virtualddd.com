@@ -97,13 +97,6 @@ RewriteRule ^dipl-team-member/maxime-sanglan-charlier/?$ /organisers/maxime/ [R=
 RewriteRule ^dipl-team-member/zsofia-herendi/?$ /organisers/zsofia-herendi/ [R=301,L]
 RewriteRule ^dipl-team-member/?$ /organisers/ [R=301,L]
 
-# --- 5b. Organiser pages this site has moved -----------------------
-# Not inherited from WordPress: addresses this site published itself and
-# then moved when somebody renamed their row in Notion. An organiser slug
-# comes from their name, so a rename is a URL change, and nothing else
-# notices — a person is a row, not a page with a Retire URL checkbox.
-RewriteRule ^organisers/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
-
 # --- 6. Session recordings (95 of 536 videos) ----------------------
 # Same slug as a session: the session page has the video and the write-up.
 RewriteRule ^videos/abstractions-as-bridges-with-hazel-weakly/?$ /sessions/abstractions-as-bridges-with-hazel-weakly/ [R=301,L]
@@ -236,6 +229,7 @@ RewriteRule ^submit-community/?$ - [G,L]
 # keeps working. The hand-written ones first, then whatever the sync
 # recorded when a slug changed or a page was retired in Notion.
 RewriteRule ^heuristics/eventstorming-split-and-merge-above-7-people-on-process-and-design-level/?$ /heuristics/eventstorming-split-and-merge-above-7-people/ [R=301,L]
+RewriteRule ^organisers/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
 
 # --- 12. Pending: reading list and book club -----------------------
 # Decided to keep, but the destinations need editorial content first.
