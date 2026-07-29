@@ -113,11 +113,18 @@ if (host.split('.').length === 2) {
   // not a red cross: `Tell n8n what shipped` is skipped when this step fails,
   // so a good deploy ships silently. A check that cries wolf is worse than no
   // check, because people learn to scroll past it.
-  // Second line of defence behind the settle pause in deploy.yml: five
-  // tries over forty seconds, because the window measured close to a minute.
-  const attempts = 5;
+  // Second line of defence behind the settle pause in deploy.yml. It was five
+  // tries over forty seconds, on a window measured at close to a minute, and
+  // it then failed two more good deploys on 2026-07-29 — both of which were
+  // serving the redirect correctly a few minutes later. So the window is
+  // longer than it was measured to be, and guessing it again would be the
+  // same mistake: twelve tries fifteen seconds apart gives it three minutes.
+  //
+  // That patience is free on a healthy deploy, which breaks out on the first
+  // attempt. It is only spent on the case that used to be a false alarm.
+  const attempts = 12;
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    if (attempt > 1) await sleep(10000);
+    if (attempt > 1) await sleep(15000);
     try {
       const res = await fetch(wwwUrl, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
       const to = res.headers.get('location');
