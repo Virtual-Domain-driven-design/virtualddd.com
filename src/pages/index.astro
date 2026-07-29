@@ -257,11 +257,24 @@ try {
     .heur-links { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
     /* The type tiles come from patterns.css (.tbanner--compact). */
 
-    /* Four conferences, all visible. A carousel would hide content and move on
-       its own for a set that is stable at four. */
+    /* Every conference visible, however many there are. A carousel would hide
+       one third of a row whose whole purpose is to send people somewhere on a
+       date, and the home page already has two things that move on their own.
+
+       One, two, three, then five. Four is skipped on purpose: with five
+       conferences it leaves a single card alone on a second row beside three
+       empty columns, which is the layout this replaced. Three gives 3 + 2,
+       which reads as deliberate. `auto-fit` was tried first and is worse — it
+       lands on four for every width between about 900px and 1130px.
+
+       At 72rem, where the container stops growing, five sit at about 205px
+       each: the width the organiser cards below already use. The number here
+       is the one thing that will need changing when a sixth conference is
+       added, and it wants to become six or three rather than five. */
     .conf-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
-    @media (min-width: 640px) { .conf-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 900px) { .conf-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 40rem) { .conf-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 56rem) { .conf-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 72rem) { .conf-grid { grid-template-columns: repeat(5, 1fr); } }
     .conf-grid > * { min-width: 0; }
 
     /* Organiser cards sit a little narrower than the carousel default. */
