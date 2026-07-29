@@ -445,12 +445,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     dataSourceId: '33e9db0a-1418-4a3e-a053-33fa384e5e93',
     section: '/sessions/',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'select',
-    // `Ended` is live too. It is not a lesser state than Done: it means the
-    // session has happened and post-production has not finished, and it is what
-    // the Notion automation watches to extract heuristics. Leaving it out took
-    // the page off the site for the length of that gap, and raised the address
-    // as `unpublished-but-live` on the way.
-    liveStatuses: ['Done', 'Published', 'Ended'], featuredImageProp: 'Featured image',
+    liveStatuses: ['Done', 'Published'], featuredImageProp: 'Featured image',
     needsPeople: true, needsGuests: true,
     extra: async (h) => {
       const l: string[] = [];

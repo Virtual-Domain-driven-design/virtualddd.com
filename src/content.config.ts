@@ -29,7 +29,7 @@ const sessions = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      status: z.enum(['Ideas', 'Drafting', 'Planned', 'GoLive', 'Published', 'Ended', 'Done']),
+      status: z.enum(['Ideas', 'Drafting', 'Planned', 'GoLive', 'Published', 'Done']),
       // Drives the upcoming (future) vs past (elapsed) split, client-side.
       datetime: z.coerce.date(),
       typeOfSession: z.enum(['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on']).optional(),

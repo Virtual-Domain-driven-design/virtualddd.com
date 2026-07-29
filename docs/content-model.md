@@ -128,12 +128,10 @@ data is what lets a fifth conference look right without a code change.
 
 - **Sessions** render in two states, derived from `Datetime`, not from a manual
   flip: `Status = Published` + a future `Datetime` → **upcoming** (RSVP);
-  `Status = Ended` or `Done` → **past archive** (recording, notes). `Ended`
-  means the session has happened and post-production has not finished, and it
-  is the status a Notion automation watches to extract heuristics. It is live
-  for the same reason `Done` is: a session that has already happened still has
-  an address, and taking the page down between the meetup and the recording
-  would break it for exactly the days people are looking for it.
+  `Status = Done` → **past archive** (recording, notes). A session stays
+  `Published` from go-live until post-production finishes, so both of the live
+  states are also the two states a session can be in after it has happened —
+  the page never comes down in between.
 
   The upcoming→past transition is **client-side**. Pages that lead with a
   session render *every* upcoming session, soonest first, all but the first
