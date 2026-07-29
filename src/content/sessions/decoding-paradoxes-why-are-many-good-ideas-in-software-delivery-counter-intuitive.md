@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2024-07-16T20:00:00.000+02:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["complexity thinking", "sociotechnical system", "systems thinking", "agile coaching", "team topology", "complexity theory", "sociotechnical systems"]
+tags: ["complexity thinking", "sociotechnical systems", "systems thinking", "agile coaching", "team topologies", "complexity theory"]
 video: "https://youtu.be/sN3kabXr2wk"
 organiser: "Kenny Baas-Schwegler"
 seoTitle: "Decoding the Paradoxes of Software Delivery"

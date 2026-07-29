@@ -6,7 +6,7 @@ question: "When a deployment causes an outage, should you revert or try to fix i
 type: ["design-heuristics"]
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Liz Fong-Jones"
-tags: ["incident response", "deployment", "resilience", "recovery"]
+tags: ["incident response", "continuous delivery", "resilience"]
 complements: ["prioritise-recoverability-over-flawless-deployment"]
 enables: ["build-safety-through-small-failures", "global-metadata-creates-global-risk", "distribute-debugging-beyond-war-room"]
 prerequisites: ["build-safety-through-small-failures"]

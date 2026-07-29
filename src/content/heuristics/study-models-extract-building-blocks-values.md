@@ -6,7 +6,7 @@ question: "How do you understand a model deeply enough to know if it fits your c
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler", "Andrea Magnorsky", "Rebecca Wirfs-Brock"]
 submitter: "Rebecca Wirfs-Brock"
-tags: ["model thinking", "critical thinking", "process models", "decision-making"]
+tags: ["systems thinking", "critical thinking", "decision-making"]
 metaDescription: "Study models intentionally by pulling out their building blocks, understanding their beliefs, and recognizing what areas they focus on."
 ---
 

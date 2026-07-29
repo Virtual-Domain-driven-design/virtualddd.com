@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T16:45:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
-tags: ["bounded context", "socio-technical", "ux", "organisational design"]
+tags: ["bounded context", "sociotechnical systems", "ux", "organisational design"]
 video: "https://www.youtube.com/embed/yMRuP3tcugQ"
 podcastPlayer: "https://player.captivate.fm/episode/920dcf8e-b26d-4cba-a493-2b7744a91138/"
 organiser: "Kenny Baas-Schwegler"

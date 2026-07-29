@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2019-08-08T22:00:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Beginner"]
-tags: ["eventstorming", "design heuristics", "big picture"]
+tags: ["eventstorming", "design heuristics"]
 video: "https://www.youtube.com/embed/jFEC7Pb1FtM"
 podcastPlayer: "https://player.captivate.fm/episode/da917046-4c87-44c6-948b-e2c0471fe24b/"
 organiser: "Kenny Baas-Schwegler"

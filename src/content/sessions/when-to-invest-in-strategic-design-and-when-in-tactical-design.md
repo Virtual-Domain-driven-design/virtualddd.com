@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-11-02T18:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["strategic design", "software architecture", "tactical design", "polarity mapping", "design patterns"]
+tags: ["strategic design", "software architecture", "tactical design", "behavioural science", "design patterns"]
 video: "https://www.youtube.com/embed/6hvuLjQpfx4"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

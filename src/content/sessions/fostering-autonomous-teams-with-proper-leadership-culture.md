@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-02-23T18:30:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
-tags: ["strategic design", "leadership", "culture"]
+tags: ["strategic design", "leadership", "engineering culture"]
 video: "https://www.youtube.com/embed/kdpGPDGcbxA"
 podcastPlayer: "https://player.captivate.fm/episode/1a6ae063-4d56-4f6b-9a6e-a12a3fbae506/"
 organiser: "Kenny Baas-Schwegler"

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-11-10T18:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Beginner"]
-tags: ["tdd", "bdd", "continuous delivery", "tactical patterns"]
+tags: ["testing", "behaviour-driven development", "continuous delivery", "tactical design"]
 video: "https://www.youtube.com/embed/VaNaN_j9OCA"
 podcastPlayer: "https://player.captivate.fm/episode/5820302d-55b3-4e59-8ce8-dae6068d3ddd/"
 organiser: "Kenny Baas-Schwegler"

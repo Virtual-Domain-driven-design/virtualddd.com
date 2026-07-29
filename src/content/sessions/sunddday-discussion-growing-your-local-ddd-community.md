@@ -5,7 +5,6 @@ status: "Done"
 datetime: 2019-12-01T18:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Beginner"]
-tags: ["community"]
 video: "https://www.youtube.com/embed/sXdSjhWNeMg"
 podcastPlayer: "https://player.captivate.fm/episode/2f80ee7a-2afb-421a-bb79-ec0e834d8965/"
 organiser: "Kenny Baas-Schwegler"

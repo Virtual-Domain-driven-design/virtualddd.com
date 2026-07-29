@@ -6,7 +6,7 @@ question: "How should you handle someone whose behavior is disrupting a session 
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["facilitation", "conflict resolution", "one-on-one", "behavioural patterns"]
+tags: ["facilitation", "conflict management", "social dynamics"]
 specializes: ["understand-the-cause-of-resistance"]
 metaDescription: "When someone's behaviour disrupts a session, address it one-on-one by sharing observations and asking questions."
 ---

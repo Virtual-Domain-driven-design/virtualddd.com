@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2022-01-13T18:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["essential", "software design", "domain language"]
+tags: ["essential", "software design", "domain-driven design"]
 video: "https://www.youtube.com/embed/s_ihqdfcHDY"
 podcastPlayer: "https://player.captivate.fm/episode/416d2114-29e9-4485-b57f-242ede4f2558/"
 organiser: "Kenny Baas-Schwegler"

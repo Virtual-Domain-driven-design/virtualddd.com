@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2023-02-07T18:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["behavioural science", "team building", "software development", "agile coaching"]
+tags: ["behavioural science", "team dynamics", "software development", "agile coaching"]
 video: "https://www.youtube.com/embed/Xof9iz2uOms"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-07-21T17:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Advanced"]
-tags: ["socio-technical", "decision-making"]
+tags: ["sociotechnical systems", "decision-making"]
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["diana-montalion"]

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2025-01-21T06:30:00.000+01:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["software design", "leadership", "model thinking", "domain language"]
+tags: ["software design", "leadership", "systems thinking", "domain-driven design"]
 video: "https://youtu.be/67ufd370cFY"
 podcastPlayer: "https://player.captivate.fm/episode/186bdf82-2597-4822-9d12-f7495a5e7b6d/"
 organiser: "Andrea Magnorsky"

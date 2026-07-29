@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2025-05-14T20:00:00.000+12:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["team autonomy", "organisational design", "agile", "culture"]
+tags: ["team agency", "organisational design", "agile", "engineering culture"]
 video: "https://youtu.be/aulGzLoCwJk"
 podcastPlayer: "https://player.captivate.fm/episode/bc523e05-8be0-4d0a-acad-8d2dfc57181d/"
 organiser: "Andrea Magnorsky"

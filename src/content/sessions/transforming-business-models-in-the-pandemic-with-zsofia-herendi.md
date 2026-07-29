@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-02-16T18:30:00.000+00:00
 typeOfSession: "debate"
 level: ["Intermediate"]
-tags: ["business model canvas", "strategic design"]
+tags: ["strategic design"]
 video: "https://www.youtube.com/embed/uaRYe_bNsMg"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

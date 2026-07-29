@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-06-01T17:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["software architect", "ivory-tower", "team topologies", "collaboration"]
+tags: ["software architecture", "ivory-tower architect", "team topologies", "team collaboration"]
 video: "https://www.youtube.com/embed/nGdlw7bbaaY"
 podcastPlayer: "https://player.captivate.fm/episode/e456c6c7-31fa-4c8e-9aff-81b1d6e12aea/"
 organiser: "Kenny Baas-Schwegler"

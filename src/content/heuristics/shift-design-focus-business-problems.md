@@ -6,7 +6,7 @@ question: "How do you shift focus from existing technical constraints to core bu
 type: ["design-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["design thinking", "facilitation", "business problems", "technical constraints", "product strategy"]
+tags: ["software design", "facilitation", "product design"]
 metaDescription: "When design talk collapses into technical constraints and legacy systems, steer it back to the business problem before any solution is on the table."
 ---
 

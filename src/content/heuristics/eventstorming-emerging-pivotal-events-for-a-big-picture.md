@@ -6,7 +6,7 @@ question: "How can we start structuring a Big Picture Eventstorming after a chao
 type: ["guiding-heuristics"]
 authors: ["Kenny Schwegler"]
 submitter: "Kenny Schwegler"
-tags: ["eventstorming", "remote eventstorming", "remote facilitation"]
+tags: ["eventstorming", "remote facilitation"]
 ---
 
 ## Description

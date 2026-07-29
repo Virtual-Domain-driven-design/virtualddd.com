@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-04-14T17:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Beginner"]
-tags: ["bdd", "collaborative modelling"]
+tags: ["behaviour-driven development", "collaborative modelling"]
 video: "https://www.youtube.com/embed/HvT8wNE1C2U"
 podcastPlayer: "https://player.captivate.fm/episode/f3ee6067-b442-480c-b296-74bcd2dcdb2b/"
 organiser: "Kenny Baas-Schwegler"

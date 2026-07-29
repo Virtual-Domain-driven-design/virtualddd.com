@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-07-27T17:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["agile", "architecture", "scaling"]
+tags: ["agile", "software architecture"]
 video: "https://www.youtube.com/embed/UcCifzd-xzk"
 podcastPlayer: "https://player.captivate.fm/episode/adcdf3fc-1679-4e9f-bf62-ce05c64b7392/"
 organiser: "Kenny Baas-Schwegler"

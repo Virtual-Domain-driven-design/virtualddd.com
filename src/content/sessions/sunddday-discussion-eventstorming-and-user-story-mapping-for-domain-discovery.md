@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2019-05-26T14:30:00.000+00:00
 typeOfSession: "debate"
 level: ["Beginner"]
-tags: ["eventstorming", "user story mapping", "collaborative modelling"]
+tags: ["eventstorming", "collaborative modelling"]
 video: "https://www.youtube.com/embed/H553KZPCJQk"
 podcastPlayer: "https://player.captivate.fm/episode/c276384c-1f86-4b4f-9210-fe1b3b157d79/"
 organiser: "Kenny Baas-Schwegler"

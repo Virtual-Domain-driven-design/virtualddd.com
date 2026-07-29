@@ -6,7 +6,7 @@ question: "How do you ensure all key stakeholders share a common understanding o
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["workshop facilitation", "stakeholder alignment", "meeting planning", "collaboration"]
+tags: ["workshop facilitation", "stakeholder communication", "team collaboration"]
 complements: ["start-small-leadership-resists"]
 metaDescription: "Align every stakeholder on the purpose and the intended outcome before the workshop starts — misalignment discovered on the day is expensive to repair."
 ---

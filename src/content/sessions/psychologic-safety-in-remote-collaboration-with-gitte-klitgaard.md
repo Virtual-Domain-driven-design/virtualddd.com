@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-09-29T17:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Intermediate"]
-tags: ["agile teams", "psychological safety", "remote facilitation", "remote collaboration", "collaborative modelling", "socio-technical"]
+tags: ["agile teams", "psychological safety", "remote facilitation", "remote collaboration", "collaborative modelling", "sociotechnical systems"]
 video: "https://www.youtube.com/embed/KMvEt18aO5c"
 podcastPlayer: "https://player.captivate.fm/episode/2ad696c2-a045-4c92-bbe6-cfe720b97a01/"
 organiser: "Kenny Baas-Schwegler"

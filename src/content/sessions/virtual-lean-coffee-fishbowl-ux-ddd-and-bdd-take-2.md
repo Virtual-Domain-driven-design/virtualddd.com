@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-06-17T18:30:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
-tags: ["bdd", "strategic design", "ux"]
+tags: ["behaviour-driven development", "strategic design", "ux"]
 video: "https://www.youtube.com/embed/wF0OHhVELyo"
 podcastPlayer: "https://player.captivate.fm/episode/9b3b2cc4-d684-4960-a106-5e537352601f/"
 organiser: "Kenny Baas-Schwegler"

@@ -5,7 +5,7 @@ status: "Published"
 episode: 8
 publishedDate: 2025-12-09
 authors: ["Krisztina Hirth", "Andrea Magnorsky", "Kenny Schwegler"]
-tags: ["facilitating software architecture and design", "domain events", "technical debt", "legacy modernisation", "engineering culture", "event-driven architecture"]
+tags: ["facilitating software architecture and design", "strategic design", "technical debt", "legacy modernisation", "engineering culture", "event-driven architecture"]
 youtube: "https://youtu.be/eyJhUqGJgbA"
 podcast: "https://player.captivate.fm/episode/b9001bb9-070a-4c03-89e4-faf221c37778/"
 curatedHeuristics: ["permit-contained-failure-to-foster-learning", "distinguish-between-tigers-and-mice-in-design", "domain-events-must-carry-their-own-context", "the-goal-is-the-right-outcome-not-being-right", "mistrust-simplicity-achieved-without-thought", "a-decision-is-what-gets-implemented"]

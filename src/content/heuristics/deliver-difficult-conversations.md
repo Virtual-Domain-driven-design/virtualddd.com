@@ -6,7 +6,7 @@ question: "How do you deliver challenging feedback or uncomfortable truths to st
 type: ["value-based-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["difficult conversations", "stakeholder communication", "challenging feedback", "professional communication", "leadership skills"]
+tags: ["conflict management", "stakeholder communication", "feedback", "leadership"]
 metaDescription: "Deliver uncomfortable truths to stakeholders by framing them around shared goals, so the conversation stays about the work rather than about blame."
 ---
 

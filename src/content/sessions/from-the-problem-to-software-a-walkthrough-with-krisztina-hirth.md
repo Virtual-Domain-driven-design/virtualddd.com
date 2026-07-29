@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2022-02-08T18:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["continuous improvement", "walkthrough", "product development", "teams and organisations"]
+tags: ["product design", "organisational design"]
 video: "https://www.youtube.com/embed/zI31Dh-lU8o"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-09-21T16:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["frontend", "software architecture", "tactical patterns"]
+tags: ["software architecture", "tactical design"]
 video: "https://www.youtube.com/embed/gX_Nx1vqeBQ"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

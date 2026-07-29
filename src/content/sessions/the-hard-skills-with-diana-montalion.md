@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2022-06-07T17:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["systems thinking", "software architecture", "digital transformation"]
+tags: ["systems thinking", "software architecture", "organisational change"]
 video: "https://www.youtube.com/embed/QwqNdQSgjeM"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

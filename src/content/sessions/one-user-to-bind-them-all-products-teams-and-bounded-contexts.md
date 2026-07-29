@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-07-29T17:00:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
-tags: ["ux", "bounded context", "team topology", "socio-technical", "strategic design"]
+tags: ["ux", "bounded context", "team topologies", "sociotechnical systems", "strategic design"]
 video: "https://www.youtube.com/embed/wMX9PdRYuRo"
 podcastPlayer: "https://player.captivate.fm/episode/e90c9e07-cd17-4106-b2d3-7fed3fbbebf7/"
 organiser: "Kenny Baas-Schwegler"

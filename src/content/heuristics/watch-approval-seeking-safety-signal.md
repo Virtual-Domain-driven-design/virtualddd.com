@@ -6,7 +6,7 @@ question: "How can you tell if hierarchy is preventing honest collaboration in a
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["psychological safety", "hierarchy", "collaborative modelling", "organisational dynamics"]
+tags: ["psychological safety", "power dynamics", "collaborative modelling", "organisational design"]
 competesWith: ["respect-apathy-in-decision-making"]
 complements: ["acknowledge-power-dynamics-in-public-code-critique"]
 prerequisites: ["prioritise-foundation-trust-in-the-team"]

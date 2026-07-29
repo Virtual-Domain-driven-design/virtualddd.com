@@ -6,7 +6,7 @@ question: "How do you help a group move forward when everyone seems frozen or un
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["facilitation", "psychological safety", "sense-making", "vulnerability"]
+tags: ["facilitation", "psychological safety", "sense-making"]
 metaDescription: "When a group is stuck, share your own feelings first and invite others to share if they recognise similar reactions."
 ---
 

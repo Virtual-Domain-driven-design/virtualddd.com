@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T19:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced"]
-tags: ["socio-technical", "decision-making"]
+tags: ["sociotechnical systems", "decision-making"]
 video: "https://www.youtube.com/embed/zPvYqrASCRA"
 podcastPlayer: "https://player.captivate.fm/episode/caefcc93-c791-43f4-9310-6e4a5497655a/"
 organiser: "Kenny Baas-Schwegler"

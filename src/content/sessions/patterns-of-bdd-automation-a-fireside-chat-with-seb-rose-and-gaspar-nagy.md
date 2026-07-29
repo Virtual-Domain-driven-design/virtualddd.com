@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2025-11-25T17:00:00.000+01:00
 typeOfSession: "fireside-chat"
 level: ["Advanced", "Intermediate", "Beginner"]
-tags: ["behaviour-driven development", "automation", "collaborative modelling", "patterns"]
+tags: ["behaviour-driven development", "collaborative modelling", "design patterns"]
 video: "https://youtu.be/TP-qyFnN13s"
 podcastPlayer: "https://player.captivate.fm/episode/d2283fab-51bb-40bb-be23-c2cd868011f2/"
 organiser: "Kenny Baas-Schwegler"

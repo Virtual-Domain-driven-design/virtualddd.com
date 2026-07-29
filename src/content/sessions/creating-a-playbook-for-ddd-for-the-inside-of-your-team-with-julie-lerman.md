@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-06-02T17:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Beginner"]
-tags: ["inside-out", "socio-technical", "essential"]
+tags: ["sociotechnical systems", "essential"]
 video: "https://www.youtube.com/embed/GVa5vI19kZo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

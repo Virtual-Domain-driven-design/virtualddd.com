@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-12T17:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["service design", "design heuristics", "team topologies"]
+tags: ["strategic design", "design heuristics", "team topologies"]
 video: "https://www.youtube.com/embed/UQq-Ayml0iI"
 podcastPlayer: "https://player.captivate.fm/episode/1679d2d4-444e-419f-9f8b-6a959ea07d4c/"
 organiser: "Kenny Baas-Schwegler"

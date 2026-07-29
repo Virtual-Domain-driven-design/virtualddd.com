@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-04-06T17:00:00.000+00:00
 typeOfSession: "fireside-chat"
 level: ["Advanced"]
-tags: ["inclusion", "diversity", "domain crunching", "epistemic injustice"]
+tags: ["inclusion", "diversity", "collaborative modelling", "power dynamics"]
 video: "https://www.youtube.com/embed/tRgqD2ztHpk"
 podcastPlayer: "https://player.captivate.fm/episode/1deef386-7e8c-443d-9f70-8c29c1bd2695/"
 organiser: "Kenny Baas-Schwegler"

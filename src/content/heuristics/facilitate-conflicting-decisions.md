@@ -6,7 +6,7 @@ question: "How do you facilitate decisions when conflicting priorities or user n
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrew Harmel-Law"]
 submitter: "Beija Nigl"
-tags: ["decision-making", "facilitation", "conflict resolution", "prioritisation", "trade-offs"]
+tags: ["decision-making", "facilitation", "conflict management", "decision-making process"]
 metaDescription: "When priorities clash, make the trade-off explicit — name what each option gains and gives up — so the group chooses consciously rather than by attrition."
 ---
 

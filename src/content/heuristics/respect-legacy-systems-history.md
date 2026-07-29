@@ -6,7 +6,7 @@ question: "How should one approach existing legacy systems during modernization 
 type: ["guiding-heuristics"]
 authors: ["Michael Plöd", "Beija Nigl", "Kenny Schwegler", "Andrea Magnorsky", "Andrew Harmel-Law"]
 submitter: "Michael Plöd"
-tags: ["architectural modernisation", "legacy", "facilitating software architecture and design", "sociotechnical systems"]
+tags: ["legacy modernisation", "legacy", "facilitating software architecture and design", "sociotechnical systems"]
 ---
 
 Assume legacy systems were successful in their original context and built with good intentions. This fosters respect and helps uncover underlying value, rather than dismissing them outright. Recognize that their past success often funded current initiatives.

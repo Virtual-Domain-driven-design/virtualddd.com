@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T06:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced"]
-tags: ["ddddd", "functional programming", "haskell"]
+tags: ["ddddd", "functional programming"]
 video: "https://www.youtube.com/embed/sIJr3SCKhjo"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

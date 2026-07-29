@@ -6,7 +6,7 @@ question: "What should you do when you feel overwhelmed or triggered during a fa
 type: ["guiding-heuristics"]
 authors: ["Evelyn van Kelle", "Andrea Magnorsky", "Kenny Schwegler", "Gien Verschatse"]
 submitter: "Evelyn van Kelle"
-tags: ["facilitation", "self-regulation", "observation", "emotional awareness"]
+tags: ["facilitation", "self-awareness"]
 metaDescription: "When you feel triggered or lose control as a facilitator, take a literal step back and observe behaviour patterns."
 ---
 

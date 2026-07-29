@@ -6,7 +6,7 @@ question: "How do you create the conditions where people feel safe enough to con
 type: ["guiding-heuristics"]
 authors: ["Xin Yao", "Andrea Magnorsky", "Andrew Harmel-Law", "Kenny Schwegler"]
 submitter: "Xin Yao"
-tags: ["psychological safety", "workshop design", "collaboration", "group dynamics"]
+tags: ["psychological safety", "workshop facilitation", "team collaboration", "social dynamics"]
 complements: ["challenge-workshop-premise-before-diving-in", "notice-anxiety-signal-missing-something"]
 enables: ["challenge-workshop-premise-before-diving-in", "pause-every-ten-minutes-invite-dissent", "design-bounded-contexts-around-eventstorming-policies", "align-bounded-context-with-the-value-stream"]
 prerequisites: ["pause-every-ten-minutes-invite-dissent", "design-experiences-not-explanations"]

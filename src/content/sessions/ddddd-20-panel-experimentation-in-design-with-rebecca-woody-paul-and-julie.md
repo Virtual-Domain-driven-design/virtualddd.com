@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T20:00:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Advanced"]
-tags: ["ddddd", "experimentation", "essential", "design"]
+tags: ["ddddd", "essential"]
 video: "https://www.youtube.com/embed/GimWdjmJGek"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-01-12T18:30:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
-tags: ["essential", "strategic design", "software architecture", "large-scale systems"]
+tags: ["essential", "strategic design", "software architecture", "distributed systems"]
 video: "https://www.youtube.com/embed/h-7-lMJ_jdw"
 podcastPlayer: "https://player.captivate.fm/episode/9793d0be-efdf-4f66-9380-8bcf73934d42/"
 organiser: "Kenny Baas-Schwegler"

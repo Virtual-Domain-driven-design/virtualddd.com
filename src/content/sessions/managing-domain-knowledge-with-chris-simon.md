@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2024-03-14T08:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Beginner", "Intermediate", "Advanced"]
-tags: ["ux", "design patterns", "software development", "ux/ui design"]
+tags: ["ux", "design patterns", "software development"]
 video: "https://youtu.be/uk7hCIRJmW4"
 podcastPlayer: "https://player.captivate.fm/episode/0f609660-e4f2-49d2-83f7-99c43a84be02/"
 miro: "https://miro.com/app/board/uXjVNkcj8nA=/?share_link_id=218487956167"

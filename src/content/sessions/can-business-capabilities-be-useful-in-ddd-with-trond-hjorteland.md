@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2019-06-25T18:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["capability modelling", "software architecture"]
+tags: ["strategic design", "software architecture"]
 video: "https://www.youtube.com/embed/WSAHL7oHGUw"
 podcastPlayer: "https://player.captivate.fm/episode/e539d317-60af-4158-8c3e-4c2a1855e6ce/"
 organiser: "Kenny Baas-Schwegler"

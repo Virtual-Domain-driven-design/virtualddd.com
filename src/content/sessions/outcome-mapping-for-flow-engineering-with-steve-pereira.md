@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-09-01T17:30:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Advanced"]
-tags: ["flow engineering", "outcome mapping"]
+tags: ["collaborative modelling"]
 video: "https://www.youtube.com/embed/1XA4bUcgp8Q"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

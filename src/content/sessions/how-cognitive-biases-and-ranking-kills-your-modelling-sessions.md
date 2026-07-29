@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-04-07T17:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Advanced"]
-tags: ["socio-technical", "bias", "deep democracy"]
+tags: ["sociotechnical systems", "cognitive bias", "deep democracy"]
 video: "https://www.youtube.com/embed/djbbZnOIGE0"
 podcastPlayer: "https://player.captivate.fm/episode/56044b17-a51e-4680-a2c4-0b16dfd654e7/"
 organiser: "Kenny Baas-Schwegler"

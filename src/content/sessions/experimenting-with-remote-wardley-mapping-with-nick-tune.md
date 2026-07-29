@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-01T17:00:00.000+00:00
 typeOfSession: "hands-on"
 level: ["Beginner"]
-tags: ["strategic design", "remote work", "collaborative modelling", "wardley maps"]
+tags: ["strategic design", "remote work", "collaborative modelling", "wardley mapping"]
 video: "https://www.youtube.com/embed/Rvt7k542fOI"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

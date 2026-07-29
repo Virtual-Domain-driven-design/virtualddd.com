@@ -6,7 +6,7 @@ question: "What role should leadership play during a major incident?"
 type: ["guiding-heuristics"]
 authors: ["Liz Fong-Jones", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Liz Fong-Jones"
-tags: ["incident response", "leadership", "pressure", "support"]
+tags: ["incident response", "leadership"]
 complements: ["prioritise-foundation-trust-in-the-team"]
 enables: ["build-safety-through-small-failures", "distribute-debugging-beyond-war-room"]
 prerequisites: ["build-safety-through-small-failures"]

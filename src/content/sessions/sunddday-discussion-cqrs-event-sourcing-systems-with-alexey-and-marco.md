@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2019-08-25T17:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Beginner"]
-tags: ["cqrs/es", "event sourcing", "cqrs"]
+tags: ["cqrs", "event sourcing"]
 video: "https://www.youtube.com/embed/5e7lhY2q8WQ"
 podcastPlayer: "https://player.captivate.fm/episode/c15e93e3-e8d2-49d6-ab57-f9ccb18f4f7e/"
 organiser: "Kenny Baas-Schwegler"

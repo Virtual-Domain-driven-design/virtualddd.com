@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-05-15T04:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Beginner"]
-tags: ["ddddd", "aggregate", "aggregate canvas"]
+tags: ["ddddd", "aggregate"]
 video: "https://www.youtube.com/embed/AF880t1RUU4"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2019-07-18T16:30:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
-tags: ["socio-technical", "strategic design"]
+tags: ["sociotechnical systems", "strategic design"]
 video: "https://www.youtube.com/embed/YqbXEhO237w"
 podcastPlayer: "https://player.captivate.fm/episode/2d26b610-4422-4474-b4d5-89551a4881d5/"
 organiser: "Kenny Baas-Schwegler"

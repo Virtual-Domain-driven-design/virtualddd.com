@@ -5,7 +5,6 @@ status: "Done"
 datetime: 2020-08-04T16:30:00.000+00:00
 typeOfSession: "panel-discussion"
 level: ["Intermediate"]
-tags: ["oss"]
 video: "https://www.youtube.com/embed/F4SwUssweGY"
 podcastPlayer: "https://player.captivate.fm/episode/b6ad1524-6e06-4d9a-96a1-ee68d5fac393/"
 organiser: "Kenny Baas-Schwegler"

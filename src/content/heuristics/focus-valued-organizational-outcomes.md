@@ -6,7 +6,7 @@ question: "How do you gain organizational support for uncertain architectural ex
 type: ["guiding-heuristics"]
 authors: ["Diana Montalion", "Andrea Magnorsky", "Kenny Schwegler"]
 submitter: "Diana Montalion"
-tags: ["stakeholder management", "organisational change", "adr", "risk management"]
+tags: ["stakeholder communication", "organisational change", "adr"]
 complements: ["treat-resistance-as-a-valuable-signal"]
 metaDescription: "Frame architectural experiments around outcomes the organisation already values rather than debating approaches."
 ---

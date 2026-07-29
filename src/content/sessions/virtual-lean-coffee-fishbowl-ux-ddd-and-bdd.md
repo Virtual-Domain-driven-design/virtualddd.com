@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2020-01-16T19:00:00.000+00:00
 typeOfSession: "debate"
 level: ["Advanced"]
-tags: ["ux", "bdd", "socio-technical"]
+tags: ["ux", "behaviour-driven development", "sociotechnical systems"]
 video: "https://www.youtube.com/embed/QelbEUblpLo"
 podcastPlayer: "https://player.captivate.fm/episode/da4527db-b269-48c4-a7da-4538f142d2f4/"
 organiser: "Kenny Baas-Schwegler"

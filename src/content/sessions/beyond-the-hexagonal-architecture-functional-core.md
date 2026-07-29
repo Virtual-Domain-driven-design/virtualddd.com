@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-02-02T18:30:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["hexagonal architecture", "tactical design", "functional core", "anti-corruption layer"]
+tags: ["software architecture", "tactical design", "functional programming"]
 video: "https://www.youtube.com/embed/SAjsP2igBNk"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

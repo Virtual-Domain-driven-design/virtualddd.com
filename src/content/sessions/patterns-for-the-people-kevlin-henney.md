@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2019-04-02T17:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["patterns"]
+tags: ["design patterns"]
 video: "https://www.ustream.tv/embed/recorded/120901497"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

@@ -5,7 +5,7 @@ status: "Done"
 datetime: 2021-03-23T17:00:00.000+00:00
 typeOfSession: "talk"
 level: ["Intermediate"]
-tags: ["legacy", "refactoring", "anemic domain model", "java"]
+tags: ["legacy", "refactoring", "tactical design"]
 video: "https://www.youtube.com/embed/Ut3H8oh892A"
 organiser: "Kenny Baas-Schwegler"
 coOrganisers: ["Krisztina Hirth"]

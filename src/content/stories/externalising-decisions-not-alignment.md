@@ -5,7 +5,7 @@ status: "Published"
 episode: 24
 publishedDate: 2026-07-21
 authors: ["Michael Joyce", "Andrea Magnorsky", "Andrew Harmel-Law"]
-tags: ["facilitating software architecture and design", "collaborative modelling", "stakeholder alignment", "adr", "social dynamics", "technical leadership", "consensus"]
+tags: ["facilitating software architecture and design", "collaborative modelling", "stakeholder communication", "adr", "social dynamics", "technical leadership", "decision-making process"]
 youtube: "https://youtu.be/UrdOmhWyfTs"
 podcast: "https://player.captivate.fm/episode/df008cd7-71a9-473b-853a-b2d9ead7dfa2/"
 seoTitle: "Externalising Decisions: Why Talking Isn't Alignment"
