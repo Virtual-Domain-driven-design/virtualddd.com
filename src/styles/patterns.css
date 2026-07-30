@@ -426,6 +426,12 @@ a.card--heuristic:hover .card-more { color: var(--color-primary-ink); }
 .panel-cyan h1, .panel-cyan h2 { color: var(--color-ink); margin-top: 0; }
 .panel-cyan p { color: var(--color-ink-muted); }
 .panel-cyan .btn { align-self: flex-start; }
+/* A link in here cannot use the accent colour, because the accent *is* the
+ * panel: cyan on cyan renders an invisible link that is still in the HTML and
+ * still focusable. Ink and an underline, so it reads as a link without a colour
+ * to lean on. Buttons keep their own treatment and are unaffected. */
+.panel-cyan a:not(.btn) { color: var(--color-ink); text-decoration: underline; text-underline-offset: 0.15em; }
+.panel-cyan a:not(.btn):hover { text-decoration-thickness: 2px; }
 
 /* Text over a photographic background needs a scrim to stay legible. */
 .scrim { position: relative; overflow: hidden; background-size: cover; background-position: center; }

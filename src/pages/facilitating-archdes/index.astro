@@ -10,6 +10,10 @@ import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
 import { collectionPage, topTrail } from '../../lib/seo';
 import { samePerson } from '../../lib/people';
+import { Image } from 'astro:assets';
+import coverDecision from '../../assets/behind-the-stories/making-of-a-decision.png';
+import coverCollab from '../../assets/behind-the-stories/collaborative-software-design.jpg';
+import coverFacilitating from '../../assets/behind-the-stories/facilitating-software-architecture.jpg';
 
 const storyGuestIndex = await guestsById();
 const stories = (await getCollection('stories')).sort(
@@ -32,6 +36,72 @@ const hosts = [...new Set(stories.flatMap((s) => s.data.hosts))]
   .sort((a, b) => a.localeCompare(b))
   .map((name) => organisers.find((o) => samePerson(o.data.name, name)))
   .filter(Boolean) as typeof organisers;
+
+// The writing the three of us did about the problem this series keeps circling,
+// each paired with the episode where its author tells it as a story.
+//
+// Hardcoded on purpose. It is editorial copy, like the panel above it, and it
+// changes about as often: three pieces that will still be three pieces for a
+// while. When the articles we are writing start arriving, this wants to become
+// a small Notion database instead, sharing one with the "Reading list page"
+// todo, so a fourth piece needs no commit. Not before then: a schema, a sync
+// spec and a content type is a lot of machinery for three rows.
+//
+// Whatever it grows into, this page shows three. A rail that lists everything
+// stops being a way in and becomes a bibliography.
+const byStory = new Map(stories.map((s) => [s.id, s]));
+const writing = [
+  {
+    kind: 'Series',
+    work: 'Making of a Decision',
+    by: 'Andrea Magnorsky',
+    angle: 'The power dynamics that settle which options are ever heard, long before anyone decides.',
+    href: 'https://www.roundcrisis.com/2025/09/01/making-of-a-decision/',
+    cover: coverDecision,
+    story: 'governance-after-incident-decision-reversal',
+  },
+  {
+    kind: 'Book',
+    work: 'Collaborative Software Design',
+    by: 'Evelyn van Kelle, Gien Verschatse and Kenny Baas-Schwegler',
+    angle: 'How a group models a domain together, and how the decisions that come out of it are made to stick.',
+    href: 'https://collaborative-software-design.com/',
+    cover: coverCollab,
+    story: 'architectural-indecision',
+  },
+  {
+    kind: 'Book',
+    work: 'Facilitating Software Architecture',
+    by: 'Andrew Harmel-Law',
+    angle: 'Handing architectural decisions to the people doing the work, without losing the thread of the whole.',
+    href: 'https://facilitatingsoftwarearchitecture.com/',
+    cover: coverFacilitating,
+    story: 'uncovering-ghost-decisions-architecture',
+  },
+].map((a) => {
+  const episode = byStory.get(a.story);
+  return {
+    ...a,
+    episode,
+    // The episode's own description rather than a line written here. Mine
+    // restated the title twice over, and these name the guest and the
+    // situation. Each of the three is the host's own episode, so the pairing
+    // is "here is the thinking, and here is them telling it as a story".
+    note: episode?.data.seoMetadescription ?? excerpt(episode?.body ?? '', '', 150),
+  };
+});
+
+// The two episodes that explain the series rather than tell a story. Taken by
+// slug so the titles and links cannot rot, with the series name trimmed off the
+// front of the first: on this page it is the name of the page.
+const startHere = ['stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it', 'systems-change-transparency']
+  .map((id) => byStory.get(id))
+  .filter(Boolean)
+  .map((s) => ({
+    id: s!.id,
+    episode: s!.data.episode,
+    label: s!.data.title.replace(/^Stories on Facilitating Software Architecture & Design:\s*/, ''),
+  }));
 
 const tags = tagOptions(stories);
 const description =
@@ -71,23 +141,68 @@ const jsonLd = collectionPage(Astro.site, {
         <p class="eyebrow eyebrow--dark">Facilitating Stories</p>
         <h1>Stories of Facilitating Software Architecture &amp; Design</h1>
         <p>
-          Regardless of the architectural approach — from traditional enterprise to more hands-on,
-          emergent methods — teams face similar obstacles when building effective systems. The core
-          challenge remains how to build software that truly works and enables a smooth flow of delivery.
+          Whatever approach a team takes, from enterprise architecture to something far more
+          emergent, the same problems keep turning up. Making the software work is rarely the hard
+          part. Getting a group of people to decide, and to still agree once that decision meets the
+          work, usually is.
         </p>
         <p>
-          So we started this series: real-world experiences from our community, sharing practical stories
-          about the approaches that have delivered results — moving beyond the theoretical and into the
-          practical.
+          So we started asking people what actually happened. Not the tidy version told from a
+          conference stage: the workshop that went sideways, the decision that got reversed, the
+          thing they would do differently now.
         </p>
-        <a class="btn btn--accent si-btn" href="/ai-usage-on-this-site/">Read more on our AI usage →</a>
+        <p>
+          What the stories keep circling is who was in the room, how the decision really got made,
+          and what was left of it a month later.
+        </p>
+        {startHere.length > 0 && (
+          <div class="si-start">
+            <p class="si-start-label">New here? We explain the why in the first two episodes:</p>
+            <ul>
+              {startHere.map((e) => (
+                <li><a href={`/facilitating-archdes/${e.id}/`}>Episode {e.episode}: {e.label} →</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
       </aside>
     </div>
   </section>
 
+
   <!-- Story archive -->
   <section class="archive">
-    <div class="wrap">
+    <div class="wrap archive-grid">
+      <aside class="archive-rail">
+        <div class="rail-inner">
+          <h2 class="eyebrow eyebrow--cyan">What we wrote</h2>
+          <p class="rail-lead">
+            Three angles on the same problem, and the episode where each one met a real team.
+          </p>
+          <ul class="rail-list">
+            {writing.map((a) => (
+              <li class="rail-item">
+                <a class="rail-plate" href={a.href} rel="noopener" tabindex="-1" aria-hidden="true">
+                  <Image src={a.cover} alt="" width={480} loading="lazy" />
+                </a>
+                <p class="rail-kind">{a.kind}</p>
+                <h3 class="rail-title"><a href={a.href} rel="noopener">{a.work} <span class="rail-ext">↗</span></a></h3>
+                <p class="rail-by">{a.by}</p>
+                <p class="rail-angle">{a.angle}</p>
+                {a.episode && (
+                  <p class="rail-pair">
+                    <a href={`/facilitating-archdes/${a.episode.id}/`}>
+                      In practice: episode {a.episode.data.episode} →
+                    </a>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+
+      <div class="archive-main">
       <h2 class="eyebrow eyebrow--cyan">All stories</h2>
 
       <CardFilter
@@ -126,6 +241,7 @@ const jsonLd = collectionPage(Astro.site, {
           })}
         </div>
       </CardFilter>
+      </div>
     </div>
   </section>
 
@@ -148,6 +264,15 @@ const jsonLd = collectionPage(Astro.site, {
     .si-about p:last-child { margin-bottom: 0; }
     .si-btn { align-self: flex-start; margin-top: var(--space-6); }
 
+    /* The two episodes that say why the series exists, next to the paragraph
+       that says the same thing in prose. This replaced the AI usage button,
+       which was the panel's only call to action and so the loudest thing on a
+       page about stories; it now sits under Follow us in the sidebar. */
+    .si-start { margin-top: var(--space-6); }
+    .si-start-label { margin: 0 0 var(--space-2); font-weight: 600; }
+    .si-start ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+    .si-start a { font-weight: 600; }
+
     /* The solo carousel stretches to the height of the cyan card beside it. */
     .solo-track { height: 100%; }
 
@@ -162,11 +287,71 @@ const jsonLd = collectionPage(Astro.site, {
        three narrow columns turn the archive into a wall of thumbnails and
        squeeze the excerpt to a line. The filter bar is capped to match, so the
        column has one edge rather than two. */
-    .story-list { display: flex; flex-direction: column; gap: var(--space-8); max-width: 52rem; margin-inline: auto; }
-    .archive :global(.card-filter) { max-width: 52rem; margin-inline: auto; }
+    /* The archive and the writing beside it. The story column keeps its 52rem
+       exactly — a story is a long read and three narrow columns would turn the
+       archive into a wall of thumbnails — but it stops being centred, and the
+       space that centring wasted becomes the rail. At 72rem those two add up to
+       the container: 52rem of stories, a gap, and what is left. */
+    .story-list { display: flex; flex-direction: column; gap: var(--space-8); max-width: 52rem; }
+    .archive :global(.card-filter) { max-width: 52rem; }
+
+    .archive-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-10); }
+    .archive-grid > * { min-width: 0; }
+    /* Above the stories on a narrow screen: below them it would sit under two
+       dozen cards, which is the same as not being there. */
+    .archive-rail { order: -1; }
+    @media (min-width: 72rem) {
+      /* No `align-items: start` here: it sizes the rail to its own content, and
+         then the sticky inside it has nowhere to travel and scrolls away with
+         the first story. The rail has to be as tall as the archive beside it. */
+      .archive-grid { grid-template-columns: minmax(0, 52rem) 1fr; gap: var(--space-12); }
+      /* Both children carry order:-1 for the narrow layout, so the rail has to
+         be pushed back explicitly here or the two tie and fall back to DOM
+         order, which puts the rail in the 52rem column. */
+      .archive-rail { order: 1; }
+      /* Sticky, so the writing stays with the reader for all 24 stories rather
+         than scrolling away in the first screenful.
+         With the covers in, the rail is about 1200px tall and a 1440x900 window
+         has roughly 820px to give it. A sticky element taller than the viewport
+         pins at the top and hides its own foot, so the third item would be
+         unreachable: hence its own scroll, capped to what is actually visible. */
+      .rail-inner {
+        /* 5.5rem rather than an offset of my own: the site header is itself
+           sticky at top 0, and `.detail-side` in patterns.css already uses this
+           number to clear it. At 2rem the rail pinned underneath the header and
+           hid its own heading. */
+        position: sticky;
+        top: 5.5rem;
+        max-height: calc(100vh - 5.5rem - var(--space-8));
+        overflow-y: auto;
+        scrollbar-width: thin;
+      }
+    }
+
+    .rail-lead { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-6); }
+    .rail-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+    .rail-item { border-left: 2px solid var(--color-border); padding-left: var(--space-4); }
+    /* One band per item, everything contained rather than cropped: two of these
+       are book covers and the third is a diagram, and neither survives a crop.
+       So the box is uniform and the artwork sits inside it, which is the same
+       argument ConferenceCard makes about logos. */
+    .rail-plate { display: block; height: 8.5rem; background: var(--color-surface-2); border-radius: calc(var(--radius) / 2); margin-bottom: var(--space-3); overflow: hidden; }
+    .rail-plate img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .rail-kind {
+      font-family: var(--font-heading); font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; font-size: var(--text-sm); color: var(--color-accent-dark);
+      margin: 0 0 var(--space-1);
+    }
+    .rail-title { margin: 0 0 var(--space-1); font-size: var(--text-base); }
+    .rail-title a { text-decoration: none; }
+    .rail-title a:hover { text-decoration: underline; }
+    .rail-ext { font-size: 0.8em; opacity: 0.7; }
+    .rail-by { margin: 0 0 var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .rail-angle { margin: 0 0 var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
+    .rail-pair { margin: 0; font-size: var(--text-sm); }
     /* The heading shares the column's left edge, rather than floating out to
        the page margin on its own. */
-    .archive .eyebrow { display: flex; max-width: 52rem; margin-inline: auto; }
+    .archive .eyebrow { display: flex; }
   </style>
 
   <script>
