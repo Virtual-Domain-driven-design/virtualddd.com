@@ -81,6 +81,26 @@ async function worker() {
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
 const bad = [];
+/**
+ * Said out loud, never fatal.
+ *
+ * Only the apex redirect lives here, and only because it is the one check that
+ * races the host. After a release the www vhost serves 200 for a few minutes
+ * before it honours the new .htaccess, and the window is not predictable: the
+ * budget went from forty seconds to five tries to twelve tries over three
+ * minutes and it still lost on 2026-07-30, then redirected correctly thirty
+ * seconds later. Four good deploys have been failed by it and it has never
+ * caught a real fault.
+ *
+ * The cost of that is not a red cross. `Tell n8n what shipped` is skipped when
+ * this step fails, so a good deploy ships in silence. Meanwhile watch.yml runs
+ * this same script weekly against a settled site, which is where a genuine www
+ * regression gets caught, and a week is the right urgency for one.
+ *
+ * Everything else here stays fatal: a 404 on an inherited URL, a redirect
+ * chain, a search index the host will not serve.
+ */
+const warn = [];
 for (const r of results) {
   if (r.error) { bad.push(`${r.path} — request failed: ${r.error}`); continue; }
   if (r.first === 404) { bad.push(`${r.path} — 404 (nothing handles it)`); continue; }
@@ -113,18 +133,14 @@ if (host.split('.').length === 2) {
   // not a red cross: `Tell n8n what shipped` is skipped when this step fails,
   // so a good deploy ships silently. A check that cries wolf is worse than no
   // check, because people learn to scroll past it.
-  // Second line of defence behind the settle pause in deploy.yml. It was five
-  // tries over forty seconds, on a window measured at close to a minute, and
-  // it then failed two more good deploys on 2026-07-29 — both of which were
-  // serving the redirect correctly a few minutes later. So the window is
-  // longer than it was measured to be, and guessing it again would be the
-  // same mistake: twelve tries fifteen seconds apart gives it three minutes.
-  //
-  // That patience is free on a healthy deploy, which breaks out on the first
-  // attempt. It is only spent on the case that used to be a false alarm.
-  const attempts = 12;
+  // A short look, not a vigil. Three minutes of patience was bought when this
+  // could fail the deploy; now that it only warns, spending them would be
+  // three minutes added to every release for a line of output. Four tries over
+  // half a minute catches the case where the host has already settled and says
+  // so plainly when it has not.
+  const attempts = 4;
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    if (attempt > 1) await sleep(15000);
+    if (attempt > 1) await sleep(10000);
     try {
       const res = await fetch(wwwUrl, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
       const to = res.headers.get('location');
@@ -136,11 +152,11 @@ if (host.split('.').length === 2) {
         console.log(`  www answered ${res.status}; the release may still be settling, retrying…`);
         continue;
       }
-      if (res.status !== 301) bad.push(`${wwwUrl} — ${res.status} after ${attempts} tries, expected a 301 to https://${host}/`);
-      else bad.push(`${wwwUrl} — 301 to ${to}, which is not ${host}`);
+      if (res.status !== 301) warn.push(`${wwwUrl} — ${res.status} after ${attempts} tries, expected a 301 to https://${host}/`);
+      else warn.push(`${wwwUrl} — 301 to ${to}, which is not ${host}`);
     } catch (e) {
       if (attempt < attempts) { console.log(`  www request failed (${e.message}), retrying…`); continue; }
-      bad.push(`${wwwUrl} — request failed: ${e.message}`);
+      warn.push(`${wwwUrl} — request failed: ${e.message}`);
     }
   }
 }
@@ -168,6 +184,13 @@ console.log(`  301 redirect  : ${count((r) => r.first === 301 || r.first === 308
 console.log(`  410 Gone      : ${count((r) => r.first === 410)}`);
 if (wwwNote) console.log(wwwNote);
 console.log(`  problems      : ${bad.length}`);
+
+if (warn.length) {
+  console.log(`  warnings      : ${warn.length}`);
+  for (const w of warn) console.log(`    ${w}`);
+  console.log('  (not fatal: the apex redirect settles minutes after a release,');
+  console.log('   and watch.yml checks it weekly against a site that has.)');
+}
 
 if (bad.length) {
   console.error('\nproblems:');
