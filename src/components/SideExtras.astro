@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Socials from './Socials.astro';
+import AiUsage from './AiUsage.astro';
 
 interface LatestItem {
   href: string;
@@ -44,7 +45,7 @@ const DISCORD_PATH =
      Stories page, where it competed with the stories themselves. -->
 <div class="side-block">
   <h2 class="eyebrow eyebrow--cyan">How this site is made</h2>
-  <a class="btn btn--accent btn--block side-ai" href="/ai-usage-on-this-site/">Read more on our AI usage →</a>
+  <AiUsage class="btn--accent btn--block side-ai" />
 </div>
 
 {latest.length > 0 && (
@@ -71,8 +72,9 @@ const DISCORD_PATH =
 
 <style>
   .side-block { margin-top: var(--space-8); }
-  /* Clear of its own heading. */
-  .side-ai { margin-top: var(--space-3); }
+  /* `:global` because the element belongs to AiUsage now, so this file's scope
+     attribute is not on it and a plain `.side-ai` would never match. */
+  :global(.side-ai) { margin-top: var(--space-3); }
 
   /* Discord — consistent with the other sidebar blocks (dark, cyan accents) */
   .sd-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); }

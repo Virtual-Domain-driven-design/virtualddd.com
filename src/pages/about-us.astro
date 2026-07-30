@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AiUsage from '../components/AiUsage.astro';
 import { pageJsonLd, topTrail } from '../lib/seo';
 import { Image } from 'astro:assets';
 import heroImg from '../assets/about/ddd_session_93.jpg';
@@ -115,17 +116,7 @@ const jsonLd = pageJsonLd(Astro.site, {
       </div>
     </section>
 
-    <!-- AI usage banner -->
-    <a class="ai-banner" href="/ai-usage-on-this-site/">
-      <span class="aib-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-      </span>
-      <span class="aib-text">
-        <span class="aib-title">AI usage on this site</span>
-        <span class="aib-sub">How we do — and don't — use AI.</span>
-      </span>
-      <span class="btn btn--inverse aib-btn">Read more →</span>
-    </a>
+    <AiUsage variant="banner" />
   </div>
 
   <style>
@@ -160,14 +151,5 @@ const jsonLd = pageJsonLd(Astro.site, {
     }
     .ar-img { aspect-ratio: 16 / 10; }
 
-    /* AI usage banner (pink) */
-    .ai-banner { display: flex; align-items: center; gap: var(--space-6); background: var(--color-accent); color: var(--on-brand); padding: var(--space-6) var(--space-8); }
-    .ai-banner:hover { text-decoration: none; }
-    .aib-icon { flex: none; display: inline-flex; }
-    .aib-text { flex: 1 1 auto; display: flex; flex-direction: column; }
-    .aib-title { font-family: var(--font-heading); font-weight: 700; font-size: var(--text-xl); }
-    .aib-sub { color: var(--color-ink-muted); font-size: var(--text-sm); }
-    .aib-btn { flex: none; }
-    @media (max-width: 639.98px) { .ai-banner { flex-wrap: wrap; text-align: center; justify-content: center; } .aib-text { flex-basis: 100%; } }
   </style>
 </BaseLayout>
