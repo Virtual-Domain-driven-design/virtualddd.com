@@ -55,7 +55,25 @@ const jsonLd = graph(organization(Astro.site), { ...set, size: all.length }, {
   </div>
 
   <style>
-    .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 75% center; }
+    /* The photograph is 800x450, and full-bleed the band asks it to cover
+       1440x605: `cover` then scales it 1.8x on width and throws away 205px of
+       height, which took the top of Rebecca's head off and made the whole thing
+       look stretched. Confined to the right of the band it is scaled 1.34x
+       instead, cropped horizontally rather than vertically, and she is in frame.
+       The left is where the scrim is almost opaque and the text sits, so nothing
+       is lost by not covering it. A better fix is a larger photograph; this is
+       the most an 800px one can do. */
+    .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 22%; }
+    @media (min-width: 900px) {
+      .hero-bg {
+        left: 38%;
+        width: 62%;
+        object-position: 60% 22%;
+        /* Feathered, so the photo's edge is not a vertical line down the band. */
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%);
+        mask-image: linear-gradient(90deg, transparent 0, #000 14%);
+      }
+    }
     .hero-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.82) 38%, rgba(0,0,0,0.35) 68%, rgba(0,0,0,0) 100%); }
     .hero-inner { padding-block: var(--space-12); }
     .hero-text { max-width: 40rem; }
