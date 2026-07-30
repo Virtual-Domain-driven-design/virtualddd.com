@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/eventstorming-glossary-cheat-sheet/"
 license: "CC-BY-SA-4.0"
 category: "EventStorming & remote"
 order: 1
-stars: 973
+stars: 974
 heroImage: "./_assets/eventstorming-glossary-cheat-sheet/core-concepts.jpg"
 contributors:
   - { name: "Baasie", url: "https://github.com/Baasie" }
