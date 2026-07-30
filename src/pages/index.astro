@@ -6,6 +6,7 @@ import StoryCard from '../components/StoryCard.astro';
 import OrganiserCard from '../components/OrganiserCard.astro';
 import ConferenceCard from '../components/ConferenceCard.astro';
 import Carousel from '../components/Carousel.astro';
+import AiUsage from '../components/AiUsage.astro';
 import { getCollection } from 'astro:content';
 import { splitSessions } from '../lib/collections';
 import { orderConferences } from '../lib/conferences';
@@ -175,19 +176,22 @@ try {
     </section>
 
     <section class="heur-stories">
-      <div class="hs-col">
-        <div class="section-head"><h2>Heuristics</h2><a href="/heuristics/">All →</a></div>
-        <div class="heur-links">
-          {HEURISTIC_TYPES.map((t) => (
-            <a class="tbanner tbanner--compact scrim" href={`/heuristics/${t.key}/`} style={`background-image: url(${t.bg.src})`}>
-              <span class="tbanner-body">
-                <h3 class="tbanner-title">{t.title} ››</h3>
-                <span class="tbanner-text">{t.text}</span>
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
+      <aside class="hs-col ai-panel panel-cyan">
+        <h2>Content creation and AI</h2>
+        <p>
+          Everything here starts with people talking to each other. A session, a story, an argument
+          in Discord that carries on for a week. That is the part we are here for, and it is the part
+          nothing can do on our behalf.
+        </p>
+        <p>
+          We do use AI, and we would rather say where than let you wonder. It drafts the written
+          version of a story from the transcript, suggests the heuristics we then argue over and
+          mostly throw away, and it helped build this site. What it does not do is decide what we
+          think.
+        </p>
+        <p class="ai-claim">The thinking, the opinions and the mistakes are ours.</p>
+        <AiUsage class="btn--ink ai-cta" />
+      </aside>
       <div class="hs-col">
         <div class="section-head"><h2>Latest stories</h2><a href="/facilitating-archdes/">All →</a></div>
         <div class="solo-carousel">
@@ -200,6 +204,20 @@ try {
             {stories.map((_, i) => <button type="button" data-i={i} aria-label={`Story ${i + 1}`}></button>)}
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="heur-row">
+      <div class="section-head"><h2>Heuristics</h2><a href="/heuristics/">All →</a></div>
+      <div class="heur-links">
+        {HEURISTIC_TYPES.map((t) => (
+          <a class="tbanner tbanner--compact scrim" href={`/heuristics/${t.key}/`} style={`background-image: url(${t.bg.src})`}>
+            <span class="tbanner-body">
+              <h3 class="tbanner-title">{t.title} ››</h3>
+              <span class="tbanner-text">{t.text}</span>
+            </span>
+          </a>
+        ))}
       </div>
     </section>
 
@@ -254,8 +272,23 @@ try {
     .heur-stories { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-16); align-items: stretch; }
     .hs-col { min-width: 0; display: flex; flex-direction: column; }
     @media (min-width: 900px) { .heur-stories { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
-    .heur-links { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
-    /* The type tiles come from patterns.css (.tbanner--compact). */
+    /* The three type tiles, side by side under the pair above. Stacked they were
+       a column of banners competing with the stories carousel beside them; in a
+       row they read as one set of three, which is what they are. The tiles
+       themselves come from patterns.css (.tbanner--compact). */
+    .heur-row { margin-block: var(--space-16); }
+    .heur-links { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+    @media (min-width: 700px) { .heur-links { grid-template-columns: repeat(3, 1fr); } }
+    .heur-links > * { min-width: 0; }
+
+    /* Where the heuristics used to sit: what we use AI for, said plainly, next
+       to the stories it helps produce. The panel is not about the tooling; it is
+       about the part the tooling cannot do, which is why the claim is the line
+       that carries weight and the link is the last thing rather than the first. */
+    .ai-panel { justify-content: flex-start; }
+    .ai-panel h2 { font-size: var(--text-2xl); }
+    .ai-claim { font-weight: 700; color: var(--color-ink); }
+    .ai-cta { align-self: flex-start; margin-top: auto; }
 
     /* Every conference visible, however many there are. A carousel would hide
        one third of a row whose whole purpose is to send people somewhere on a

@@ -38,7 +38,7 @@ export const HEURISTIC_TYPES: HeuristicTypeInfo[] = [
     key: 'guiding-heuristics',
     title: 'Guiding heuristics',
     label: 'Guiding',
-    text: 'Heuristics that guide our use of other heuristics — meta-heuristics, if you will.',
+    text: 'Heuristics that guide our use of other heuristics. Meta-heuristics, if you will.',
     bg: heurGuiding,
   },
   {
