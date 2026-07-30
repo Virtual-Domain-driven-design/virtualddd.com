@@ -38,6 +38,15 @@ const DISCORD_PATH =
   <Socials />
 </div>
 
+<!-- How this site is made, rather than what it says. Its own block: under
+     Follow us it read as another way to follow us, which is the opposite of
+     what it is. It used to be the only call to action on the Facilitating
+     Stories page, where it competed with the stories themselves. -->
+<div class="side-block">
+  <h2 class="eyebrow eyebrow--cyan">How this site is made</h2>
+  <a class="btn btn--accent btn--block side-ai" href="/ai-usage-on-this-site/">Read more on our AI usage →</a>
+</div>
+
 {latest.length > 0 && (
   <div class="side-block">
     <h2 class="eyebrow eyebrow--cyan">{latestLabel}</h2>
@@ -62,6 +71,8 @@ const DISCORD_PATH =
 
 <style>
   .side-block { margin-top: var(--space-8); }
+  /* Clear of its own heading. */
+  .side-ai { margin-top: var(--space-3); }
 
   /* Discord — consistent with the other sidebar blocks (dark, cyan accents) */
   .sd-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); }
