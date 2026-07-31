@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/welcome-to-ddd/"
 license: "CC-BY-SA-4.0"
 category: "Getting started"
 order: 1
-stars: 1532
+stars: 1533
 heroImage: "./_assets/welcome-to-ddd/ddd_on_a_page1.png"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
