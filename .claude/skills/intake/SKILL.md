@@ -56,7 +56,9 @@ understanding and a recommendation — not a diff.
      for, or what we find tidy? What does the friction cost them today?
    - **Design.** Does it hold the brand fixed — colours, logo, feel (rule 3,
      `docs/brand-and-code.md`)? Does `patterns.css` already have this filter
-     bar, card or grid before you add another?
+     bar, card or grid before you add another? If the change has a *look* and
+     not only a behaviour, run [/ui-design](../ui-design/SKILL.md) to draw the
+     option slate — its recommendation feeds the options in step 5.
    - **Front-end.** What already does this? A new component beside `TeaserCard`,
      a helper beside `src/lib/`, is a finding unless you can say why the existing
      one did not fit. Do the tests still select only `[data-test]` and `js-*`
