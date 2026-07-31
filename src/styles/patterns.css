@@ -85,6 +85,18 @@
 
 /* --------------------------------------------------------------------- lead */
 /* The intro paragraph under an h1. Eight pages had written their own. */
+/* The quieter second paragraph in a hero: a caveat, a pointer, a note about what
+   is coming. ddd-crew has had one of these as a page-scoped `.licence` since it
+   shipped, which is right for a licence note but meant every other hero that
+   wanted the same thing got an unstyled class and a paragraph at full weight. */
+.hero-note {
+  color: var(--color-text-muted);
+  max-width: 52rem;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  margin: 0;
+}
+
 .lead {
   color: var(--color-text-muted);
   max-width: 52rem;

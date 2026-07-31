@@ -20,7 +20,7 @@
     "check:urls": "node scripts/check-redirects.mjs",
     "verify:live": "node scripts/verify-live.mjs",
     "sync": "npm run sync:notion && npm run sync:ddd-crew",
-    "sync:notion": "npm run sync:guests && npm run sync:sessions && npm run sync:open-spaces && npm run sync:stories && npm run sync:heuristics && npm run sync:organisers && npm run sync:conferences",
+    "sync:notion": "npm run sync:guests && npm run sync:sessions && npm run sync:open-spaces && npm run sync:stories && npm run sync:heuristics && npm run sync:organisers && npm run sync:conferences && npm run sync:reading-list",
     "sync:sessions": "tsx scripts/sync-notion.ts content --collection=sessions --write",
     "sync:open-spaces": "tsx scripts/sync-notion.ts content --collection=open-spaces --write",
     "sync:stories": "tsx scripts/sync-notion.ts content --collection=stories --write",
@@ -28,7 +28,8 @@
     "sync:organisers": "tsx scripts/sync-notion.ts organisers --write",
     "sync:guests": "tsx scripts/sync-notion.ts guests --write",
     "sync:ddd-crew": "tsx scripts/sync-ddd-crew.ts --write",
-    "sync:conferences": "tsx scripts/sync-notion.ts conferences --write"
+    "sync:conferences": "tsx scripts/sync-notion.ts conferences --write",
+    "sync:reading-list": "tsx scripts/sync-notion.ts content --collection=reading-list --write"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

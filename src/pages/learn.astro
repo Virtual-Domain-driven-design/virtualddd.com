@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DiscordCard from '../components/DiscordCard.astro';
+import { collectionPage, topTrail, pageTitle } from '../lib/seo';
+
+/**
+ * The Learn DDD hub.
+ *
+ * Deliberately small. It exists so the header can carry one slot instead of one
+ * per resource type, and so /reading-list/, /ddd-crew/ and later /videos/ have a
+ * parent to sit under. The guided journey lands here when it is written; until
+ * then this page points at what already exists rather than promising a path that
+ * does not.
+ *
+ * No card images: the reading list has covers, ddd-crew has hero images and the
+ * heuristics have none, so three cards would be inconsistent. Text cards say the
+ * same thing without inventing artwork.
+ */
+const sections = [
+  {
+    href: '/reading-list/',
+    title: 'Reading list',
+    text: 'Books, papers and free PDFs we would defend, each with one line on why it is worth your evening. The free ones come first.',
+    more: 'Browse the reading list',
+  },
+  {
+    href: '/ddd-crew/',
+    title: 'ddd-crew tools',
+    text: 'Canvases, modelling processes and reference guides from the ddd-crew, republished here with attribution under CC BY-SA so they are easy to browse.',
+    more: 'Browse the tools',
+  },
+  {
+    href: '/heuristics/',
+    title: 'Heuristics',
+    text: 'Rules of thumb pulled out of real sessions. Not theory: what practitioners actually decided, and when it held.',
+    more: 'Browse the heuristics',
+  },
+];
+
+const description =
+  'Free resources for learning Domain-Driven Design, curated by the Virtual DDD community: ' +
+  'a reading list, the ddd-crew tools, and heuristics taken from real sessions.';
+
+const jsonLd = collectionPage(Astro.site, {
+  url: new URL('/learn/', Astro.site).toString(),
+  name: 'Learn DDD',
+  description,
+  items: sections.map((s) => ({
+    name: s.title,
+    url: new URL(s.href, Astro.site).toString(),
+  })),
+  trail: topTrail('Learn DDD', '/learn/'),
+});
+---
+
+<BaseLayout title={pageTitle('Learn DDD', { brand: true })} description={description} jsonLd={jsonLd}>
+  <section class="hero hero-band hero-band--padded">
+    <div class="page-wash" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow eyebrow--cyan">Learn DDD</p>
+      <h1>Learn Domain-Driven Design</h1>
+      <p class="lead">
+        All of it free, and none of it behind a signup. Three ways in, depending on
+        whether you want something to read, something to run in a session, or what
+        people decided when they tried.
+      </p>
+      <p class="hero-note">
+        A guided path for someone completely new to this is being written. Until it is
+        here, start wherever your problem is.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap" data-pagefind-body>
+    <ul class="learn-grid">
+      {sections.map((s) => (
+        <li>
+          <a class="card learn-card" href={s.href}>
+            <div class="card-body">
+              <h2 class="card-title">{s.title}</h2>
+              <p class="card-excerpt">{s.text}</p>
+              <span class="card-more">{s.more} &rarr;</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <DiscordCard
+      text="Ask the awkward question, or tell us what is missing from any of these."
+    />
+  </section>
+</BaseLayout>
+
+<style>
+  .learn-grid { list-style: none; margin: 0 0 var(--space-16); padding: 0; display: grid; gap: var(--space-6); }
+  @media (min-width: 48rem) { .learn-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* The whole card is the link, so it needs to fill its grid cell and push the
+     read-more line to the bottom however long the description runs. */
+  /* `p a, li a` in global.css underlines inline prose links, and a card that IS
+     an anchor inside an <li> matches it, so every word in the card inherits an
+     underline. That rule is not meant for this. */
+  .learn-card, .learn-card:hover { text-decoration: none; }
+  .learn-card { height: 100%; padding: var(--space-6); }
+  .learn-card .card-body { display: flex; flex-direction: column; flex: 1; }
+  .learn-card .card-title { margin: 0 0 var(--space-3); }
+  .card-excerpt { color: var(--color-text-muted); margin: 0; line-height: 1.6; }
+</style>

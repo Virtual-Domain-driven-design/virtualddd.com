@@ -1,0 +1,287 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { collectionPage, topTrail, pageTitle } from '../lib/seo';
+import CardFilter from '../components/CardFilter.astro';
+import { packFacet } from '../lib/card-filter';
+
+const DISCORD = 'https://discord.gg/tRJkcsFDKN';
+
+// Explore DDD 2018, Denver. "DDD isn't done" is the only phrase reported as his
+// exact words, so it is the only thing in quotation marks; the principles below
+// it are our paraphrase, not a quote. The talk is in data/videos-inventory.csv
+// as eric-evans-keynote-ddd-isnt-done-a-skeptical-optimistic-pragmatic-look, and
+// links out to YouTube because there is no /videos/ page to send people to yet.
+const EVANS_KEYNOTE = 'https://www.youtube.com/watch?v=R2IAgnpkBck';
+
+// One page, no page per book. The only text on an entry that is ours is `why`,
+// and a page wrapped around one sentence is the thin page that got the old
+// /videos/ section retired. The slug is the anchor here, not a URL.
+const all = await getCollection('readingList');
+
+// Free first, because that is what this community stands for and it is the part
+// a newcomer can act on today. Then newest, so a shelf does not silently
+// calcify around whatever was published in 2003.
+const books = all.sort((a, b) => {
+  if (a.data.free !== b.data.free) return a.data.free ? -1 : 1;
+  return (b.data.year ?? 0) - (a.data.year ?? 0);
+});
+
+// The blue book illustrates the origin section as well as being an entry in the
+// list. It is looked up rather than hard-coded as an asset so it cannot drift
+// from the row it is describing: if the cover changes in Notion, both change.
+const blueBook = books.find((b) => b.id === 'domain-driven-design');
+
+// Filter options come from the books themselves, so a topic nobody uses never
+// appears and a new one needs no code. Level keeps its own order rather than
+// alphabetical: Beginner before Advanced is the only order that means anything.
+const LEVEL_ORDER = ['Beginner', 'Intermediate', 'Advanced', 'Reference'] as const;
+const levels = LEVEL_ORDER.filter((l) => books.some((b) => b.data.level.includes(l)));
+const topics = [...new Set(books.flatMap((b) => b.data.topics))].sort();
+
+const description =
+  'Books, papers and free PDFs on Domain-Driven Design, facilitation and architecture, ' +
+  'recommended by the Virtual DDD community. Free ones first, and every entry says why it is worth your time.';
+
+const jsonLd = collectionPage(Astro.site, {
+  url: new URL('/reading-list/', Astro.site).toString(),
+  name: 'Reading list',
+  description,
+  // Anchors rather than the publishers' URLs: this list is ours, the books are
+  // not. No rating anywhere, because a recommendation is not a review score.
+  items: books.map((b) => ({
+    name: b.data.title,
+    url: new URL(`/reading-list/#${b.id}`, Astro.site).toString(),
+  })),
+  trail: topTrail('Reading list', '/reading-list/'),
+});
+---
+
+<BaseLayout title={pageTitle('Reading list', { brand: true })} description={description} jsonLd={jsonLd}>
+  {/* No hero band. The Facilitating Stories index opens the same way: straight
+      into a two-column intro with the h1 living in the cyan panel, which is what
+      makes the top of those pages feel like one page rather than a banner with a
+      page under it.
+
+      The panel comes FIRST in the source and is placed into the right-hand
+      column, so the h1 is not preceded by an h2. Stacked on narrow screens that
+      also puts the introduction before the origin story, which is the right
+      reading order. */}
+  <section class="wrap reading-intro">
+    <div class="ri-about panel-cyan">
+      <p class="eyebrow eyebrow--dark">Learn DDD</p>
+      <h1>Reading list</h1>
+      <p>
+        What we would actually put in someone's hands, and why. Not a survey of
+        everything ever written about Domain-Driven Design, just the ones we would
+        defend.
+      </p>
+      <p>
+        Nothing here is sponsored and there are no affiliate links. There are no buy
+        links either: you can find a book. The one line under each cover is ours, and it
+        is the only part of this page that is.
+      </p>
+      <p>
+        Tell us we got one wrong, or recommend the one that should be here.
+      </p>
+      <a class="btn btn--ink" href={DISCORD}>Join our Discord &rarr;</a>
+    </div>
+
+    <div class="ri-origin">
+      <div class="section-head"><h2>It started with one book</h2></div>
+      <div class="origin-body">
+        {/* The whole figure is conditional, caption included. This section is about
+            the blue book but its cover comes from the blue book's row in the list,
+            so unpublishing that row leaves a caption with nothing above it. The
+            prose stands on its own without the picture; a stranded caption does not.
+
+            Width only. Giving both dimensions makes sharp resize into that exact
+            box and crop the sides, and book covers are not all 2:3. Astro still
+            emits width and height from the source ratio, so there is no shift. */}
+        {blueBook?.data.featuredImage && (
+          <figure class="origin-cover">
+            <Image src={blueBook.data.featuredImage} alt="Cover of Domain-Driven Design by Eric Evans"
+                   width={200} loading="eager" />
+            <figcaption>Eric Evans, <em>Domain-Driven Design</em>, 2003</figcaption>
+          </figure>
+        )}
+
+        <div class="origin-prose">
+          <p>
+            Eric Evans wrote <em>Domain-Driven Design</em> in 2003, and a surprising amount of
+            what people still argue about traces back to it. Fifteen years later he stood up at
+            Explore DDD in Denver and said <a href={EVANS_KEYNOTE} rel="noopener">“DDD isn’t
+            done”</a>. He was right. The patterns have moved on since the book, and so have the
+            tools, the canvases and the words people use for them. The point has not moved:
+            work on the part of the domain that actually matters, build the model with the
+            people who know it, and keep the language straight inside a boundary you drew
+            deliberately.
+          </p>
+          <p>
+            Which is the long way of saying you do not have to start with the blue book, and
+            most people should not. Vlad Khononov’s <em>Learning Domain-Driven Design</em> is
+            the better first read. If you would rather see how the pieces fit together before
+            learning them one at a time, start with Susanne Kaiser’s book instead. Or ignore
+            both and take whatever below sounds like the problem you actually have.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="wrap" data-pagefind-body>
+    <div class="section-head">
+      <h2>The list</h2>
+      <p class="shelf-count">Free first, then newest</p>
+    </div>
+    <CardFilter
+      noun={{ one: 'book', many: 'books' }}
+      searchLabel="Search the reading list"
+      searchPlaceholder="Search title, author or topic…"
+      facets={[
+        { key: 'topics', allLabel: 'All topics', label: 'Filter by topic', options: topics },
+        { key: 'level', allLabel: 'All levels', label: 'Filter by level', options: levels },
+      ]}
+      emptyMessage="No books match those filters."
+    >
+    <ul class="shelf">
+      {books.map((b) => (
+        <li class="card book" id={b.id} data-test="card"
+            data-search={[b.data.title, b.data.authors, b.data.publisher, b.data.why, ...b.data.topics, ...b.data.level].filter(Boolean).join(' ').toLowerCase()}
+            data-topics={packFacet(b.data.topics)}
+            data-level={packFacet(b.data.level)}>
+          <div class="book-cover">
+            {b.data.featuredImage ? (
+              <Image src={b.data.featuredImage} alt={`Cover of ${b.data.title}`} width={120} loading="lazy" />
+            ) : (
+              <div class="card-thumb-ph" aria-hidden="true">{b.data.type}</div>
+            )}
+          </div>
+
+          <div class="card-body">
+            {/* Title first. The note is still the reason to read it, but at 22
+                items a wall of similar grey sentences gives the eye nothing to
+                land on, so the title has to be the anchor. */}
+            <h3 class="card-title">{b.data.title}</h3>
+
+            <p class="card-meta">
+              {b.data.authors}
+              {b.data.publisher && <span> · {b.data.publisher}</span>}
+              {b.data.year && <span> · {b.data.year}</span>}
+            </p>
+
+            {b.data.why
+              ? <p class="book-why">{b.data.why}</p>
+              : <p class="book-why book-why--missing">No note yet, so this is a link rather than a recommendation.</p>}
+
+            <p class="chips">
+              {b.data.free && <span class="chip chip--accent">Free</span>}
+              {/* The type chip only earns its place when it is not already implied:
+                  "Free" and "Free PDF" side by side is the same fact twice. */}
+              {b.data.type !== 'Book' && !b.data.free && <span class="chip chip--outline">{b.data.type}</span>}
+              {b.data.level.map((l) => <span class="chip chip--label">{l}</span>)}
+              {b.data.topics.slice(0, 2).map((t) => <span class="chip chip--outline">{t}</span>)}
+            </p>
+
+            {b.data.free && b.data.link && (
+              <p class="book-get"><a href={b.data.link} rel="noopener">Read it free &rarr;</a></p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+    </CardFilter>
+
+  </section>
+
+  {/* A quiet landing after the list. The Discord button is up in the cyan panel,
+      so this closes the page without asking for the same click twice.
+
+      Keep the link on the same line as the word before it: a newline between text
+      and an element collapses to nothing in JSX, which renders "is a<a href=..."
+      with no space. test:content catches exactly that. */}
+  <section class="wrap discuss">
+    <p>
+      Would rather read one together than argue about it? There is a <a href="/book-club/">Book club</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+
+  /* Never set max-width on a .wrap element: it has margin-inline:auto, so a
+     narrow value centres the block and it stops lining up with the shelf.
+     Constrain the paragraphs inside it instead. */
+  .origin-prose p, .discuss p { line-height: 1.6; }
+  .discuss p { max-width: 68ch; }
+  .discuss { margin-bottom: 3rem; }
+
+  .origin-cover img { height: auto; border-radius: 2px; }
+  .origin-cover figcaption { margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.75; max-width: 180px; }
+  .origin-prose p:first-child { margin-top: 0; }
+
+  /* Same 3fr / 2fr shape as the Facilitating Stories intro, stacking on narrow
+     screens so the cyan panel never squeezes the cover and prose. */
+  .reading-intro { display: grid; grid-template-columns: 1fr; gap: var(--space-8); align-items: stretch; margin-block: var(--space-12) var(--space-16); }
+  .reading-intro > * { min-width: 0; }
+  @media (min-width: 900px) {
+    .reading-intro { grid-template-columns: 3fr 2fr; gap: var(--space-12); }
+    /* Placed rather than ordered, so the panel can come first in the source for
+       the heading order without moving on screen. */
+    .ri-origin { grid-column: 1; grid-row: 1; }
+    .ri-about { grid-column: 2; grid-row: 1; }
+  }
+
+  /* Stretched, not hugging its content: now that the panel carries the h1 and
+     the introduction it has enough to say to match the origin column, and two
+     equal columns read as deliberate where a short one read as a mistake. */
+  .ri-about h1 { margin: 0 0 var(--space-4); font-size: var(--text-3xl); }
+  .ri-about p { margin: 0 0 var(--space-4); }
+
+  .shelf-count { margin: 0; font-size: 0.9rem; opacity: 0.75; white-space: nowrap; }
+
+  @media (max-width: 48rem) {
+    .shelf-count { white-space: normal; }
+  }
+
+  /* On a phone a 180px float leaves the text about 12 characters wide, so the
+     cover stops floating and sits above the prose. */
+  @media (max-width: 34rem) {
+    .origin-cover { float: none; margin: 0 0 var(--space-4); }
+  }
+
+  .shelf { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; gap: 1rem; }
+  /* One card across a 1050px page gives the note a 110-character measure.
+     Two columns halves the scroll and makes the covers read as a shelf. */
+  @media (min-width: 70rem) { .shelf { grid-template-columns: 1fr 1fr; } }
+
+  /* Floated rather than a column, so the prose wraps under the cover instead
+     of leaving 200px of dead space beside a paragraph that is 45 characters
+     wide. flow-root contains the float without a clearfix. */
+  .origin-body { display: flow-root; max-width: 48rem; }
+  .origin-cover { float: left; margin: 0 var(--space-6) var(--space-4) 0; }
+  .origin-cover img { width: 180px; }
+
+  .book { display: grid; grid-template-columns: 120px 1fr; gap: 1.25rem; align-items: start; padding: 1rem; }
+  /* Anchors are linked from the learning journey, so a jump must not land the
+     heading under the sticky header. */
+  .book { scroll-margin-top: 6rem; }
+
+  .book-cover img { width: 120px; height: auto; border-radius: 2px; }
+  .book-cover .card-thumb-ph { width: 120px; height: 180px; display: grid; place-items: center; font-size: 0.8rem; }
+
+  .book-why { line-height: 1.5; margin: 0 0 0.6rem; }
+  .book-why--missing { font-style: italic; opacity: 0.7; }
+
+  .book .card-title { margin: 0 0 0.15rem; }
+  .book .card-meta { margin: 0 0 0.5rem; }
+  .book-get { margin: 0.6rem 0 0; font-family: var(--font-heading); font-weight: 600; }
+
+  @media (max-width: 34rem) {
+    .book { grid-template-columns: 84px 1fr; gap: 0.9rem; }
+    .book-cover img, .book-cover .card-thumb-ph { width: 84px; }
+    .book-cover .card-thumb-ph { height: 126px; }
+  }
+</style>

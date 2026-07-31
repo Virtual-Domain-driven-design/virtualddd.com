@@ -232,14 +232,13 @@ for (const r of recordedRules()) {
     : `RewriteRule ^${esc(r.from.slice(1))}?$ ${r.to} [R=301,L]`);
 }
 
-section('12. Pending: reading list and book club');
-L.push('# Decided to keep, but the destinations need editorial content first.');
-L.push('# Uncomment each line the day its page ships.');
-L.push('# RewriteRule ^papers/?$ /reading-list/ [R=301,L]');
-L.push('# RewriteRule ^books/?$ /reading-list/ [R=301,L]');
+section('12. Reading list');
+L.push('# /reading-list/ shipped, so these stop being Gone and point at it.');
+L.push('# The old pages were poor (an empty figure on /papers/, untitled cover');
+L.push('# images on /books/), but the addresses still carry links worth keeping.');
+L.push('RewriteRule ^papers/?$ /reading-list/ [R=301,L]');
+L.push('RewriteRule ^books/?$ /reading-list/ [R=301,L]');
 L.push('# /book-club/ stays a real page — no rule needed.');
-L.push('RewriteRule ^papers/?$ - [G,L]');
-L.push('RewriteRule ^books/?$ - [G,L]');
 
 L.push('</IfModule>');
 L.push('');

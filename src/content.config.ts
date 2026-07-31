@@ -208,4 +208,36 @@ const dddCrew = defineCollection({
     }),
 });
 
-export const collections = { sessions, openSpaces, stories, heuristics, organisers, sessionGuests, conferences, dddCrew };
+// Books, papers and free PDFs we recommend. Unlike every other collection here
+// there is NO page per entry: they all render inside /reading-list/, so the slug
+// is an anchor rather than a URL. The only text on an entry that is ours is
+// `why`, and a page wrapped around one sentence is the thin page that got the
+// old /videos/ section retired.
+const readingList = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/reading-list' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      status: z.enum(['Idea', 'Drafting', 'Published']),
+      authors: z.string().optional(),
+      type: z.enum(['Book', 'Free PDF', 'Paper', 'Report']).default('Book'),
+      // Optional because a recommendation can outlive its link, and a dead URL
+      // should degrade to a title we still stand behind rather than fail a build.
+      link: z.url().optional(),
+      publisher: z.string().optional(),
+      year: z.number().optional(),
+      isbn: z.string().optional(),
+      level: z.array(z.enum(['Beginner', 'Intermediate', 'Advanced', 'Reference'])).default([]),
+      topics: z.array(z.string()).default([]),
+      free: z.boolean().default(false),
+      // The recommendation itself. Optional in the schema so a half-entered row
+      // does not break the build, but the page says so out loud when it is missing.
+      why: z.string().optional(),
+      // Named `featuredImage` like every other collection because that is the key
+      // the sync writes, not because a book cover is a featured image.
+      featuredImage: image().optional(),
+      ...seo,
+    }),
+});
+
+export const collections = { sessions, openSpaces, stories, heuristics, organisers, sessionGuests, conferences, dddCrew, readingList };

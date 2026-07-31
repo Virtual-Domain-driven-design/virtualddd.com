@@ -67,7 +67,15 @@ const nav = [
   { href: '/facilitating-archdes/', label: 'Facilitating Stories', section: true },
   { href: '/open-space/', label: 'Open Space', section: true },
   { href: '/heuristics/', label: 'Heuristics', section: true },
-  { href: '/ddd-crew/', label: 'ddd crew', section: true },
+  // One header slot for the whole Learn section rather than one per resource
+  // type: the bar was already full, and ddd crew, the reading list and later
+  // videos all belong under the same roof. The hub at /learn/ lists them, so
+  // nothing is hidden behind a menu that needs JavaScript to open.
+  { href: '/learn/', label: 'Learn DDD', section: true },
+  // Under Learn DDD rather than in the header bar. Still in this list so the
+  // footer links them and search results are labelled, without a second table.
+  { href: '/reading-list/', label: 'Reading list', section: true, nav: false },
+  { href: '/ddd-crew/', label: 'ddd crew', section: true, nav: false },
   { href: '/podcasts/', label: 'Podcasts', section: true, nav: false },
   { href: '/organisers/', label: 'Organisers', section: true, nav: false },
   { href: '/book-club/', label: 'Book club', section: true, nav: false },

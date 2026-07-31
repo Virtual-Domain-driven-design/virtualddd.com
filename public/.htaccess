@@ -231,12 +231,11 @@ RewriteRule ^submit-community/?$ - [G,L]
 RewriteRule ^heuristics/eventstorming-split-and-merge-above-7-people-on-process-and-design-level/?$ /heuristics/eventstorming-split-and-merge-above-7-people/ [R=301,L]
 RewriteRule ^organisers/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
 
-# --- 12. Pending: reading list and book club -----------------------
-# Decided to keep, but the destinations need editorial content first.
-# Uncomment each line the day its page ships.
-# RewriteRule ^papers/?$ /reading-list/ [R=301,L]
-# RewriteRule ^books/?$ /reading-list/ [R=301,L]
+# --- 12. Reading list ----------------------------------------------
+# /reading-list/ shipped, so these stop being Gone and point at it.
+# The old pages were poor (an empty figure on /papers/, untitled cover
+# images on /books/), but the addresses still carry links worth keeping.
+RewriteRule ^papers/?$ /reading-list/ [R=301,L]
+RewriteRule ^books/?$ /reading-list/ [R=301,L]
 # /book-club/ stays a real page — no rule needed.
-RewriteRule ^papers/?$ - [G,L]
-RewriteRule ^books/?$ - [G,L]
 </IfModule>

@@ -428,6 +428,9 @@ interface Helpers {
   date: (n: string) => string | undefined;
   num: (n: string) => number | undefined;
   select: (n: string) => string | undefined;
+  /** A checkbox, false when the property is absent — Notion does not send one
+   *  that has never been ticked. */
+  checkbox: (n: string) => boolean;
   heur: (n: string) => string[];
   person: (n: string) => string[];
   guest: (n: string) => string[];
@@ -436,8 +439,13 @@ interface Helpers {
 
 interface ContentSpec {
   dataSourceId: string;
-  /** URL section, so a rename can be turned into a redirect. */
-  section: string;
+  /** URL section, so a rename can be turned into a redirect.
+   *
+   *  Omit it for a collection with no page per entry, such as the reading list:
+   *  every row is rendered inside one list page, so a slug change moves an
+   *  anchor rather than a URL and there is nothing to redirect. The rename
+   *  tracking and redirect emission below already guard on this being present. */
+  section?: string;
   titleProp: string;
   slugProp: string;
   statusKind: StatusKind;
@@ -541,6 +549,34 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       }
       const md = h.text('Meta Description'); if (md) l.push(`metaDescription: ${yamlStr(md)}`);
       const st = h.text('SEO Title'); if (st) l.push(`seoTitle: ${yamlStr(st)}`);
+      return l;
+    },
+  },
+  // Books, papers and free PDFs we recommend. No `section`: there is no page
+  // per book, because the only text on an entry that is ours is one sentence,
+  // and a page wrapped around one sentence is the thin page that got the old
+  // /videos/ section retired. They all render inside /reading-list/, and the
+  // slug is the anchor there rather than a URL.
+  'reading-list': {
+    dataSourceId: '253adb92-df69-4664-838a-a28ea0798bf0',
+    titleProp: 'Title', slugProp: 'Slug', statusKind: 'select',
+    liveStatuses: ['Published'], featuredImageProp: 'Cover',
+    extra: async (h) => {
+      const l: string[] = [];
+      const authors = h.text('Authors'); if (authors) l.push(`authors: ${yamlStr(authors)}`);
+      const type = h.select('Type'); if (type) l.push(`type: ${yamlStr(type)}`);
+      const link = h.url('Link'); if (link) l.push(`link: ${yamlStr(link)}`);
+      const publisher = h.text('Publisher'); if (publisher) l.push(`publisher: ${yamlStr(publisher)}`);
+      const year = h.num('Year'); if (year != null) l.push(`year: ${year}`);
+      const isbn = h.text('ISBN'); if (isbn) l.push(`isbn: ${yamlStr(isbn)}`);
+      const level = h.multi('Level'); if (level.length) l.push(`level: ${yamlList(level)}`);
+      const topics = h.multi('Topics'); if (topics.length) l.push(`topics: ${yamlList(topics)}`);
+      // Written even when false: the page orders free things first, and a missing
+      // key and a false one must not read the same to the template.
+      l.push(`free: ${h.checkbox('Free')}`);
+      // The recommendation itself. Without it an entry is a link, not a
+      // recommendation, so the page treats its absence as a reason to complain.
+      const why = h.text('Why it is worth it'); if (why) l.push(`why: ${yamlStr(why)}`);
       return l;
     },
   },
@@ -652,6 +688,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       date: (n) => get(n)?.date?.start ?? undefined,
       num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
       select: (n) => get(n)?.select?.name ?? undefined,
+      checkbox: (n) => get(n)?.checkbox === true,
       heur: (n) => rel(n).flatMap((id: string) => {
         const r = resolveRelation(id, heurSlug, heurPending);
         if (r.kind === 'resolved') return [r.slug];
@@ -809,10 +846,17 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   // leaving a stale alert for the pipeline to keep raising. A preview run is
   // not allowed to touch it, and a --limit run has not seen the whole database.
   if (write && !limit) {
-    writeAlert(spec.section, [
-      ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: spec.section, title: q.title, url: q.url })),
-      ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: spec.section, title: u.title, url: u.url })),
-      ...strandedAlerts(spec.section),
+    // A collection with no `section` still raises alerts worth seeing: a book
+    // published without a slug renders no anchor, and a cover whose source has
+    // gone is the failure that once wiped eight organiser photos. So the alert
+    // file is keyed by the page these entries appear on, which for a non-routed
+    // collection is the list page rather than a URL per entry. Only the rename
+    // and redirect handling above is skipped when `section` is absent.
+    const alertKey = spec.section ?? `/${key}/`;
+    writeAlert(alertKey, [
+      ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: alertKey, title: q.title, url: q.url })),
+      ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: alertKey, title: u.title, url: u.url })),
+      ...strandedAlerts(alertKey),
     ]);
   }
 

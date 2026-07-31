@@ -85,7 +85,7 @@ jobs:
         # and would have frozen at whatever was first committed.
         run: |
           npx tsx scripts/sync-notion.ts guests --write
-          for c in sessions open-spaces stories heuristics; do
+          for c in sessions open-spaces stories heuristics reading-list; do
             npx tsx scripts/sync-notion.ts content --collection=$c --write $FULL
           done
           for r in organisers conferences; do
