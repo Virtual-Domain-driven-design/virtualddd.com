@@ -139,3 +139,14 @@ never ships; the opposite and the divergent ship only if chosen.
 - **Not `review-change`.** That runs *after*, on the built change. This runs
   *before*, on the idea. It is the design half of what [intake](../intake/SKILL.md)
   opens; hand your recommendation back to intake's options and carry on.
+
+## How this is enforced
+
+*Weakly, and honestly so.* A `PreToolUse` hook
+(`.claude/hooks/pre-visual-edit.sh`) blocks an edit to a `.astro` or `.css` file
+under `src/` until this skill has been invoked in the session — giving rule 4 a
+machine where it had only a habit. It cannot read the design, only confirm the
+step happened, and invoking this skill satisfies it even when the honest verdict
+is "no visual change, proceed." If it cannot read the session transcript it
+fails **open** and says so on stderr, because a gate that bricks every edit when
+a log format shifts costs more than the rule it guards.
