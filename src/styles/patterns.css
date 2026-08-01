@@ -220,6 +220,11 @@ a.card:hover .card-more { color: var(--color-primary); }
 /* An upcoming item, flagged with the accent border. */
 .card--upcoming { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border)); }
 
+/* Somebody else's page: the card sits in the row with ours and the dashed
+   border says the link leaves the site. Used on /ddd-crew/ for the tools we
+   may not republish. */
+.card--offsite { border-style: dashed; }
+
 /* The white "index card" used for heuristics, wherever a heuristic appears. */
 .card--heuristic {
   background: #fff;

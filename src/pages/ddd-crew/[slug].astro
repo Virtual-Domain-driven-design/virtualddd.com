@@ -3,6 +3,8 @@ import { dddCrewJsonLd, pageTitle, trail } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import type { CrewConfig } from '../../lib/ddd-crew';
+import config from '../../../data/ddd-crew.json';
 
 export async function getStaticPaths() {
   const items = await getCollection('dddCrew');
@@ -12,6 +14,13 @@ export async function getStaticPaths() {
 const { entry, items } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
+
+// Which category a tool is in is ours to decide, so it comes from Notion rather
+// than from the repository. A page whose row was removed still renders: it just
+// says "ddd-crew" and nothing more.
+const crew = config as CrewConfig;
+const categoryOf = (repo: string) => crew.tools.find((t) => t.repo === repo)?.category;
+const category = categoryOf(entry.id);
 
 const contribShown = d.contributors.slice(0, 16);
 const contribMore = d.contributors.length - contribShown.length;
@@ -42,7 +51,7 @@ const jsonLd = dddCrewJsonLd(Astro.site, entry, {
 >
   <article class="dc wrap">
     <p class="detail-back" data-pagefind-ignore><a href="/ddd-crew/">← All ddd-crew tools</a></p>
-    <p class="eyebrow eyebrow--pink">ddd-crew · {d.category}</p>
+    <p class="eyebrow eyebrow--pink">ddd-crew{category ? ` · ${category}` : ''}</p>
     <h1>{d.title}</h1>
     {d.description && <p class="lead">{d.description}</p>}
 
@@ -74,7 +83,7 @@ const jsonLd = dddCrewJsonLd(Astro.site, entry, {
         <div class="more-grid">
           {siblings.map((s) => (
             <a class="more-card" href={`/ddd-crew/${s.id}/`}>
-              <span class="more-cat">{s.data.category}</span>
+              <span class="more-cat">{categoryOf(s.id)}</span>
               <span class="more-title">{s.data.title}</span>
             </a>
           ))}

@@ -1,37 +1,49 @@
 /**
  * Sync ddd-crew content.
  *
- * Republishes the README of each curated ddd-crew GitHub repo (CC BY-SA 4.0) into
- * committed markdown under src/content/ddd-crew/, downloading the diagrams into
- * ./_assets/<repo>/ and rewriting relative links so nothing 404s. Attribution and
- * a canonical link to the upstream published version are added in the layout.
+ * Republishes the README of each ddd-crew repo the site carries (CC BY-SA 4.0)
+ * into committed markdown under src/content/ddd-crew/, downloading the diagrams
+ * into ./_assets/<repo>/ and rewriting relative links so nothing 404s.
+ * Attribution and a canonical link to the upstream published version are added
+ * in the layout.
  *
  *   tsx scripts/sync-ddd-crew.ts [--write]
  *
  * Without --write it reports what it would do (dry run).
+ *
+ * **Which repos** is not decided here. It comes from the 🛠️ ddd-crew database
+ * in Notion by way of data/ddd-crew.json, so adding a tool is a row rather than
+ * a pull request: run `npm run sync:ddd-crew-config` first, or let the hourly
+ * sync do it. Category and order live there too, and are not written into the
+ * generated markdown — one fact, one place.
  */
-import { writeFileSync, mkdirSync, rmSync, readdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, rmSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import sharp from 'sharp';
+import { CREW_CONFIG_FILE, retargetBranch, type CrewConfig, type CrewTool } from '../src/lib/ddd-crew';
 
 const OWNER = 'ddd-crew';
 const OUT = 'src/content/ddd-crew';
 const write = process.argv.includes('--write');
 
-// Curated CC BY-SA 4.0 repos, grouped for the index gallery.
-const REPOS: { name: string; category: string; order: number }[] = [
-  { name: 'welcome-to-ddd', category: 'Getting started', order: 1 },
-  { name: 'ddd-starter-modelling-process', category: 'Getting started', order: 2 },
-  { name: 'ddd-familiarity-assessment', category: 'Getting started', order: 3 },
-  { name: 'context-mapping', category: 'Strategic design', order: 1 },
-  { name: 'core-domain-charts', category: 'Strategic design', order: 2 },
-  { name: 'domain-message-flow-modelling', category: 'Strategic design', order: 3 },
-  { name: 'bounded-context-canvas', category: 'Modelling canvases', order: 1 },
-  { name: 'aggregate-design-canvas', category: 'Modelling canvases', order: 2 },
-  { name: 'como-prep-canvas', category: 'Modelling canvases', order: 3 },
-  { name: 'eventstorming-glossary-cheat-sheet', category: 'EventStorming & remote', order: 1 },
-  { name: 'virtual-modelling-templates', category: 'EventStorming & remote', order: 2 },
-];
+/** The repos to republish, in the order the gallery reads them.
+ *
+ * A missing or empty config is fatal rather than "nothing to do": the prune at
+ * the end deletes any page not in this list, so an unreadable config would take
+ * the whole section down and report success. */
+function republishedRepos(): CrewTool[] {
+  let config: CrewConfig;
+  try {
+    config = JSON.parse(readFileSync(CREW_CONFIG_FILE, 'utf8'));
+  } catch (e) {
+    throw new Error(`Cannot read ${CREW_CONFIG_FILE} (${(e as Error).message}). Run: npm run sync:ddd-crew-config`);
+  }
+  const repos = (config.tools ?? []).filter((t) => t.republished);
+  if (!repos.length) {
+    throw new Error(`${CREW_CONFIG_FILE} lists no republished repos, so this run would delete every page under ${OUT}. Tick Republished in Notion, or leave the section alone.`);
+  }
+  return repos;
+}
 
 const yamlStr = (s: string) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 
@@ -96,14 +108,19 @@ function resolveRepoPath(rel: string): string {
   return parts.join('/');
 }
 
-async function processRepo(spec: (typeof REPOS)[number]) {
-  const { name } = spec;
+async function processRepo(tool: CrewTool) {
+  const name = tool.repo;
   const meta = await api(`repos/${OWNER}/${name}`);
   const branch: string = meta.default_branch ?? 'main';
   const rawBase = `https://raw.githubusercontent.com/${OWNER}/${name}/${branch}`;
   const blobBase = `https://github.com/${OWNER}/${name}/blob/${branch}`;
 
   let md = await fetchText(`${rawBase}/README.md`);
+
+  // Before anything is parsed out of it: the README's own absolute links to
+  // this repo still say `master` on seven of these, and GitHub only redirects
+  // those because the rename went through GitHub. See retargetBranch.
+  md = retargetBranch(md, OWNER, name, branch);
 
   // Title = first H1; strip it from the body (we render the title ourselves).
   const h1 = md.match(/^\s*#\s+(.+?)\s*$/m);
@@ -190,8 +207,9 @@ async function processRepo(spec: (typeof REPOS)[number]) {
     `repo: ${yamlStr(meta.html_url)}`,
     `canonical: ${yamlStr(`https://${OWNER}.github.io/${name}/`)}`,
     `license: "CC-BY-SA-4.0"`,
-    `category: ${yamlStr(spec.category)}`,
-    `order: ${spec.order}`,
+    // No category or order here: they are the site's editorial decision, they
+    // live in data/ddd-crew.json, and a second copy in generated front matter
+    // is a copy that can disagree with Notion.
     typeof meta.stargazers_count === 'number' ? `stars: ${meta.stargazers_count}` : null,
     heroImage ? `heroImage: ${yamlStr(`./_assets/${name}/${heroImage}`)}` : null,
     'contributors:',
@@ -230,31 +248,37 @@ async function processRepo(spec: (typeof REPOS)[number]) {
 }
 
 async function main() {
-  console.log(`ddd-crew sync ${write ? '(writing)' : '(dry run — pass --write)'}\n`);
+  const repos = republishedRepos();
+  console.log(`ddd-crew sync ${write ? '(writing)' : '(dry run — pass --write)'}, ${repos.length} repos from ${CREW_CONFIG_FILE}\n`);
   if (write) mkdirSync(OUT, { recursive: true });
   let ok = 0;
   const failed: string[] = [];
-  for (const spec of REPOS) {
+  for (const tool of repos) {
     try {
-      await processRepo(spec);
+      await processRepo(tool);
       ok++;
     } catch (e) {
-      failed.push(spec.name);
-      console.error(`  ✗ ${spec.name}: ${(e as Error).message}`);
+      failed.push(tool.repo);
+      console.error(`  ✗ ${tool.repo}: ${(e as Error).message}`);
     }
   }
-  // Prune orphaned markdown for repos no longer in the list — but only when the
+  // Prune orphaned markdown for repos no longer republished — but only when the
   // whole run succeeded, so a partial (rate-limited) run never deletes content.
+  //
+  // Untick Republished, or set a row to anything but Published, and its page
+  // stops being generated: /ddd-crew/<repo>/ then 404s. Nothing here records a
+  // redirect, because a tool put back next week would be shadowed by the rule
+  // that retired it.
   if (write && failed.length === 0) {
-    const keep = new Set(REPOS.map((r) => `${r.name}.md`));
+    const keep = new Set(repos.map((r) => `${r.repo}.md`));
     for (const f of readdirSync(OUT)) {
       if (f.endsWith('.md') && !keep.has(f)) {
         rmSync(join(OUT, f));
-        console.log(`  – pruned ${f}`);
+        console.log(`  – pruned ${f}; /ddd-crew/${f.replace(/\.md$/, '')}/ will 404 from the next deploy`);
       }
     }
   }
-  console.log(write ? `\nWrote ${ok}/${REPOS.length} to ${OUT}${failed.length ? ` (failed: ${failed.join(', ')})` : ''}` : '\nDry run complete.');
+  console.log(write ? `\nWrote ${ok}/${repos.length} to ${OUT}${failed.length ? ` (failed: ${failed.join(', ')})` : ''}` : '\nDry run complete.');
 }
 
 main();

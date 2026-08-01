@@ -135,8 +135,10 @@ for:
   filter bars, because a card is a pointer to a page that is already indexed on
   its own account. Adding ~3 MB, so watch the ceiling above.
 - **`npm run sync`** does guests **before** sessions, because sessions
-  reference them. `--strict` fails on a dangling relation. `--full` ignores
-  `data/sync-state.json` and re-fetches every body.
+  reference them, and the ddd-crew config **before** the ddd-crew fetch,
+  because the config is what says which READMEs to go and get. `--strict` fails
+  on a dangling relation. `--full` ignores `data/sync-state.json` and re-fetches
+  every body.
 - **`npm run redirects`** must be re-run after adding or renaming content. A
   test fails if the committed `.htaccess` is not what the generator would write
   today.

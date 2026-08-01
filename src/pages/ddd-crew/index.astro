@@ -3,22 +3,29 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { collectionPage, topTrail } from '../../lib/seo';
+import { byGallery, categoryRank, type CrewConfig } from '../../lib/ddd-crew';
+import config from '../../../data/ddd-crew.json';
 
-const all = await getCollection('dddCrew');
-const CATEGORIES = ['Getting started', 'Strategic design', 'Modelling canvases', 'EventStorming & remote'];
-const grouped = CATEGORIES.map((cat) => ({
-  cat,
-  items: all.filter((i) => i.data.category === cat).sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)),
-})).filter((g) => g.items.length);
+// The whole gallery — what is on it, in what order — is the 🛠️ ddd-crew
+// database in Notion, synced into data/ddd-crew.json. Two kinds of card come
+// out of one list: a repo we may republish links to our own page, and one we
+// may not links out to GitHub. They interleave, because "the free resources
+// list" belongs at the end of Getting started rather than in a footnote.
+const crew = config as CrewConfig;
+const pages = new Map((await getCollection('dddCrew')).map((e) => [e.id, e]));
 
-// Unlicensed ddd-crew repos we can't republish — link out instead.
-const linkOuts = [
-  { title: 'Free DDD learning resources', repo: 'https://github.com/ddd-crew/free-ddd-learning-resources', text: 'A curated collection of free resources for learning DDD.' },
-  { title: 'Context Mapping quiz', repo: 'https://github.com/ddd-crew/context-mapping-quiz', text: 'Learn context mapping by trying this interactive quiz.' },
-  { title: 'AI DDD prompts & rules', repo: 'https://github.com/ddd-crew/ai-ddd-prompts-and-rules', text: 'DDD prompts and rules for your favourite coding assistant.' },
-  { title: 'Debiasing decisions toolkit', repo: 'https://github.com/ddd-crew/debiasing-decisions-toolkit', text: 'Structured behavioural interventions for better decisions.' },
-  { title: 'Strategic architecture building blocks', repo: 'https://github.com/ddd-crew/strategic-architecture-building-blocks', text: 'Earlier explorations in strategic architecture (archived direction).' },
-];
+// A tool is only ours to serve once its README has actually been fetched. Until
+// then it renders as a link-out, so the hour between ticking Republished and
+// the next ddd-crew sync shows a working card rather than a broken link.
+const tools = byGallery(crew).map((t) => ({ tool: t, page: t.republished ? pages.get(t.repo) : undefined }));
+
+// Grouped from the tools rather than from a list of category names, so a
+// category added in Notion cannot be silently left off the page.
+const rank = categoryRank(crew.categories);
+const grouped = [...new Set(tools.map((t) => t.tool.category))]
+  .sort((a, b) => rank(a) - rank(b))
+  .map((cat) => ({ cat: cat || 'More tools', items: tools.filter((t) => t.tool.category === cat) }));
+
 const description =
   'Community Domain-Driven Design tools, canvases and guides from the ddd-crew — republished with attribution under CC BY-SA 4.0.';
 // Only the republished tools are listed: the link-outs are somebody else's
@@ -27,9 +34,9 @@ const jsonLd = collectionPage(Astro.site, {
   url: new URL('/ddd-crew/', Astro.site).toString(),
   name: 'ddd-crew tools',
   description,
-  items: grouped.flatMap((g) => g.items).map((i) => ({
-    name: i.data.title,
-    url: new URL(`/ddd-crew/${i.id}/`, Astro.site).toString(),
+  items: tools.filter((t) => t.page).map(({ tool, page }) => ({
+    name: page!.data.title,
+    url: new URL(`/ddd-crew/${tool.repo}/`, Astro.site).toString(),
   })),
   trail: topTrail('ddd-crew tools', '/ddd-crew/'),
 });
@@ -48,7 +55,7 @@ const jsonLd = collectionPage(Astro.site, {
         they're easy to browse, always crediting the original authors.
       </p>
       <p class="licence">
-        All content in this section is by the ddd-crew and its contributors, licensed{' '}
+        Everything republished here is by the ddd-crew and its contributors, licensed{' '}
         <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Each tool links back to
         its source repository and canonical version.
       </p>
@@ -60,34 +67,31 @@ const jsonLd = collectionPage(Astro.site, {
       <section class="cat">
         <h2 class="eyebrow eyebrow--cyan">{g.cat}</h2>
         <div class="grid">
-          {g.items.map((i) => (
-            <a class="card tool" href={`/ddd-crew/${i.id}/`}>
-              <div class="tool-thumb">
-                {i.data.heroImage ? <Image src={i.data.heroImage} alt="" width={560} /> : <div class="card-thumb-ph"></div>}
-              </div>
-              <div class="card-body tool-body">
-                <h3 class="card-title">{i.data.title}</h3>
-                {i.data.description && <p class="tool-desc">{i.data.description}</p>}
-                <span class="card-more">Open →</span>
-              </div>
-            </a>
+          {g.items.map(({ tool, page }) => (
+            page ? (
+              <a class="card tool" href={`/ddd-crew/${tool.repo}/`}>
+                <div class="tool-thumb">
+                  {page.data.heroImage ? <Image src={page.data.heroImage} alt="" width={560} /> : <div class="card-thumb-ph"></div>}
+                </div>
+                <div class="card-body tool-body">
+                  <h3 class="card-title">{page.data.title}</h3>
+                  {page.data.description && <p class="tool-desc">{page.data.description}</p>}
+                  <span class="card-more">Open →</span>
+                </div>
+              </a>
+            ) : (
+              <a class="card card--offsite tool" href={tool.link}>
+                <div class="card-body tool-body">
+                  <h3 class="card-title">{tool.name}</h3>
+                  {tool.note && <p class="tool-desc">{tool.note}</p>}
+                  <span class="card-more">On GitHub ↗</span>
+                </div>
+              </a>
+            )
           ))}
         </div>
       </section>
     ))}
-
-    <section class="linkouts">
-      <h2 class="eyebrow eyebrow--cyan">More from the ddd-crew</h2>
-      <p class="lo-note">These live on GitHub — head over to explore or contribute.</p>
-      <div class="lo-grid">
-        {linkOuts.map((l) => (
-          <a class="lo-card" href={l.repo}>
-            <span class="lo-title">{l.title} ↗</span>
-            <span class="lo-text">{l.text}</span>
-          </a>
-        ))}
-      </div>
-    </section>
   </div>
 
   <style>
@@ -108,13 +112,5 @@ const jsonLd = collectionPage(Astro.site, {
     .tool-body .card-title { font-size: var(--text-xl); margin-bottom: var(--space-2); }
     .tool-desc { color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.6; margin: 0; }
 
-    .linkouts { margin-block: var(--space-16); }
-    .lo-note { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-6); }
-    .lo-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
-    @media (min-width: 640px) { .lo-grid { grid-template-columns: repeat(2, 1fr); } }
-    .lo-card { display: flex; flex-direction: column; gap: var(--space-1); background: var(--color-surface); border: 1px dashed var(--color-border); padding: var(--space-4) var(--space-5); color: var(--color-text); transition: border-color 0.15s; }
-    .lo-card:hover { border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border)); text-decoration: none; }
-    .lo-title { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); }
-    .lo-text { color: var(--color-text-muted); font-size: var(--text-sm); }
   </style>
 </BaseLayout>

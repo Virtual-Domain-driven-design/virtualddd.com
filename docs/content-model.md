@@ -24,8 +24,10 @@ purpose: content history in git, offline builds, and diffs you can review.
 | organisers | `cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6` |
 | session guests | `d82910e0-cac0-46f8-8a20-cb3a3376d5eb` |
 | conferences | `c5b9e231-6766-4589-a179-c70d20db3e34` |
+| ddd-crew (which tools, not their text) | `9503b575-65e8-49c5-a4c0-e80099ec2c2c` |
 
-ddd-crew content comes from GitHub, not Notion (`npm run sync:ddd-crew`).
+ddd-crew *content* comes from GitHub, not Notion (`npm run sync:ddd-crew`).
+Which repos it fetches comes from Notion — see [ddd-crew content](#ddd-crew-content).
 
 ## Two people databases, deliberately
 
@@ -185,6 +187,8 @@ data is what lets a fifth conference look right without a code change.
 
 - **Open spaces, stories, heuristics**: `Status = Published`.
 - **Conferences**: `Show on site` ticked.
+- **ddd-crew**: `Status = Published` puts a tool on the gallery; `Republished`
+  decides whether it gets a page here or a link out to GitHub.
 - Only rows passing their gate produce files.
 
 ## Relations
@@ -204,5 +208,46 @@ is **mandatory**, in the layout rather than per page, with a link to the licence
 `rel=canonical` points upstream, since `ddd-crew.github.io` already publishes
 these. The licence and the credit are in the structured data and in each page's
 markdown too, so they survive being read without the HTML.
+
+## Two sources, and the line between them
+
+The **text** is the repository's: title, description, README, diagrams,
+contributors, stars. `scripts/sync-ddd-crew.ts` fetches it and writes
+`src/content/ddd-crew/<repo>.md`. Nothing about it is ours to decide.
+
+**Which tools the section carries, and how it reads**, is ours, and lives in the
+🛠️ ddd-crew database in Notion (`9503b575-65e8-49c5-a4c0-e80099ec2c2c`). One
+row per repo:
+
+| Property | What it does |
+|---|---|
+| `Name` | The name on a link-out card. A republished page uses the README's own H1 instead, because that is the author's title for their own work |
+| `Repo` | The `ddd-crew/<repo>` name. It is the file name and therefore the address, so changing it moves a page |
+| `Link` | The upstream repository. Where a link-out card goes; defaults to `github.com/ddd-crew/<Repo>` |
+| `Republished` | CC BY-SA 4.0, so we may host the README at `/ddd-crew/<repo>/`. Off means the card links out to GitHub and no README is fetched |
+| `Category`, `Order` | Where the card sits. The **select's own option order** is the category order on the page, so dragging an option reorders the gallery |
+| `Status` | The publish gate: `Published` shows it, anything else does not |
+| `Why it is worth it` | Our sentence, shown on a link-out card, where there is no README to describe itself |
+
+`npm run sync:ddd-crew-config` writes that to
+[`data/ddd-crew.json`](../data/README.md), which is what
+`scripts/sync-ddd-crew.ts` and `/ddd-crew/` both read. **A row is not a page
+until its README has been fetched**: a repo ticked `Republished` whose markdown
+is not there yet renders as a link-out card, so the hour between the two syncs
+shows a working card rather than a broken link.
+
+**Un-ticking `Republished`, or moving a row off `Published`, deletes the page**
+and `/ddd-crew/<repo>/` starts answering 404. Nothing records a redirect for it,
+deliberately: a tool put back next week would be shadowed by the rule that
+retired it. If a tool is going away for good, add the address to
+`data/retired-urls.csv` by hand.
+
+**Only the repository decides its own branch.** The sync reads `default_branch`
+from the API rather than assuming `main`, and rewrites the README's own absolute
+`blob/master` links to that branch (`retargetBranch` in `src/lib/ddd-crew.ts`).
+Every ddd-crew repo renamed `master` to `main`, and GitHub's redirect for that
+is a courtesy, not a promise. Only the literal `master` is touched: any other
+branch segment could be a tag or a commit SHA, and a permalink rewritten to a
+moving branch is worse than a redirected one.
 
 ---

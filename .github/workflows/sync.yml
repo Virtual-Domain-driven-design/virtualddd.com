@@ -91,9 +91,17 @@ jobs:
           for r in organisers conferences; do
             npx tsx scripts/sync-notion.ts $r --write
           done
+          # Which ddd-crew repos the site carries, and in what order. One query,
+          # so it runs every time: ticking a row in Notion is live within the
+          # hour, and fetching the READMEs below is the expensive half.
+          npx tsx scripts/sync-notion.ts ddd-crew --write
           # Someone else's repositories, so there is nothing to be incremental
-          # about — but it is cheap, and only the nightly run needs it.
-          if [ -n "$FULL" ]; then npx tsx scripts/sync-ddd-crew.ts --write; fi
+          # about. The nightly --full re-pulls them for upstream drift; any other
+          # run does it only when the list above actually changed, so a tool
+          # added this morning does not wait for the night.
+          if [ -n "$FULL" ] || ! git diff --quiet -- data/ddd-crew.json; then
+            npx tsx scripts/sync-ddd-crew.ts --write
+          fi
           npm run redirects
 
       - name: What changed?

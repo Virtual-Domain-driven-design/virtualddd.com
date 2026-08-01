@@ -44,6 +44,11 @@ pick something up:
 - **Stories, heuristics, open spaces.** Set `Status = Published` and they
   appear on the next sync.
 - **Organisers.** Who runs what, and the portrait used across the site.
+- **ddd-crew tools.** Which of the ddd-crew's canvases and guides
+  [/ddd-crew/](https://virtualddd.com/ddd-crew/) carries, in which category and
+  in what order. A row with `Republished` ticked is one we may host in full;
+  without it the card links out to GitHub. Adding a tool is a row, not a pull
+  request.
 
 ### Four things to know before you edit
 

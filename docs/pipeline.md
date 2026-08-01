@@ -64,7 +64,10 @@ Notion ──────────────┤  n8n dispatch   ├──�
   before adding a watcher.
 - **Drift** heals nightly (`--full`, 03:17 UTC), which is also what re-pulls
   the ddd-crew repositories. This is a different job from the hourly sync, not
-  a slower copy of it. The hourly run only re-fetches a body Notion says has
+  a slower copy of it. Which repos to pull is read from Notion on *every* run,
+  because that is one query; the READMEs are fetched when the nightly full run
+  comes round, or straight away when `data/ddd-crew.json` changed, so adding a
+  tool in Notion does not wait for the night. The hourly run only re-fetches a body Notion says has
   changed, so anything that goes stale *without* an edit — an image whose
   source died, a README upstream, a page the sync skipped on a bad day — is
   only ever caught here.

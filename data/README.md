@@ -9,9 +9,10 @@ Committed inputs that the build reads, and one file the sync writes back.
 | `legacy-redirects.csv` | 35 redirect rules inherited from the site's earlier redirect table, folded into the generated `.htaccess`. |
 | `videos-inventory.csv` | 536 video addresses with their YouTube IDs, kept so that section can return later **at the same URLs**. |
 | `sync-state.json` | **Generated.** What the last sync saw, per page: the slug, Notion's `last_edited_time` and a digest of the body written. It is what makes the sync incremental and what notices a generated file edited by hand. |
+| `ddd-crew.json` | **Generated** from the 🛠️ ddd-crew database in Notion by `npm run sync:ddd-crew-config`. Which ddd-crew repos `/ddd-crew/` carries, which of them we may republish, and the order they read in. `scripts/sync-ddd-crew.ts` fetches a README for each republished one; the page reads the same file to lay the gallery out. Deleting it takes the section down. |
 | `sync-alerts.json` | **Generated.** What the last sync wants a person to decide. Committed on purpose — `sync.yml` raises an alert only when this file's own diff says it is new, so an ignored or uncommitted copy means no alert is ever raised. Resolving something empties it. |
 
-Four files, and every one of them is load-bearing. The bulk-authoring CSVs that
+Every one of them is load-bearing. The bulk-authoring CSVs that
 used to live here — `seo-copy.csv`, `guest-profiles.csv`, `session-guests.csv` —
 were removed once their copy was in Notion: a committed snapshot that pushes
 *into* the source of truth goes stale the moment an editor improves something,

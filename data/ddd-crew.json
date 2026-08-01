@@ -1,0 +1,154 @@
+{
+  "categories": [
+    "Getting started",
+    "Strategic design",
+    "Modelling canvases",
+    "EventStorming & remote"
+  ],
+  "tools": [
+    {
+      "repo": "welcome-to-ddd",
+      "name": "Welcome to DDD",
+      "link": "https://github.com/ddd-crew/welcome-to-ddd",
+      "republished": true,
+      "category": "Getting started",
+      "order": 1,
+      "note": "The gentlest front door in the whole ddd-crew set. Send someone here before anything with a canvas on it."
+    },
+    {
+      "repo": "ddd-starter-modelling-process",
+      "name": "DDD Starter Modelling Process",
+      "link": "https://github.com/ddd-crew/ddd-starter-modelling-process",
+      "republished": true,
+      "category": "Getting started",
+      "order": 2,
+      "note": "The one that turns reading into doing: an order to work in when you have no idea where to start. Pairs with Maxime Sanglan-Charlier's talk explaining it."
+    },
+    {
+      "repo": "ddd-familiarity-assessment",
+      "name": "DDD Familiarity Assessment",
+      "link": "https://github.com/ddd-crew/ddd-familiarity-assessment",
+      "republished": true,
+      "category": "Getting started",
+      "order": 3,
+      "note": "Useful for finding out what a team already knows before you teach them things they do not need."
+    },
+    {
+      "repo": "free-ddd-learning-resources",
+      "name": "Free DDD learning resources",
+      "link": "https://github.com/ddd-crew/free-ddd-learning-resources",
+      "republished": false,
+      "category": "Getting started",
+      "order": 4,
+      "note": "The comprehensive free list, which is exactly why we should not build our own. We curate a path; this is the library at the end of it."
+    },
+    {
+      "repo": "ai-ddd-prompts-and-rules",
+      "name": "AI DDD prompts & rules",
+      "link": "https://github.com/ddd-crew/ai-ddd-prompts-and-rules",
+      "republished": false,
+      "category": "Getting started",
+      "order": 5,
+      "note": "DDD prompts and rules for a coding assistant. Not licensed for republishing, so we link out."
+    },
+    {
+      "repo": "context-mapping",
+      "name": "Context Mapping",
+      "link": "https://github.com/ddd-crew/context-mapping",
+      "republished": true,
+      "category": "Strategic design",
+      "order": 1,
+      "note": "The patterns for how contexts relate, in one place. The vocabulary that makes team friction discussable."
+    },
+    {
+      "repo": "core-domain-charts",
+      "name": "Core Domain Charts",
+      "link": "https://github.com/ddd-crew/core-domain-charts",
+      "republished": true,
+      "category": "Strategic design",
+      "order": 2,
+      "note": "For arguing about where to spend your best people, with a picture instead of opinions."
+    },
+    {
+      "repo": "domain-message-flow-modelling",
+      "name": "Domain Message Flow Modelling",
+      "link": "https://github.com/ddd-crew/domain-message-flow-modelling",
+      "republished": true,
+      "category": "Strategic design",
+      "order": 3,
+      "note": "Shows how a single scenario crosses your context boundaries, which is where designs usually turn out to be wrong."
+    },
+    {
+      "repo": "context-mapping-quiz",
+      "name": "Context Mapping quiz",
+      "link": "https://github.com/ddd-crew/context-mapping-quiz",
+      "republished": false,
+      "category": "Strategic design",
+      "order": 4,
+      "note": "Interactive, and a faster way to find out you have misunderstood a pattern than reading about it again."
+    },
+    {
+      "repo": "strategic-architecture-building-blocks",
+      "name": "Strategic architecture building blocks",
+      "link": "https://github.com/ddd-crew/strategic-architecture-building-blocks",
+      "republished": false,
+      "category": "Strategic design",
+      "order": 5,
+      "note": "An earlier exploration, kept for reference. Say so when linking it: it is an archived direction, not current advice."
+    },
+    {
+      "repo": "bounded-context-canvas",
+      "name": "Bounded Context Canvas",
+      "link": "https://github.com/ddd-crew/bounded-context-canvas",
+      "republished": true,
+      "category": "Modelling canvases",
+      "order": 1,
+      "note": "The most used canvas in the set. Fills the gap between naming a context and knowing what it is responsible for."
+    },
+    {
+      "repo": "aggregate-design-canvas",
+      "name": "Aggregate Design Canvas",
+      "link": "https://github.com/ddd-crew/aggregate-design-canvas",
+      "republished": true,
+      "category": "Modelling canvases",
+      "order": 2,
+      "note": "For when the vocabulary starts to bite and someone asks what an aggregate actually is in your system."
+    },
+    {
+      "repo": "como-prep-canvas",
+      "name": "CoMo Prep Canvas",
+      "link": "https://github.com/ddd-crew/como-prep-canvas",
+      "republished": true,
+      "category": "Modelling canvases",
+      "order": 3,
+      "note": "Preparation for a collaborative modelling session, which is the part people skip and then blame the workshop."
+    },
+    {
+      "repo": "debiasing-decisions-toolkit",
+      "name": "Debiasing decisions toolkit",
+      "link": "https://github.com/ddd-crew/debiasing-decisions-toolkit",
+      "republished": false,
+      "category": "Modelling canvases",
+      "order": 4,
+      "note": "Structured interventions for better group decisions. Closest of all of these to what this community is actually about."
+    },
+    {
+      "repo": "eventstorming-glossary-cheat-sheet",
+      "name": "EventStorming Glossary Cheat Sheet",
+      "link": "https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet",
+      "republished": true,
+      "category": "EventStorming & remote",
+      "order": 1,
+      "note": "One page that settles what the sticky colours mean, which is most of the confusion in a first EventStorming."
+    },
+    {
+      "repo": "virtual-modelling-templates",
+      "name": "Virtual Modelling Templates",
+      "link": "https://github.com/ddd-crew/virtual-modelling-templates",
+      "republished": true,
+      "category": "EventStorming & remote",
+      "order": 2,
+      "note": "Ready-made boards, so a remote session does not start with half an hour of drawing rectangles."
+    }
+  ]
+}

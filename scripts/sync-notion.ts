@@ -4,6 +4,7 @@
  *   content --collection=<name>   pages to markdown
  *   organisers                    the team, as JSON
  *   guests                        session speakers, as JSON
+ *   ddd-crew                      which ddd-crew repos the site shows, as JSON
  *
  * Nothing here is hand-edited afterwards: Notion is the source of truth and
  * this is the only writer. Add --write to land files under src/content/;
@@ -21,6 +22,7 @@ import {
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
+import { byGallery, CREW_CONFIG_FILE, type CrewConfig, type CrewTool } from '../src/lib/ddd-crew';
 // The same rule the cards use, so the sync cannot decide a conference is over
 // on a different day from the page that renders it.
 import { hasPassed } from '../src/lib/conferences';
@@ -93,6 +95,7 @@ const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/
 const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (speakers, panellists)
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
 const CONFERENCES_DS = 'c5b9e231-6766-4589-a179-c70d20db3e34'; // DDD conferences and camps, on the home page
+const DDD_CREW_DS = '9503b575-65e8-49c5-a4c0-e80099ec2c2c'; // which ddd-crew repos /ddd-crew/ shows
 
 // --- what the last sync saw -------------------------------------------------
 //
@@ -1138,6 +1141,88 @@ async function runRows(key: string, outDir: string, write: boolean) {
   if (!write) console.log(`\n  (preview only — files in ${outDir})`);
 }
 
+// --- ddd-crew command: the section's shape, as one config file --------------
+//
+// Not a collection: no page is generated here and nothing is written under
+// src/content/. This writes the *instruction* that scripts/sync-ddd-crew.ts
+// then carries out — which repos to fetch a README from, and which to link out
+// to — and that /ddd-crew/ reads to lay the gallery out. See scripts/lib/ddd-crew.ts.
+
+async function runDddCrew(write: boolean) {
+  const [pages, schema] = await Promise.all([
+    queryAll(DDD_CREW_DS),
+    api('ddd-crew schema', () => notion.dataSources.retrieve({ data_source_id: DDD_CREW_DS })) as Promise<any>,
+  ]);
+
+  // Notion returns a select's options in the order they are shown, so dragging
+  // a category in the property editor reorders the gallery. Keeping the order
+  // here is what lets /ddd-crew/ stop holding a hardcoded list of four
+  // categories — a list that silently dropped every tool in a fifth one.
+  const categories: string[] = (schema.properties?.Category?.select?.options ?? []).map((o: any) => o.name);
+
+  const tools: CrewTool[] = [];
+  const seen = new Set<string>();
+  let unpublished = 0;
+  const skipped: string[] = [];
+
+  for (const page of pages) {
+    const P = page.properties ?? {};
+    const text = (n: string) => (P[n]?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+    const name = plainTitle(page, 'Name');
+
+    if (statusOf(page, 'select') !== 'Published') { unpublished++; continue; }
+
+    const repo = text('Repo').toLowerCase();
+    if (!repo) { skipped.push(`${name || page.id} (no Repo, so it has no address and no README to fetch)`); continue; }
+    if (seen.has(repo)) { skipped.push(`${name} (a second row for ddd-crew/${repo}; keeping the first)`); continue; }
+    seen.add(repo);
+
+    const category = P.Category?.select?.name ?? '';
+    if (category && !categories.includes(category)) categories.push(category);
+
+    tools.push({
+      repo,
+      name: name || repo,
+      // Derived rather than demanded: the repo name is the whole of the URL,
+      // and a link-out row with an empty Link would otherwise be a card that
+      // goes nowhere.
+      link: P.Link?.url || `https://github.com/ddd-crew/${repo}`,
+      republished: P.Republished?.checkbox ?? false,
+      category,
+      order: P.Order?.number ?? 0,
+      note: text('Why it is worth it') || undefined,
+    });
+  }
+
+  // Never write an empty section. Notion answering with nothing — a token that
+  // lost access, the wrong database, a filter left on a view — would otherwise
+  // delete every republished page in the same run that could not read them.
+  if (!tools.length) {
+    throw new Error(`${DDD_CREW_DS} returned no published rows. Refusing to write an empty ${CREW_CONFIG_FILE}: that would take the whole /ddd-crew/ section down.`);
+  }
+
+  const config: CrewConfig = { categories, tools: [] };
+  config.tools = byGallery({ categories, tools });
+
+  const republished = config.tools.filter((t) => t.republished).length;
+  console.log(`ddd-crew: ${config.tools.length} tools (${republished} republished, ${config.tools.length - republished} linked out) in ${categories.length} categories`);
+  for (const t of config.tools) {
+    console.log(`  ${t.republished ? '✓' : '↗'} ${t.category} ${t.order} — ${t.repo}`);
+  }
+  if (unpublished) console.log(`  · ${unpublished} row(s) not Published, so not on the site`);
+  for (const s of skipped) console.log(`  ! ${s}`);
+
+  // No timestamp in the file, deliberately: the sync deploys when its own diff
+  // says something changed, and a line that changes every hour would deploy the
+  // site every hour to publish nothing.
+  if (write) {
+    writeFileSync(CREW_CONFIG_FILE, JSON.stringify(config, null, 2) + '\n');
+    console.log(`\nWrote ${CREW_CONFIG_FILE}. Run sync:ddd-crew to fetch the READMEs.`);
+  } else {
+    console.log(`\n  (preview only — pass --write to update ${CREW_CONFIG_FILE})`);
+  }
+}
+
 // --- dispatch ---------------------------------------------------------------
 
 async function run() {
@@ -1147,6 +1232,7 @@ async function run() {
   const only = args.find((a) => a.startsWith('--collection='))?.split('=')[1];
   const limit = Number(args.find((a) => a.startsWith('--limit='))?.split('=')[1] ?? 0);
 
+  if (cmd === 'ddd-crew') return runDddCrew(write);
   if (cmd === 'organisers' || cmd === 'guests' || cmd === 'conferences') {
     const dir = cmd === 'guests' ? 'session-guests' : cmd;
     const outDir = args.find((a) => a.startsWith('--out='))?.split('=')[1]
@@ -1159,7 +1245,7 @@ async function run() {
       ?? (write ? `src/content/${target}` : `preview/${target}`);
     return runContent(target, limit, outDir, write, args.includes('--strict'), args.includes('--full'));
   }
-  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict] [--full]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n  tsx scripts/sync-notion.ts conferences [--write]\n\n  --full    re-fetch every body, ignoring data/sync-state.json\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
+  console.error('usage:\n  tsx scripts/sync-notion.ts content --collection=<sessions|open-spaces|stories|heuristics> [--limit=N] [--write] [--strict] [--full]\n  tsx scripts/sync-notion.ts organisers [--write]\n  tsx scripts/sync-notion.ts guests [--write]\n  tsx scripts/sync-notion.ts conferences [--write]\n  tsx scripts/sync-notion.ts ddd-crew [--write]\n\n  --full    re-fetch every body, ignoring data/sync-state.json\n  --strict  exit non-zero on a dangling relation — one pointing at a page that\n            is not in the heuristics database. Relations to heuristics that are\n            merely awaiting curation are reported but tolerated.');
   process.exit(1);
 }
 
