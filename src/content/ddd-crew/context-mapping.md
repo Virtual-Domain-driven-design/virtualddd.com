@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/context-mapping/"
 license: "CC-BY-SA-4.0"
 category: "Strategic design"
 order: 1
-stars: 1833
+stars: 1834
 heroImage: "./_assets/context-mapping/context-map-cheat-sheet.png"
 contributors:
   - { name: "mploed", url: "https://github.com/mploed" }

@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/aggregate-design-canvas/"
 license: "CC-BY-SA-4.0"
 category: "Modelling canvases"
 order: 2
-stars: 817
+stars: 818
 heroImage: "./_assets/aggregate-design-canvas/aggregate-design-canvas-v1.1.png"
 contributors:
   - { name: "cakper", url: "https://github.com/cakper" }

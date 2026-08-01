@@ -6,7 +6,7 @@ canonical: "https://ddd-crew.github.io/ddd-starter-modelling-process/"
 license: "CC-BY-SA-4.0"
 category: "Getting started"
 order: 2
-stars: 5957
+stars: 5958
 heroImage: "./_assets/ddd-starter-modelling-process/ddd-crew-modeling-process--cirlces-feed-each-other.svg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
