@@ -33,13 +33,50 @@ export function samePerson(a: string, b: string): boolean {
 export const anySamePerson = (names: string[] | undefined, person: string) =>
   (names ?? []).some((n) => samePerson(n, person));
 
-/** The profiles a person may have off this site. */
+/** The profiles a person may have off this site.
+ *
+ * `mastodon` and `bluesky` are a handle; see `socialUrl` below, which also
+ * accepts a URL. `website` and `linkedin` are always URLs, because neither has
+ * a handle anyone writes down. */
 interface Profiles {
   website?: string;
   linkedin?: string;
   mastodon?: string;
   bluesky?: string;
 }
+
+/** A Mastodon or Bluesky handle, as the URL it stands for.
+ *
+ * Both people databases hold handles (`@sebrose@mastodon.scot`) rather than
+ * URLs, because the n8n social flows put them straight into a post and a URL is
+ * not what you write in a toot. A URL is still accepted and passed through
+ * untouched, so a row entered before that change keeps working.
+ *
+ * It lives beside `profileLinks` because that is the one thing that turns these
+ * into hrefs *and* into `sameAs`. A handle reaching either would be a broken
+ * link and a broken claim about who someone is.
+ */
+export const socialUrl = (
+  network: 'mastodon' | 'bluesky',
+  value?: string,
+): string | undefined => {
+  const v = (value ?? '').trim();
+  if (!v) return undefined;
+  if (/^https?:\/\//i.test(v)) return v;
+
+  // An instance is not optional on Mastodon: `@sebrose` on its own names
+  // nobody in particular, so it is dropped rather than guessed at. Bluesky
+  // handles are a domain, either `name.bsky.social` or one someone has
+  // verified as their own.
+  const m =
+    network === 'mastodon'
+      ? v.match(/^@?([^@\s/]+)@([^@\s/]+\.[^@\s/]+)$/)
+      : v.match(/^@?([^@\s/]+\.[^@\s/]+)$/);
+  if (!m) return undefined;
+  return network === 'mastodon'
+    ? `https://${m[2]}/@${m[1]}`
+    : `https://bsky.app/profile/${m[1]}`;
+};
 
 /** A person's outbound links, labelled and in one fixed order.
  *
@@ -50,8 +87,8 @@ export const profileLinks = (p: Profiles): { label: string; href: string }[] =>
   ([
     ['Website', p.website],
     ['LinkedIn', p.linkedin],
-    ['Mastodon', p.mastodon],
-    ['Bluesky', p.bluesky],
+    ['Mastodon', socialUrl('mastodon', p.mastodon)],
+    ['Bluesky', socialUrl('bluesky', p.bluesky)],
   ] as const)
     .filter(([, href]) => !!href)
     .map(([label, href]) => ({ label, href: href as string }));

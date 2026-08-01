@@ -7,7 +7,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { samePerson, anySamePerson, guestsToName, profileLinks, storyByline } from '../../src/lib/people.ts';
+import { samePerson, anySamePerson, guestsToName, profileLinks, socialUrl, storyByline } from '../../src/lib/people.ts';
 
 describe('samePerson', () => {
   test('matches the same name written the same way', () => {
@@ -73,6 +73,41 @@ describe('profileLinks', () => {
     assert.deepEqual(profileLinks({ website: 'https://example.com' }),
       [{ label: 'Website', href: 'https://example.com' }]);
     assert.deepEqual(profileLinks({}), []);
+  });
+
+  // Guests hold handles and organisers hold URLs, so both reach profileLinks.
+  test('turns a guest handle into a link', () => {
+    assert.deepEqual(profileLinks({ mastodon: '@sebrose@mastodon.scot' }),
+      [{ label: 'Mastodon', href: 'https://mastodon.scot/@sebrose' }]);
+    assert.deepEqual(profileLinks({ bluesky: '@vanessaformicola.bsky.social' }),
+      [{ label: 'Bluesky', href: 'https://bsky.app/profile/vanessaformicola.bsky.social' }]);
+  });
+
+  test('drops a handle it cannot resolve rather than linking nowhere', () => {
+    // These would otherwise reach `sameAs`, which is a claim about who
+    // someone is, not just a link on a page.
+    assert.deepEqual(profileLinks({ mastodon: '@sebrose' }), []);
+    assert.deepEqual(profileLinks({ bluesky: '@vanessa' }), []);
+  });
+});
+
+describe('socialUrl', () => {
+  test('leaves a URL alone, so organisers are unaffected', () => {
+    assert.equal(socialUrl('mastodon', 'https://mastodon.scot/@sebrose'),
+      'https://mastodon.scot/@sebrose');
+    assert.equal(socialUrl('bluesky', 'https://bsky.app/profile/kenny.weave-it.org'),
+      'https://bsky.app/profile/kenny.weave-it.org');
+  });
+
+  test('accepts a handle with or without its leading @', () => {
+    assert.equal(socialUrl('mastodon', 'sebrose@mastodon.scot'), 'https://mastodon.scot/@sebrose');
+    assert.equal(socialUrl('bluesky', 'kenny.weave-it.org'), 'https://bsky.app/profile/kenny.weave-it.org');
+  });
+
+  test('is empty for nothing, whitespace, or a shape it does not know', () => {
+    assert.equal(socialUrl('mastodon', undefined), undefined);
+    assert.equal(socialUrl('bluesky', '   '), undefined);
+    assert.equal(socialUrl('mastodon', '@a@b@c'), undefined);
   });
 });
 

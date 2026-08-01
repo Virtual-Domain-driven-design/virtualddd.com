@@ -967,8 +967,9 @@ const ROW_SPECS: Record<string, RowSpec> = {
       role: h.text('Role') || undefined,
       website: h.url('URL'),
       linkedin: h.url('LinkedIn'),
-      mastodon: h.url('Mastodon'),
-      bluesky: h.url('Bluesky'),
+      // Handles, the same as guests: see the note on the guests spec below.
+      mastodon: h.text('Mastodon') || undefined,
+      bluesky: h.text('Bluesky') || undefined,
       area: h.select('Area'),
       organises: h.multi('Organises'),
       showOnTeam: h.checkbox('Show on team'),
@@ -986,8 +987,13 @@ const ROW_SPECS: Record<string, RowSpec> = {
       bio: h.text('Bio') || undefined,
       website: h.url('Website'),
       linkedin: h.url('LinkedIn'),
-      mastodon: h.url('Mastodon'),
-      bluesky: h.url('Bluesky'),
+      // Text, not URL, on both people databases: these two hold a handle
+      // (`@sebrose@mastodon.scot`) so the n8n social flows can put them in a
+      // post, which is the only place a handle is wanted. `h.url` reads
+      // Notion's `url` field and returns undefined for a text property, so
+      // reading these the old way drops every handle without an error.
+      mastodon: h.text('Mastodon') || undefined,
+      bluesky: h.text('Bluesky') || undefined,
       alsoAnOrganiser: h.checkbox('Also an organiser'),
     }),
   },

@@ -127,8 +127,11 @@ const organisers = defineCollection({
       role: z.string().optional(),
       website: z.url().optional(),
       linkedin: z.url().optional(),
-      mastodon: z.url().optional(),
-      bluesky: z.url().optional(),
+      // A handle, not a URL, the same as guests below. Both people databases
+      // hold these as plain text so the n8n social flows can drop them into a
+      // post; `socialUrl` in src/lib/people.ts turns them into links.
+      mastodon: z.string().optional(),
+      bluesky: z.string().optional(),
       area: z.string().optional(),
       organises: z.array(z.string()).default([]),
       showOnTeam: z.boolean().default(false),
@@ -152,8 +155,15 @@ const sessionGuests = defineCollection({
       bio: z.string().optional(),
       website: z.url().optional(),
       linkedin: z.url().optional(),
-      mastodon: z.url().optional(),
-      bluesky: z.url().optional(),
+      // A handle, not a URL: `@sebrose@mastodon.scot`, `@name.bsky.social`.
+      // These two properties are plain text in Notion so the n8n social flows
+      // can drop them straight into a post, which is the only place a handle is
+      // wanted. `socialUrl` in src/lib/people.ts turns them into links and into
+      // `sameAs`, and drops one it cannot resolve rather than publishing a
+      // broken address. It still accepts a URL, so a row that predates this
+      // keeps working.
+      mastodon: z.string().optional(),
+      bluesky: z.string().optional(),
       // Ticked when this person also has a row in the organisers database, so
       // the deliberate duplicate is findable.
       alsoAnOrganiser: z.boolean().default(false),

@@ -69,12 +69,26 @@ a person's links reads it — the organiser page, the organiser card's icons, a
 session's guest block, and the `sameAs` on every `Person` node. Adding a fifth
 network is that list plus an icon, not a change in four places.
 
-**Store the full URL, not the handle.** Mastodon and Bluesky are both written
-`@name@server` in conversation, and neither is a link. `@kenny_baas@mastodon.social`
-is `https://mastodon.social/@kenny_baas`, and `@kenny.weave-it.org` is
-`https://bsky.app/profile/kenny.weave-it.org`. A handle in the field publishes a
-broken link and a broken `sameAs`, and the sync cannot tell the difference
-because Notion's URL property does not either.
+**Store the handle, not the URL.** On both databases `Mastodon` and `Bluesky`
+are plain **text** and hold `@sebrose@mastodon.scot` or
+`@vanessaformicola.bsky.social`. They were URL properties until 2026-08-01 and
+were changed because the n8n social flows put a handle straight into a post: a
+URL is not what you write in a toot, and deriving one from the other is only
+possible in this direction. `Website`, `URL` and `LinkedIn` stay URLs, because
+neither has a handle anyone writes down.
+
+`socialUrl` in `src/lib/people.ts` goes back the other way for the site. It
+turns `@user@instance` into `https://instance/@user` and `@name.tld` into
+`https://bsky.app/profile/name.tld`, still accepts a URL so an older row keeps
+working, and **drops anything it cannot resolve**: `@sebrose` with no instance
+names nobody in particular, so it is left out rather than guessed at. That
+matters because these values are not only links on a page, they are the `sameAs`
+on a `Person` node, which is a claim about who someone is.
+
+*How we know: **machine, partly.** `tests/unit/people.test.mjs` covers the
+handle, the URL and the unresolvable one. Nothing checks that a handle in Notion
+is spelled correctly, so a typo publishes a link to a profile that does not
+exist.*
 
 The cost is that someone who both organises and speaks has a row in each. That
 is deliberate, and `Also an organiser` marks it. The alternative, one people
