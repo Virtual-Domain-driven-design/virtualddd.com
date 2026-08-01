@@ -4,8 +4,6 @@ description: "A structured approach to designing and documenting each of your bo
 repo: "https://github.com/ddd-crew/bounded-context-canvas"
 canonical: "https://ddd-crew.github.io/bounded-context-canvas/"
 license: "CC-BY-SA-4.0"
-category: "Modelling canvases"
-order: 1
 stars: 2041
 heroImage: "./_assets/bounded-context-canvas/bounded-context-canvas-v5.jpg"
 contributors:
@@ -38,7 +36,7 @@ The canvas guides you through the process of designing a bounded context by requ
 
 ![alt text](./_assets/bounded-context-canvas/bounded-context-canvas-v5.jpg "The Bounded Context Canvas V5")
 
-Download the [blank canvas template](https://github.com/ddd-crew/bounded-context-canvas/blob/master/resources/bounded-context-canvas-5v-blank.jpg).
+Download the [blank canvas template](https://github.com/ddd-crew/bounded-context-canvas/blob/main/resources/bounded-context-canvas-5v-blank.jpg).
 
 ## Summary
 
@@ -107,7 +105,7 @@ For help filling in this section of the canvas, see [Core Domain Charts](https:/
 ### Domain Roles
 How can you characterise the behaviour of this bounded context? Does it receive high volumes of data and crunch them into insights - an analysis context? Or does it enforce a workflow - an execution context? Identifying the different roles a context plays can help to avoid coupling responsibilities.
 
-Check out Alberto Brandolini's [Bounded Context Archetypes](https://medium.com/@cyrillemartraire/collaborative-construction-by-alberto-brandolini-an-archetype-of-bounded-contexts-bea640bbb5b) and Rebecca Wirfs-Brock's [Object Role Stereotypes](http://www.wirfs-brock.com/PDFs/A_Brief-Tour-of-RDD.pdf) for a deeper analysis of this space. The [Model Traits worksheet](https://github.com/ddd-crew/bounded-context-canvas/blob/master/resources/model-traits-worksheet.md) contains community-generated examples of roles (model traits was the former name for domain roles).
+Check out Alberto Brandolini's [Bounded Context Archetypes](https://medium.com/@cyrillemartraire/collaborative-construction-by-alberto-brandolini-an-archetype-of-bounded-contexts-bea640bbb5b) and Rebecca Wirfs-Brock's [Object Role Stereotypes](http://www.wirfs-brock.com/PDFs/A_Brief-Tour-of-RDD.pdf) for a deeper analysis of this space. The [Model Traits worksheet](https://github.com/ddd-crew/bounded-context-canvas/blob/main/resources/model-traits-worksheet.md) contains community-generated examples of roles (model traits was the former name for domain roles).
 
 ### Inbound Communication
 
@@ -174,21 +172,21 @@ Here are some tools that can help you to use the Bounded Context Canvas.
 A free and open source [online Bounded Context Canvas tool](https://dddtoolbox.com/bounded-context-canvas) with an interactive editor ([Source Code](https://github.com/poulainpi/ddd-toolbox)).
 
 ### HTML Version
-A [HTML version of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/master/tools/html-version/README.md) you can edit in a browser and version in source control alongside your code. Contributed by [Nelson da Costa](https://github.com/baruica).
+A [HTML version of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/main/tools/html-version/README.md) you can edit in a browser and version in source control alongside your code. Contributed by [Nelson da Costa](https://github.com/baruica).
 
 ### Miro Version
 A free [MiroHQ template](https://miro.com/miroverse/category/newly-added/the-bounded-context-canvas) of the Bounded Context Canvas.
 
-The current version of the template on Miroverse is v4 at the moment. In the meantime, you can download a Miro board backup [here from this repository](https://github.com/ddd-crew/bounded-context-canvas/blob/master/resources/bounded-context-canvas-v5-miro.rtb)
+The current version of the template on Miroverse is v4 at the moment. In the meantime, you can download a Miro board backup [here from this repository](https://github.com/ddd-crew/bounded-context-canvas/blob/main/resources/bounded-context-canvas-v5-miro.rtb)
 
 ### draw.io Version
-A [draw.io template of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/master/tools/drawio-svg-version/README.md) containing the Bounded Context Canvas as template.
+A [draw.io template of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/main/tools/drawio-svg-version/README.md) containing the Bounded Context Canvas as template.
 
 ### Excalidraw Version
-A [Excalidraw template of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/master/tools/excalidraw-version/README.md) containing the Bounded Context Canvas as template.
+A [Excalidraw template of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/main/tools/excalidraw-version/README.md) containing the Bounded Context Canvas as template.
 
 ### Lucidchart Version
-A [Lucidchart template of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/master/tools/lucid-version/README.md) containing the Bounded Context Canvas as template.
+A [Lucidchart template of the canvas](https://github.com/ddd-crew/bounded-context-canvas/blob/main/tools/lucid-version/README.md) containing the Bounded Context Canvas as template.
 
 ## Design Tips
 
@@ -219,7 +217,7 @@ The public interface of a bounded context is its contract with the rest of the s
 
 ## Translations
 
-All resources are available [in French](https://github.com/ddd-crew/bounded-context-canvas/blob/master/translations/fr/resources) and in [Portuguese](https://github.com/ddd-crew/bounded-context-canvas/blob/master/translations/pt/resources).
+All resources are available [in French](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/fr/resources) and in [Portuguese](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/pt/resources).
 
 ## Contributors
 

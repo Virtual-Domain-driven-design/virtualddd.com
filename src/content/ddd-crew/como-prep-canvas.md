@@ -4,8 +4,6 @@ description: "The “Collaborative Modeling Workshop Preparation Canvas” is a 
 repo: "https://github.com/ddd-crew/como-prep-canvas"
 canonical: "https://ddd-crew.github.io/como-prep-canvas/"
 license: "CC-BY-SA-4.0"
-category: "Modelling canvases"
-order: 3
 stars: 33
 heroImage: "./_assets/como-prep-canvas/como-prep-canvas-v2.jpg"
 contributors:
@@ -13,6 +11,8 @@ contributors:
   - { name: "mploed", url: "https://github.com/mploed" }
   - { name: "Andrea", url: "https://github.com/Andrea" }
   - { name: "Baasie", url: "https://github.com/Baasie" }
+  - { name: "cosimalaube", url: "https://github.com/cosimalaube" }
+  - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
   - { name: "Max-Git", url: "https://github.com/Max-Git" }
 ---
 The "Collaborative Modelling Workshop Preparation Canvases" are designed to support facilitators when preparing for collaborative modelling (CoMo) workshops. The goal is to improve the overall quality and outcomes of CoMo workshops and to help newcomers to get started.
@@ -842,6 +842,8 @@ The **Collaborative Modelling Workshop Preparation Canvas** is designed to ensur
 
 [Preview on Miro.com](https://miro.com/app/board/uXjVJP8Fbzc=/)
 
+[German translation of the Miroboard as a Miro template](https://miro.com/templates/workshop-fuer-collaborative-modelling/)
+
 ## Authors
 
 - Beija Nigl ([GitHub](https://github.com/beija), [LinkedIn](https://www.linkedin.com/in/beija-nigl/))
@@ -852,6 +854,7 @@ The **Collaborative Modelling Workshop Preparation Canvas** is designed to ensur
 ## Contributors
 
 - All the [CoMoCamp](https://comocamp.org/) Open Space participants!
+- Cosima Laube ([GitHub](https://github.com/cosimalaube), [LinkedIn](https://www.linkedin.com/in/cosima-laube/)), German translation 
 
 ## License
 

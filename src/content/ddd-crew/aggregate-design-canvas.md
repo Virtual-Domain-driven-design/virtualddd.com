@@ -4,8 +4,6 @@ description: "A structured approach to designing and documenting Aggregates"
 repo: "https://github.com/ddd-crew/aggregate-design-canvas"
 canonical: "https://ddd-crew.github.io/aggregate-design-canvas/"
 license: "CC-BY-SA-4.0"
-category: "Modelling canvases"
-order: 2
 stars: 818
 heroImage: "./_assets/aggregate-design-canvas/aggregate-design-canvas-v1.1.png"
 contributors:
@@ -28,17 +26,17 @@ The canvas has a suggested order of working through it, that helps to iterativel
 ### Downloads
 
 v1.1:
-- [Aggregate Design Canvas v1.1 (png)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.1.png "Aggregate Design Canvas v1.1 (png)")
-- [Aggregate Design Canvas v1.1 (pdf)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.1.pdf "Aggregate Design Canvas v1.1 (pdf)")
-- [Aggregate Design Canvas v1.1 (miro board backup)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.1.rtb "Aggregate Design Canvas v1.1 (miro board backup)")
-- [Aggregate Design Canvas v1.1 (drawio svg)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.1.drawio.svg "Aggregate Design Canvas v1.1 (drawio svg)")
-- [Aggregate Design Canvas v1.1 (Excalidraw)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.1.excalidraw "Aggregate Design Canvas v1.1 (Excalidraw)")
+- [Aggregate Design Canvas v1.1 (png)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.1.png "Aggregate Design Canvas v1.1 (png)")
+- [Aggregate Design Canvas v1.1 (pdf)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.1.pdf "Aggregate Design Canvas v1.1 (pdf)")
+- [Aggregate Design Canvas v1.1 (miro board backup)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.1.rtb "Aggregate Design Canvas v1.1 (miro board backup)")
+- [Aggregate Design Canvas v1.1 (drawio svg)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.1.drawio.svg "Aggregate Design Canvas v1.1 (drawio svg)")
+- [Aggregate Design Canvas v1.1 (Excalidraw)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.1.excalidraw "Aggregate Design Canvas v1.1 (Excalidraw)")
 
 v1.0:
-- [Aggregate Design Canvas v1 (jpg)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.jpg "Aggregate Design Canvas v1 (jpg)")
-- [Aggregate Design Canvas v1 (pdf)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.pdf "Aggregate Design Canvas v1 (pdf)")
-- [Aggregate Design Canvas v1 (miro board backup)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.rtb "Aggregate Design Canvas v1 (miro board backup)")
-- [Aggregate Design Canvas v1 (drawio svg)](https://github.com/ddd-crew/aggregate-design-canvas/blob/master/resources/aggregate-design-canvas-v1.drawio.svg "Aggregate Design Canvas v1 (drawio svg)")
+- [Aggregate Design Canvas v1 (jpg)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.jpg "Aggregate Design Canvas v1 (jpg)")
+- [Aggregate Design Canvas v1 (pdf)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.pdf "Aggregate Design Canvas v1 (pdf)")
+- [Aggregate Design Canvas v1 (miro board backup)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.rtb "Aggregate Design Canvas v1 (miro board backup)")
+- [Aggregate Design Canvas v1 (drawio svg)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/resources/aggregate-design-canvas-v1.drawio.svg "Aggregate Design Canvas v1 (drawio svg)")
 
 ## How to Use
 

@@ -4,8 +4,6 @@ description: "Tools for applying collaborative DDD in remote tools like Miro"
 repo: "https://github.com/ddd-crew/virtual-modelling-templates"
 canonical: "https://ddd-crew.github.io/virtual-modelling-templates/"
 license: "CC-BY-SA-4.0"
-category: "EventStorming & remote"
-order: 2
 stars: 84
 heroImage: "./_assets/virtual-modelling-templates/strategic-ddd-miro-template.png"
 contributors:
@@ -22,13 +20,13 @@ This repo contains a collection of resources for applying DDD collaboratively in
 
 [View the free template on Miro](https://miro.com/miroverse/category/strategy-and-planning/strategic-domain-driven-design-template)
 
-[Download the Miro backup file](https://github.com/ddd-crew/virtual-modelling-templates/blob/master/resources/strategic-ddd-miro-backup.rtb)
+[Download the Miro backup file](https://github.com/ddd-crew/virtual-modelling-templates/blob/main/resources/strategic-ddd-miro-backup.rtb)
 
 ## Context Mapping Miro Template
 
 ![Context Mapping Starter Kit Template](./_assets/virtual-modelling-templates/Remote-Context-Mapping-Starter-Kit.jpg)
 
-[Download the Miro backup file](https://github.com/ddd-crew/virtual-modelling-templates/blob/master/resources/Remote-Context-Mapping-Starter-Kit.rtb)
+[Download the Miro backup file](https://github.com/ddd-crew/virtual-modelling-templates/blob/main/resources/Remote-Context-Mapping-Starter-Kit.rtb)
 
 ## Instructions
 

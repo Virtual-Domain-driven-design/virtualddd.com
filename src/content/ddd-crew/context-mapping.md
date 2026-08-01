@@ -4,8 +4,6 @@ description: "Context Maps describe the contact between bounded contexts and tea
 repo: "https://github.com/ddd-crew/context-mapping"
 canonical: "https://ddd-crew.github.io/context-mapping/"
 license: "CC-BY-SA-4.0"
-category: "Strategic design"
-order: 1
 stars: 1834
 heroImage: "./_assets/context-mapping/context-map-cheat-sheet.png"
 contributors:
@@ -152,7 +150,7 @@ If you perform context mapping with Miro, there is a board backup that gets you 
 
 ![Remote Context Mapping Starter Kit for Miro](./_assets/context-mapping/RemoteContextMappingStarterKit.jpg)
 
-[Link to Miro Board Backup](https://github.com/ddd-crew/context-mapping/blob/master/resources/Remote-Context-Mapping-Starter-Kit.rtb)
+[Link to Miro Board Backup](https://github.com/ddd-crew/context-mapping/blob/main/resources/Remote-Context-Mapping-Starter-Kit.rtb)
 
 You can also check out (and comment) [a read-only version of the starter kit on Miro](https://miro.com/app/board/o9J_kqtuB6A=/)
 

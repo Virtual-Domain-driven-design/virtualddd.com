@@ -4,8 +4,6 @@ description: "Definitions of DDD and fundamental concepts to reduce the learning
 repo: "https://github.com/ddd-crew/welcome-to-ddd"
 canonical: "https://ddd-crew.github.io/welcome-to-ddd/"
 license: "CC-BY-SA-4.0"
-category: "Getting started"
-order: 1
 stars: 1534
 heroImage: "./_assets/welcome-to-ddd/ddd_on_a_page1.png"
 contributors:

@@ -4,8 +4,6 @@ description: "A tool for collaboratively finding your core domains - strategic b
 repo: "https://github.com/ddd-crew/core-domain-charts"
 canonical: "https://ddd-crew.github.io/core-domain-charts/"
 license: "CC-BY-SA-4.0"
-category: "Strategic design"
-order: 2
 stars: 614
 heroImage: "./_assets/core-domain-charts/core-domain-chart-template.jpg"
 contributors:
@@ -69,7 +67,7 @@ Complexity can manifest in different forms. Here are some clues for uncovering t
 
 ## Examples
 
-Check out the [Examples](https://github.com/ddd-crew/core-domain-charts/blob/master/examples) to get a better understanding of these charts.
+Check out the [Examples](https://github.com/ddd-crew/core-domain-charts/blob/main/examples) to get a better understanding of these charts.
 
 Please feel free to create a pull request with your own examples.
 
