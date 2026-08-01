@@ -377,11 +377,15 @@ export function openSpaceJsonLd(
  * are in the data and not only in the layout: `license`, `isBasedOn` the repo,
  * `contributor` for the people who wrote it, and `sameAs` the upstream
  * publication that `rel=canonical` already points at. Nothing here claims we
- * authored it. */
+ * authored it.
+ *
+ * `genre` is passed in rather than read off the entry: which category a tool
+ * sits in is our editorial decision and lives in data/ddd-crew.json, not in the
+ * repository's own markdown. */
 export function dddCrewJsonLd(
   site: URL | undefined,
   entry: CollectionEntry<'dddCrew'>,
-  opts: { url: string; image?: string; trail: [string, string][] },
+  opts: { url: string; image?: string; genre?: string; trail: [string, string][] },
 ) {
   const d = entry.data;
   const org = organization(site);
@@ -399,7 +403,7 @@ export function dddCrewJsonLd(
       ...(d.contributors.length
         ? { contributor: d.contributors.map((c) => person({ name: c.name, url: c.url })) }
         : {}),
-      ...(d.category ? { genre: d.category } : {}),
+      ...(opts.genre ? { genre: opts.genre } : {}),
       ...(opts.image ? { image: [opts.image] } : {}),
       // The canonical version is upstream; this page republishes it.
       mainEntityOfPage: d.canonical,

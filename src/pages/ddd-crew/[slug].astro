@@ -35,6 +35,7 @@ const siblings = items
 const jsonLd = dddCrewJsonLd(Astro.site, entry, {
   url: new URL(`/ddd-crew/${entry.id}/`, Astro.site).toString(),
   image: d.heroImage ? await socialCard(Astro.site, d.heroImage) : undefined,
+  genre: category,
   trail: trail('dddCrew', d.title, `/ddd-crew/${entry.id}/`),
 });
 

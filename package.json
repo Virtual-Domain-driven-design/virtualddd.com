@@ -10,7 +10,7 @@
     "build": "astro build && node scripts/prune-dist.mjs && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "npm run test:unit && npm run build && node --test \"tests/*.test.mjs\"",
+    "test": "npm run test:unit && npx astro check && npm run build && node --test \"tests/*.test.mjs\"",
     "test:unit": "node --import tsx --test \"tests/unit/*.test.mjs\"",
     "test:content": "node --test \"tests/content/*.test.mjs\"",
     "test:quick": "npm run test:unit && node --test \"tests/{build,urls}.test.mjs\"",
