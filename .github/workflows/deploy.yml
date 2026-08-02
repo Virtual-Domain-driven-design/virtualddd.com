@@ -110,8 +110,26 @@ jobs:
         run: |
           touched=$(git diff --name-only "$BEFORE" "$SHA" -- src/content 2>/dev/null || true)
           [ -z "$touched" ] && { echo "No generated content touched."; exit 0; }
-          author=$(git log -1 --format='%an' "$SHA")
-          if [ "$author" = "virtualddd-sync" ]; then
+
+          # Ask who authored the commits that *touched src/content* in this
+          # range — not who authored the tip.
+          #
+          # It used to read `git log -1 "$SHA"`, which is the same thing only
+          # when the sync's own commit is the very last one to land. Merge a
+          # pull request that carries a sync commit and the tip is the merge
+          # commit, authored by whoever pressed the button; the content is
+          # untouched by them and the deploy fails anyway. That is a false
+          # positive on the one workflow whose whole job is to be trusted, and
+          # the obvious workaround for it — push straight to main — is worse
+          # than the rule being enforced.
+          #
+          # A squash still fails, and correctly: squashing rewrites the author
+          # of the content into whoever opened the pull request, so there is no
+          # longer any evidence that the sync produced it. Use a rebase or a
+          # merge commit when a branch carries synced content.
+          authors=$(git log --format='%an' "$BEFORE..$SHA" -- src/content | sort -u)
+          others=$(printf '%s\n' "$authors" | grep -v '^virtualddd-sync$' || true)
+          if [ -z "$others" ]; then
             echo "Changed by the sync, which is the only thing allowed to."
             exit 0
           fi
@@ -123,10 +141,16 @@ jobs:
             echo
             echo "$touched" | sed 's/^/    /'
             echo
+            echo "Changed by: $(printf '%s' "$others" | paste -sd', ')"
+            echo
             echo "Make the change in Notion instead. If the *shape* of the content needs to"
             echo "change, that is a schema change; see docs/content-model.md."
+            echo
+            echo "If this *is* the sync's output arriving through a pull request, merge it"
+            echo "with a rebase or a merge commit rather than a squash — a squash rewrites"
+            echo "the author and erases the evidence that the sync produced it."
           } >> "$GITHUB_STEP_SUMMARY"
-          echo "::error::Generated content under src/content/ was edited by hand (author: $author). Change it in Notion."
+          echo "::error::Generated content under src/content/ was changed by $(printf '%s' "$others" | paste -sd', '). Change it in Notion."
           exit 1
 
       - uses: actions/setup-node@v7
