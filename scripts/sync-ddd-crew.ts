@@ -137,8 +137,15 @@ async function processRepo(tool: CrewTool) {
 
   // Title = first H1; strip it from the body (we render the title ourselves).
   const h1 = md.match(/^\s*#\s+(.+?)\s*$/m);
-  const title = (h1?.[1] ?? name).replace(/[#*`]/g, '').trim();
+  let title = (h1?.[1] ?? tool.name ?? name).replace(/[#*`]/g, '').trim();
   if (h1) md = md.replace(h1[0], '').replace(/^\s+/, '');
+
+  // Some READMEs head themselves with the repository name, and a card reading
+  // "ai-ddd-prompts-and-rules" looks like a broken title rather than a faithful
+  // one. Notion holds a human name for every tool, so use it in exactly that
+  // case. Any other H1 is the author's own title for their work and stands.
+  const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (tool.name && squash(title) === squash(name)) title = tool.name;
 
   // Description: repo description, else the first real paragraph of the README.
   // Ignore "WIP…" placeholder descriptions in favour of the README.
