@@ -134,7 +134,7 @@ jobs:
 
       - name: What changed?
         id: diff
-        # Guarded too, or a skipped sync reports \"nothing changed in Notion\",
+        # Guarded too, or a skipped sync reports "nothing changed in Notion",
         # which is a different claim from \"we never looked\".
         if: steps.token.outputs.ready == 'true'
         run: |

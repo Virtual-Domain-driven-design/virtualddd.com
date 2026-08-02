@@ -128,6 +128,16 @@ jobs:
           # longer any evidence that the sync produced it. Use a rebase or a
           # merge commit when a branch carries synced content.
           authors=$(git log --format='%an' "$BEFORE..$SHA" -- src/content | sort -u)
+          # Fail closed when there is nobody to attribute it to. A force-push
+          # backwards leaves `github.event.before` newer than `github.sha`, so
+          # the range is empty while the diff above still shows content moving:
+          # an empty author list would otherwise read as "nobody but the sync"
+          # and wave it through. A guard whose whole job is attribution must not
+          # pass when it cannot attribute.
+          if [ -z "$authors" ]; then
+            echo "::error::Content under src/content/ changed between $BEFORE and $SHA, but no commit in that range touched it. Cannot tell who did; refusing to deploy."
+            exit 1
+          fi
           others=$(printf '%s\n' "$authors" | grep -v '^virtualddd-sync$' || true)
           if [ -z "$others" ]; then
             echo "Changed by the sync, which is the only thing allowed to."
@@ -141,7 +151,7 @@ jobs:
             echo
             echo "$touched" | sed 's/^/    /'
             echo
-            echo "Changed by: $(printf '%s' "$others" | paste -sd', ')"
+            echo "Changed by: $(printf '%s' "$others" | paste -sd, | sed 's/,/, /g')"
             echo
             echo "Make the change in Notion instead. If the *shape* of the content needs to"
             echo "change, that is a schema change; see docs/content-model.md."
@@ -150,7 +160,7 @@ jobs:
             echo "with a rebase or a merge commit rather than a squash — a squash rewrites"
             echo "the author and erases the evidence that the sync produced it."
           } >> "$GITHUB_STEP_SUMMARY"
-          echo "::error::Generated content under src/content/ was changed by $(printf '%s' "$others" | paste -sd', '). Change it in Notion."
+          echo "::error::Generated content under src/content/ was changed by $(printf '%s' "$others" | paste -sd, | sed 's/,/, /g'). Change it in Notion."
           exit 1
 
       - uses: actions/setup-node@v7
