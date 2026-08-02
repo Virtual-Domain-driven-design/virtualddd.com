@@ -1,5 +1,5 @@
 ---
-title: "ai-ddd-prompts-and-rules"
+title: "AI DDD prompts & rules"
 description: "DDD-related prompts and rules to use with your favourite coding assistants"
 repo: "https://github.com/ddd-crew/ai-ddd-prompts-and-rules"
 canonical: "https://ddd-crew.github.io/ai-ddd-prompts-and-rules/"

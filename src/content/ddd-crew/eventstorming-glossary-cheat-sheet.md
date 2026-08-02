@@ -1,5 +1,5 @@
 ---
-title: "EventStorming Glossary & Cheat sheet"
+title: "EventStorming Glossary Cheat Sheet"
 description: "EventStorming is the smartest approach to collaborate beyond silo boundaries. The power of EventStorming comes from a diverse multi-disciplined group…"
 repo: "https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet"
 canonical: "https://ddd-crew.github.io/eventstorming-glossary-cheat-sheet/"

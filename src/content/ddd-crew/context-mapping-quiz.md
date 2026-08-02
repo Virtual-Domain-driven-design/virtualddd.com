@@ -1,5 +1,5 @@
 ---
-title: "Context Mapping Quiz"
+title: "Context Mapping quiz"
 description: "Learn context mapping by trying this quiz"
 repo: "https://github.com/ddd-crew/context-mapping-quiz"
 canonical: "https://ddd-crew.github.io/context-mapping-quiz/"

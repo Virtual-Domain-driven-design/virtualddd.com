@@ -1,5 +1,5 @@
 ---
-title: "Debiasing Decisions Toolkit"
+title: "Debiasing decisions toolkit"
 description: "Structured behavioural interventions for better decisions in software, architecture, and technical leadership. Checklists, canvases, and more."
 repo: "https://github.com/ddd-crew/debiasing-decisions-toolkit"
 canonical: "https://ddd-crew.github.io/debiasing-decisions-toolkit/"
