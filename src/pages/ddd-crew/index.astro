@@ -27,7 +27,7 @@ const grouped = [...new Set(tools.map((t) => t.tool.category))]
   .map((cat) => ({ cat: cat || 'More tools', items: tools.filter((t) => t.tool.category === cat) }));
 
 const description =
-  'Community Domain-Driven Design tools, canvases and guides from the ddd-crew — republished with attribution under CC BY-SA 4.0.';
+  'Community Domain-Driven Design tools, canvases and guides from the ddd-crew — republished with attribution under the licence each repository sets.';
 // Only the republished tools are listed: the link-outs are somebody else's
 // pages, and an ItemList of them would claim this page holds them.
 const jsonLd = collectionPage(Astro.site, {
@@ -55,9 +55,9 @@ const jsonLd = collectionPage(Astro.site, {
         they're easy to browse, always crediting the original authors.
       </p>
       <p class="licence">
-        Everything republished here is by the ddd-crew and its contributors, licensed{' '}
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Each tool links back to
-        its source repository and canonical version.
+        Everything republished here is by the ddd-crew and its contributors, under the licence each
+        repository sets: mostly <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>,
+        and each page says which. Every tool links back to its source repository and canonical version.
       </p>
     </div>
   </section>

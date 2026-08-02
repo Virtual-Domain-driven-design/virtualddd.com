@@ -3,7 +3,7 @@ import { dddCrewJsonLd, pageTitle, trail } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import type { CrewConfig } from '../../lib/ddd-crew';
+import { licenceOf, type CrewConfig } from '../../lib/ddd-crew';
 import config from '../../../data/ddd-crew.json';
 
 export async function getStaticPaths() {
@@ -21,6 +21,10 @@ const d = entry.data;
 const crew = config as CrewConfig;
 const categoryOf = (repo: string) => crew.tools.find((t) => t.repo === repo)?.category;
 const category = categoryOf(entry.id);
+
+// Their licence, not ours to assume: most of these are CC BY-SA 4.0 and one is
+// CC BY 4.0, which asks less of a reader than ShareAlike does.
+const lic = licenceOf(d.license);
 
 const contribShown = d.contributors.slice(0, 16);
 const contribMore = d.contributors.length - contribShown.length;
@@ -59,7 +63,7 @@ const jsonLd = dddCrewJsonLd(Astro.site, entry, {
     <div class="attribution">
       <p class="attr-line">
         Republished from the <a href={d.repo}>ddd-crew/{entry.id}</a> repository, licensed{' '}
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The canonical version
+        {lic ? <a href={lic.url}>{lic.name}</a> : d.license}. The canonical version
         lives at <a href={d.canonical}>ddd-crew.github.io</a>.
       </p>
       {contribShown.length > 0 && (

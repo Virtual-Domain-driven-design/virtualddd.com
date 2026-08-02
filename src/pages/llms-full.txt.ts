@@ -40,7 +40,7 @@ export async function GET(context: APIContext) {
     '>',
     '> Community-authored, and free to quote with attribution to Virtual DDD and',
     '> the named author. The ddd-crew tools are not included here: they are',
-    '> republished under CC BY-SA 4.0 and their canonical version lives upstream.',
+    '> republished under their own licences and their canonical version lives upstream.',
     '',
   ];
 

@@ -7,7 +7,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { byGallery, retargetBranch } from '../../src/lib/ddd-crew.ts';
+import { byGallery, licenceOf, retargetBranch } from '../../src/lib/ddd-crew.ts';
 
 const tool = (over) => ({
   repo: 'x', name: 'X', link: 'https://github.com/ddd-crew/x',
@@ -53,6 +53,24 @@ describe('the gallery order', () => {
       tools: [tool({ repo: 'b', name: 'Beta' }), tool({ repo: 'a', name: 'Alpha' })],
     });
     assert.deepEqual(out.map((t) => t.repo), ['a', 'b']);
+  });
+});
+
+// The page said CC BY-SA 4.0 for a year because every repo carried it. On
+// 2026-08-02 one did not, and the page told the world that somebody's CC BY 4.0
+// work came with a ShareAlike obligation. These say the licence is read, never
+// assumed.
+describe('naming a repository\'s licence', () => {
+  test('reads the licence it is given, not the one most repos have', () => {
+    assert.equal(licenceOf('CC-BY-4.0').name, 'CC BY 4.0');
+    assert.equal(licenceOf('CC-BY-4.0').url, 'https://creativecommons.org/licenses/by/4.0/');
+    assert.equal(licenceOf('CC-BY-SA-4.0').name, 'CC BY-SA 4.0');
+  });
+
+  test('a licence we hold no name for is null, never a guess', () => {
+    assert.equal(licenceOf('EUPL-1.2'), null);
+    assert.equal(licenceOf(undefined), null);
+    assert.equal(licenceOf(''), null);
   });
 });
 

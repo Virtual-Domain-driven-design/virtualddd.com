@@ -6,6 +6,7 @@
  * not use relative paths.
  */
 import type { CollectionEntry } from 'astro:content';
+import { licenceOf } from './ddd-crew';
 
 export const SITE_NAME = 'Virtual DDD';
 export const SITE_TAGLINE = 'A community for Domain-Driven Design, software architecture and design';
@@ -373,7 +374,7 @@ export function openSpaceJsonLd(
 
 /** A ddd-crew tool: someone else's CreativeWork, republished here.
  *
- * The licence and the attribution are the whole point (CC BY-SA 4.0), so they
+ * The licence and the attribution are the whole point, so they
  * are in the data and not only in the layout: `license`, `isBasedOn` the repo,
  * `contributor` for the people who wrote it, and `sameAs` the upstream
  * publication that `rel=canonical` already points at. Nothing here claims we
@@ -388,6 +389,7 @@ export function dddCrewJsonLd(
   opts: { url: string; image?: string; genre?: string; trail: [string, string][] },
 ) {
   const d = entry.data;
+  const licence = licenceOf(d.license);
   const org = organization(site);
   return graph(
     org,
@@ -396,7 +398,10 @@ export function dddCrewJsonLd(
       '@id': `${opts.url}#work`,
       name: d.title,
       ...(d.description ? { description: d.description } : {}),
-      license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      // The repository's own licence. Omitted rather than guessed for one we
+      // hold no URL for: a wrong licence in structured data is machine-readable
+      // and travels further than the page it came from.
+      ...(licence ? { license: licence.url } : {}),
       creditText: 'The ddd-crew and its contributors',
       isBasedOn: d.repo,
       sameAs: [d.repo, d.canonical],
