@@ -3,7 +3,7 @@ title: "Context Mapping Quiz"
 description: "Learn context mapping by trying this quiz"
 repo: "https://github.com/ddd-crew/context-mapping-quiz"
 canonical: "https://ddd-crew.github.io/context-mapping-quiz/"
-license: "CC-BY-SA-4.0"
+license: "CC-BY-4.0"
 stars: 33
 heroImage: "./_assets/context-mapping-quiz/quiz_sample.png"
 contributors:
