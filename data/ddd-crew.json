@@ -88,15 +88,6 @@
       "note": "Interactive, and a faster way to find out you have misunderstood a pattern than reading about it again."
     },
     {
-      "repo": "strategic-architecture-building-blocks",
-      "name": "Strategic architecture building blocks",
-      "link": "https://github.com/ddd-crew/strategic-architecture-building-blocks",
-      "republished": true,
-      "category": "Strategic design",
-      "order": 5,
-      "note": "An earlier exploration, kept for reference. Say so when linking it: it is an archived direction, not current advice."
-    },
-    {
       "repo": "bounded-context-canvas",
       "name": "Bounded Context Canvas",
       "link": "https://github.com/ddd-crew/bounded-context-canvas",
