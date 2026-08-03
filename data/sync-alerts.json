@@ -1,6 +1,12 @@
 {
   "items": [
     {
+      "kind": "image-source-gone",
+      "section": "conferences",
+      "title": "kandddinsky (logo)",
+      "url": "https://kandddinsky.de/img/design/logo_dark.svg"
+    },
+    {
       "kind": "person-renamed",
       "section": "/organisers/",
       "title": "kenny-baas-schwegler → kenny-schwegler",
