@@ -1,4 +1,10 @@
 {
   "name": "Philipp Kostyra",
-  "alsoAnOrganiser": false
+  "bio": "Philipp Kostyra designs clarity in complex enterprise systems. He is a Development Architect at SAP and a DDD Coach and Trainer with almost a decade spent leading Domain-Driven Design adoption at enterprise scale.\n\nSystems rarely fail because of technology, they fail because architecture no longer reflects how the business actually operates. From that starting point, his work sits at the intersection of enterprise architecture, cloud processes, and Domain-Driven Design.\n\nInside SAP, Philipp built and manages a DDD community of more than 800 members. The community exists to raise architectural maturity through shared practice and real project experience, not through dogma or tooling debates. As a Trainer in the SAP Architecture Curriculum, he coaches engineers and architects to apply DDD to real business problems.\n\nIn the automotive sector, he implemented DDD in procurement planning systems operating at enterprise scale: by aligning bounded contexts with business capabilities and clarifying domain ownership across teams, the outcome was faster change, clearer accountability, and better software and better decision-making across business and IT.\n\nHis stance is deliberate: architecture is a strategic discipline, not an implementation detail. Domain-Driven Design, applied seriously, is a leadership tool as much as a technical one. The central question driving his work: how can large enterprises evolve continuously without losing coherence?\n\nHis training Strategic Integration Design with DDD (co-designed with integration architect Karol Skrzymowski) brings this perspective into practice. Born from a year and a half of research and a hands-on lab at DDD Europe 2025, the workshop applies the strategic patterns of DDD one level up: to the spaces between systems, where most architectural decisions quietly go wrong.",
+  "website": "https://www.explore-domains.com/",
+  "linkedin": "https://www.linkedin.com/in/philippkostyra/",
+  "mastodon": "https://mastodon.social/@neolytian",
+  "bluesky": "https://bsky.app/profile/neolytian.bsky.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/philipp-kostyra-photo.jpg"
 }
