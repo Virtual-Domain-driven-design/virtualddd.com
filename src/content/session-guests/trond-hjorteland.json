@@ -2,6 +2,8 @@
   "name": "Trond Hjorteland",
   "bio": "I help organisations with IT architecture, domain modelling, and service design, using  DDD, business capability mapping, event storming, microservices, and event-driven architectures, combined with the organisational and agile practices needed to make those designs actually stick.",
   "linkedin": "https://www.linkedin.com/in/trondhjort/",
+  "mastodon": "@trondhjort@hachyderm.io",
+  "bluesky": "@trond.hjorteland.com",
   "alsoAnOrganiser": false,
   "photo": "./_assets/trond-hjorteland-photo.jpg"
 }
