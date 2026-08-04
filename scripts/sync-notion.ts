@@ -989,14 +989,20 @@ const ROW_SPECS: Record<string, RowSpec> = {
       name,
       bio: h.text('Bio') || undefined,
       website: h.url('Website'),
-      linkedin: h.url('LinkedIn'),
+      // Guests name these three for what they hold: `LinkedIn Url`,
+      // `Mastodon Tag`, `Bluesky Tag`. Organisers still say `LinkedIn`,
+      // `Mastodon`, `Bluesky`, so the two specs read different names on
+      // purpose. Renaming a property is invisible to the sync, because every
+      // field here is optional: it writes the file without the field, commits
+      // as the bot and deploys green.
+      linkedin: h.url('LinkedIn Url'),
       // Text, not URL, on both people databases: these two hold a handle
       // (`@sebrose@mastodon.scot`) so the n8n social flows can put them in a
       // post, which is the only place a handle is wanted. `h.url` reads
       // Notion's `url` field and returns undefined for a text property, so
       // reading these the old way drops every handle without an error.
-      mastodon: h.text('Mastodon') || undefined,
-      bluesky: h.text('Bluesky') || undefined,
+      mastodon: h.text('Mastodon Tag') || undefined,
+      bluesky: h.text('Bluesky Tag') || undefined,
       alsoAnOrganiser: h.checkbox('Also an organiser'),
     }),
   },
