@@ -10,7 +10,7 @@ video: "https://www.youtube.com/embed/Xw_eh9vLAio"
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "Most DDD talks target large organisations. This one is for startups and small product companies — the misconceptions, and what actually carries over."
-featuredImage: "./_assets/ddddd-20-ddd-for-small-organizations-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-ddd-for-small-organizations-featured.jpg"
 ---
 
 Most DDD talks target topics specifically for larger organizations. But what about the rest of us who work with small organizations like startups or smaller product companies? Does DDD work for us too?

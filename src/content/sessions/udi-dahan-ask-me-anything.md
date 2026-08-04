@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["udi-dahan"]
 seoTitle: "Udi Dahan: Ask Me Anything on DDD and Architecture"
 seoMetadescription: "A fireside chat with Udi Dahan taking questions on Domain-Driven Design, SOA, event-driven architecture, CQRS and large-scale distributed systems."
-featuredImage: "./_assets/udi-dahan-ask-me-anything-featured.jpeg"
+featuredImage: "./_assets/udi-dahan-ask-me-anything-featured.jpg"
 ---
 
 Join us in this special fireside chat with Udi Dahan answering all your questions spanning from Domain-Driven Design, Software Architecture from SOA, event-driven, CQRS, Large-scale distributed systems, Saga Patterns, Event sourcing, microservices and anything in between. Ask your questions upfront or during the session!

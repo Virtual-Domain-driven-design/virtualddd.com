@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Splitting Systems into Bounded Contexts and Microservices"
 seoMetadescription: "Why split a large system into smaller services with their own model and language — decoupling teams and giving them real autonomy over what they own."
-featuredImage: "./_assets/splitting-systems-towards-bounded-contexts-and-microservices-featured.jpeg"
+featuredImage: "./_assets/splitting-systems-towards-bounded-contexts-and-microservices-featured.jpg"
 ---
 
 There are many reasons to split up large-scale systems towards more modular, smaller services with their own model and language. You can decouple teams and give full autonomy of that service to a team. By decoupling services and teams you can handle changes to the domain faster, having a faster time to market. You decrease the cognitive load of the teams, empowering teams to truly understand the complexity of their shared models with domain experts.

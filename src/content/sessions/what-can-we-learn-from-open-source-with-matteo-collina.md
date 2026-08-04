@@ -11,7 +11,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["matteo-collina"]
 seoMetadescription: "Matteo Collina, long-time Node.js contributor and TSC member, on what the rest of us can learn from how open source actually gets built."
-featuredImage: "./_assets/what-can-we-learn-from-open-source-with-matteo-collina-featured.jpeg"
+featuredImage: "./_assets/what-can-we-learn-from-open-source-with-matteo-collina-featured.jpg"
 ---
 
 Thanks to Krisztina we will have Matteo Collina as a special guest on our next panel. Matteo is a long time Nodejs contributor and TSC member. Open-source software is a success story, and undoubtedly one, we can learn from. In OSS the clocks tick differently, but it is software built for users, to solve problems - both relatively unknowns factors at the beginning. So what can DDD developers for businesses learn from that experience: how to handle these uncertainties,  how is the Ubiquitous Language developed in the Open source world? How do you do design in OSS? And many more questions!

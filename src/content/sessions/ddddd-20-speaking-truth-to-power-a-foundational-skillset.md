@@ -11,7 +11,7 @@ podcastPlayer: "https://player.captivate.fm/episode/caefcc93-c791-43f4-9310-6e4a
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "When you can see the icebergs ahead but cannot convince anyone to steer: speaking truth to power as a foundational skill for architects."
-featuredImage: "./_assets/ddddd-20-speaking-truth-to-power-a-foundational-skillset-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-speaking-truth-to-power-a-foundational-skillset-featured.jpg"
 ---
 
 As complexity increases, are you (too often) shouting into the wind? Do you see icebergs ahead yet fail to convince others to avoid them? Are your architecture-focused discussions more exhausting than productive? Does the accountant understand the value of your work? The thinking and communication skills we've developed on the job often fail us when we face more-complex challenges. That is why we are learning DDD. Rather than double down on code-specific solutions, we are developing different, more effective conceptual approaches. Yet, there is an underlying skillset the nourishes and supports our ability to practice DDD or any approach that challenges traditional 'power' structures. In this workshop, we'll focus on that skillset. 

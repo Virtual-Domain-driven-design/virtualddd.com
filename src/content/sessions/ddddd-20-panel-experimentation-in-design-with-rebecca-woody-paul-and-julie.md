@@ -12,7 +12,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["rebecca-wirfs-brock", "woody-zuil", "paul-rayner", "julie-lerman"]
 seoTitle: "Panel: Experimentation in Software Design"
 seoMetadescription: "Rebecca Wirfs-Brock, Woody Zuill, Paul Rayner and Julie Lerman on experimentation as the route to a sustainable, flexible design rather than cranking out product."
-featuredImage: "./_assets/ddddd-20-panel-experimentation-in-design-with-rebecca-woody-paul-and-julie-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-panel-experimentation-in-design-with-rebecca-woody-paul-and-julie-featured.jpg"
 ---
 
 In this panel, we will discuss how Experimentation makes our lives better as engineers to create a sustainable flexible design. Experimentation is a big idea in mobbing. We don't just crank out products like a feature factory, we make our lives better as we go...and sustain ourselves and our software. 

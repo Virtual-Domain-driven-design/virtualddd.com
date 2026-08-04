@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["kirsten-clacey", "jay-allen-morris", "jo-perold"]
 seoTitle: "Remote Facilitation: Making Distributed Meetings Work"
 seoMetadescription: "Kirsten Clacey, Jay-Allen Morris and Jo Perold on making remote collaboration effective and genuinely enjoyable rather than merely survivable."
-featuredImage: "./_assets/remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold-featured.jpeg"
+featuredImage: "./_assets/remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold-featured.jpg"
 ---
 
 Collaboration in remote meetings doesn’t have to be difficult, learn how to make it effective, enjoyable and valuable. Join us for a panel discussion and see how we as a DDD community can improve our remote collaborative modelling sessions from Kirsten Clacey and Jay-Allen Morris, authors of The Remote Facilitator’s Pocket Guide and Jo Perold Coach and Trainer at Agile42 & keynote speaker at conferences.

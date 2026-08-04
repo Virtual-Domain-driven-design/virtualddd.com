@@ -12,7 +12,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["michael-plod", "gien-verschatse", "zsofia-herendi", "stefan-hofer"]
 seoTitle: "Panel: Remote Training in the DDD Community"
 seoMetadescription: "In-person training disappeared overnight. Michael Plöd, Gien Verschatse, Zsofia Herendi, Stefan Hofer and Kacper Gunia on what remote teaching made possible."
-featuredImage: "./_assets/ddddd-20-panelremote-related-trainings-with-michael-gien-zsofia-stefan-kacper-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-panelremote-related-trainings-with-michael-gien-zsofia-stefan-kacper-featured.jpg"
 ---
 
 The market for in person / presence training is pretty much gone right now due to the current situation. However each crisis brings up new opportunities. Some folks in the Domain-driven Design community have already gathered experiences in conduction and attending remote trainings about our favorite topic. This panel aims at sharing experiences among traininers and attendees as well. The questions we will discuss will include:

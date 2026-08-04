@@ -11,7 +11,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["indu-alagarsamy", "maxime-sanglan-charlier", "barry-o-sullivan"]
 seoMetadescription: "EventStorming taken online: the DDD community's go-to tool for collaborating across silo boundaries, and what changes when the wall is virtual."
-featuredImage: "./_assets/trying-out-online-eventstorming-featured.jpeg"
+featuredImage: "./_assets/trying-out-online-eventstorming-featured.jpg"
 ---
 
 EventStorming is the smartest approach to collaboration beyond silo boundaries. Within the DDD community, it is the go-to visualisation and collaboration tool to start exploring and discovering together. We believe firmly that the power of EventStorming is with having all the smart people who together have all the knowledge in a room. However, this poses a challenge when you work with people off-site, and it is a question that has been asked a lot by many people. So join us in this session where we will do an online software modelling EventStorming on miro board together with community friends! During the EventStorming, we will discuss what concerns we have, and where we might actually see it work. We will together distil our heuristics for online EventStorming! People who will Join us: Indu Alagarsamy Maxime Sanglan-Charlier Barry O Sullivan

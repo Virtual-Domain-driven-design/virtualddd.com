@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["thomas-ploch"]
 seoMetadescription: "Thomas Ploch on the long-running argument about aggregates: Eric Evans's consistency boundary, and what the community has made of it since."
-featuredImage: "./_assets/what-is-an-aggregate-with-thomas-ploch-featured.jpeg"
+featuredImage: "./_assets/what-is-an-aggregate-with-thomas-ploch-featured.jpg"
 ---
 
 Within the community there is been an ongoing discussion about the aggregate pattern. From Eric Evans perspective it is:

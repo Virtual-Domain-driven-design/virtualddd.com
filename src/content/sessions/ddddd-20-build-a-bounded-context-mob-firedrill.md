@@ -10,7 +10,7 @@ video: "https://www.youtube.com/embed/Dg478xHcDrY"
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "A mob firedrill: how far can a room get building a web bounded context from scratch, and what does the attempt teach about working together?"
-featuredImage: "./_assets/ddddd-20-build-a-bounded-context-mob-firedrill-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-build-a-bounded-context-mob-firedrill-featured.jpg"
 ---
 
 Let's see what it takes to get a Web BC online. How far can we get? What should it include? How will we do it and work together to get it done?

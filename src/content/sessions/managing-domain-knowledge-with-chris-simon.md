@@ -13,7 +13,7 @@ organiser: "Andrea Magnorsky"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["chris-simon"]
 seoMetadescription: "Chris Simon on the range of tools for building domain knowledge together — example mapping, BDD, EventStorming, domain storytelling — and how to keep it."
-featuredImage: "./_assets/managing-domain-knowledge-with-chris-simon-featured.jpeg"
+featuredImage: "./_assets/managing-domain-knowledge-with-chris-simon-featured.jpg"
 ---
 
 From example mapping, to BDD, to DDD practices like event storming and domain storytelling, we're fortunate to have a wide range of tools for collaboratively building domain knowledge and creating models of those domains in software.

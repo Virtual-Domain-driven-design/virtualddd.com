@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["dawn-ahukanna", "rebecca-wirfs-brock", "vladik-khononov", "trond-hjorteland"]
 seoMetadescription: "How much design belongs up front? A discussion on getting early feedback on load-bearing decisions without building on a flawed model."
-featuredImage: "./_assets/balancing-upfront-design-versus-iterative-design-featured.jpeg"
+featuredImage: "./_assets/balancing-upfront-design-versus-iterative-design-featured.jpg"
 ---
 
 We want early feedback to inform foundational or load-bearing decision making before committing to hard/expensive to change design decisions. But we don’t want to start building based on flawed design decisions, the consequences of which are hard/expensive to change when we discover it is faulty. The problem is, how do we balance these two polarities from an either-or to both-and thinking. In this session, we will explore contexts and tradeoffs in upfront design versus iterative design. Joining us to share their perspectives and experiences in a never-ending discussion are: *Dawn Ahukanna (Design Principal and Front-End Architect) *Rebecca Wirfs-Brock (Architecture, Design Heuristics, and Agile Practices) *Diana Montalion (Architecting content systems strategies for enterprise) *Vladik Khononov (Software Engineer and Cloud Architect) and *Trond Hjorteland (IT Architect and aspiring sociotechnical systems designer). We will facilitate using a polarity map from Barry Johnson to guide the conversation and find out the patterns and signs to observe to start managing these polarities for yourselves.

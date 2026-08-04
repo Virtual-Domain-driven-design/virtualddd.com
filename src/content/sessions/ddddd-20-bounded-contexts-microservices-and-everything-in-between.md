@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["vladik-khononov"]
 seoTitle: "Bounded Contexts, Microservices and Everything Between"
 seoMetadescription: "Forty years on from Glenford Myers, we still extol modularity without saying how to achieve it. On bounded contexts, microservices and what sits between."
-featuredImage: "./_assets/ddddd-20-bounded-contexts-microservices-and-everything-in-between-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-bounded-contexts-microservices-and-everything-in-between-featured.jpg"
 ---
 
 Bounded Contexts, Microservices, and Everything In Between “95% of the words are spent extolling the benefits of ‘modularity’ and that little, if anything, is said about how to achieve it” - Glenford J. Myers, 1978.

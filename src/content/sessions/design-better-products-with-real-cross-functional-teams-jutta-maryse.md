@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["jutta-eckstein", "maryse-meinen"]
 seoTitle: "Better Products Through Cross-Functional Teams"
 seoMetadescription: "Jutta Eckstein and Maryse Meinen on how the composition of a team quietly decides who the product ends up serving — and who it leaves out."
-featuredImage: "./_assets/design-better-products-with-real-cross-functional-teams-jutta-maryse-featured.jpeg"
+featuredImage: "./_assets/design-better-products-with-real-cross-functional-teams-jutta-maryse-featured.jpg"
 ---
 
 Too many products have been developed that serve one kind of client only. The reason is that the composition of the teams leads (subconsciously) to the development of products that serve only people that resemble the people in the team. One “famous” example is the soap dispenser that only works if your skin is white.

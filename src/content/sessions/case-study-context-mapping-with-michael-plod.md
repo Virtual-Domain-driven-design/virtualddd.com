@@ -11,7 +11,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["michael-plod"]
 seoMetadescription: "Michael Plöd walks a real case study through context mapping — applying the patterns to actual bounded contexts rather than discussing the theory."
-featuredImage: "./_assets/case-study-context-mapping-with-michael-plod-featured.jpeg"
+featuredImage: "./_assets/case-study-context-mapping-with-michael-plod-featured.jpg"
 ---
 
  Of course, we could spend two hours talking and discussing the theory around Context Maps and the related patterns but this time around we will apply them together in practice. This VDDD meetup episode will be based on a case study with some bounded contexts already being present. From there on we will explore the usage of the patterns found in the context map and we will also weigh in on some heuristics regarding their usage.

@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Natural Boundaries: Reading the Signs in Your Organisation"
 seoMetadescription: "Finding the right context boundaries is hard; implementing them without changing the organisation is harder. How to read the signs the organisation gives you."
-featuredImage: "./_assets/ddddd-20-natural-boundaries-how-to-read-the-signs-and-benefit-from-the-problems-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-natural-boundaries-how-to-read-the-signs-and-benefit-from-the-problems-featured.jpg"
 ---
 
 Finding the right boundaries of contexts is hard - implementing them can be even harder if the organisation does not change. But how can one change the organisation, how can one be sure that it changes in the right direction? There are signs, mostly perceived as a blocker but I see them as an enabler, as a pointer to the right boundaries. This idea combined with observing and measuring the value stream could lead to the right boundaries for teams and for code.

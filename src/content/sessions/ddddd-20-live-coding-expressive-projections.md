@@ -10,7 +10,7 @@ video: "https://www.youtube.com/embed/FtxPdXp_FTA"
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "Live coding event-sourced projections with higher-order functions, algebraic data types and pattern matching — and dogged determination."
-featuredImage: "./_assets/ddddd-20-live-coding-expressive-projections-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-live-coding-expressive-projections-featured.jpg"
 ---
 
 Let’s write some event sourced projections!

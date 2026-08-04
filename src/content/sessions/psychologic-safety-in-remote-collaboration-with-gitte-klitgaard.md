@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["gitte-klitgaard"]
 seoTitle: "Psychological Safety in Remote Collaboration"
 seoMetadescription: "Gitte Klitgaard on what remote collaborative modelling asks of a group, and why people only share what they know when they feel safe enough to."
-featuredImage: "./_assets/psychologic-safety-in-remote-collaboration-with-gitte-klitgaard-featured.jpeg"
+featuredImage: "./_assets/psychologic-safety-in-remote-collaboration-with-gitte-klitgaard-featured.jpg"
 ---
 
 The recent COVID-19 pandemic forced us DDD practitioners to move our collaborative modelling efforts to the remote world. Within collaborative modelling, we want to share all the information we have, all the different perceptions, even if they might look weird, quirky or invalid at the start. Only then can we design and create enriched models to build sustainable and valuable software. The problem here is, people will only share all their information if there is psychological safety, and that is already hard in a physical session, let alone remote.

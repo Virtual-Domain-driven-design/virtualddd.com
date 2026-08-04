@@ -12,7 +12,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["dan-bergh"]
 seoTitle: "Secure by Domain-Driven Design"
 seoMetadescription: "Jessica Kerr, Dan Bergh Johnsson and Daniel Deogun on where DDD meets security: understanding the domain well enough to stop what you do not want."
-featuredImage: "./_assets/secure-by-domain-driven-design-with-jessica-dan-bergh-and-daniel-featured.jpeg"
+featuredImage: "./_assets/secure-by-domain-driven-design-with-jessica-dan-bergh-and-daniel-featured.jpg"
 ---
 
 Let's talk about the confluence between domain-driven design and security. Deep understanding of the domain lets us define what we DO want to happen, which helps us stop things that we DON'T want to happen. Jessica Kerr will start the meeting up with an exposition of her favorite parts of the book Secure By Design and together with Dan Bergh Johnsson and Daniel Deogun we will do a panel discussion and Q&A. Come add your perspective at the Virtual DDD meetup.

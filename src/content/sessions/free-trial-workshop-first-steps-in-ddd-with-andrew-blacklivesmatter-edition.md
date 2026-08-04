@@ -11,7 +11,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["andrew-harmel-law"]
 seoTitle: "First Steps in DDD: A Free Workshop with Andrew Harmel-Law"
 seoMetadescription: "Andrew Harmel-Law runs his First Steps in Domain-Driven Design course free for the #BlackLivesMatter community."
-featuredImage: "./_assets/free-trial-workshop-first-steps-in-ddd-with-andrew-blacklivesmatter-edition-featured.jpeg"
+featuredImage: "./_assets/free-trial-workshop-first-steps-in-ddd-with-andrew-blacklivesmatter-edition-featured.jpg"
 ---
 
 To support the #BlackLivesMatter community Andrew Harmel-Law will be doing a FREE trial workshop 'First Steps in Domain-Driven Design'online course for that community. (Sorry, if you don't identify as a member of the #BlackLivesMatter community, you'll have to wait for the next run which I promise will be available soon.) It'll be 3 hours on Zoom and is aimed at all developers with at least basic object-oriented skills who want to get their feet wet with this key technique. There's a lot of hands-on coding (in Java), but Business Analysts have also found it very useful.

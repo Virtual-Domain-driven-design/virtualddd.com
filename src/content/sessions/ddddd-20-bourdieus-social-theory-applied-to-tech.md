@@ -11,7 +11,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["romeu-moura"]
 seoMetadescription: "Bourdieu's social theory applied to tech: the hidden power structures in every workplace, and how we oppress and are oppressed by accident."
-featuredImage: "./_assets/ddddd-20-bourdieus-social-theory-applied-to-tech-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-bourdieus-social-theory-applied-to-tech-featured.jpg"
 ---
 
 Bourdieu's social theory applied to tech Every workplace, every community, and in fact every social interaction, is governed by various forces, hidden power structures, implicit oppression and submission. We oppress people by accident, and we are oppressed by others by accident.

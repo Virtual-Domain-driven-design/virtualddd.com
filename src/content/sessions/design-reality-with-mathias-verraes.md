@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["mathias-verraes"]
 seoMetadescription: "Mathias Verraes on models driven by the domain but not constrained by it — because domain language is messy, organic, ambiguous and incomplete."
-featuredImage: "./_assets/design-reality-with-mathias-verraes-featured.jpeg"
+featuredImage: "./_assets/design-reality-with-mathias-verraes-featured.jpg"
 ---
 
 Our models should be driven by the domain, but not constrained by what domain experts tell us. After all, the domain language is messy, organic, ambiguous, social, incomplete, and if it has any intentional design to it at all, it's not designed to be turned into software. Modelling is more than capturing requirements, it's the opportunity to create novel concepts. This talk will use real-world stories to invite you to discuss. 
