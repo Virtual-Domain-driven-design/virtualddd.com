@@ -756,6 +756,18 @@
       "hash": "fca31442d7bb7c14"
     }
   },
+  "learning-journey": {
+    "3ada485afafc818ebdc3de0ee6c1e75d": {
+      "slug": "is-this-your-problem",
+      "edited": "2026-07-30T12:22:00.000Z",
+      "hash": "49655ad063bc0a34"
+    },
+    "3ada485afafc81a19eb0c4fa65f1cfe8": {
+      "slug": "the-four-words",
+      "edited": "2026-08-04T11:32:00.000Z",
+      "hash": "b8be94ddfbe3c8cf"
+    }
+  },
   "open-spaces": {
     "11383b55d7bf43718bcfb3e89e6ad27d": {
       "slug": "improving-your-software-design-by-nourishing-diversity",
