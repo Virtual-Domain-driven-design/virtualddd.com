@@ -54,6 +54,11 @@ describe('layout', () => {
       const paths = [
         '/', '/sessions/', '/facilitating-archdes/', '/open-space/', '/heuristics/',
         '/ddd-crew/', '/podcasts/', '/organisers/', '/book-club/', '/about-us/', '/ddd-heuristics/',
+        // /learn/ carries the EventStorming board, which is the one thing on
+        // this site that scrolls sideways on purpose. If that ever escapes its
+        // own container the whole page scrolls, which is exactly the defect
+        // this test was written for.
+        '/learn/',
         ...sample('sessions', '/sessions/', 8),
         ...sample('stories', '/facilitating-archdes/', 8),
         ...sample('heuristics', '/heuristics/', 5),

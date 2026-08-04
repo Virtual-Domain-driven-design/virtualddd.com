@@ -131,6 +131,30 @@ describe('AGENTS.md rule 3 — the brand is the fixed point', () => {
     }
     assert.deepEqual(offences, [], `colour literals outside tokens.css:\n${offences.join('\n')}`);
   });
+
+  test('the EventStorming sticky colours stay on the board', () => {
+    // The one sanctioned exception to rule 3, and the only four colours on this
+    // site that are not brand: they are the conventional sticky colours of the
+    // practice, borrowed so /learn/ can draw the path in the notation it is
+    // teaching. Because they have to live in tokens.css — the test above
+    // forbids the alternative — every component can reach them, and a comment
+    // saying "these belong to the board" is a habit rather than a constraint.
+    //
+    // A pleasant orange is exactly the kind of thing somebody borrows for a
+    // card six months later, and nothing else here would notice. If a third
+    // view ever genuinely needs them, add it below and say why in the commit.
+    const ALLOWED = ['src/components/JourneyBoard.astro', 'src/components/NotationKey.astro'];
+    const strays = [];
+    for (const f of [...components, ...styleSheets]) {
+      if (f === 'src/styles/tokens.css' || ALLOWED.includes(f)) continue;
+      read(f).split('\n').forEach((line, i) => {
+        for (const m of line.matchAll(/--sticky-[a-z-]+/g)) {
+          strays.push(`${f}:${i + 1}  ${m[0]}  →  not brand; it belongs to /learn/ only`);
+        }
+      });
+    }
+    assert.deepEqual(strays, [], `sticky colours used outside the board:\n${strays.join('\n')}`);
+  });
 });
 
 describe('additive bias — what nobody deleted', () => {

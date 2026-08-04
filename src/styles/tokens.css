@@ -16,6 +16,18 @@
   --color-accent-ink: #c53d84; /* pink, darkened to read on white */
   --color-heur-value: #7b61ff; /* third heuristic type; no dark-theme twin */
 
+  /* EventStorming stickies. Not brand colours, and deliberately so: these are
+     the conventional colours of the practice this community facilitates every
+     week, and on /learn/ the path is drawn in the notation it is teaching. They
+     are quarantined to that one view — nothing else may reach for them — which
+     is why they are named for what a sticky *means* rather than for a hue.
+     Every one is a light fill carrying --color-ink, so text on them reads the
+     same way it does on a cyan panel. */
+  --sticky-intention: #8ab6e8;  /* what somebody means to achieve, and why */
+  --sticky-constraint: #ffe066; /* what has to be true, or consumed, first */
+  --sticky-outcome: #f2a33c;    /* what is then the case; this is the timeline */
+  --sticky-hotspot: #f2789a;    /* the open question, or what we left out */
+
   /* Neutrals (dark theme) */
   --color-text: #eef1f4;
   --color-text-muted: #a3a9b5;

@@ -15,6 +15,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pages, meta, attr, text, markup, countHook, published, DIST } from './helpers.mjs';
+import { readFileSync as readEntry, readdirSync as readEntries } from 'node:fs';
 
 let all;
 before(() => {
@@ -590,5 +591,53 @@ describe('the documentation', () => {
       }
     }
     assert.deepEqual(bad, [], `broken documentation links:\n${bad.join('\n')}`);
+  });
+});
+
+describe('the learning journey board', () => {
+  // /learn/ draws its board from the stages and from relations the sync
+  // resolved into their front matter. A relation that quietly resolves to
+  // nothing produces a page that is *valid* and simply says less, which is
+  // indistinguishable from a stage nobody curated yet. That is exactly how two
+  // fields vanished from every person on this site in one week with the deploy
+  // green throughout, so it gets a relationship assertion rather than trust.
+  const board = () => all.find((p) => p.path === '/learn/');
+  const DIR = 'src/content/learning-journey';
+  const stageFiles = () => readEntries(DIR).filter((f) => f.endsWith('.md'));
+
+  test('every published stage is a step on the board', () => {
+    const stages = published('learning-journey');
+    assert.ok(stages > 0, 'the sync produced no learning-journey stages');
+    assert.equal(countHook(board().html, 'journey-step'), stages);
+  });
+
+  test('every resource a stage carries reaches the board', () => {
+    // Equality, not "at least one". The first draft of this test asked whether
+    // a stage that declares resources renders any, and both stages still had
+    // their videos when the book and tool lookups were sabotaged, so it passed
+    // while the board had quietly lost half its stickies.
+    //
+    // Deliberately not a count of *which* resources: that is editorial and
+    // belongs in tests/content/. The two collections sync in the same run, so
+    // what the front matter lists is what the page owes the reader.
+    const declared = (md) =>
+      (md.match(/^ {2}- title:/gm) ?? []).length
+      + ['books', 'tools'].reduce((n, key) => {
+        const m = md.match(new RegExp(`^${key}: \\[(.*)\\]$`, 'm'));
+        return n + (m ? (m[1].match(/"/g) ?? []).length / 2 : 0);
+      }, 0);
+
+    const owed = stageFiles().reduce((n, f) => n + declared(readEntry(`${DIR}/${f}`, 'utf8')), 0);
+    assert.ok(owed > 0, 'no stage declares any resource, so this proves nothing');
+    assert.equal(
+      countHook(board().html, 'journey-resource'), owed,
+      'the stages carry more resources than the board renders, so a lookup is dropping them',
+    );
+  });
+
+  test('the board says where it runs out', () => {
+    // The open end is what invites people to fill it in. Losing it would take
+    // the only call to action on the page with it.
+    assert.equal(countHook(board().html, 'journey-open'), 1);
   });
 });
