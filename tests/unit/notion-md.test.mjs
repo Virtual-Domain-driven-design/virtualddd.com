@@ -8,7 +8,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  assetRefs, createBlocksToMd, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  assetRefs, createBlocksToMd, imageExt, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -307,5 +307,37 @@ describe('a slug that moved is an address that moved', () => {
 
   test('the first run has nothing to compare against', () => {
     assert.deepEqual(movedSlugs({}, was), []);
+  });
+});
+
+describe('what came back is actually a picture', () => {
+  // A Photo property that links to a file in Google Drive rather than holding
+  // an upload answers 200 with the *viewer page*, at an address ending `.png`.
+  // Trusting that extension put 74 KB of HTML into src/content as somebody's
+  // photograph on 2026-08-04, and the build failed on NoImageMetadata twenty
+  // minutes later in a different workflow.
+  const html = Buffer.from('<!DOCTYPE html><html dir="ltr"><head><script>window._DRIVE_VIEWER={}</script>');
+
+  test('a web page is not an image, whatever the URL called it', () => {
+    assert.equal(imageExt(html), null);
+  });
+
+  test('the formats the sync actually downloads', () => {
+    assert.equal(imageExt(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0])), 'jpg');
+    assert.equal(imageExt(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0])), 'png');
+    assert.equal(imageExt(Buffer.from('GIF89a' + 'x'.repeat(8))), 'gif');
+    assert.equal(imageExt(Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBP')])), 'webp');
+    assert.equal(imageExt(Buffer.concat([Buffer.alloc(4), Buffer.from('ftypavif')])), 'avif');
+  });
+
+  test('an SVG document counts; a page with one inside it does not', () => {
+    assert.equal(imageExt(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>')), 'svg');
+    assert.equal(imageExt(Buffer.from('<?xml version="1.0"?>\n<svg xmlns="x"><rect/></svg>')), 'svg');
+    assert.equal(imageExt(Buffer.from('<!DOCTYPE html><body><svg><rect/></svg></body>')), null);
+  });
+
+  test('nothing, and not-quite-enough, are both refused', () => {
+    assert.equal(imageExt(Buffer.alloc(0)), null);
+    assert.equal(imageExt(Buffer.from([0xff, 0xd8])), null);
   });
 });

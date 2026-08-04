@@ -94,6 +94,40 @@ export function assetRefs(entry: string): string[] {
  * because what makes it subtle is names shadowing each other: `body-1` must
  * not answer for `body-11`, and a slug that is the prefix of another slug must
  * not lend it its picture. Only the extension may follow the label. */
+/** What the bytes actually are, whatever the URL and the headers claimed.
+ *
+ * This used to trust the URL's extension, falling back to the content-type and
+ * then to png. A Photo property that *links to* a file in Google Drive rather
+ * than holding an upload answers with Drive's viewer page: 74 KB of HTML, 200
+ * OK, at an address ending `.png`. So the extension said png, `shrinkImage`
+ * swallowed sharp's objection in its `catch { return raw }`, and the sync
+ * committed an HTML document as somebody's photograph. The build then failed
+ * on `NoImageMetadata` in a different workflow, twenty minutes later, naming a
+ * file rather than the row that produced it.
+ *
+ * The bytes are the one thing that cannot lie, so they decide both whether
+ * this is an image at all and what to call it.
+ */
+export function imageExt(buf: Buffer): string | null {
+  if (buf.length < 12) return null;
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'jpg';
+  if (buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
+  if (buf.subarray(0, 4).toString('latin1') === 'GIF8') return 'gif';
+  if (buf.subarray(0, 4).toString('latin1') === 'RIFF'
+    && buf.subarray(8, 12).toString('latin1') === 'WEBP') return 'webp';
+  // AVIF carries its brand at bytes 8..12 of an ISO base media container.
+  if (buf.subarray(4, 8).toString('latin1') === 'ftyp') {
+    const brand = buf.subarray(8, 12).toString('latin1');
+    if (brand === 'avif' || brand === 'avis') return 'avif';
+  }
+  // SVG is text and has no magic number, so the test is that the document
+  // *opens* as one. A web page with a logo inside it is not an image.
+  const head = buf.subarray(0, 512).toString('utf8').replace(/^﻿/, '').trimStart();
+  if (head.startsWith('<svg')) return 'svg';
+  if (head.startsWith('<?xml') && /<svg[\s>]/.test(head)) return 'svg';
+  return null;
+}
+
 export function isAssetFor(file: string, slug: string, label: string): boolean {
   const stem = `${slug}-${label}.`;
   return file.startsWith(stem) && /^[a-z0-9]+$/i.test(file.slice(stem.length));

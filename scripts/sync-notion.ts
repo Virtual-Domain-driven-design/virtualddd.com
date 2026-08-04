@@ -18,7 +18,7 @@ import { normaliseTags } from '../src/lib/tags';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
-  createBlocksToMd, assetRefs, fileUrl, isAssetFor, kebab, movedSlugs, plainTitle,
+  createBlocksToMd, assetRefs, fileUrl, imageExt, isAssetFor, kebab, movedSlugs, plainTitle,
   resolveRelation, statusOf, yamlList, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
@@ -289,15 +289,6 @@ async function buildLookup<T>(dataSourceId: string, label: string, valueOf: (pag
   return map;
 }
 
-const EXT_BY_CT: Record<string, string> = {
-  'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif',
-  'image/webp': 'webp', 'image/svg+xml': 'svg', 'image/avif': 'avif',
-};
-function extFromUrl(url: string): string | null {
-  const path = url.split('?')[0];
-  const m = path.match(/\.([a-z0-9]{2,4})$/i);
-  return m ? m[1].toLowerCase() : null;
-}
 
 const IMG_MAX = 1600;
 /** Cap dimensions and recompress so committed source images stay small. */
@@ -358,14 +349,20 @@ function existingAsset(dir: string, slug: string, label: string): string | null 
 /** Images kept from an earlier sync because their source stopped answering.
  *  Flushed into the alert file by whichever collection is being synced, so a
  *  person is told to re-upload rather than finding out from the page. */
-const strandedImages: { slug: string; label: string; url: string }[] = [];
+const strandedImages: { slug: string; label: string; url: string; kept: boolean }[] = [];
 
-/** What this run had to keep, as alerts for the section being synced. */
+/** What this run could not download, as alerts for the section being synced.
+ *
+ * `kept` is the difference between an inconvenience and a hole in the page,
+ * and the message says which: a row that already had a picture still shows one,
+ * a row that never did shows nothing at all until somebody fixes the link. */
 const strandedAlerts = (section: string): Alert[] =>
   strandedImages.map((s) => ({
     kind: 'image-source-gone' as const,
     section,
-    title: `${s.slug} (${s.label})`,
+    title: s.kept
+      ? `${s.slug} (${s.label}): showing the last copy we downloaded`
+      : `${s.slug} (${s.label}): no picture at all until this is fixed`,
     url: s.url,
   }));
 
@@ -386,7 +383,15 @@ async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = Buffer.from(await res.arrayBuffer());
-    const ext = extFromUrl(url) ?? EXT_BY_CT[res.headers.get('content-type') ?? ''] ?? 'png';
+    const ext = imageExt(raw);
+    if (!ext) {
+      const ct = res.headers.get('content-type') ?? 'no content-type';
+      throw new Error(
+        `what came back is not an image (${ct}, ${raw.length} bytes). ` +
+        'A Photo that links to Google Drive returns the viewer page rather ' +
+        'than the file; upload the picture into Notion instead.',
+      );
+    }
     const buf = await shrinkImage(raw, ext);
     const name = `${ctx.slug}-${label}.${ext}`;
     mkdirSync(ctx.dir, { recursive: true });
@@ -394,12 +399,16 @@ async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise
     return `./_assets/${name}`;
   } catch (e: any) {
     const kept = existingAsset(ctx.dir, ctx.slug, label);
+    // Either way an editor has to go and fix the row, so either way it is an
+    // alert. Only the kept case used to raise one, so a *new* row with an
+    // unusable picture failed into a log nobody reads, and the first anyone
+    // knew of it was a red build in another workflow naming a filename.
+    strandedImages.push({ slug: ctx.slug, label, url, kept: Boolean(kept) });
     if (kept) {
       console.warn(`    ! image source gone (${label}): ${e.message} — keeping ${kept}`);
-      strandedImages.push({ slug: ctx.slug, label, url });
       return `./_assets/${kept}`;
     }
-    console.warn(`    ! image download failed (${label}): ${e.message}`);
+    console.warn(`    ! no usable image (${label}): ${e.message}`);
     return null;
   }
 }
