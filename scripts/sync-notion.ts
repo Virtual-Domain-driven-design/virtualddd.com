@@ -342,7 +342,19 @@ function pruneAssets(outDir: string, label = 'asset'): void {
  *  there. The naming rule is `isAssetFor` in scripts/lib/notion-md.ts. */
 function existingAsset(dir: string, slug: string, label: string): string | null {
   try {
-    return readdirSync(dir).find((f) => isAssetFor(f, slug, label)) ?? null;
+    const found = readdirSync(dir).find((f) => isAssetFor(f, slug, label)) ?? null;
+    if (!found) return null;
+    // A copy is only worth keeping if it is a picture. The first bad download
+    // of this kind was committed before the check above existed, and without
+    // this the fallback would find that file, decide the site still had
+    // something to show, and hand the build the same broken bytes on every run
+    // for ever. Nothing would ever repair itself.
+    if (!imageExt(readFileSync(`${dir}/${found}`))) {
+      console.warn(`    ! ${found} is not a picture either; dropping it`);
+      unlinkSync(`${dir}/${found}`);
+      return null;
+    }
+    return found;
   } catch { return null; } // no _assets directory yet: nothing to keep
 }
 
