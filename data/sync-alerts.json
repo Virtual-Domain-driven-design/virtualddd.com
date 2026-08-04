@@ -1,6 +1,12 @@
 {
   "items": [
     {
+      "kind": "image-source-gone",
+      "section": "session guests",
+      "title": "karol-skrzymowski (photo): no picture at all until this is fixed",
+      "url": "https://drive.google.com/file/d/1KKJJ5AEDJRu7cLdQtL7xUKyAJi2wswS9/view?usp=sharing"
+    },
+    {
       "kind": "person-renamed",
       "section": "/organisers/",
       "title": "kenny-baas-schwegler → kenny-schwegler",
