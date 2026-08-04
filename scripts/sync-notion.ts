@@ -19,7 +19,7 @@ import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
   createBlocksToMd, assetRefs, fileUrl, imageExt, isAssetFor, kebab, movedSlugs, plainTitle,
-  resolveRelation, statusOf, yamlList, yamlStr,
+  resolveRelation, statusOf, yamlList, yamlRecords, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
 import { byGallery, CREW_CONFIG_FILE, type CrewConfig, type CrewTool } from '../src/lib/ddd-crew';
@@ -96,6 +96,9 @@ const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (sp
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
 const CONFERENCES_DS = 'c5b9e231-6766-4589-a179-c70d20db3e34'; // DDD conferences and camps, on the home page
 const DDD_CREW_DS = '9503b575-65e8-49c5-a4c0-e80099ec2c2c'; // which ddd-crew repos /ddd-crew/ shows
+const BOOKS_DS = '253adb92-df69-4664-838a-a28ea0798bf0'; // the reading list
+const VIDEOS_DS = 'f929a0ef-2224-4ae1-8057-4a03805c59e7'; // curated talks; no page of their own yet
+const JOURNEY_DS = 'c5208a17-2a05-4eea-902b-496eff4b45d8'; // the stages of /learn/
 
 // --- what the last sync saw -------------------------------------------------
 //
@@ -277,6 +280,66 @@ function readExisting(path: string): { featured?: string; body: string } | null 
 }
 
 /** id -> value maps for relation resolution (page IDs are stored dashless-agnostic). */
+/** What a stage's Videos relation resolves to. No collection holds these, so
+ *  the record itself travels into the entry. */
+interface VideoRef { title: string; who: string; url: string; minutes?: number; why: string }
+/** Books and tools resolve to a slug: /reading-list/ and /ddd-crew/ hold the
+ *  rest, and copying a recommendation would be a second copy to keep true. */
+interface BookRef { slug: string; free: boolean; title: string }
+interface ToolRef { repo: string; name: string }
+
+/** A published-only lookup, and what was left out of it.
+ *
+ * Two very different things hide behind "this relation does not resolve", and
+ * they must not be reported the same way: a row that exists but is still being
+ * curated resolves itself the day somebody publishes it, while a relation
+ * pointing at a page that is not in the database at all (deleted, archived, or
+ * the wrong database) is a fault nobody will otherwise notice.
+ *
+ * `ok` is false when the database could not be read at all — usually because it
+ * has not been shared with the integration. Nothing is dangling in that case:
+ * there was nothing for it to dangle against, and reporting every relation as
+ * broken would bury the one line that says why. */
+interface Gate<T> {
+  published: Map<string, T>;
+  unpublished: Map<string, { title: string; status: string }>;
+  ok: boolean;
+}
+
+const emptyGate = <T>(): Gate<T> => ({ published: new Map<string, T>(), unpublished: new Map(), ok: false });
+
+/** A row's Slug property, which several databases carry and none call anything else. */
+const rowSlug = (p: any): string =>
+  (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+
+async function buildGate<T>(
+  dataSourceId: string,
+  label: string,
+  kind: StatusKind,
+  titleProp: string,
+  valueOf: (page: any) => T | null,
+): Promise<Gate<T>> {
+  const published = new Map<string, T>();
+  const unpublished = new Map<string, { title: string; status: string }>();
+  let ok = false;
+  try {
+    for (const p of await queryAll(dataSourceId)) {
+      const id = (p.id as string).replace(/-/g, '');
+      const status = statusOf(p, kind);
+      // Published *and* renderable. A row published with no slug has nothing to
+      // link to, so it belongs with the unpublished ones and is reported the
+      // same way rather than silently producing a broken address.
+      const value = status === 'Published' ? valueOf(p) : null;
+      if (value) published.set(id, value);
+      else unpublished.set(id, { title: plainTitle(p, titleProp) || rowSlug(p) || id, status: status || 'no status' });
+    }
+    ok = true;
+  } catch (e: any) {
+    console.warn(`  ! ${label} not readable (${e.code ?? e.message}); those relations are left unresolved. Share that database with the integration to fix.`);
+  }
+  return { published, unpublished, ok };
+}
+
 async function buildLookup<T>(dataSourceId: string, label: string, valueOf: (page: any) => T) {
   const map = new Map<string, T>();
   try {
@@ -455,7 +518,18 @@ interface Helpers {
   /** A checkbox, false when the property is absent — Notion does not send one
    *  that has never been ticked. */
   checkbox: (n: string) => boolean;
+  /** The published rows a relation points at.
+   *
+   *  One reader for every relation the sync follows. What differs per database
+   *  is only the gate: which rows count as published, and what a resolved one
+   *  carries. A row that exists but is not published yet, and a relation
+   *  pointing at no row at all, are reported separately by the caller, because
+   *  the first is expected and the second is a fault. */
+  refs: <T>(n: string, gate: Gate<T>) => T[];
   heur: (n: string) => string[];
+  videos: (n: string) => VideoRef[];
+  books: (n: string) => BookRef[];
+  tools: (n: string) => ToolRef[];
   person: (n: string) => string[];
   guest: (n: string) => string[];
   img: (n: string, label: string) => Promise<string | null>;
@@ -477,6 +551,10 @@ interface ContentSpec {
   featuredImageProp?: string; // omit to skip featured-image download
   needsPeople?: boolean;
   needsGuests?: boolean;
+  /** Read the Videos, Books and ddd-crew databases too. Only the learning
+   *  journey points at them, and three extra queries on every other collection
+   *  would be three queries for nothing. */
+  needsJourneyRefs?: boolean;
   extra: (h: Helpers) => Promise<string[]>;
 }
 
@@ -576,13 +654,62 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       return l;
     },
   },
+  // The stages of the learning journey on /learn/. No `section` for the same
+  // reason as the reading list: they render inside one page, so the slug is an
+  // anchor rather than a URL.
+  //
+  // The stage body in Notion holds working notes to ourselves ("three books is
+  // one too many for this stage"), so the page renders the properties only and
+  // never the body.
+  'learning-journey': {
+    dataSourceId: JOURNEY_DS,
+    titleProp: 'Name', slugProp: 'Slug', statusKind: 'select',
+    liveStatuses: ['Published'],
+    needsJourneyRefs: true,
+    extra: async (h) => {
+      const l: string[] = [];
+      const order = h.num('Order'); if (order != null) l.push(`order: ${order}`);
+      const time = h.text('Time'); if (time) l.push(`time: ${yamlStr(time)}`);
+      const why = h.text('Why'); if (why) l.push(`why: ${yamlStr(why)}`);
+      const done = h.text('Done when'); if (done) l.push(`doneWhen: ${yamlStr(done)}`);
+      // What the stage deliberately leaves out, which is some of the best
+      // curation on the page: "no book at this step, on purpose". It used to
+      // live in the Notion body, which this collection never renders.
+      const notHere = h.text('Not here, on purpose'); if (notHere) l.push(`notHere: ${yamlStr(notHere)}`);
+
+      // Shortest first. Stage 1's own note says the five-minute talk is listed
+      // first on purpose, so a sceptic gets an exit before the twenty-minute
+      // commitment, and a Notion relation has no order worth trusting. Length
+      // reproduces that intent as a rule, which keeps working when somebody
+      // adds a third video without having read the note. A video with no
+      // Minutes yet sorts last rather than first, so an unfilled field cannot
+      // quietly become the thing a newcomer is sent to first.
+      const videos = h.videos('Videos')
+        .sort((a, b) => (a.minutes ?? Infinity) - (b.minutes ?? Infinity));
+      if (videos.length) {
+        l.push(yamlRecords('videos', videos.map((v) => ({
+          title: v.title, who: v.who, url: v.url, minutes: v.minutes, why: v.why,
+        }))));
+      }
+
+      // Free first, the same rule /reading-list/ already sorts by, so the two
+      // pages cannot disagree about which book to read first.
+      const books = h.books('Books')
+        .sort((a, b) => (a.free === b.free ? a.title.localeCompare(b.title) : a.free ? -1 : 1));
+      if (books.length) l.push(`books: ${yamlList(books.map((b) => b.slug))}`);
+
+      const tools = h.tools('ddd-crew').sort((a, b) => a.name.localeCompare(b.name));
+      if (tools.length) l.push(`tools: ${yamlList(tools.map((t) => t.repo))}`);
+      return l;
+    },
+  },
   // Books, papers and free PDFs we recommend. No `section`: there is no page
   // per book, because the only text on an entry that is ours is one sentence,
   // and a page wrapped around one sentence is the thin page that got the old
   // /videos/ section retired. They all render inside /reading-list/, and the
   // slug is the anchor there rather than a URL.
   'reading-list': {
-    dataSourceId: '253adb92-df69-4664-838a-a28ea0798bf0',
+    dataSourceId: BOOKS_DS,
     titleProp: 'Title', slugProp: 'Slug', statusKind: 'select',
     liveStatuses: ['Published'], featuredImageProp: 'Cover',
     extra: async (h) => {
@@ -623,20 +750,51 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   // (expected — it gets published when the curation is done), versus a
   // relation pointing at a page that is not in the database at all (deleted,
   // archived, or the wrong database — a real dangling reference).
-  const heurSlug = new Map<string, string>();
-  const heurPending = new Map<string, { title: string; status: string }>();
-  let heurLookupOk = false;
-  try {
-    for (const p of await queryAll(HEURISTICS_DS)) {
-      const id = (p.id as string).replace(/-/g, '');
-      const slug = (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-      if (statusOf(p, 'status') === 'Published' && slug) heurSlug.set(id, slug);
-      else heurPending.set(id, { title: plainTitle(p, 'Title') || slug || id, status: statusOf(p, 'status') ?? 'no status' });
-    }
-    heurLookupOk = true;
-  } catch (e: any) {
-    console.warn(`  ! heuristics not readable (${e.code ?? e.message}); heuristic relations left unresolved.`);
-  }
+  const heuristics = await buildGate(HEURISTICS_DS, 'heuristics', 'status', 'Title',
+    (p) => rowSlug(p) || null);
+
+  // The learning journey is the only collection that points at these three, so
+  // nothing else pays for reading them. Videos carry their whole record because
+  // there is no video collection on the site to look one up in; books and tools
+  // carry a slug, because /reading-list/ and /ddd-crew/ already hold the rest
+  // and a second copy of somebody's recommendation would be a second copy to
+  // keep true.
+  const journey = spec.needsJourneyRefs;
+  const videos = journey
+    ? await buildGate<VideoRef>(VIDEOS_DS, 'videos', 'select', 'Title', (p) => {
+        const title = plainTitle(p, 'Title');
+        if (!title) return null;
+        const t = (n: string) => (p.properties?.[n]?.rich_text ?? []).map((x: any) => x.plain_text).join('').trim();
+        const num = (n: string) => (typeof p.properties?.[n]?.number === 'number' ? p.properties[n].number : undefined);
+        const youtube = t('YouTube ID');
+        const source = t('Source');
+        const year = num('Year');
+        return {
+          title,
+          // One line for the page to print, composed here so the rule lives in
+          // one place: who made it, and where it was recorded.
+          who: [t('Speaker'), [source, year].filter(Boolean).join(' ')].filter(Boolean).join(' · '),
+          // Built from the id, never stored twice: that is what the property
+          // description in Notion says, and a video with neither an id nor a
+          // link is a title nobody can act on.
+          url: youtube ? `https://www.youtube.com/watch?v=${youtube}` : (p.properties?.Link?.url ?? ''),
+          minutes: num('Minutes'),
+          why: t('Why it is worth it'),
+        };
+      })
+    : emptyGate<VideoRef>();
+  const books = journey
+    ? await buildGate<BookRef>(BOOKS_DS, 'books', 'select', 'Title', (p) => {
+        const slug = rowSlug(p);
+        return slug ? { slug, free: p.properties?.Free?.checkbox === true, title: plainTitle(p, 'Title') } : null;
+      })
+    : emptyGate<BookRef>();
+  const tools = journey
+    ? await buildGate<ToolRef>(DDD_CREW_DS, 'ddd-crew tools', 'select', 'Name', (p) => {
+        const repo = (p.properties?.Repo?.rich_text ?? []).map((x: any) => x.plain_text).join('').trim();
+        return repo ? { repo, name: plainTitle(p, 'Name') } : null;
+      })
+    : emptyGate<ToolRef>();
 
   /** Relations to heuristics that exist but are not published yet. Expected. */
   const pending: { slug: string; prop: string; ref: string }[] = [];
@@ -713,14 +871,20 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
       select: (n) => get(n)?.select?.name ?? undefined,
       checkbox: (n) => get(n)?.checkbox === true,
-      heur: (n) => rel(n).flatMap((id: string) => {
-        const r = resolveRelation(id, heurSlug, heurPending);
-        if (r.kind === 'resolved') return [r.slug];
+      refs: <T>(n: string, gate: Gate<T>) => rel(n).flatMap((id: string) => {
+        const r = resolveRelation(id, gate.published, gate.unpublished);
+        if (r.kind === 'resolved') return [r.value];
         if (r.kind === 'pending') pending.push({ slug, prop: n, ref: `${r.title} (${r.status})` });
         // If the lookup itself failed there is nothing to be dangling against.
-        else if (heurLookupOk) dropped.push({ slug, prop: n, ref: `unknown page ${id.slice(0, 8)}…` });
+        else if (gate.ok) dropped.push({ slug, prop: n, ref: `unknown page ${id.slice(0, 8)}…` });
         return [];
       }),
+      // The name every other spec already calls, kept so this stays one
+      // mechanism rather than a reader per database.
+      heur: (n) => h.refs(n, heuristics),
+      videos: (n) => h.refs(n, videos),
+      books: (n) => h.refs(n, books),
+      tools: (n) => h.refs(n, tools),
       person: (n) => rel(n).map((id: string) => personName.get(id)).filter(Boolean) as string[],
       guest: (n) => rel(n).flatMap((id: string) => {
         const name = guests.get(id);

@@ -30,7 +30,8 @@
     "sync:ddd-crew-config": "tsx scripts/sync-notion.ts ddd-crew --write",
     "sync:ddd-crew": "tsx scripts/sync-ddd-crew.ts --write",
     "sync:conferences": "tsx scripts/sync-notion.ts conferences --write",
-    "sync:reading-list": "tsx scripts/sync-notion.ts content --collection=reading-list --write"
+    "sync:reading-list": "tsx scripts/sync-notion.ts content --collection=reading-list --write",
+    "sync:learning-journey": "tsx scripts/sync-notion.ts content --collection=learning-journey --write"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

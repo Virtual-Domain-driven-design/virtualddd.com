@@ -47,6 +47,33 @@ export function yamlList(items: string[]): string {
   return '[' + items.map(yamlStr).join(', ') + ']';
 }
 
+/** A list of small records as block YAML.
+ *
+ * `yamlList` covers a list of strings, which is all any collection needed until
+ * the learning journey. A stage's videos have to carry their own title, who
+ * made them and why they are worth it, because unlike books and ddd-crew tools
+ * there is no video collection on the site to look any of that up in.
+ *
+ * A field that is undefined or empty is left out rather than written as null:
+ * every one of them is optional in the schema, and to Zod an absent key and a
+ * null are not the same thing.
+ */
+export function yamlRecords(
+  key: string,
+  rows: Record<string, string | number | undefined>[],
+): string {
+  const lines = [`${key}:`];
+  for (const row of rows) {
+    const fields = Object.entries(row).filter(([, v]) => v !== undefined && v !== '');
+    if (!fields.length) continue;
+    fields.forEach(([k, v], i) => {
+      const rendered = typeof v === 'number' ? String(v) : yamlStr(String(v));
+      lines.push(`${i === 0 ? '  - ' : '    '}${k}: ${rendered}`);
+    });
+  }
+  return lines.join('\n');
+}
+
 export function fileUrl(f: any): string {
   return f?.type === 'external' ? f.external?.url : f?.file?.url ?? '';
 }
@@ -87,13 +114,6 @@ export function assetRefs(entry: string): string[] {
     .map((m) => { try { return decodeURIComponent(m[1]); } catch { return m[1]; } });
 }
 
-/** Is this file the asset a previous sync stored for `slug` and `label`?
- *
- * Assets are written as `<slug>-<label>.<ext>` — `photo`, `featured`,
- * `body-1`. The rule lives here, and the directory read stays in the script,
- * because what makes it subtle is names shadowing each other: `body-1` must
- * not answer for `body-11`, and a slug that is the prefix of another slug must
- * not lend it its picture. Only the extension may follow the label. */
 /** What the bytes actually are, whatever the URL and the headers claimed.
  *
  * This used to trust the URL's extension, falling back to the content-type and
@@ -128,6 +148,13 @@ export function imageExt(buf: Buffer): string | null {
   return null;
 }
 
+/** Is this file the asset a previous sync stored for `slug` and `label`?
+ *
+ * Assets are written as `<slug>-<label>.<ext>` — `photo`, `featured`,
+ * `body-1`. The rule lives here, and the directory read stays in the script,
+ * because what makes it subtle is names shadowing each other: `body-1` must
+ * not answer for `body-11`, and a slug that is the prefix of another slug must
+ * not lend it its picture. Only the extension may follow the label. */
 export function isAssetFor(file: string, slug: string, label: string): boolean {
   const stem = `${slug}-${label}.`;
   return file.startsWith(stem) && /^[a-z0-9]+$/i.test(file.slice(stem.length));
@@ -242,18 +269,18 @@ export function createBlocksToMd(deps: MdDeps) {
  * pointing at a page that is not in the database at all is a real dangling
  * reference. Only the second should fail a build.
  */
-export type RelationOutcome =
-  | { kind: 'resolved'; slug: string }
+export type RelationOutcome<T = string> =
+  | { kind: 'resolved'; value: T }
   | { kind: 'pending'; title: string; status: string }
   | { kind: 'dangling' };
 
-export function resolveRelation(
+export function resolveRelation<T>(
   id: string,
-  published: Map<string, string>,
+  published: Map<string, T>,
   unpublished: Map<string, { title: string; status: string }>,
-): RelationOutcome {
-  const slug = published.get(id);
-  if (slug) return { kind: 'resolved', slug };
+): RelationOutcome<T> {
+  const value = published.get(id);
+  if (value !== undefined) return { kind: 'resolved', value };
   const p = unpublished.get(id);
   if (p) return { kind: 'pending', title: p.title, status: p.status };
   return { kind: 'dangling' };

@@ -8,7 +8,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  assetRefs, createBlocksToMd, imageExt, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  assetRefs, createBlocksToMd, imageExt, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlRecords, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -203,7 +203,16 @@ describe('relation gating', () => {
 
   test('resolves a published heuristic to its slug', () => {
     assert.deepEqual(resolveRelation('id-live', published, unpublished),
-      { kind: 'resolved', slug: 'a-published-heuristic' });
+      { kind: 'resolved', value: 'a-published-heuristic' });
+  });
+
+  test('carries whatever the gate holds, not only a slug', () => {
+    // The learning journey resolves a video to its whole record, because there
+    // is no video collection on the site to look one up in. One reader, four
+    // databases: the gate decides what a resolved relation carries.
+    const videos = new Map([['id-video', { title: 'What is DDD', minutes: 28 }]]);
+    assert.deepEqual(resolveRelation('id-video', videos, new Map()),
+      { kind: 'resolved', value: { title: 'What is DDD', minutes: 28 } });
   });
 
   test('reports one still being curated as pending, not as an error', () => {
@@ -339,5 +348,44 @@ describe('what came back is actually a picture', () => {
   test('nothing, and not-quite-enough, are both refused', () => {
     assert.equal(imageExt(Buffer.alloc(0)), null);
     assert.equal(imageExt(Buffer.from([0xff, 0xd8])), null);
+  });
+});
+
+describe('records as block YAML', () => {
+  test('writes one list item per record', () => {
+    assert.equal(
+      yamlRecords('videos', [{ title: 'What is DDD in 1 slide', minutes: 5 }]),
+      'videos:\n  - title: "What is DDD in 1 slide"\n    minutes: 5',
+    );
+  });
+
+  test('numbers stay numbers and strings get quoted', () => {
+    // `minutes: "5"` would fail the schema, and a quoted title is what keeps a
+    // colon in someone's talk title from ending the value early.
+    assert.equal(
+      yamlRecords('videos', [{ title: 'DDD: the good parts', minutes: 42 }]),
+      'videos:\n  - title: "DDD: the good parts"\n    minutes: 42',
+    );
+  });
+
+  test('a field nobody filled in is left out, not written as null', () => {
+    // Every one of these is optional in the schema, and to Zod an absent key
+    // and a null are not the same thing. Minutes is the live case: the property
+    // does not exist in Notion yet.
+    assert.equal(
+      yamlRecords('videos', [{ title: 'What is DDD', minutes: undefined, why: '' }]),
+      'videos:\n  - title: "What is DDD"',
+    );
+  });
+
+  test('quotes survive, so a title with one cannot break the file', () => {
+    assert.equal(
+      yamlRecords('videos', [{ title: 'The "blue book"' }]),
+      'videos:\n  - title: "The \\"blue book\\""',
+    );
+  });
+
+  test('an empty record is skipped rather than writing a bare dash', () => {
+    assert.equal(yamlRecords('videos', [{ title: undefined }]), 'videos:');
   });
 });
