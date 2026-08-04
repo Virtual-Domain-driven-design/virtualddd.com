@@ -2,5 +2,6 @@
   "name": "Marco Schneider",
   "bio": "Marco is a software architect at Active Group GmbH in Tübingen (Germany). Active Group builds software exclusively using functional programming. Other than functional programming, he is interested in the nuances of programming languages and how the tools they provide shape the design of our programs.",
   "linkedin": "https://www.linkedin.com/in/marco-schneider-34391612a/",
-  "alsoAnOrganiser": false
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/marco-schneider-photo.png"
 }
