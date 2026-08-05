@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SessionCard from '../../components/SessionCard.astro';
 import CardFilter from '../../components/CardFilter.astro';
+import ListenOn from '../../components/ListenOn.astro';
 import { Image } from 'astro:assets';
 import { splitSessions, tagOptions } from '../../lib/collections';
 import { iso, longDateTime } from '../../lib/dates';
@@ -85,6 +86,11 @@ const jsonLd = collectionPage(Astro.site, {
       </section>
     )}
 
+    <!-- Between the next session and the archive of past ones, because that is
+         where the reader's question changes from "can I come to this" to "what
+         else is there", and the answer to the second is: it is a podcast. -->
+    <ListenOn show="sessions" class="sessions-listen" />
+
     <section class="archive">
       <h2>Past sessions</h2>
 
@@ -107,6 +113,15 @@ const jsonLd = collectionPage(Astro.site, {
 
   <style>
     .archive h2 { margin-top: var(--space-8); }
+
+    /* The same gap the hero above it leaves, so the card sits in the page's
+       rhythm rather than crowding "Past sessions".
+       `:global`, because the element belongs to ListenOn and this file's scope
+       attribute is not on it. Without it Astro compiles the selector against a
+       cid the element does not carry, the rule matches nothing, and the only
+       symptom is 32px of gap where the hero above leaves 64. That is what this
+       shipped as until somebody measured it rather than looking at it. */
+    :global(.sessions-listen) { margin-bottom: var(--space-16); }
 
     /* Upcoming hero */
     .hero { margin-bottom: var(--space-16); }

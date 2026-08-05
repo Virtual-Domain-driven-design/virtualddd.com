@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
+import ListenOn from '../../components/ListenOn.astro';
 import DiscussedHeuristics from '../../components/DiscussedHeuristics.astro';
 import PersonRow from '../../components/PersonRow.astro';
 import PrevNext from '../../components/PrevNext.astro';
@@ -137,17 +138,29 @@ const jsonLd = storyJsonLd(Astro.site, story, {
         {d.episode != null && <p class="side-ep">Episode {d.episode}</p>}
         {iso && <p class="side-date"><time class="js-local" data-format="date" datetime={iso} data-iso={iso}>{dateStr}</time></p>}
         {credited.length > 0 && <p class="side-authors">{credited.join(', ')}</p>}
-        {(d.youtube || d.podcast) && (
-          <div class="side-links">
-            {d.youtube && <a class="btn btn--accent btn--sm btn--block" href={d.youtube}>Watch on YouTube ↗</a>}
-            {d.podcast && <a class="btn btn--ghost btn--sm btn--block" href={d.podcast}>Listen to the podcast ↗</a>}
+        {/* "Listen to the podcast" used to sit here and opened the Captivate
+            player page — the same player already embedded a few hundred pixels
+            above, and the third listen-shaped thing in one column. The row
+            below replaces it and says something the page did not: where the
+            episode is in the app you actually use. */}
+        {d.youtube && (
+          <div class="side-actions">
+            <a class="btn btn--accent btn--sm btn--block" href={d.youtube}>Watch on YouTube ↗</a>
           </div>
+        )}
+
+        {/* Inside this card rather than below it: which episode it is, who is
+            on it and where to hear it is one answer, not two cards. The Apple
+            link is the show rather than the episode for the ten stories that
+            have dropped out of the feed window. */}
+        {d.podcast && (
+          <ListenOn show="stories" layout="rail" player={d.podcast} class="side-listen" />
         )}
       </div>
 
       {d.tags.length > 0 && (
         <div class="side-block">
-          <p class="eyebrow eyebrow--cyan">Tags</p>
+          <h2 class="eyebrow eyebrow--cyan">Tags</h2>
           <div class="chips">{d.tags.map((t) => <span class="chip chip--outline">{t}</span>)}</div>
         </div>
       )}
@@ -199,11 +212,10 @@ const jsonLd = storyJsonLd(Astro.site, story, {
     .detail-head h1 { margin: 0 0 var(--space-3); }
     .byline { color: var(--color-text-muted); margin: 0 0 var(--space-8); }
 
-    .side-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+    /* `.side-card` and `.side-actions` are in patterns.css. */
     .side-ep { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-dark); margin: 0 0 var(--space-1); font-size: var(--text-sm); }
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
     .side-authors { color: var(--color-text-muted); margin: 0 0 var(--space-5); font-size: var(--text-sm); }
-    .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
 
     /* Guests and hosts — the same panels a session uses, so a person looks the
        same wherever the community met them. */
@@ -212,6 +224,14 @@ const jsonLd = storyJsonLd(Astro.site, story, {
     .people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
     .people li + li { border-top: 1px solid var(--color-border); padding-top: var(--space-6); }
 
+    /* A rule, not a gap: inside one card the listening block is a second
+       subject, and only a line says so. `:global` because the element belongs
+       to ListenOn and this file's scope attribute is not on it. */
+    :global(.side-listen) {
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-border);
+    }
     .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
   </style>

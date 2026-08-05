@@ -1,0 +1,120 @@
+---
+/** Where to follow one of the two shows, and where to find one episode.
+ *
+ * The player embedded on a session or story page is for someone already here.
+ * This is for the other half of the job: getting the show into the app they
+ * already open on the way to work, so next week's episode arrives without them
+ * remembering us. That is why every link points away from this site.
+ *
+ * Two shapes, because it appears in two kinds of space:
+ *   `wide` — a card in the flow of a page, labelled buttons in a row. The home
+ *            page pair, and the sessions index above the archive.
+ *   `rail` — icons only, and **no surface of its own**: it is placed inside the
+ *            sidebar's `.side-card` on a detail page, so the facts about an
+ *            episode and where to hear it read as one card rather than two.
+ *
+ * ## Why there is no "this episode on Apple" button
+ *
+ * There was, and it was the loudest thing on the card: a pink block for one
+ * platform above a row of seven equals. We are not an Apple podcast, we are a
+ * podcast, and the card should not say otherwise. So the deep link moved *into*
+ * the Apple icon — pass `player` and Apple opens this episode while the rest
+ * open the show — and every platform looks exactly as important as every other,
+ * which is the truth. The distinction is on the link's own label, for anyone
+ * who reads one before clicking.
+ */
+import { APPLE, SHOWS, subscribeLinks, appleEpisodeUrl, type ShowKey } from '../lib/podcasts';
+import known from '../../data/podcast-episodes.json';
+
+interface Props {
+  show: ShowKey;
+  layout?: 'wide' | 'rail';
+  /** A Captivate player URL. Points Apple at this episode, where Apple has it. */
+  player?: string;
+  /** Whether to name the show and say what it is. Off in a sidebar that has
+   *  already said which show the page belongs to. */
+  describe?: boolean;
+  class?: string;
+}
+
+const { show: key, layout = 'wide', player, describe = layout === 'wide', class: className } = Astro.props;
+
+const show = SHOWS[key];
+// Apple carries the episode where it knows it. Missing is normal rather than
+// broken: an episode that has aged out of the feed window is in no directory at
+// all, and then Apple links to the show like everybody else.
+const episode = appleEpisodeUrl(show, player, known);
+const links = subscribeLinks(show).map((l) =>
+  l.key === APPLE && episode ? { ...l, href: episode, episode: true } : { ...l, episode: false },
+);
+---
+
+<div class:list={['listen', `listen--${layout}`, className]} data-test="listen-on" data-pagefind-ignore>
+  <p class="eyebrow eyebrow--cyan">Listen and follow</p>
+
+  {describe && (
+    <Fragment>
+      <p class="listen-name"><a href={show.href}>{show.name}</a></p>
+      <p class="listen-blurb">{show.blurb}</p>
+    </Fragment>
+  )}
+
+  <ul class="listen-links">
+    {links.map((l) => {
+      const name = l.episode ? `This episode on ${l.label}` : `${show.name} on ${l.label}`;
+      return (
+        <li>
+          <a
+            href={l.href}
+            aria-label={name}
+            title={name}
+            target="_blank"
+            rel="noopener"
+            data-test={l.episode ? 'listen-episode' : undefined}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d={l.path} /></svg>
+            {layout === 'wide' && <span>{l.label}</span>}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</div>
+
+<style>
+  .listen-name { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: 1.2; margin: 0 0 var(--space-2); }
+  /* `p a` and `li a` in global.css underline links inside prose, which is right
+     there and wrong here: a title and a row of buttons are neither. */
+  .listen-name a { color: var(--color-text); text-decoration: none; }
+  .listen-name a:hover { color: var(--color-primary); }
+  .listen-blurb { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0 0 var(--space-5); }
+
+  /* A card in its own right in the flow of a page; inside somebody else's card
+     in a rail, where a second border around a nested block is the "bloated"
+     look this replaced. */
+  .listen--wide { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--space-6); }
+
+  .listen-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .listen-links a {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    /* 24×24 is the floor for a button; these are links carrying an icon, and
+       they are given the same floor because nothing about them reads as inline
+       text. See the accessibility floor in docs/brand-and-code.md. */
+    min-height: 36px; padding: 0 var(--space-3);
+    color: var(--color-text-muted); background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    font-family: var(--font-heading); font-size: var(--text-sm); font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .listen-links a:hover {
+    color: var(--on-brand); background: var(--color-primary);
+    border-color: var(--color-primary); text-decoration: none;
+  }
+  .listen-links svg { flex: none; }
+
+  /* In a sidebar there is no room for seven labelled buttons, so the rail drops
+     the label and keeps the icon. The name is still on `aria-label`, which is
+     the same trade `Socials.astro` makes further down the same column. */
+  .listen--rail .listen-links a { padding: 0; width: 36px; justify-content: center; }
+</style>

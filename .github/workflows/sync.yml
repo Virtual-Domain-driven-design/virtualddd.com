@@ -102,6 +102,13 @@ jobs:
           if [ -n "$FULL" ] || ! git diff --quiet -- data/ddd-crew.json; then
             npx tsx scripts/sync-ddd-crew.ts --write
           fi
+          # Which episode is which on Apple, for the "listen elsewhere" cards.
+          # Never fatal: the script exits non-zero when a lookup fails, which is
+          # the right answer to a person running it, but the committed file is
+          # still good and letting Apple being down block a content commit is
+          # the outage docs/pipeline.md promises publishing will never have.
+          npx tsx scripts/sync-podcast-episodes.ts --write \
+            || echo "::warning::Podcast episode links were not refreshed; the committed map still stands."
           npm run redirects
 
       - name: What changed?

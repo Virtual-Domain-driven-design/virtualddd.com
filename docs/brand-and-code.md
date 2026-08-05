@@ -107,6 +107,10 @@ shared layer, never copied into a second page. Copying is what once made
   role, bio, links), used for a session's host and its guests. `CardFilter` is
   *the* filter: search, facets, result count, empty state and "load more" over
   any grid of cards carrying the `data-search` / `data-<facet>` contract.
+  `ListenOn` is *the* podcast card, in both the places one is wanted: `wide` in
+  the flow of a page, `rail` in a sidebar. It takes a show and, optionally, the
+  Captivate player URL the page already holds, and that one prop is the whole
+  difference between "follow the show" and "here is this episode".
 - **`src/scripts/`**: the client-side behaviour, one module per concern
   (`header`, `local-time`, `session-timing`, `conference-timing`), imported by
   `BaseLayout`'s single script. The last two exist for the same reason: the

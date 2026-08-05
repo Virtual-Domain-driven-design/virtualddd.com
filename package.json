@@ -19,7 +19,7 @@
     "redirects": "node scripts/build-redirects.mjs",
     "check:urls": "node scripts/check-redirects.mjs",
     "verify:live": "node scripts/verify-live.mjs",
-    "sync": "npm run sync:notion && npm run sync:ddd-crew",
+    "sync": "npm run sync:notion && npm run sync:ddd-crew && npm run sync:podcasts",
     "sync:notion": "npm run sync:guests && npm run sync:sessions && npm run sync:open-spaces && npm run sync:stories && npm run sync:heuristics && npm run sync:organisers && npm run sync:conferences && npm run sync:reading-list && npm run sync:ddd-crew-config",
     "sync:sessions": "tsx scripts/sync-notion.ts content --collection=sessions --write",
     "sync:open-spaces": "tsx scripts/sync-notion.ts content --collection=open-spaces --write",
@@ -29,6 +29,7 @@
     "sync:guests": "tsx scripts/sync-notion.ts guests --write",
     "sync:ddd-crew-config": "tsx scripts/sync-notion.ts ddd-crew --write",
     "sync:ddd-crew": "tsx scripts/sync-ddd-crew.ts --write",
+    "sync:podcasts": "tsx scripts/sync-podcast-episodes.ts --write",
     "sync:conferences": "tsx scripts/sync-notion.ts conferences --write",
     "sync:reading-list": "tsx scripts/sync-notion.ts content --collection=reading-list --write",
     "sync:learning-journey": "tsx scripts/sync-notion.ts content --collection=learning-journey --write"

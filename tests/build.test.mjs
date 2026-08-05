@@ -480,6 +480,64 @@ describe('error pages', () => {
   });
 });
 
+describe('where to listen', () => {
+  // The card that sends someone to the show in their own podcast app, and to
+  // this episode on Apple. Both halves fail silently: a wrong link still
+  // renders, and a missing episode link looks exactly like an episode Apple
+  // does not have.
+  const withPlayer = (prefix) =>
+    all.filter((p) => new RegExp(`^${prefix}[^/]+/$`).test(p.path) && p.html.includes('player.captivate.fm/episode/'));
+
+  test('every page with a player says where else to hear it', () => {
+    const bad = [];
+    for (const prefix of ['/sessions/', '/facilitating-archdes/']) {
+      for (const p of withPlayer(prefix)) {
+        if (!p.html.includes('data-test="listen-on"')) bad.push(p.path);
+      }
+    }
+    assert.deepEqual(bad, [], `has an episode embedded but no way to follow the show:\n${bad.join('\n')}`);
+  });
+
+  test('an episode link points at the show it belongs to', () => {
+    // Two shows, two Apple IDs. Rendering a story's episode under the sessions
+    // ID would 404 quietly, and only for the people who click.
+    const ids = { '/sessions/': '1478089740', '/facilitating-archdes/': '1837176113' };
+    let checked = 0;
+    for (const [prefix, id] of Object.entries(ids)) {
+      for (const p of withPlayer(prefix)) {
+        const tag = attr(p.html, /(<a[^>]*data-test="listen-episode"[^>]*>)/);
+        if (!tag) continue;
+        checked++;
+        const href = attr(tag, /href="([^"]+)"/);
+        assert.ok(
+          href?.startsWith(`https://podcasts.apple.com/podcast/id${id}?i=`),
+          `${p.path}: episode link is not an episode of show ${id} — ${href}`,
+        );
+      }
+    }
+    assert.ok(checked > 0, 'no page offered an episode link, so this proved nothing');
+  });
+
+  test('the join to Apple still holds for nearly every session', () => {
+    // A threshold, not a count, and it is a real bug this catches rather than a
+    // hypothetical one. What Notion stores is Captivate's *media* ID; what
+    // Apple answers with is the RSS `<guid>`. Those are the same string only
+    // for the episodes recorded natively on Captivate, so the obvious join
+    // silently resolved 8 of 59 and looked like it worked. The feed is what
+    // relates the two — see scripts/sync-podcast-episodes.ts.
+    //
+    // Deliberately not "all of them": an episode ageing out of the feed window
+    // is Captivate's business, not a broken build, and must not stop a deploy.
+    const sessions = withPlayer('/sessions/');
+    const linked = sessions.filter((p) => p.html.includes('data-test="listen-episode"'));
+    assert.ok(sessions.length > 40, `only ${sessions.length} sessions have a player`);
+    assert.ok(
+      linked.length >= sessions.length * 0.9,
+      `only ${linked.length} of ${sessions.length} sessions resolved to an Apple episode`,
+    );
+  });
+});
+
 describe('feeds and machine-readable files', () => {
   test('sitemap, RSS, robots.txt and llms.txt exist', () => {
     for (const f of ['sitemap-index.xml', 'rss.xml', 'robots.txt', 'llms.txt', 'llms-full.txt', '.htaccess']) {

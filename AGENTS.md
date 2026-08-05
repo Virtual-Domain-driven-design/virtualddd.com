@@ -139,6 +139,12 @@ for:
   because the config is what says which READMEs to go and get. `--strict` fails
   on a dangling relation. `--full` ignores `data/sync-state.json` and re-fetches
   every body.
+- **`npm run sync:podcasts`** is the one step that is never fatal. It asks Apple
+  which episode is which so the pages can link to one, and `sync.yml` swallows a
+  failure into a warning on purpose: `data/podcast-episodes.json` is committed,
+  so a build never needs Apple and a bad afternoon at Apple must not block a
+  content commit. Run by hand it still exits non-zero, because a person asking
+  for a refresh wants to know it did not happen.
 - **`npm run redirects`** must be re-run after adding or renaming content. A
   test fails if the committed `.htaccess` is not what the generator would write
   today.
