@@ -16,6 +16,9 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pages, meta, attr, text, markup, countHook, published, DIST } from './helpers.mjs';
 import { readFileSync as readEntry, readdirSync as readEntries } from 'node:fs';
+// The site's own rule for when a session is over, imported rather than restated:
+// see the comment in 'sessions in their two states'.
+import { hasFinished } from '../src/lib/upcoming.ts';
 
 let all;
 before(() => {
@@ -348,13 +351,28 @@ describe('the conferences row', () => {
 describe('sessions in their two states', () => {
   // One template renders both. Getting this wrong means either advertising an
   // event that has been, or hiding the joining details for one that has not.
+  //
+  // "Past" is `hasFinished` from src/lib/upcoming.ts, the same rule the pages
+  // are built with, imported rather than restated. This test used to say
+  // `start > Date.now()`, with no grace at all, while the site keeps a session
+  // live for three hours after it starts so somebody arriving late still gets
+  // the join link. For those three hours the two disagreed by design, and any
+  // content change in that window failed the deploy: it did on 2026-08-05 at
+  // 05:59 and again at 06:25, both inside the window after a session that
+  // started at 06:00 UTC.
+  //
+  // A residual race is unavoidable and much smaller: the pages were built a
+  // couple of minutes before this runs, so a session crossing the three-hour
+  // line in between still trips it. Three hours of certainty became two
+  // minutes of chance.
   const sessionPages = () => all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
   const startOf = (p) => +new Date(attr(p.html, /<time[^>]*data-iso="([^"]+)"/));
+  const finished = (p) => hasFinished(startOf(p), Date.now());
 
   test('a past session offers no RSVP, no join link and no calendar file', () => {
     const bad = [];
     for (const p of sessionPages()) {
-      if (startOf(p) > Date.now()) continue;
+      if (!finished(p)) continue;
       if (p.html.includes('data-test="add-to-calendar"')) bad.push(`${p.path}: offers a calendar file`);
       if (/class="[^"]*\bjs-live\b/.test(p.html)) bad.push(`${p.path}: still shows joining links`);
       if (/>RSVP/.test(p.html)) bad.push(`${p.path}: still asks for an RSVP`);
@@ -363,7 +381,7 @@ describe('sessions in their two states', () => {
   });
 
   test('an upcoming session offers a way in', () => {
-    const upcoming = sessionPages().filter((p) => startOf(p) > Date.now());
+    const upcoming = sessionPages().filter((p) => !finished(p));
     for (const p of upcoming) {
       assert.ok(
         p.html.includes('data-test="add-to-calendar"') || /RSVP/.test(p.html),

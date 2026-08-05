@@ -166,7 +166,7 @@ jobs:
           set -o pipefail
           npx playwright install --with-deps chromium
           { node --import tsx --test "tests/unit/*.test.mjs"
-            node --test "tests/*.test.mjs"; } 2>&1 | tee /tmp/step-output.log
+            node --import tsx --test "tests/*.test.mjs"; } 2>&1 | tee /tmp/step-output.log
 
       # Reports rather than blocks: these fail because of what someone wrote in
       # Notion, and publishing must never be hostage to an editorial typo.
