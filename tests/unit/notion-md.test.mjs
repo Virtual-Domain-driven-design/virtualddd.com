@@ -7,6 +7,7 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import { newAlerts } from '../../scripts/new-alerts.mjs';
 import {
   assetRefs, createBlocksToMd, imageExt, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlRecords, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
@@ -387,5 +388,47 @@ describe('records as block YAML', () => {
 
   test('an empty record is skipped rather than writing a bare dash', () => {
     assert.equal(yamlRecords('videos', [{ title: undefined }]), 'videos:');
+  });
+});
+
+describe('which alerts are actually new', () => {
+  // The bug this replaces: the step sent the whole file whenever the file
+  // changed. One flapping image alert rewrote it every other run and dragged a
+  // settled organiser rename along, so the same message kept arriving in
+  // Discord for days.
+  const doc = (...items) => JSON.stringify({ items });
+  const renamed = { kind: 'person-renamed', section: '/organisers/', title: 'a → b', url: 'u' };
+  const photo = { kind: 'image-source-gone', section: 'stories', title: 'x (body-2)', url: 'g' };
+
+  test('an alert that was already there is not raised again', () => {
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed)), []);
+  });
+
+  test('the settled one stays quiet when a flapping one comes back', () => {
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed, photo)), [photo]);
+  });
+
+  test('a flapping alert is raised again each time it returns', () => {
+    // It really did break again, so it really is news. Only its neighbours
+    // should stay quiet.
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed, photo)), [photo]);
+    assert.deepEqual(newAlerts(doc(renamed, photo), doc(renamed)), []);
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed, photo)), [photo]);
+  });
+
+  test('reworded is not the same alert, because nobody has read the new words', () => {
+    const louder = { ...photo, title: 'x (body-2): no picture at all' };
+    assert.deepEqual(newAlerts(doc(photo), doc(louder)), [louder]);
+  });
+
+  test('the first run has no previous file, so everything is new', () => {
+    // Not theoretical: this file was gitignored once and eight organiser
+    // photos went unannounced.
+    assert.deepEqual(newAlerts('', doc(renamed, photo)), [renamed, photo]);
+    assert.deepEqual(newAlerts('not json at all', doc(renamed)), [renamed]);
+  });
+
+  test('an emptied file raises nothing rather than throwing', () => {
+    assert.deepEqual(newAlerts(doc(renamed), JSON.stringify({})), []);
   });
 });
