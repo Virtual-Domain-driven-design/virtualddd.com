@@ -7,6 +7,18 @@
       "url": "https://drive.google.com/file/d/1KKJJ5AEDJRu7cLdQtL7xUKyAJi2wswS9/view?usp=sharing"
     },
     {
+      "kind": "notion-schema-drift",
+      "section": "/learning-journey/",
+      "title": "Not here, on purpose is read by the sync, but the database has no such property",
+      "url": "https://app.notion.com/p/Find-out-whether-this-is-even-your-problem-3ada485afafc818ebdc3de0ee6c1e75d"
+    },
+    {
+      "kind": "notion-schema-drift",
+      "section": "/sessions/",
+      "title": "Humantix is read by the sync, but the database has no such property",
+      "url": "https://app.notion.com/p/Surviving-a-National-Blackout-with-Offline-First-Architecture-Emilio-Carri-n-395a485afafc8007a86dca201f1a4423"
+    },
+    {
       "kind": "person-renamed",
       "section": "/organisers/",
       "title": "kenny-baas-schwegler → kenny-schwegler",
