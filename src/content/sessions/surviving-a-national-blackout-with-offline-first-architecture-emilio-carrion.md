@@ -1,12 +1,13 @@
 ---
 title: "Surviving a National Blackout with Offline-First Architecture | Emilio Carrión"
 slug: "surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"
-status: "Published"
+status: "Done"
 datetime: 2026-08-05T18:00:00.000+12:00
 typeOfSession: "talk"
 level: ["Intermediate"]
 tags: ["software design", "software architecture", "incident response"]
 video: "https://youtube.com/live/3MHn4rRjuJ8"
+podcastPlayer: "https://player.captivate.fm/episode/e1ff00f9-21e3-4df2-a332-cc141b51d1cb/"
 meet: "https://meet.google.com/koo-vzyo-yoq"
 humanitix: "https://events.humanitix.com/surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion"
 organiser: "Andrea Magnorsky"
