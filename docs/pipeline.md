@@ -181,8 +181,8 @@ file is the promise, not a record of what happens to be built.
 
 ## Things only an editor can decide
 
-`data/sync-alerts.json` collects what the sync can see but must not act on. Two
-kinds, both *published in Notion, not true on the site*:
+`data/sync-alerts.json` collects what the sync can see but must not act on.
+Three kinds, all *published in Notion, not true on the site*:
 
 - **`person-renamed`**: an organiser's row was renamed in Notion. Their slug
   comes from their name, so the page moved; the 301 is recorded in
@@ -196,8 +196,8 @@ kinds, both *published in Notion, not true on the site*:
   build. Skipping it *silently* is not: the editor believes it is on the site,
   and only they can give it a slug.
 
-Neither is worth failing a run over, and both are invisible if they only reach
-a CI log, which is the whole reason the file exists. It is keyed by section and
+None of them is worth failing a run over, and all are invisible if they only
+reach a CI log, which is the whole reason the file exists. It is keyed by section and
 rewritten on every run, so resolving the last one empties the list rather than
 leaving a stale alert behind, and one collection cannot erase another's.
 
@@ -213,7 +213,7 @@ took the "already raised" branch and reached nobody, including eight organiser
 photos on launch day. The step now fails outright if the file is ignored,
 because that failure is silent and looks exactly like having nothing to say.
 
-Two more kinds join the two above:
+Two more kinds join those three:
 
 - **`image-source-gone`**: the picture in Notion points somewhere that stopped
   answering. The sync keeps the copy it downloaded last time rather than
@@ -225,3 +225,28 @@ Two more kinds join the two above:
   until somebody goes and finds the next edition, and this is the one alert
   that fires without anyone having touched Notion at all: a date going by is
   not an edit. See [content-model.md](content-model.md), "Conferences".
+
+And one that is not an editorial decision at all:
+
+- **`notion-schema-drift`**: a property the sync reads was renamed, deleted or
+  retyped. Every other kind here says a person has to choose something; this one
+  says the pipeline has stopped being able to read something, and that generated
+  content is *already* wrong. It is the only kind that means go and look at the
+  files.
+
+  It exists because a rename fails nothing. The read returns nothing, every
+  field is optional, so the run writes the record without it and deploys green;
+  in the first week of August 2026 that happened four times and each was found
+  days later by a person. `scripts/lib/schema-drift.ts` watches instead. Every
+  typed reader passes the property name and the type it expects through one
+  function, and a Notion page property arrives carrying its own `type`, so the
+  comparison is free and needs no second list of expected properties to keep in
+  step.
+
+  A property counts as gone only when *no* row in the database had it, because
+  one empty row is ordinary. A checkbox is never reported missing: Notion does
+  not send one that has never been ticked, so absence there says nothing. Both
+  rules are in `tests/unit/schema-drift.test.mjs`, each case a real incident.
+
+  It detects rather than prevents. The order still matters: change the code
+  first, then the Notion property.

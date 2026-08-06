@@ -159,6 +159,7 @@ The pipeline tells you rather than waiting to be asked. What lands where:
 |---|---|
 | A page is published in Notion but not on the site | The **sync** run in GitHub Actions. A page with no slug, or one still quarantined, is reported there and posted to Discord |
 | Something in Notion needs a person to decide | **Discord**, from `data/sync-alerts.json`: an unpublished page whose address is still live, a page with no slug, an image whose source has gone, a conference whose dates have been and gone |
+| A field is quietly missing from every generated file | The `notion-schema-drift` alert, in the same place. A property the sync reads was renamed, deleted or retyped in Notion, so the read returns nothing and the run commits without it. Change the code first, then the Notion property |
 | A deploy failed on `Cannot reach the host` | The host's brute-force protection blocked the runner. Re-run the deploy; a different runner has a different IP. Kualo calls it cPHulk |
 | CI is red on `main` after a content commit | The sync commits and deploys as separate jobs. Check which one failed before assuming the content is wrong |
 | The site is stale but the runs are green | Check the deploy built the commit you expect. The `What is being built?` step prints it |

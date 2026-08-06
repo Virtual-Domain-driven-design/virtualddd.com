@@ -22,6 +22,9 @@ import {
   resolveRelation, statusOf, yamlList, yamlRecords, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
+// Whether Notion is still shaped the way the readers below assume. Every typed
+// reader goes through `watch.note`, so the run knows what it depended on.
+import { schemaWatch, driftAlerts, driftLines, type Reader } from './lib/schema-drift';
 import { byGallery, CREW_CONFIG_FILE, type CrewConfig, type CrewTool } from '../src/lib/ddd-crew';
 // The same rule the cards use, so the sync cannot decide a conference is over
 // on a different day from the page that renders it.
@@ -184,9 +187,13 @@ interface Alert {
    *  organiser's slug comes from their name, so their page has moved. The
    *  redirect is already recorded; this says so out loud, because a person is
    *  a row rather than a page and has no `Retire URL` checkbox to tick, so
-   *  nobody decided this and nobody would otherwise know it happened. */
+   *  nobody decided this and nobody would otherwise know it happened.
+   *  `notion-schema-drift` — a property this sync reads was renamed, deleted or
+   *  retyped in Notion. Every other kind here is an editorial decision; this one
+   *  is the pipeline saying it has stopped being able to read something. It is
+   *  the only kind that means generated content is already wrong. */
   kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed'
-    | 'person-renamed';
+    | 'person-renamed' | 'notion-schema-drift';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -832,6 +839,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   const edited: string[] = [];
   let reused = 0;
 
+  const watch = schemaWatch();
   const allRows = await queryAll(spec.dataSourceId);
   const pages = allRows.filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
   /** Rows that are no longer published, by page id, so pruning can ask *why*. */
@@ -860,17 +868,27 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       continue;
     }
     const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
-    const rel = (n: string) => (get(n)?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
+    // The same read, remembered. Every typed reader below goes through `got`,
+    // so the run ends knowing exactly which properties it depended on and what
+    // Notion answered with.
+    //
+    // Two reads stay outside it. `h.get` is the raw escape hatch, which no spec
+    // currently uses, and the slug above, which needs none: a renamed Slug
+    // property makes every page in the database look slugless, and
+    // `published-without-a-slug` already says that far more loudly than this
+    // would.
+    const got = (n: string, want: Reader) => { watch.note(n, want, P[n]); return P[n]; };
+    const rel = (n: string) => (got(n, 'relation')?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
 
     const h: Helpers = {
       get,
-      text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
-      url: (n) => get(n)?.url ?? undefined,
-      date: (n) => get(n)?.date?.start ?? undefined,
-      num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
-      select: (n) => get(n)?.select?.name ?? undefined,
-      checkbox: (n) => get(n)?.checkbox === true,
+      text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
+      url: (n) => got(n, 'url')?.url ?? undefined,
+      date: (n) => got(n, 'date')?.date?.start ?? undefined,
+      num: (n) => { const v = got(n, 'number')?.number; return typeof v === 'number' ? v : undefined; },
+      select: (n) => got(n, 'select')?.select?.name ?? undefined,
+      checkbox: (n) => got(n, 'checkbox')?.checkbox === true,
       refs: <T>(n: string, gate: Gate<T>) => rel(n).flatMap((id: string) => {
         const r = resolveRelation(id, gate.published, gate.unpublished);
         if (r.kind === 'resolved') return [r.value];
@@ -893,7 +911,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
         return [];
       }),
       img: async (n, label) => {
-        const u = fileUrl((get(n)?.files ?? [])[0]);
+        const u = fileUrl((got(n, 'files')?.files ?? [])[0]);
         return u ? await downloadImage(u, ctx, label) : null;
       },
     };
@@ -1030,6 +1048,12 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     console.log('    Nothing will render them until somebody fills the slug in.');
   }
 
+  // Said out loud on a preview run too, because this is the one alert a
+  // developer wants *before* pushing. A --limit run has seen a handful of rows,
+  // where "no row had it" is an accident of the slice rather than a fact.
+  const drift = !limit && targets.length ? watch.drift() : [];
+  for (const line of driftLines(drift)) console.log(line);
+
   // Unconditional, so that resolving the last one empties the list rather than
   // leaving a stale alert for the pipeline to keep raising. A preview run is
   // not allowed to touch it, and a --limit run has not seen the whole database.
@@ -1045,6 +1069,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: alertKey, title: q.title, url: q.url })),
       ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: alertKey, title: u.title, url: u.url })),
       ...strandedAlerts(alertKey),
+      ...driftAlerts(alertKey, targets[0]?.url ?? '', drift),
     ]);
   }
 
@@ -1231,6 +1256,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
   const spec = ROW_SPECS[key];
   if (!spec) { console.error(`unknown row collection: ${key}`); process.exit(1); }
 
+  const watch = schemaWatch();
   const pages = await queryAll(spec.dataSourceId);
   const assetDir = `${outDir}/_assets`;
   mkdirSync(outDir, { recursive: true });
@@ -1245,16 +1271,18 @@ async function runRows(key: string, outDir: string, write: boolean) {
   const now: Record<string, EntryState> = {};
   for (const page of pages) {
     const P = page.properties;
-    const get = (n: string) => P[n];
+    // See `schemaWatch`. This is the database the 4 August rename landed in, so
+    // it is the one that most wants watching.
+    const got = (n: string, want: Reader) => { watch.note(n, want, P[n]); return P[n]; };
     const h: RowHelpers = {
-      text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      url: (n) => get(n)?.url ?? undefined,
-      select: (n) => get(n)?.select?.name ?? undefined,
-      multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
-      checkbox: (n) => get(n)?.checkbox ?? false,
-      date: (n) => get(n)?.date?.start ?? undefined,
-      dateEnd: (n) => get(n)?.date?.end ?? undefined,
-      file: (n) => fileUrl((get(n)?.files ?? [])[0]),
+      text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      url: (n) => got(n, 'url')?.url ?? undefined,
+      select: (n) => got(n, 'select')?.select?.name ?? undefined,
+      multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
+      checkbox: (n) => got(n, 'checkbox')?.checkbox ?? false,
+      date: (n) => got(n, 'date')?.date?.start ?? undefined,
+      dateEnd: (n) => got(n, 'date')?.date?.end ?? undefined,
+      file: (n) => fileUrl((got(n, 'files')?.files ?? [])[0]),
     };
     const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
     const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
@@ -1316,11 +1344,15 @@ async function runRows(key: string, outDir: string, write: boolean) {
     saveState(state);
   }
 
+  const drift = pages.length ? watch.drift() : [];
+  for (const line of driftLines(drift)) console.log(line);
+
   // Unconditional, like the content sync's: re-uploading the last picture in
   // Notion has to be able to empty this list, not just stop adding to it.
   if (write) writeAlert(spec.label, [
     ...strandedAlerts(spec.label),
     ...(spec.alerts?.(rows) ?? []),
+    ...driftAlerts(spec.label, pages[0]?.url ?? '', drift),
     ...moved.map((m) => ({
       kind: 'person-renamed' as const,
       section: spec.section!,
