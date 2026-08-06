@@ -8,12 +8,6 @@
     },
     {
       "kind": "notion-schema-drift",
-      "section": "/learning-journey/",
-      "title": "Not here, on purpose is read by the sync, but the database has no such property",
-      "url": "https://app.notion.com/p/Find-out-whether-this-is-even-your-problem-3ada485afafc818ebdc3de0ee6c1e75d"
-    },
-    {
-      "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
       "url": "https://app.notion.com/p/Surviving-a-National-Blackout-with-Offline-First-Architecture-Emilio-Carri-n-395a485afafc8007a86dca201f1a4423"
