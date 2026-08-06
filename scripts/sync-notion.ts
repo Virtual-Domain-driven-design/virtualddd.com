@@ -653,22 +653,12 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
       const submitter = h.select('Submitter'); if (submitter) l.push(`submitter: ${yamlStr(submitter)}`);
       const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
-      // `Prerequisites ` carries a trailing space in Notion, and this read has
-      // been quietly carrying one to match. That works and is a trap: it is one
-      // of the five relations in the heuristics graph, and whoever tidies the
-      // name on either side empties it on every heuristic without a word.
-      //
-      // So take whichever spelling the page actually has. Probing with `h.get`
-      // rather than reading twice is deliberate: two reads would leave the
-      // absent spelling permanently missing, and the drift check would report a
-      // rename that is not happening. This way one real name is read, and if
-      // *neither* exists the preferred one is read and properly reported.
-      const named = (...names: string[]) => names.find((n) => h.get(n) !== undefined) ?? names[0];
-      for (const [k, ...spellings] of [
-        ['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'],
-        ['prerequisites', 'Prerequisites', 'Prerequisites '], ['specializes', 'Specializes'],
-      ] as const) {
-        const v = h.heur(named(...spellings)); if (v.length) l.push(`${k}: ${yamlList(v)}`);
+      // `Prerequisites` carried a trailing space in Notion until 2026-08-06, and
+      // this read carried one to match. Both are clean now. Nothing here defends
+      // against it coming back: that is what the drift check is for, and a
+      // second guard on one property is the sort of thing nobody dares delete.
+      for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites'], ['specializes', 'Specializes']] as const) {
+        const v = h.heur(p); if (v.length) l.push(`${k}: ${yamlList(v)}`);
       }
       const md = h.text('Meta Description'); if (md) l.push(`metaDescription: ${yamlStr(md)}`);
       const st = h.text('SEO Title'); if (st) l.push(`seoTitle: ${yamlStr(st)}`);
