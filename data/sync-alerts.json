@@ -7,6 +7,12 @@
       "url": "https://drive.google.com/file/d/1KKJJ5AEDJRu7cLdQtL7xUKyAJi2wswS9/view?usp=sharing"
     },
     {
+      "kind": "image-source-gone",
+      "section": "conferences",
+      "title": "kandddinsky (logo): showing the last copy we downloaded",
+      "url": "https://kandddinsky.de/img/design/logo_dark.svg"
+    },
+    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
