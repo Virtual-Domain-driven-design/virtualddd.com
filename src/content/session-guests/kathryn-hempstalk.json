@@ -1,4 +1,7 @@
 {
   "name": "Kathryn Hempstalk",
-  "alsoAnOrganiser": false
+  "bio": "I build data and AI functions from zero. Four times now, I've been the first data leader in the building — most recently at Auror, where over four years I grew the Data & AI function to over a dozen people and took the company's first AI product, Connect-the-Dots, from prototype to a high-margin revenue driver. \n\nMy background is unusual in combining depth on both sides of the leadership equation. I'm a machine learning scientist by training (PhD, one-class classification) who still works hands-on — most recently with multi-modal LLMs in production, LLM evaluation against human performance, and generative pipeline observability (LangFuse, DeepEval). And I'm an experienced executive: strategy, budgets, boards, vendor negotiation, and governance, including founding and chairing a data governance committee and working with frameworks like the EU AI Act and NZ Privacy Act.",
+  "linkedin": "https://www.linkedin.com/in/kathempstalk/",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/kathryn-hempstalk-photo.jpg"
 }
