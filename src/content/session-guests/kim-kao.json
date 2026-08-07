@@ -1,4 +1,8 @@
 {
   "name": "Kim Kao",
-  "alsoAnOrganiser": false
+  "bio": "Kim is an experienced business and technology leader with proven skills in problem framing, business goal alignment, and solution design. Also, he also well-versed in engineering and software development methodologies. Kim has led several successful cloud technology adoption in helping digital transformation as an AWS solutions architect, collaborated with cross regional enthusiastic problem solvers in promoting Domain-Driven Design.\n\nHe now spends time in helping customers, communities to achieve their business goal through strategic alignment facilitating skills, problem framing methodologies and cloud offerings. As the same time, he is the co-founder of Domain-Driven Design Taiwan community, devote to bring in effective collaboration model in the software industry   to expose engineers' talents and Infinite possibilities.",
+  "website": "https://kimkao.dev/",
+  "linkedin": "https://www.linkedin.com/in/kimkao/",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/kim-kao-photo.png"
 }
