@@ -4,7 +4,7 @@ slug: "drawing-same-system-different-architectures"
 status: "Published"
 episode: 18
 publishedDate: 2026-04-28
-guests: ["aino-corry"]
+guests: ["aino-cornils-vonge-corry"]
 hosts: ["Andrea Magnorsky", "Kenny Schwegler"]
 tags: ["facilitating software architecture and design", "software architecture", "collaborative modelling", "psychological safety", "social dynamics"]
 youtube: "https://youtu.be/U5NHOSBjdtE"
