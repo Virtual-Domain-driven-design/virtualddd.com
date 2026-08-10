@@ -1,0 +1,100 @@
+---
+/**
+ * The header, when there is no session to put in it.
+ *
+ * Both pages lead with a session, and neither had an answer for the week there
+ * is not one. Nothing rendered: the page opened on whatever came next, which
+ * reads as a site that has stopped rather than a community between sessions.
+ *
+ * So the block keeps its shape — same proportions, same place — and changes
+ * what it says. The countdown is the one part that cannot survive, because
+ * there is no date to count to; a timer at zero would be worse than none. In
+ * its place is the honest answer to "when is the next one", which is that
+ * nobody has proposed it yet.
+ *
+ * The picture is the brand gradient rather than a stock image. There is no
+ * session, so there is no artwork, and inventing some would be the one thing
+ * on this page that was not true.
+ *
+ * `data-next-empty` is read by the sweep in `src/scripts/session-timing.ts`,
+ * which shows this only while there is genuinely nothing upcoming. That matters
+ * more than it looks: the last session of a run finishing is a clock event, not
+ * a build event, so this has to be able to appear on a page that shipped days
+ * ago with sessions on it.
+ */
+const DISCORD = 'https://discord.gg/tRJkcsFDKN';
+
+interface Props {
+  /** Hidden until the sweep says otherwise, on a page that shipped with at
+   *  least one upcoming session. A page built with none shows it immediately. */
+  startHidden?: boolean;
+}
+const { startHidden = false } = Astro.props;
+---
+
+<section class="none" data-next-empty data-test="no-sessions" hidden={startHidden}>
+  <div class="none-card">
+    <div class="none-art" aria-hidden="true"></div>
+    <div class="none-body">
+      <span class="chip chip--label">Between sessions</span>
+      <h2>Nothing on the calendar — yet.</h2>
+      <p class="none-lead">Sessions are proposed by members, not programmed by us.</p>
+      <p class="none-text">
+        If there is something you have been chewing on — a problem you solved, or one you
+        have not — that is the session. Bring it to the Discord and we will find a date.
+      </p>
+      <div class="none-cta">
+        <a class="btn btn--accent" href={DISCORD}>Propose a session on Discord →</a>
+        <a class="btn btn--ghost" href="/sessions/">Watch a past one</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* A container query, and the only one in the codebase, so it is worth saying
+     why. This block lives at two widths that have nothing to do with the
+     viewport: the full page on /sessions/, and the ~3/5 column beside the cyan
+     panel on the home page. A `min-width: 800px` media query splits it into two
+     columns in both, so on a wide screen the home page one went side-by-side
+     inside 640px and the heading broke over three lines with a button wrapping
+     under it. The element has to answer to the space it is actually in.
+
+     The alternative was a prop, and every caller then has to remember which
+     width it is passing into. This cannot be got wrong. */
+  .none { margin-bottom: var(--space-16); container-type: inline-size; }
+  .none[hidden] { display: none; }
+
+  /* The twin of `.hero-card` in src/pages/sessions/index.astro, on purpose:
+     this is that block with no session in it, and it sits in the same place on
+     the same page. Not extracted into patterns.css because the two differ in
+     the one line that matters — that one splits on the viewport, this one on
+     its container — and a shared rule would have to give up the difference.
+     Change the proportions here and change them there too. */
+  .none-card {
+    display: grid; grid-template-columns: 1fr;
+    background: var(--color-surface); box-shadow: var(--shadow);
+  }
+
+  /* The two brand colours, and nothing else. Every other header on the site is
+     a photograph behind a scrim; this one has no photograph to be honest about,
+     so it says so by being flat. */
+  .none-art {
+    min-height: 12rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  }
+
+  .none-body { padding: var(--space-8); }
+  .none-body h2 { font-size: var(--text-3xl); margin: var(--space-3) 0 var(--space-3); }
+  .none-lead {
+    font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg);
+    margin: 0 0 var(--space-2);
+  }
+  .none-text { color: var(--color-text-muted); margin: 0 0 var(--space-6); max-width: 34rem; }
+  .none-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+  @container (min-width: 46rem) {
+    .none-card { grid-template-columns: 1.1fr 1fr; }
+    .none-art { min-height: 100%; }
+  }
+</style>

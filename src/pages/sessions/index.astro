@@ -3,6 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SessionCard from '../../components/SessionCard.astro';
 import CardFilter from '../../components/CardFilter.astro';
 import ListenOn from '../../components/ListenOn.astro';
+import UpcomingThen from '../../components/UpcomingThen.astro';
+import NoSessionsYet from '../../components/NoSessionsYet.astro';
+import DiscordCard from '../../components/DiscordCard.astro';
 import { Image } from 'astro:assets';
 import { splitSessions, tagOptions } from '../../lib/collections';
 import { iso, longDateTime } from '../../lib/dates';
@@ -37,7 +40,7 @@ const jsonLd = collectionPage(Astro.site, {
     <h1>Online sessions</h1>
 
     {upcoming.length > 0 && (
-      <section class="hero" aria-label="Next session">
+      <section class="hero" aria-label="Next session" data-next-any>
         <p class="eyebrow eyebrow--pink">Next session</p>
         {upcoming.map((session, i) => {
           const f = session.data;
@@ -54,6 +57,11 @@ const jsonLd = collectionPage(Astro.site, {
                 </div>
                 <h2><a href={`/sessions/${session.id}/`}>{f.title}</a></h2>
                 <p class="hero-date"><time class="js-local" data-format="datetime" datetime={sIso} data-iso={sIso}>{longDateTime(f.datetime)}</time></p>
+                {/* The home page has always had this and this page never did,
+                    which made the same session feel more imminent there than
+                    here. Empty in the HTML like the other one, because a
+                    countdown baked at build time is wrong within the minute. */}
+                <p class="hero-countdown js-countdown" data-iso={sIso}></p>
                 {f.organiser && <p class="hero-host">Hosted by {f.organiser}</p>}
                 <div class="hero-cta">
                   {f.humanitix
@@ -72,19 +80,25 @@ const jsonLd = collectionPage(Astro.site, {
             </div>
           );
         })}
-        {upcoming.length > 1 && (
-          /* Every upcoming session appears here; the sweep hides whichever one
-             is currently the hero, and any that have already been. */
-          <div class="grid-cards more-upcoming">
-            {upcoming.map((s, i) => (
-              <div class="js-next-item" data-iso={iso(s.data.datetime)} hidden={i === 0}>
-                <SessionCard session={s} />
-              </div>
-            ))}
-          </div>
-        )}
+        <UpcomingThen sessions={upcoming} />
       </section>
     )}
+
+    {/* Shown when the last announced session has been. Hidden at build time
+        whenever the page ships with one, and revealed by the sweep the moment
+        that stops being true — which is a clock event, not a build event. */}
+    <NoSessionsYet startHidden={upcoming.length > 0} />
+
+    <!-- The ask that fills the space the card grid used to waste: sessions here
+         come from members proposing them, so the page says so where somebody is
+         already looking at the schedule. The band itself is DiscordCard with
+         different words — the home page and the reading list use the same one,
+         and a second pink band would be a copy that drifts. -->
+    <DiscordCard
+      title="Got a topic? That is the session."
+      text="There is no panel of experts at the front: members bring what they have learned, and the rest of us ask awkward questions about it. Sessions start as a message in the Discord."
+      cta="Propose a session"
+    />
 
     <!-- Between the next session and the archive of past ones, because that is
          where the reader's question changes from "can I come to this" to "what
@@ -123,7 +137,13 @@ const jsonLd = collectionPage(Astro.site, {
        shipped as until somebody measured it rather than looking at it. */
     :global(.sessions-listen) { margin-bottom: var(--space-16); }
 
-    /* Upcoming hero */
+    /* Upcoming hero.
+       `.hero-card` below has a twin: `.none-card` in NoSessionsYet.astro, which
+       is the same block with no session in it and has to look like this one.
+       They are deliberately not shared. The split is driven by the viewport
+       here, where this is always the full page width, and by a container query
+       there, because that component also sits in the home page's narrower
+       column. Retune the proportions in one and the other will not follow. */
     .hero { margin-bottom: var(--space-16); }
     .hero-card { display: grid; grid-template-columns: 1fr; background: var(--color-surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
     .hero-img { aspect-ratio: 16 / 9; background: var(--color-surface); }
@@ -133,11 +153,11 @@ const jsonLd = collectionPage(Astro.site, {
     .hero-body h2 { font-size: var(--text-3xl); margin: 0 0 var(--space-3); }
     .hero-body h2 a { color: var(--color-text); }
     .hero-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
+    .hero-countdown { font-family: var(--font-heading); font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-2); font-variant-numeric: tabular-nums; }
     .hero-host { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
     .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
     .hero-live { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-top: var(--space-4); }
     .hero-live-label { font-family: var(--font-heading); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--text-sm); color: var(--color-primary); }
-    .more-upcoming { margin-top: var(--space-6); }
 
     @media (min-width: 800px) {
       .hero-card { grid-template-columns: 1.1fr 1fr; }

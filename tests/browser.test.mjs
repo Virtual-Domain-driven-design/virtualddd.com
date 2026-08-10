@@ -133,6 +133,105 @@ describe('the next session', () => {
   }
 });
 
+describe('what is under the next session', () => {
+  // The list of everything after the hero, and the block that replaces the
+  // whole thing once nothing is left.
+  //
+  // The design this tests is "every count is a designed state": one session,
+  // several, and none. Only one of those three is reachable by loading the site
+  // today, and the other two arrive by the clock rather than by a deploy — the
+  // last session of a run finishing is not a Notion edit, so nothing rebuilds.
+  // Which is exactly how the defect this replaced survived: with two sessions
+  // announced, the home page rendered the second one nowhere at all and
+  // /sessions/ put it in a four-column grid on its own.
+  //
+  // So each state is reached by moving the clock, and each assertion is about
+  // what the page decided, not how it looks.
+
+  /** The upcoming sessions the page shipped, soonest first. */
+  const shipped = (page) =>
+    page.$$eval('[data-test="next-session"]', (els) =>
+      els.map((e) => e.dataset.iso).sort());
+
+  const state = (page) => page.evaluate(() => ({
+    heroes: [...document.querySelectorAll('[data-test="next-session"]')].filter((e) => !e.hidden).length,
+    rows: [...document.querySelectorAll('[data-test="upcoming-row"]')].filter((e) => !e.hidden).length,
+    count: document.querySelector('[data-test="upcoming-count"]')?.textContent.trim() ?? '',
+    empty: !document.querySelector('[data-test="no-sessions"]')?.hidden,
+  }));
+
+  for (const path of ['/', '/sessions/']) {
+    test(`${path} lists every announced session except the one it is leading with`, async () => {
+      const page = await browser.newPage();
+      await page.goto(base + path, { waitUntil: 'load' });
+      const isos = await shipped(page);
+      if (isos.length < 2) { await page.close(); return; } // needs two to say anything
+
+      // Well before any of them, so all are still to come.
+      await page.clock.install({ time: new Date(new Date(isos[0]).getTime() - 20 * 86400000) });
+      await page.goto(base + path, { waitUntil: 'load' });
+      await page.clock.runFor(1000);
+
+      const s = await state(page);
+      assert.equal(s.heroes, 1, 'one session should be leading the page');
+      assert.equal(s.rows, isos.length - 1,
+        'every announced session except the hero belongs in the list underneath');
+      assert.match(s.count, new RegExp(`^${isos.length - 1} more announced$`),
+        `the count said "${s.count}" over ${s.rows} row(s); the two must not be able to disagree`);
+      assert.equal(s.empty, false, 'the "nothing scheduled" block should not be on show');
+      await page.close();
+    });
+
+    test(`${path} empties the list as sessions pass, without a rebuild`, async () => {
+      // The state that produced the original hole: one left, nothing to list.
+      const page = await browser.newPage();
+      await page.goto(base + path, { waitUntil: 'load' });
+      const isos = await shipped(page);
+      if (isos.length < 2) { await page.close(); return; }
+
+      // Just after the first, so only the last one is still to come.
+      await page.clock.install({ time: new Date(new Date(isos.at(-2)).getTime() + 4 * 3600000) });
+      await page.goto(base + path, { waitUntil: 'load' });
+      await page.clock.runFor(1000);
+
+      const s = await state(page);
+      assert.equal(s.heroes, 1, 'the last remaining session should have taken the lead');
+      assert.equal(s.rows, 0, 'nothing is left to list once the hero is the only one');
+      assert.equal(s.count, 'Nothing else announced',
+        'the count still claims there is more to see');
+      assert.equal(s.empty, false, 'a session is still coming, so nothing is "between sessions"');
+      await page.close();
+    });
+
+    test(`${path} says what to do when nothing is scheduled at all`, async () => {
+      // The state nobody had designed: every announced session has been. The
+      // page used to open on whatever came next, which reads as a site that has
+      // stopped rather than a community between sessions.
+      const page = await browser.newPage();
+      await page.goto(base + path, { waitUntil: 'load' });
+      const isos = await shipped(page);
+      if (!isos.length) { await page.close(); return; }
+
+      await page.clock.install({ time: new Date(new Date(isos.at(-1)).getTime() + 86400000) });
+      await page.goto(base + path, { waitUntil: 'load' });
+      await page.clock.runFor(1000);
+
+      const s = await state(page);
+      assert.equal(s.heroes, 0, 'a session that has been is still being advertised');
+      assert.equal(s.rows, 0, 'a session that has been is still listed');
+      assert.equal(s.empty, true,
+        'nothing is scheduled and the page does not say so, or offer a way to change that');
+
+      // The point of the block: somewhere to go. A dead end here is the whole
+      // failure, not a missing decoration.
+      const ways = await page.$$eval('[data-test="no-sessions"] a', (els) => els.map((e) => e.href));
+      assert.ok(ways.some((h) => h.includes('discord')),
+        `the empty state offers no way to propose a session: ${JSON.stringify(ways)}`);
+      await page.close();
+    });
+  }
+});
+
 describe('the conferences row', () => {
   // The ordering rule is proved in tests/unit/conferences.test.mjs, because
   // every conference in Notion is in the future and will be for months. What is
