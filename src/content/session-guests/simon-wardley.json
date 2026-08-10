@@ -1,4 +1,9 @@
 {
   "name": "Simon Wardley",
-  "alsoAnOrganiser": false
+  "bio": "Explorer of uncharted spaces. Twice voted in the UKTech50, Judge in Nesta's Open Banking and Netflix's Open Source competitions, Co-Chair of OSCON Europe, Cloud Camp and Map Camp. Regular speaker on the global tech circuit.",
+  "website": "https://www.swardleymaps.com/",
+  "linkedin": "https://www.linkedin.com/in/simonwardley/",
+  "bluesky": "@swardley.bsky.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/simon-wardley-photo.jpg"
 }
