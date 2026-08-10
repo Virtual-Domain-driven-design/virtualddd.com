@@ -24,16 +24,36 @@ const seo = {
   seoMetadescription: z.string().optional(),
 };
 
+// A Notion select is a picker, and adding an option to it is one click that
+// nobody thinks of as a code change. These fields used to be `z.enum(...)`, so
+// that click failed `astro check` — the deploy's first step — and stopped the
+// whole site publishing over a label. It is the same shape of outage the URL
+// properties caused twice (see the note in `sessionGuests` below), and it gets
+// the same answer: the sync is the gate, and the build is not.
+//
+// So the known values are documented in the comment beside each field and
+// enforced nowhere. Nothing is lost by relaxing them: every one of these is
+// rendered, never branched on. A label nobody has seen before becomes a chip
+// with a new word in it, which is what the editor was asking for.
+//
+// `status` is the one that decides anything (`=== 'Published'`, in five
+// places), and it needed no new machinery either. A row whose status the sync
+// does not recognise falls out of `liveStatuses`, and a live page falling out
+// of that set is already the quarantine case in scripts/sync-notion.ts: the
+// file stays, the page keeps being served, and `unpublished-but-live` puts it
+// in Discord. So the page does not vanish and somebody is told, which is what
+// the enum was really protecting, without a failed deploy in the middle.
+
 const sessions = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/sessions' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      status: z.enum(['Ideas', 'Drafting', 'Planned', 'GoLive', 'Published', 'Done']),
+      status: z.string(),   // Ideas | Drafting | Planned | GoLive | Published | Done
       // Drives the upcoming (future) vs past (elapsed) split, client-side.
       datetime: z.coerce.date(),
-      typeOfSession: z.enum(['talk', 'debate', 'panel-discussion', 'fireside-chat', 'hands-on']).optional(),
-      level: z.array(z.enum(['Advanced', 'Intermediate', 'Beginner'])).default([]),
+      typeOfSession: z.string().optional(),   // talk | debate | panel-discussion | fireside-chat | hands-on
+      level: z.array(z.string()).default([]),   // Advanced | Intermediate | Beginner
       tags: z.array(z.string()).default([]),
       featuredImage: image().optional(),
       video: z.url().optional(),
@@ -56,7 +76,7 @@ const openSpaces = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      status: z.enum(['Drafting', 'Published', 'Done']),
+      status: z.string(),   // Drafting | Published | Done
       date: z.coerce.date(),
       tags: z.array(z.string()).default([]),
       featuredImage: image().optional(),
@@ -74,7 +94,7 @@ const stories = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      status: z.enum(['Ideas', 'Planning', 'Planned', 'Recorded', 'Drafting', 'Published']),
+      status: z.string(),   // Ideas | Planning | Planned | Recorded | Drafting | Published
       episode: z.number().optional(),
       publishedDate: z.coerce.date().optional(),
       // The people on an episode, in the order Notion holds them: the first
@@ -98,9 +118,9 @@ const heuristics = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      status: z.enum(['Submitted', 'Research', 'Curating', 'SEO Enrich', 'Published']),
+      status: z.string(),   // Submitted | Research | Curating | SEO Enrich | Published
       question: z.string().optional(),
-      type: z.array(z.enum(['Not sure', 'value-based-heuristics', 'guiding-heuristics', 'design-heuristics'])).default([]),
+      type: z.array(z.string()).default([]),   // Not sure | value-based-heuristics | guiding-heuristics | design-heuristics
       authors: z.array(z.string()).default([]),
       submitter: z.string().optional(),
       tags: z.array(z.string()).default([]),
@@ -233,7 +253,7 @@ const learningJourney = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/learning-journey' }),
   schema: z.object({
     title: z.string(),
-    status: z.enum(['Idea', 'Drafting', 'Published']),
+    status: z.string(),   // Idea | Drafting | Published
     order: z.number().default(0),
     // Optional so a half-written stage does not fail the build, but a stage
     // without `why` and `doneWhen` is a heading with nothing under it, and the
@@ -276,16 +296,16 @@ const readingList = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      status: z.enum(['Idea', 'Drafting', 'Published']),
+      status: z.string(),   // Idea | Drafting | Published
       authors: z.string().optional(),
-      type: z.enum(['Book', 'Free PDF', 'Paper', 'Report']).default('Book'),
+      type: z.string().default('Book'),   // Book | Free PDF | Paper | Report
       // Optional because a recommendation can outlive its link, and a dead URL
       // should degrade to a title we still stand behind rather than fail a build.
       link: z.url().optional(),
       publisher: z.string().optional(),
       year: z.number().optional(),
       isbn: z.string().optional(),
-      level: z.array(z.enum(['Beginner', 'Intermediate', 'Advanced', 'Reference'])).default([]),
+      level: z.array(z.string()).default([]),   // Beginner | Intermediate | Advanced | Reference
       topics: z.array(z.string()).default([]),
       free: z.boolean().default(false),
       // The recommendation itself. Optional in the schema so a half-entered row

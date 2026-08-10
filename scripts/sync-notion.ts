@@ -196,9 +196,14 @@ interface Alert {
    *  `unusable-url` — a URL property holds something that is not an address at
    *  all. Notion's URL property is a text box and takes anything; the schema
    *  that reads it does not. The field is left out so the deploy survives, and
-   *  the link the editor believes is on the site is not there. */
+   *  the link the editor believes is on the site is not there.
+   *  `missing-required-field` — a row Notion calls published has nothing in a
+   *  property the schema demands, such as a session with no Datetime. The row
+   *  is not written at all, because a file without it is one `astro check`
+   *  refuses, and that refusal stops the whole site publishing rather than
+   *  just this page. Only an editor can say when the session is. */
   kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed'
-    | 'person-renamed' | 'notion-schema-drift' | 'unusable-url';
+    | 'person-renamed' | 'notion-schema-drift' | 'unusable-url' | 'missing-required-field';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -594,6 +599,15 @@ interface ContentSpec {
   slugProp: string;
   statusKind: StatusKind;
   liveStatuses: string[];
+  /** Front-matter keys the schema in src/content.config.ts demands, and that
+   *  `extra` therefore has to produce. A row that cannot supply one is skipped
+   *  and raised, instead of being written as a file the build will refuse.
+   *
+   *  Named after the front-matter key rather than the Notion property because
+   *  that is what the schema names, and the schema is what has to be satisfied.
+   *  A row with no Datetime is not a broken build: it is a session nobody has
+   *  scheduled yet, which is an editorial state and belongs in Discord. */
+  requires?: string[];
   featuredImageProp?: string; // omit to skip featured-image download
   needsPeople?: boolean;
   needsGuests?: boolean;
@@ -609,7 +623,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     dataSourceId: '33e9db0a-1418-4a3e-a053-33fa384e5e93',
     section: '/sessions/',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'select',
-    liveStatuses: ['Done', 'Published'], featuredImageProp: 'Featured image',
+    liveStatuses: ['Done', 'Published'], requires: ['datetime'], featuredImageProp: 'Featured image',
     needsPeople: true, needsGuests: true,
     extra: async (h) => {
       const l: string[] = [];
@@ -640,7 +654,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     dataSourceId: '0cfb73c7-a638-4948-a4df-5fe06dcd2dd1',
     section: '/open-space/',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'status',
-    liveStatuses: ['Published', 'Done'], featuredImageProp: 'Featured image',
+    liveStatuses: ['Published', 'Done'], requires: ['date'], featuredImageProp: 'Featured image',
     extra: async (h) => {
       const l: string[] = [];
       if (h.date('Date')) l.push(`date: ${h.date('Date')}`);
@@ -878,6 +892,8 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   const quarantined: { url: string; title: string }[] = [];
   /** Published, but with no slug — so there is no address to render them at. */
   const unrenderable: { url: string; title: string }[] = [];
+  /** Live rows the schema would refuse, and the field that is missing. */
+  const incomplete: { url: string; title: string; missing: string }[] = [];
   /** Generated files somebody changed by hand; refetched from Notion. */
   const edited: string[] = [];
   let reused = 0;
@@ -979,6 +995,27 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       edited.push(`${outDir}/${before.slug}.md`);
     }
 
+    // Everything the spec builds, before anything is written down about it.
+    //
+    // A row that cannot satisfy the schema is skipped here rather than written
+    // and left for `astro check` to reject, because that rejection is the
+    // deploy's first step and it takes the *whole site* down with it: one
+    // session with an empty Datetime and nothing else publishes either. Same
+    // principle as `usableUrl`, and the same one the content report has always
+    // followed — the sync is the gate, and publishing is never hostage to a row
+    // somebody has not finished filling in.
+    //
+    // Before `now[id]` and `renamed`, so a skipped row leaves no trace in the
+    // sync state. Recording it there would tell the next run it had been
+    // written, and the run after that would see no change to make.
+    const extraLines = await spec.extra(h);
+    const missing = (spec.requires ?? []).filter((k) => !extraLines.some((l) => l.startsWith(`${k}:`)));
+    if (missing.length) {
+      console.log(`  ! skipping "${title}": no ${missing.join(', ')}, which the schema requires`);
+      incomplete.push({ title, url: page.url, missing: missing.join(', ') });
+      continue;
+    }
+
     if (before && before.slug !== slug) renamed.push({ from: before.slug, to: slug });
     now[id] = { slug, edited: editedAt, hash: '' };
 
@@ -986,7 +1023,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     fm.push(`title: ${yamlStr(title)}`);
     fm.push(`slug: ${yamlStr(slug)}`);
     fm.push(`status: ${yamlStr(statusOf(page, spec.statusKind))}`);
-    fm.push(...(await spec.extra(h)));
+    fm.push(...extraLines);
     if (spec.featuredImageProp) {
       const featuredRel = unchanged ? previous!.featured : await h.img(spec.featuredImageProp, 'featured');
       if (featuredRel) fm.push(`featuredImage: ${yamlStr(featuredRel)}`);
@@ -1085,6 +1122,10 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     console.log('    or tick Retire URL to take the address down properly:');
     for (const q of quarantined) console.log(`      ${q.url}  (${q.title})`);
   }
+  if (incomplete.length) {
+    console.log(`\n  ! ${incomplete.length} published page(s) missing a field the schema requires, so they were not written:`);
+    for (const i of incomplete) console.log(`      ${i.title} — no ${i.missing}  ${i.url}`);
+  }
   if (unrenderable.length) {
     console.log(`\n  ! ${unrenderable.length} page(s) published in Notion with no slug, so they have no address:`);
     for (const u of unrenderable) console.log(`      ${u.title}  ${u.url}`);
@@ -1111,6 +1152,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     writeAlert(alertKey, [
       ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: alertKey, title: q.title, url: q.url })),
       ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: alertKey, title: u.title, url: u.url })),
+      ...incomplete.map((i) => ({ kind: 'missing-required-field' as const, section: alertKey, title: `${i.title}: no ${i.missing}, so the page is not published`, url: i.url })),
       ...strandedAlerts(alertKey),
       ...unusableUrlAlerts(alertKey),
       ...driftAlerts(alertKey, targets[0]?.url ?? '', drift),

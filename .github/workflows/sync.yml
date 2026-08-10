@@ -139,6 +139,24 @@ jobs:
             || echo "::warning::Podcast episode links were not refreshed; the committed map still stands."
           npm run redirects
 
+      # The backstop, and the last thing before anything is counted as a change.
+      #
+      # Everything above gates the fields it knows how to gate: `usableUrl` for
+      # addresses, `requires` for a property the schema demands. This catches
+      # what nobody thought of, by asking the build's own validator rather than
+      # a copy of it, and putting back the one row it refuses.
+      #
+      # It runs *before* "What changed?" on purpose. A row restored here must be
+      # restored before the diff is taken, or the sync would commit content the
+      # deploy is about to reject — which is the whole failure being prevented:
+      # one unfinished row in Notion, and nothing else on the site publishes
+      # either.
+      #
+      # It does not fail the run. Holding a row back is the successful outcome.
+      - name: Would the build accept what we just wrote?
+        if: steps.token.outputs.ready == 'true'
+        run: node scripts/validate-content.mjs
+
       - name: What changed?
         id: diff
         # Guarded too, or a skipped sync reports "nothing changed in Notion",

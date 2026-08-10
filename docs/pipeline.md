@@ -203,6 +203,23 @@ Three kinds, all *published in Notion, not true on the site*:
   slug, and therefore no address. Skipping it is right; there is nothing to
   build. Skipping it *silently* is not: the editor believes it is on the site,
   and only they can give it a slug.
+- **`missing-required-field`**: the same shape, one field along. A published row
+  with nothing in a property the schema demands, such as a session with no
+  Datetime. The row is not written, because a file without it is one the build
+  refuses, and that refusal is not confined to the page: `astro check` is the
+  deploy's first step, so one unscheduled session would stop the whole site
+  publishing. Which fields these are is declared per collection as `requires`
+  in `scripts/sync-notion.ts`, named after the front-matter key the schema
+  demands rather than the Notion property, because the schema is what has to be
+  satisfied.
+- **`entry-rejected`**: the backstop for the fields nobody thought to gate.
+  After the sync writes, `scripts/validate-content.mjs` runs Astro's own
+  validator over the generated content; any entry it refuses is put back to its
+  last committed version, or left out entirely if it has never been published,
+  and raised here. The page then shows what it showed before rather than
+  nothing, and every other page still ships. If this fires, the gate that
+  should have caught it upstream is missing, and the alert is the request to
+  add one.
 
 None of them is worth failing a run over, and all are invisible if they only
 reach a CI log, which is the whole reason the file exists. It is keyed by section and
