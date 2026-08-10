@@ -2,7 +2,7 @@
  *
  * The licence and the upstream canonical are in the front matter, not just the
  * page: anything reading the markdown instead of the HTML must still be told
- * this is CC BY-SA 4.0 and where the original lives. */
+ * which licence this carries and where the original lives. */
 import type { APIContext } from 'astro';
 import { markdownPaths, markdownFor } from '../../../lib/markdown-page';
 
@@ -15,7 +15,7 @@ export const GET = (context: APIContext) =>
     body: entry.body ?? '',
     extra: {
       type: 'ddd-crew tool',
-      license: 'CC BY-SA 4.0',
+      license: entry.data.license,
       canonical: entry.data.canonical,
       repository: entry.data.repo,
       credit: 'The ddd-crew and its contributors',

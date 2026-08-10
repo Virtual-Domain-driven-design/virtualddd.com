@@ -11,7 +11,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["nick-tune"]
 seoMetadescription: "Nick Tune on running Wardley Mapping remotely — anticipating how domains evolve and what that means for the boundaries you draw today."
-featuredImage: "./_assets/experimenting-with-remote-wardley-mapping-with-nick-tune-featured.jpeg"
+featuredImage: "./_assets/experimenting-with-remote-wardley-mapping-with-nick-tune-featured.jpg"
 ---
 
  ** If you want to participate, RSVP to the meetup and you will get a password protected zoom Link, else just enjoy youtube *** Wardley Mapping is a strategic tool for anticipating how domains will evolve over time.

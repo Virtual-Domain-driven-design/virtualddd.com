@@ -47,6 +47,36 @@ console.log(`checking ${targets.length} URL(s) against ${base}\n`);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * One request, retried only when the network refused to answer.
+ *
+ * A status is an answer. 404, 302 and 500 are findings, and they go to the
+ * sweep below on the first look, unretried, because a second try would only
+ * confirm them more slowly. What is retried is `fetch` *throwing*: a reset
+ * connection, a DNS blip, a handshake that never finished. There is no status
+ * then, and nothing whatever has been learned about the site.
+ *
+ * The deploy of 2026-08-03 was failed by exactly one of those. One URL out of
+ * 105 came back `fetch failed`, the same URL passed on the next deploy half an
+ * hour later, and in between `Tell n8n what shipped` was skipped, so a release
+ * that was live and correct shipped in silence. Six connections at once to
+ * shared hosting, seconds after the release symlink moved, is where that
+ * happens; it says nothing about the redirect map, which is all this script is
+ * here to prove.
+ */
+const ATTEMPTS = 3;
+async function request(url, init = { redirect: 'manual' }) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fetch(url, { ...init, signal: AbortSignal.timeout(20000) });
+    } catch (e) {
+      if (attempt === ATTEMPTS) throw e;
+      console.log(`  ${url} did not answer (${e.message}), retrying…`);
+      await sleep(attempt * 2000);
+    }
+  }
+}
+
 const CONCURRENCY = 6;
 const results = [];
 let index = 0;
@@ -56,7 +86,7 @@ async function worker() {
     const path = targets[index++];
     try {
       // manual redirect: we want to see each hop, not the final page.
-      const res = await fetch(base + path, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
+      const res = await request(base + path);
       const location = res.headers.get('location');
       let hops = 0;
       let status = res.status;
@@ -64,10 +94,7 @@ async function worker() {
       // Follow up to three hops so chains are visible.
       while (target && hops < 3) {
         hops++;
-        const next = await fetch(new URL(target, base).toString(), {
-          redirect: 'manual',
-          signal: AbortSignal.timeout(20000),
-        });
+        const next = await request(new URL(target, base).toString());
         status = next.status;
         target = next.headers.get('location');
         if (!target) break;
@@ -102,7 +129,7 @@ const bad = [];
  */
 const warn = [];
 for (const r of results) {
-  if (r.error) { bad.push(`${r.path} — request failed: ${r.error}`); continue; }
+  if (r.error) { bad.push(`${r.path} — request failed ${ATTEMPTS} times: ${r.error}`); continue; }
   if (r.first === 404) { bad.push(`${r.path} — 404 (nothing handles it)`); continue; }
   if (r.first === 200 || r.first === 410) continue;
   if (r.first === 301 || r.first === 308) {
@@ -138,6 +165,9 @@ if (host.split('.').length === 2) {
   // three minutes added to every release for a line of output. Four tries over
   // half a minute catches the case where the host has already settled and says
   // so plainly when it has not.
+  // Its own loop rather than `request` above, because it retries a wrong
+  // *status* too, not only a request that threw. Nesting the two would make
+  // twelve attempts at a check that is already only a warning.
   const attempts = 4;
   for (let attempt = 1; attempt <= attempts; attempt++) {
     if (attempt > 1) await sleep(10000);
@@ -171,10 +201,10 @@ if (host.split('.').length === 2) {
 const SEARCH_ASSETS = ['/search/', '/pagefind/pagefind.js', '/pagefind/pagefind-entry.json'];
 for (const path of SEARCH_ASSETS) {
   try {
-    const res = await fetch(base + path, { signal: AbortSignal.timeout(20000) });
+    const res = await request(base + path, { redirect: 'follow' });
     if (!res.ok) bad.push(`${path} — ${res.status}; site search will not work`);
   } catch (e) {
-    bad.push(`${path} — request failed: ${e.message}; site search will not work`);
+    bad.push(`${path} — request failed ${ATTEMPTS} times: ${e.message}; site search will not work`);
   }
 }
 

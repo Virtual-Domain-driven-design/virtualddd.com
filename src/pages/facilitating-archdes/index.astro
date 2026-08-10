@@ -6,6 +6,7 @@ import { getCollection } from 'astro:content';
 import { creditsFor, guestsById, tagOptions } from '../../lib/collections';
 import { packFacet } from '../../lib/card-filter';
 import CardFilter from '../../components/CardFilter.astro';
+import ListenOn from '../../components/ListenOn.astro';
 import { iso, shortDate } from '../../lib/dates';
 import { excerpt } from '../../lib/excerpt';
 import { collectionPage, topTrail } from '../../lib/seo';
@@ -175,6 +176,11 @@ const jsonLd = collectionPage(Astro.site, {
     <div class="wrap archive-grid">
       <aside class="archive-rail">
         <div class="rail-inner">
+          <!-- First in the rail, because it is the one thing on this page that
+               is worth doing before reading a single story: every one of them
+               is an episode, and the show is why they keep arriving. -->
+          <ListenOn show="stories" layout="rail" describe class="rail-listen" />
+
           <h2 class="eyebrow eyebrow--cyan">What we wrote</h2>
           <p class="rail-lead">
             Three angles on the same problem, and the episode where each one met a real team.
@@ -300,6 +306,9 @@ const jsonLd = collectionPage(Astro.site, {
     /* Above the stories on a narrow screen: below them it would sit under two
        dozen cards, which is the same as not being there. */
     .archive-rail { order: -1; }
+    /* `:global`, because the element belongs to ListenOn and this file's scope
+       attribute is not on it. Same reason as `.side-ai` in SideExtras. */
+    :global(.rail-listen) { margin-bottom: var(--space-8); }
     @media (min-width: 72rem) {
       /* No `align-items: start` here: it sizes the rail to its own content, and
          then the sticky inside it has nowhere to travel and scrolls away with

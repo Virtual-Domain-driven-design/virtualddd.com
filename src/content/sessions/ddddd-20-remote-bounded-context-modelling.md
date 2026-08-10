@@ -10,7 +10,7 @@ video: "https://www.youtube.com/embed/QoGvpbkzZTQ"
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "A remote workshop on bounded context modelling, open to anyone — developers, testers, product managers and architects — whether or not you have met DDD before."
-featuredImage: "./_assets/ddddd-20-remote-bounded-context-modelling-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-remote-bounded-context-modelling-featured.jpg"
 ---
 
 (It doesn't matter if you've practiced DDD before or never heard of Bounded Contexts you can attend and get value from this workshop. Developers, Testers, Product Managers, Architects, all welcome)

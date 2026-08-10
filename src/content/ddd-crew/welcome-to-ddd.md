@@ -4,20 +4,24 @@ description: "Definitions of DDD and fundamental concepts to reduce the learning
 repo: "https://github.com/ddd-crew/welcome-to-ddd"
 canonical: "https://ddd-crew.github.io/welcome-to-ddd/"
 license: "CC-BY-SA-4.0"
-category: "Getting started"
-order: 1
-stars: 1534
+stars: 1536
 heroImage: "./_assets/welcome-to-ddd/ddd_on_a_page1.png"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
   - { name: "javujavichi", url: "https://github.com/javujavichi" }
+  - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
   - { name: "Max-Git", url: "https://github.com/Max-Git" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
 ---
 This project contains definitions of DDD and fundamental concepts to reduce the learning curve and confusion.
 
 ![DDD on a page](./_assets/welcome-to-ddd/ddd_on_a_page1.png)
 ![DDD on a page](./_assets/welcome-to-ddd/ddd_on_a_page2.png)
 ![DDD on a page](./_assets/welcome-to-ddd/ddd_on_a_page3.png)
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/welcome-to-ddd/blob/main/translations/pt-br/README.md)
 
 ## Getting started with DDD
 

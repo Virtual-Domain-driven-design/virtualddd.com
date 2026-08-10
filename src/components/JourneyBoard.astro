@@ -1,0 +1,328 @@
+---
+/**
+ * The learning journey, drawn as the board we would draw it on.
+ *
+ * This is the one place on the site that leaves the neon brand behind, and it
+ * does it on purpose: /learn/ teaches Domain-Driven Design, and this community
+ * facilitates EventStorming every week, so the path is drawn in the notation it
+ * is teaching. Nobody else can do that honestly. The sticky colours live in
+ * `tokens.css` named for what a sticky *means*, so they stay quarantined to
+ * this view and cannot leak into the rest of the site as a second palette.
+ *
+ * The mapping took a correction, and the corrected one is the point:
+ *
+ *   blue     the intention. Not just the imperative title: the title and the
+ *            `why` together are what somebody means to achieve, so they share
+ *            one sticky rather than the reason floating beside the board as
+ *            grey prose.
+ *   yellow   the constraints — what has to be true, or be consumed, before that
+ *            intention can be met: the video, the book, the ddd-crew tool.
+ *   orange   the outcome. `doneWhen` is the only thing here that has *happened*:
+ *            "You can draw your own system as two or three bounded contexts."
+ *            That is what sits on the timeline, and it is why the unwritten
+ *            steps are orange too: the slot on the timeline exists, the outcome
+ *            is what nobody has decided yet.
+ *   pink     the hotspot — what a stage deliberately leaves out, and the open
+ *            question at the end of the board.
+ *
+ * And time runs left to right, always. Stacking a command above its event
+ * turns a timeline back into a list, which is what the first attempt did.
+ *
+ * ## Why this is not `Carousel.astro`
+ *
+ * That component exists precisely to stop a fourth hand-rolled sideways-
+ * scrolling row, so the burden is on this one to say why it is not one. Two
+ * things in it are load-bearing for its three users and fatal here:
+ *
+ *   `patterns.css` sizes every direct child of `.carousel` at
+ *   `flex: 0 0 clamp(240px, 46%, 320px)` and snaps it. A beat of this board is
+ *   around 40rem and must not snap: a step is wider than the viewport, so
+ *   snapping would park the reader between an intention and its outcome.
+ *
+ *   Its script scrolls by the width of the first child. This track is one long
+ *   ribbon rather than N cards, so one arrow press would jump the whole board.
+ *
+ * Making it fit would mean bending the shared component for the one caller
+ * shaped differently from its three users, which is how a shared component
+ * stops being worth sharing. What is worth borrowing is its *affordance*:
+ * arrows from 800px, which say "there is more" more plainly than the fade
+ * below. That is still open.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+interface Props {
+  stages: CollectionEntry<'learningJourney'>[];
+}
+const { stages } = Astro.props;
+
+// Books and tools resolve to entries that already carry their own title, so
+// nothing here is a second copy of a recommendation.
+const books = new Map((await getCollection('readingList')).map((b) => [b.id, b]));
+const tools = new Map((await getCollection('dddCrew')).map((t) => [t.id, t]));
+
+/**
+ * The open end of the board.
+ *
+ * Empty space on a wall is not unfinished work, it is an invitation: the whole
+ * point of the practice is that the board shows what nobody has answered yet.
+ * Two, because two stages exist in Notion beyond the published ones. Fixed
+ * rather than derived: the site cannot see an unpublished stage, and counting
+ * from one would be a promise about work nobody has started.
+ */
+const DISCORD = 'https://discord.gg/tRJkcsFDKN';
+
+const OPEN_STEPS = 2;
+
+/** Each stage with its constraints already resolved, in the order they render. */
+const beats = stages.map((stage) => {
+  const d = stage.data;
+  return {
+    stage,
+    uses: [
+      ...d.videos.map((v) => ({
+        kind: v.minutes ? `Watch · ${v.minutes} min` : 'Watch',
+        title: v.title, who: v.who, href: v.url,
+      })),
+      ...d.books.flatMap((slug) => {
+        const b = books.get(slug);
+        return b ? [{ kind: 'Read', title: b.data.title, who: b.data.authors, href: `/reading-list/#${b.id}` }] : [];
+      }),
+      ...d.tools.flatMap((repo) => {
+        const t = tools.get(repo);
+        return t ? [{ kind: 'Try', title: t.data.title, who: 'ddd-crew', href: `/ddd-crew/${t.id}/` }] : [];
+      }),
+    ],
+  };
+});
+
+// A board is a thing to read; this is the one thing to *do*. Taken from the
+// data rather than written out, so it cannot start naming a video that the
+// curators have since moved off step 1.
+const first = beats[0];
+const firstUse = first?.uses[0];
+---
+
+{stages.length > 0 && (
+  <section class="wrap board-section">
+    <div class="section-head">
+      <h2>The path, as we would model it</h2>
+      <p class="board-note">Time runs left to right. Scroll the board, or tab into it and use the arrow keys.</p>
+    </div>
+
+    {firstUse && (
+      <p class="board-start">
+        <a class="board-start-go" href={firstUse.href}
+           rel={firstUse.href?.startsWith('http') ? 'noopener' : undefined}>Start with &ldquo;{firstUse.title}&rdquo;</a>
+        {first.stage.data.time && <span class="board-start-note">The whole of step 1 takes {first.stage.data.time}.</span>}
+      </p>
+    )}
+
+    {/* The frame exists to hold the fade. Without it the board ends in a hard
+        vertical cut mid-word, and the only clue that there is more is a line of
+        grey text at the far top right, which the first person to look at this
+        page did not read. */}
+    <div class="board-frame" data-board>
+      <div class="board-scroll" tabindex="0" data-board-scroll role="region" aria-label="The learning journey as an EventStorming board">
+        <ol class="board" data-test="journey-board">
+          {beats.map(({ stage, uses }, i) => {
+            const d = stage.data;
+            return (
+              <li class="beat" id={stage.id} data-test="journey-step">
+                <p class="beat-label">
+                  <span class="beat-n">Step {i + 1}</span>
+                  {d.time && <span class="beat-time">{d.time}</span>}
+                </p>
+
+                <div class="flow">
+                  <div class="col">
+                    <p class="sticky sticky--intention">
+                      <span class="sticky-kind">Intention</span>
+                      <span class="sticky-lead">{d.title}</span>
+                      {d.why && <span class="sticky-body">{d.why}</span>}
+                    </p>
+                    {d.notHere && (
+                      <p class="sticky sticky--hotspot">
+                        <span class="sticky-kind">Not here, on purpose</span>
+                        {d.notHere}
+                      </p>
+                    )}
+                  </div>
+
+                  <span class="arrow" aria-hidden="true">&rarr;</span>
+
+                  <div class="col col--uses">
+                    {uses.map((u) => (
+                      <p class="sticky sticky--constraint" data-test="journey-resource">
+                        <span class="sticky-kind">{u.kind}</span>
+                        {u.href
+                          ? <a href={u.href} rel={u.href.startsWith('http') ? 'noopener' : undefined}>{u.title}</a>
+                          : u.title}
+                        {u.who && <span class="sticky-who">{u.who}</span>}
+                      </p>
+                    ))}
+                    {uses.length === 0 && (
+                      <p class="sticky sticky--constraint sticky--thin">
+                        <span class="sticky-kind">Nothing to consume</span>
+                        This one is on you.
+                      </p>
+                    )}
+                  </div>
+
+                  <span class="arrow" aria-hidden="true">&rarr;</span>
+
+                  <div class="col">
+                    {d.doneWhen && (
+                      <p class="sticky sticky--outcome">
+                        <span class="sticky-kind">Done when</span>
+                        {d.doneWhen}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+
+          <li class="beat beat--open" data-test="journey-open">
+            <p class="beat-label"><span class="beat-n">And then</span></p>
+            <div class="flow">
+              {Array.from({ length: OPEN_STEPS }, (_, i) => (
+                <>
+                  {i > 0 && <span class="arrow" aria-hidden="true">&rarr;</span>}
+                  <div class="col">
+                    {/* Orange, like every other outcome: the slot on the timeline
+                        is real, and it is the outcome nobody has written yet. */}
+                    <p class="sticky sticky--outcome sticky--unwritten">Step {stages.length + i + 1}</p>
+                  </div>
+                </>
+              ))}
+            </div>
+            {/* The ask sits on the sticky that does the asking. The panel at
+                the top of the page invites people to Discord in general; this
+                is a specific question, put where somebody is already wondering
+                about it. Two different requests, so it is not one click asked
+                for twice. */}
+            <p class="sticky sticky--hotspot sticky--wide">
+              <span class="sticky-kind">Hotspot</span>
+              This is where the board runs out. What belongs here depends on what you do all
+              day, and we would rather ask than guess.{' '}
+              <a href={DISCORD}>Tell us on Discord what your step 3 would be &rarr;</a>
+            </p>
+          </li>
+        </ol>
+      </div>
+      <span class="board-fade" aria-hidden="true"></span>
+    </div>
+
+  </section>
+)}
+
+<style>
+  .board-section { margin-bottom: var(--space-16); }
+  .board-note { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0; }
+
+  /* The board scrolls sideways inside its own box, so the page body never does.
+     A visible focus ring matters more than usual: this is a scroll container
+     people tab into, and without one there is no way to tell you are in it. */
+  .board-frame { position: relative; }
+  .board-scroll { overflow-x: auto; padding: var(--space-4) 0 var(--space-5); }
+  .board-scroll:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
+
+  /* On by default rather than off: the board is wider than any viewport we
+     support, so "there is more to the right" is true until proven otherwise.
+     The script below only ever takes it away, which means a visitor with no
+     JavaScript still gets the hint instead of a cut-off word. */
+  .board-fade {
+    position: absolute; inset-block: 0; right: 0; width: var(--space-16);
+    pointer-events: none; transition: opacity 0.2s ease;
+    background: linear-gradient(to right, transparent, var(--color-bg));
+  }
+  .board-frame[data-at-end] .board-fade { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .board-fade { transition: none; } }
+
+  /* The one thing to do on a page that is otherwise a thing to read. */
+  .board-start { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3); margin: 0; }
+  .board-start-go { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); }
+  .board-start-note { color: var(--color-text-muted); font-size: var(--text-sm); }
+
+  /* One ribbon. Steps follow each other left to right, and so does everything
+     inside a step: command, then what it needs, then what is then true. */
+  .board { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--space-6); align-items: start; }
+  .beat { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  .beat-label { display: flex; align-items: baseline; gap: var(--space-3); margin: 0; }
+  .beat-n {
+    font-family: var(--font-heading); font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.09em; font-size: var(--text-sm); color: var(--color-primary);
+  }
+  .beat-time { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+  .flow { display: flex; align-items: flex-start; gap: var(--space-3); }
+  /* Narrow enough that a step's whole arc — intention, what it needs, what is
+     then true — has a chance of being on screen at once. A step whose effort is
+     visible and whose payoff is not reads as more work than it is. */
+  .col { display: flex; flex-direction: column; gap: var(--space-3); width: 12rem; }
+  .col--uses { width: 13rem; }
+  .arrow { color: var(--color-text-muted); font-size: var(--text-xl); line-height: 1; padding-top: var(--space-5); }
+
+  /* A sticky is a light fill, so everything on it is ink — the same rule the
+     cyan panels follow, and the reason --on-brand exists. */
+  .sticky {
+    margin: 0; padding: var(--space-3) var(--space-4);
+    color: var(--color-ink); border-radius: var(--radius-sm);
+    box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.45);
+    font-size: var(--text-sm); line-height: 1.45;
+    display: flex; flex-direction: column; gap: 0.15rem;
+  }
+  /* Hand-placed rather than printed. Not animation: it never moves. */
+  .col > .sticky:nth-of-type(odd) { transform: rotate(-0.5deg); }
+  .col > .sticky:nth-of-type(even) { transform: rotate(0.4deg); }
+
+  .sticky-kind {
+    font-family: var(--font-heading); font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.07em; font-size: 0.7rem; color: var(--color-ink-muted);
+  }
+  .sticky-who { color: var(--color-ink-muted); font-size: 0.78rem; }
+  .sticky a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 0.15em; }
+  .sticky a:hover { text-decoration-thickness: 2px; }
+
+  /* The intention carries the title *and* the reason for it, so the heading
+     face is on the title alone rather than on the whole sticky. */
+  .sticky--intention { background: var(--sticky-intention); }
+  .sticky-lead {
+    font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg); line-height: 1.15;
+  }
+  .sticky-body { color: var(--color-ink-muted); line-height: 1.5; margin-top: 0.15rem; }
+
+  .sticky--constraint { background: var(--sticky-constraint); }
+  .sticky--outcome {
+    background: var(--sticky-outcome);
+    font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg); line-height: 1.15;
+  }
+  .sticky--hotspot { background: var(--sticky-hotspot); }
+  .sticky--thin { opacity: 0.55; }
+
+  /* An outcome nobody has written. Same sticky, same colour, no body: the slot
+     on the timeline is the whole message. */
+  .sticky--unwritten { min-height: 5.5rem; }
+  /* The open question sits under the board rather than in a column. */
+  .sticky--wide { max-width: 34rem; }
+
+</style>
+
+<script>
+  // Enhancement only. Everything above renders and reads without this; all it
+  // does is take the fade away when there is genuinely nothing more to see,
+  // so the hint never lies at the end of the board.
+  for (const frame of document.querySelectorAll('[data-board]')) {
+    const scroller = frame.querySelector('[data-board-scroll]');
+    if (!(scroller instanceof HTMLElement)) continue;
+    const update = () => {
+      const room = scroller.scrollWidth - scroller.clientWidth;
+      frame.toggleAttribute('data-at-end', room <= 1 || scroller.scrollLeft >= room - 1);
+    };
+    update();
+    scroller.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
+</script>

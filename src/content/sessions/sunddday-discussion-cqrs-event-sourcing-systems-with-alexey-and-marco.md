@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["alexey-zimarev"]
 seoTitle: "CQRS and Event Sourcing in Practice"
 seoMetadescription: "Alexey Zimarev and Marco Heimeshoff on building real systems with CQRS and event sourcing: what the patterns actually are, and when they earn their keep."
-featuredImage: "./_assets/sunddday-discussion-cqrs-event-sourcing-systems-with-alexey-and-marco-featured.jpeg"
+featuredImage: "./_assets/sunddday-discussion-cqrs-event-sourcing-systems-with-alexey-and-marco-featured.jpg"
 ---
 
 In the next SunDDDay discussion Alexey Zimarev and Marco Heimeshoff will join us and share their experience in building systems with CQRS and Event Sourcing. We will discuss what it exactly is, where it came from, what the strength and weaknesses are, when and how to use it, and how to design and maintain these systems. Join us through zoom webinar or follow the live youtube stream. You can interact with us and ask your questions through chat, or raise your hand in the zoom webinar and join us live to ask your questions fishbowl style!

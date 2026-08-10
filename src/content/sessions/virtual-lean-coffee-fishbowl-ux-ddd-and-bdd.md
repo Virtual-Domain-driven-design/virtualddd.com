@@ -11,7 +11,7 @@ podcastPlayer: "https://player.captivate.fm/episode/da4527db-b269-48c4-a7da-4538
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "A lean coffee fishbowl on UX, DDD and BDD, prompted by how little three communities doing similar work know about each other."
-featuredImage: "./_assets/virtual-lean-coffee-fishbowl-ux-ddd-and-bdd-featured.jpeg"
+featuredImage: "./_assets/virtual-lean-coffee-fishbowl-ux-ddd-and-bdd-featured.jpg"
 ---
 
 It all started with a tweet by John Cutler <>. And it seemed that a lot of people from these communities learned a lot from each other. And we would love to learn more about different areas of overlap. It seems like goals and culture are aligned in both communities.

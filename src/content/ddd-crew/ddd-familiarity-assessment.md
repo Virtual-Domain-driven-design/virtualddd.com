@@ -4,8 +4,6 @@ description: "The DDD Familiarity Assessment goal is to provide you with a set o
 repo: "https://github.com/ddd-crew/ddd-familiarity-assessment"
 canonical: "https://ddd-crew.github.io/ddd-familiarity-assessment/"
 license: "CC-BY-SA-4.0"
-category: "Getting started"
-order: 3
 stars: 17
 contributors:
   - { name: "aleixmorgadas", url: "https://github.com/aleixmorgadas" }

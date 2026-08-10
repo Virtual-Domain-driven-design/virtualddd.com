@@ -113,7 +113,7 @@ jobs:
         # and would have frozen at whatever was first committed.
         run: |
           npx tsx scripts/sync-notion.ts guests --write
-          for c in sessions open-spaces stories heuristics reading-list; do
+          for c in sessions open-spaces stories heuristics reading-list learning-journey; do
             npx tsx scripts/sync-notion.ts content --collection=$c --write $FULL
           done
           for r in organisers conferences; do
@@ -130,6 +130,13 @@ jobs:
           if [ -n "$FULL" ] || ! git diff --quiet -- data/ddd-crew.json; then
             npx tsx scripts/sync-ddd-crew.ts --write
           fi
+          # Which episode is which on Apple, for the "listen elsewhere" cards.
+          # Never fatal: the script exits non-zero when a lookup fails, which is
+          # the right answer to a person running it, but the committed file is
+          # still good and letting Apple being down block a content commit is
+          # the outage docs/pipeline.md promises publishing will never have.
+          npx tsx scripts/sync-podcast-episodes.ts --write \
+            || echo "::warning::Podcast episode links were not refreshed; the committed map still stands."
           npm run redirects
 
       - name: What changed?
@@ -170,8 +177,9 @@ jobs:
       # published that has no slug and so no address at all. Neither is worth
       # failing a run over, and both are invisible if they only reach a CI log.
       #
-      # Before the commit, so HEAD is still the previous run and the file's own
-      # diff is the whole test: the same alert is only ever raised once.
+      # Before the commit, so HEAD is still the previous run and this can ask
+      # what changed. The file's own diff decides whether to look; what is sent
+      # is the alerts that are new, item by item.
       - name: Anything only a person can decide?
         if: steps.diff.outputs.changed == 'true'
         env:
@@ -196,8 +204,14 @@ jobs:
           # never been committed — the very first alert is exactly that case.
           [ -n "$(git status --porcelain -- data/sync-alerts.json)" ] \
             || { echo "The same as last time; already raised."; exit 0; }
-          items=$(jq -c '.items // []' data/sync-alerts.json)
-          [ "$items" = "[]" ] && { echo "Everything outstanding has been resolved."; exit 0; }
+          # Only what is new. The file changing is not the same thing as an
+          # alert being new, and treating them as one is why an organiser
+          # rename from days earlier kept arriving in Discord: a story image on
+          # googleusercontent.com downloads on some runs and not others, and
+          # every flip resent the whole list. See scripts/new-alerts.mjs.
+          items=$(git show HEAD:data/sync-alerts.json 2>/dev/null \
+            | node scripts/new-alerts.mjs data/sync-alerts.json)
+          [ "$items" = "[]" ] && { echo "The file changed, but nothing in it is new."; exit 0; }
           code=$(jq -n --argjson items "$items" --arg run "$RUN" \
             '{event:"sync-alerts", items:$items, run:$run}' \
             | curl -sS -o /dev/null -w '%{http_code}' -X POST \

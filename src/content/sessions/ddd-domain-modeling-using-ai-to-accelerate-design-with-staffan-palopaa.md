@@ -12,7 +12,7 @@ coOrganisers: ["Kenny Schwegler"]
 guests: ["staffan-palopaa"]
 seoTitle: "Using AI to Accelerate Domain Modelling"
 seoMetadescription: "Staffan Palopää on using AI to shorten the learning curve for DDD and domain modelling, and where the machine helps rather than hinders the design."
-featuredImage: "./_assets/ddd-domain-modeling-using-ai-to-accelerate-design-with-staffan-palopaa-featured.jpeg"
+featuredImage: "./_assets/ddd-domain-modeling-using-ai-to-accelerate-design-with-staffan-palopaa-featured.jpg"
 ---
 
 DDD & Domain Modeling can take a long time to learn and understand. This could be one of the biggest impediments for increased adoption of DDD. With the help of AI, we can speed up the learning process dramatically. We can create domain models (from prompts) in minutes rather than days or weeks. This helps visualise the benefits of DDD for stakeholders.

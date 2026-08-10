@@ -115,6 +115,19 @@ async function processRepo(tool: CrewTool) {
   const rawBase = `https://raw.githubusercontent.com/${OWNER}/${name}/${branch}`;
   const blobBase = `https://github.com/${OWNER}/${name}/blob/${branch}`;
 
+  // Hosting somebody's README in full needs their permission, and the licence
+  // is that permission. Nothing else checks: a tick in Notion is otherwise the
+  // only thing between us and republishing all-rights-reserved material, which
+  // is exactly what these five repos were until the ddd-crew merged licences
+  // onto them. A repo with none is refused rather than quietly published; the
+  // run fails, so the prune at the end leaves every other page alone.
+  const spdx: string | undefined = meta.license?.spdx_id && meta.license.spdx_id !== 'NOASSERTION'
+    ? meta.license.spdx_id
+    : undefined;
+  if (!spdx) {
+    throw new Error(`ddd-crew/${name} states no licence, so its README is all rights reserved and may not be republished here. Ask upstream for a licence file, or untick Republished in Notion and let the card link out.`);
+  }
+
   let md = await fetchText(`${rawBase}/README.md`);
 
   // Before anything is parsed out of it: the README's own absolute links to
@@ -124,8 +137,15 @@ async function processRepo(tool: CrewTool) {
 
   // Title = first H1; strip it from the body (we render the title ourselves).
   const h1 = md.match(/^\s*#\s+(.+?)\s*$/m);
-  const title = (h1?.[1] ?? name).replace(/[#*`]/g, '').trim();
+  let title = (h1?.[1] ?? tool.name ?? name).replace(/[#*`]/g, '').trim();
   if (h1) md = md.replace(h1[0], '').replace(/^\s+/, '');
+
+  // Some READMEs head themselves with the repository name, and a card reading
+  // "ai-ddd-prompts-and-rules" looks like a broken title rather than a faithful
+  // one. Notion holds a human name for every tool, so use it in exactly that
+  // case. Any other H1 is the author's own title for their work and stands.
+  const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (tool.name && squash(title) === squash(name)) title = tool.name;
 
   // Description: repo description, else the first real paragraph of the README.
   // Ignore "WIP…" placeholder descriptions in favour of the README.
@@ -206,7 +226,11 @@ async function processRepo(tool: CrewTool) {
     description ? `description: ${yamlStr(description)}` : null,
     `repo: ${yamlStr(meta.html_url)}`,
     `canonical: ${yamlStr(`https://${OWNER}.github.io/${name}/`)}`,
-    `license: "CC-BY-SA-4.0"`,
+    // The repository's own licence, never an assumption. This said
+    // "CC-BY-SA-4.0" on every page until 2026-08-02, when the first CC BY 4.0
+    // repo was republished and the page claimed ShareAlike terms its authors
+    // had not chosen.
+    `license: ${yamlStr(spdx)}`,
     // No category or order here: they are the site's editorial decision, they
     // live in data/ddd-crew.json, and a second copy in generated front matter
     // is a copy that can disagree with Notion.

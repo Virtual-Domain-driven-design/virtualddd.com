@@ -8,6 +8,9 @@ import OrganiserCard from '../components/OrganiserCard.astro';
 import ConferenceCard from '../components/ConferenceCard.astro';
 import Carousel from '../components/Carousel.astro';
 import AiUsage from '../components/AiUsage.astro';
+import ListenOn from '../components/ListenOn.astro';
+import UpcomingThen from '../components/UpcomingThen.astro';
+import NoSessionsYet from '../components/NoSessionsYet.astro';
 import { getCollection } from 'astro:content';
 import { splitSessions } from '../lib/collections';
 import { orderConferences } from '../lib/conferences';
@@ -100,15 +103,19 @@ try {
 >
   <div class="wrap">
     <section class="next-section">
-      {upcoming.length > 0 && (
-        <div class="ns-session">
-          {upcoming.map((s, i) => (
-            <div class="js-next" data-test="next-session" data-iso={iso(s.data.datetime)} hidden={i !== 0}>
-              <FeaturedSession session={s} eyebrow="Upcoming session" />
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Always rendered, where it used to appear only when a session existed.
+          The column has to be here for the empty header to live in, and the
+          empty header has to live beside the cyan panel rather than under it:
+          the two are one composition, and a page that loses its left half the
+          week nothing is scheduled looks broken rather than quiet. */}
+      <div class="ns-session">
+        {upcoming.map((s, i) => (
+          <div class="js-next" data-test="next-session" data-iso={iso(s.data.datetime)} hidden={i !== 0}>
+            <FeaturedSession session={s} eyebrow="Upcoming session" />
+          </div>
+        ))}
+        <NoSessionsYet startHidden={upcoming.length > 0} />
+      </div>
       <aside class="ns-about panel-cyan">
         <h1>Learn software &amp; systems design, together.</h1>
         <p>
@@ -120,6 +127,12 @@ try {
         <a class="btn btn--ink ns-btn" href="/about-us/">More about us →</a>
       </aside>
     </section>
+
+    {/* The second announced session was rendered nowhere on this page: whoever
+        could not make the next one left without learning there was another.
+        Full width under both columns rather than inside the hero's, because a
+        row needs the width and the cyan panel must keep its height. */}
+    <UpcomingThen sessions={upcoming} />
 
     <DiscordCard />
 
@@ -163,6 +176,20 @@ try {
         ) : (
           <p><a class="btn btn--accent" href={`https://bsky.app/profile/${BSKY_HANDLE}`}>Follow @{BSKY_HANDLE}</a></p>
         )}
+      </div>
+    </section>
+
+    <!-- Between the two things they are recordings of. Someone who has just
+         scrolled the latest sessions and is about to reach the latest stories
+         is the person most likely to want either show in their own app. -->
+    <section class="podcast-row">
+      <div class="section-head">
+        <h2>Both shows, in your podcast app</h2>
+        <a href="/podcasts/">Every episode →</a>
+      </div>
+      <div class="podcast-pair">
+        <ListenOn show="sessions" />
+        <ListenOn show="stories" />
       </div>
     </section>
 
@@ -258,6 +285,14 @@ try {
     .bpost-media.is-video::after { content: '▶'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: #fff; background: rgba(0, 0, 0, 0.3); }
     .bpost-text { margin: 0 0 var(--space-2); font-size: var(--text-sm); line-height: 1.5; white-space: pre-wrap; }
     .bpost-date { margin: 0; font-family: var(--font-heading); color: var(--color-text-muted); font-size: var(--text-sm); }
+
+    /* The two shows, side by side. Two columns from the same breakpoint the
+       rest of the page pairs things at, so the row lands with its neighbours
+       rather than becoming a third rhythm. */
+    .podcast-row { margin-block: var(--space-16); }
+    .podcast-pair { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 900px) { .podcast-pair { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
+    .podcast-pair > * { min-width: 0; }
 
     /* Heuristics column + latest stories */
     .heur-stories { display: grid; grid-template-columns: 1fr; gap: var(--space-8); margin-block: var(--space-16); align-items: stretch; }

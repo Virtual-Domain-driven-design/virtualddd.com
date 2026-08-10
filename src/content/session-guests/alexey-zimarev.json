@@ -1,4 +1,7 @@
 {
   "name": "Alexey Zimarev",
-  "alsoAnOrganiser": false
+  "bio": "Alexey is a software architect and developer with a present focus on domain models, Domain-Driven Design (DDD), microservices, cloud-native, distributed systems. Alexey is the author of \"Hands-On Domain-Driven Design with .NET Core\" book, and the creator of the Eventuous framework.",
+  "website": "https://zimarev.com/",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/alexey-zimarev-photo.jpg"
 }

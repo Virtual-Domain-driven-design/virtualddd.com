@@ -1,0 +1,65 @@
+---
+/**
+ * How to read the board, said before the board asks to be read.
+ *
+ * This used to be a legend under the journey, which is the wrong end: the first
+ * person to look at that page understood the *shape* straight away from step 1,
+ * and then found the key afterwards, written in the vocabulary of the practice
+ * she had come to the page to learn. A key that arrives after you needed it is
+ * decoration.
+ *
+ * So it sits in the opening, beside the title, in plain words with the modelling
+ * term as the label on the sticky rather than as the explanation. Four colours
+ * is the entire notation, and saying so is what turns it from a barrier into
+ * the most interesting thing on the page.
+ */
+const KEYS = [
+  { role: 'Intention', cls: 'k--intention', what: 'what you set out to do, and why' },
+  { role: 'Constraints', cls: 'k--constraint', what: 'what you need before that can happen' },
+  { role: 'Outcome', cls: 'k--outcome', what: 'what is true once it has' },
+  { role: 'Hotspot', cls: 'k--hotspot', what: 'the question nobody has answered yet' },
+];
+---
+
+<div class="notation">
+  <div class="section-head"><h2>How we modelled your path</h2></div>
+  <p class="notation-lede">
+    In Domain-Driven Design we like to model our problems, so we did that for learning
+    DDD the same way. Time runs left to right, and four colours are the whole notation.
+  </p>
+  <ul class="notation-keys">
+    {KEYS.map((k) => (
+      <li>
+        <span class={`nkey ${k.cls}`}>{k.role}</span>
+        <span class="nwhat">{k.what}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .notation { display: flex; flex-direction: column; gap: var(--space-4); }
+  .notation-lede { color: var(--color-text-muted); margin: 0; max-width: 46ch; line-height: 1.6; }
+
+  .notation-keys { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .notation-keys li { display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap; }
+
+  /* A small sticky rather than a colour swatch: the label on it is the word the
+     board uses, so the mapping is learned from the thing itself. Square, and
+     leaning a little, like the ones on the board. */
+  .nkey {
+    flex: 0 0 auto; min-width: 7.5rem;
+    font-family: var(--font-heading); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; font-size: var(--text-sm);
+    color: var(--color-ink); padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm); box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.45);
+    transform: rotate(-0.6deg);
+  }
+  .notation-keys li:nth-child(even) .nkey { transform: rotate(0.5deg); }
+  .k--intention { background: var(--sticky-intention); }
+  .k--constraint { background: var(--sticky-constraint); }
+  .k--outcome { background: var(--sticky-outcome); }
+  .k--hotspot { background: var(--sticky-hotspot); }
+
+  .nwhat { color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.5; }
+</style>

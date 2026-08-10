@@ -1,4 +1,9 @@
 {
   "name": "Alberto Brandolini",
-  "alsoAnOrganiser": false
+  "bio": "Alberto Brandolini is the creator of EventStorming and author of the book \"Introducing EventStorming – An act of deliberate collective learning\". He's also the founder of Avanscoperta and an all-around consultant in the Information Technology field.\n\nAsserting that problems cannot be solved with the same mindset that originated them, Alberto switches perspective frequently as he assumes the point of view of the architect, of the mentor, of the coach, of the manager or of the developer.\n\nHe’s a frequent speaker in software development related conferences in Italy and across Europe, since rumors spread about his funny attitude.",
+  "linkedin": "https://www.linkedin.com/in/brando/",
+  "mastodon": "@ziobrando@hachyderm.io",
+  "bluesky": "@ziobrando.bsky.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/alberto-brandolini-photo.jpg"
 }

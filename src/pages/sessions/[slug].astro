@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SideExtras from '../../components/SideExtras.astro';
+import ListenOn from '../../components/ListenOn.astro';
 import DiscussedHeuristics from '../../components/DiscussedHeuristics.astro';
 import PersonRow from '../../components/PersonRow.astro';
 import PrevNext from '../../components/PrevNext.astro';
@@ -154,23 +155,38 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
       <div class="side-card">
         <p class="side-date"><time class="js-local" data-format="datetime" datetime={iso} data-iso={iso}>{dateStr}</time></p>
         {d.organiser && <p class="side-org">Hosted by <strong>{d.organiser}</strong></p>}
-        {isUpcoming && (d.humanitix || d.meet) && (
-          <a class="btn btn--accent side-rsvp" href={d.humanitix ?? d.meet}>RSVP to attend</a>
-        )}
-        {isUpcoming && (
-          <a class="btn btn--ghost side-rsvp" data-test="add-to-calendar" href={`/sessions/${session.id}/event.ics`}>Add to calendar</a>
-        )}
-        {(d.video || d.miro) && (
-          <p class="side-links">
-            {d.video && <a href={d.video}>Watch on YouTube ↗</a>}
-            {d.miro && <a href={d.miro}>Miro board ↗</a>}
-          </p>
+        {/* Full-width buttons, the same set a story's card offers, because a
+            reader moving between the two sections should not have to relearn
+            where the actions are. Watch leads only once the session has been:
+            while it is still upcoming the RSVP is the thing to do, and two
+            accent buttons in a column means neither is the one. */}
+        <div class="side-actions">
+          {isUpcoming && (d.humanitix || d.meet) && (
+            <a class="btn btn--accent btn--sm btn--block" href={d.humanitix ?? d.meet}>RSVP to attend</a>
+          )}
+          {isUpcoming && (
+            <a class="btn btn--ghost btn--sm btn--block" data-test="add-to-calendar" href={`/sessions/${session.id}/event.ics`}>Add to calendar</a>
+          )}
+          {d.video && (
+            <a class:list={['btn', 'btn--sm', 'btn--block', isUpcoming ? 'btn--ghost' : 'btn--accent']} href={d.video}>
+              Watch on YouTube ↗
+            </a>
+          )}
+          {d.miro && <a class="btn btn--ghost btn--sm btn--block" href={d.miro}>Miro board ↗</a>}
+        </div>
+
+        {/* Inside this card rather than below it, because "when it was, who
+            hosted it, and where to hear it" is one answer. Only where there is
+            an episode: an upcoming session has no recording yet, and inviting
+            someone to listen to it would be a lie. */}
+        {d.podcastPlayer && (
+          <ListenOn show="sessions" layout="rail" player={d.podcastPlayer} class="side-listen" />
         )}
       </div>
 
       {d.tags.length > 0 && (
         <div class="side-block">
-          <h2>Tags</h2>
+          <h2 class="eyebrow eyebrow--cyan">Tags</h2>
           <div class="chips">{d.tags.map((t) => <span class="chip chip--outline">{t}</span>)}</div>
         </div>
       )}
@@ -226,15 +242,22 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
     .guest-credit { color: var(--color-text-muted); margin: 0 0 var(--space-6); }
     .guest-credit strong { color: var(--color-text); font-family: var(--font-heading); font-weight: 600; }
 
-    /* Sidebar */
-    .side-card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-6); }
+    /* Sidebar. `.side-card` and `.side-actions` are in patterns.css. */
     .side-date { font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); margin: 0 0 var(--space-1); }
-    .side-org { color: var(--color-text-muted); margin: 0 0 var(--space-4); }
+    .side-org { color: var(--color-text-muted); margin: 0 0 var(--space-5); }
     .side-org strong { color: var(--color-accent-dark); }
-    .side-rsvp { display: flex; justify-content: center; margin-bottom: var(--space-4); }
-    .side-links { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; font-size: var(--text-sm); }
-    .side-block { margin-top: var(--space-6); }
-    .side-block h2 { font-size: var(--text-base); text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-muted); margin: 0 0 var(--space-3); }
+    /* A rule, not a gap: inside one card the listening block is a second
+       subject, and only a line says so. `:global` because the element belongs
+       to ListenOn and this file's scope attribute is not on it. */
+    :global(.side-listen) {
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-border);
+    }
+    /* The eyebrow SideExtras uses below it, rather than the grey uppercase
+       heading this page had written for itself: two labels in one column
+       styled two ways is the thing you see before you read either. */
+    .side-block { margin-top: var(--space-8); }
     .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 
     /* Guests and about-the-host panels — the people are a PersonRow each. */

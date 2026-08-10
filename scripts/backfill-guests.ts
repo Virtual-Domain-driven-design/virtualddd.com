@@ -26,6 +26,7 @@
 import dotenv from 'dotenv';
 import { Client } from '@notionhq/client';
 import { samePerson } from '../src/lib/people';
+import { usableUrl } from './lib/usable-url';
 
 dotenv.config({ path: 'local.env' });
 
@@ -88,15 +89,38 @@ function toHandle(network: 'mastodon' | 'bluesky', value: string): string | unde
   return m ? `@${m[1]}@${u.hostname}` : undefined;
 }
 
+/** An organiser's URL as it can safely be copied into a guest row.
+ *
+ * The one thing this script does that nothing else does: it writes a URL *into*
+ * Notion. `scripts/lib/usable-url.ts` guards the read, so a scheme-less value
+ * cannot reach the build any more, but a bad organiser URL copied here would
+ * quietly become a bad guest URL, and every run of this script is a chance to
+ * spread one row's typo to another. Cheaper to not copy it.
+ *
+ * A repair is copied in its repaired form on purpose. The field being filled is
+ * empty, so `https://example.com` is strictly better than what it would
+ * otherwise inherit, and the guest row can then never hold the broken shape. */
+const copyableUrl = (p: any, who: string, prop: string): string => {
+  const r = usableUrl(url(p));
+  if (r.problem === 'unusable') {
+    console.log(`  ! ${who}: ${prop} is "${r.raw}", which is not an address; not copying it`);
+    return '';
+  }
+  return r.url ?? '';
+};
+
 const [organisers, guests] = await Promise.all([allRows(PEOPLE_DS), allRows(GUESTS_DS)]);
 
-const people = organisers.map((r: any) => ({
-  name: title(r.properties.Name),
-  website: url(r.properties.URL),
-  linkedin: url(r.properties.LinkedIn),
-  mastodon: toHandle('mastodon', url(r.properties.Mastodon) || text(r.properties.Mastodon)),
-  bluesky: toHandle('bluesky', url(r.properties.Bluesky) || text(r.properties.Bluesky)),
-}));
+const people = organisers.map((r: any) => {
+  const name = title(r.properties.Name);
+  return {
+    name,
+    website: copyableUrl(r.properties.URL, name, 'URL'),
+    linkedin: copyableUrl(r.properties.LinkedIn, name, 'LinkedIn'),
+    mastodon: toHandle('mastodon', url(r.properties.Mastodon) || text(r.properties.Mastodon)),
+    bluesky: toHandle('bluesky', url(r.properties.Bluesky) || text(r.properties.Bluesky)),
+  };
+});
 
 let changed = 0;
 const untouched: string[] = [];

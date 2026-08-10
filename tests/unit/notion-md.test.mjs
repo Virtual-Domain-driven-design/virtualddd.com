@@ -7,8 +7,9 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import { newAlerts } from '../../scripts/new-alerts.mjs';
 import {
-  assetRefs, createBlocksToMd, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlStr,
+  assetRefs, createBlocksToMd, imageExt, isAssetFor, kebab, movedSlugs, resolveRelation, richText, statusOf, yamlList, yamlRecords, yamlStr,
 } from '../../scripts/lib/notion-md.ts';
 
 /** A converter with no network: no children, and images kept as their URL. */
@@ -203,7 +204,16 @@ describe('relation gating', () => {
 
   test('resolves a published heuristic to its slug', () => {
     assert.deepEqual(resolveRelation('id-live', published, unpublished),
-      { kind: 'resolved', slug: 'a-published-heuristic' });
+      { kind: 'resolved', value: 'a-published-heuristic' });
+  });
+
+  test('carries whatever the gate holds, not only a slug', () => {
+    // The learning journey resolves a video to its whole record, because there
+    // is no video collection on the site to look one up in. One reader, four
+    // databases: the gate decides what a resolved relation carries.
+    const videos = new Map([['id-video', { title: 'What is DDD', minutes: 28 }]]);
+    assert.deepEqual(resolveRelation('id-video', videos, new Map()),
+      { kind: 'resolved', value: { title: 'What is DDD', minutes: 28 } });
   });
 
   test('reports one still being curated as pending, not as an error', () => {
@@ -307,5 +317,118 @@ describe('a slug that moved is an address that moved', () => {
 
   test('the first run has nothing to compare against', () => {
     assert.deepEqual(movedSlugs({}, was), []);
+  });
+});
+
+describe('what came back is actually a picture', () => {
+  // A Photo property that links to a file in Google Drive rather than holding
+  // an upload answers 200 with the *viewer page*, at an address ending `.png`.
+  // Trusting that extension put 74 KB of HTML into src/content as somebody's
+  // photograph on 2026-08-04, and the build failed on NoImageMetadata twenty
+  // minutes later in a different workflow.
+  const html = Buffer.from('<!DOCTYPE html><html dir="ltr"><head><script>window._DRIVE_VIEWER={}</script>');
+
+  test('a web page is not an image, whatever the URL called it', () => {
+    assert.equal(imageExt(html), null);
+  });
+
+  test('the formats the sync actually downloads', () => {
+    assert.equal(imageExt(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0])), 'jpg');
+    assert.equal(imageExt(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0])), 'png');
+    assert.equal(imageExt(Buffer.from('GIF89a' + 'x'.repeat(8))), 'gif');
+    assert.equal(imageExt(Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBP')])), 'webp');
+    assert.equal(imageExt(Buffer.concat([Buffer.alloc(4), Buffer.from('ftypavif')])), 'avif');
+  });
+
+  test('an SVG document counts; a page with one inside it does not', () => {
+    assert.equal(imageExt(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>')), 'svg');
+    assert.equal(imageExt(Buffer.from('<?xml version="1.0"?>\n<svg xmlns="x"><rect/></svg>')), 'svg');
+    assert.equal(imageExt(Buffer.from('<!DOCTYPE html><body><svg><rect/></svg></body>')), null);
+  });
+
+  test('nothing, and not-quite-enough, are both refused', () => {
+    assert.equal(imageExt(Buffer.alloc(0)), null);
+    assert.equal(imageExt(Buffer.from([0xff, 0xd8])), null);
+  });
+});
+
+describe('records as block YAML', () => {
+  test('writes one list item per record', () => {
+    assert.equal(
+      yamlRecords('videos', [{ title: 'What is DDD in 1 slide', minutes: 5 }]),
+      'videos:\n  - title: "What is DDD in 1 slide"\n    minutes: 5',
+    );
+  });
+
+  test('numbers stay numbers and strings get quoted', () => {
+    // `minutes: "5"` would fail the schema, and a quoted title is what keeps a
+    // colon in someone's talk title from ending the value early.
+    assert.equal(
+      yamlRecords('videos', [{ title: 'DDD: the good parts', minutes: 42 }]),
+      'videos:\n  - title: "DDD: the good parts"\n    minutes: 42',
+    );
+  });
+
+  test('a field nobody filled in is left out, not written as null', () => {
+    // Every one of these is optional in the schema, and to Zod an absent key
+    // and a null are not the same thing. Minutes is the live case: the property
+    // does not exist in Notion yet.
+    assert.equal(
+      yamlRecords('videos', [{ title: 'What is DDD', minutes: undefined, why: '' }]),
+      'videos:\n  - title: "What is DDD"',
+    );
+  });
+
+  test('quotes survive, so a title with one cannot break the file', () => {
+    assert.equal(
+      yamlRecords('videos', [{ title: 'The "blue book"' }]),
+      'videos:\n  - title: "The \\"blue book\\""',
+    );
+  });
+
+  test('an empty record is skipped rather than writing a bare dash', () => {
+    assert.equal(yamlRecords('videos', [{ title: undefined }]), 'videos:');
+  });
+});
+
+describe('which alerts are actually new', () => {
+  // The bug this replaces: the step sent the whole file whenever the file
+  // changed. One flapping image alert rewrote it every other run and dragged a
+  // settled organiser rename along, so the same message kept arriving in
+  // Discord for days.
+  const doc = (...items) => JSON.stringify({ items });
+  const renamed = { kind: 'person-renamed', section: '/organisers/', title: 'a → b', url: 'u' };
+  const photo = { kind: 'image-source-gone', section: 'stories', title: 'x (body-2)', url: 'g' };
+
+  test('an alert that was already there is not raised again', () => {
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed)), []);
+  });
+
+  test('the settled one stays quiet when a flapping one comes back', () => {
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed, photo)), [photo]);
+  });
+
+  test('a flapping alert is raised again each time it returns', () => {
+    // It really did break again, so it really is news. Only its neighbours
+    // should stay quiet.
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed, photo)), [photo]);
+    assert.deepEqual(newAlerts(doc(renamed, photo), doc(renamed)), []);
+    assert.deepEqual(newAlerts(doc(renamed), doc(renamed, photo)), [photo]);
+  });
+
+  test('reworded is not the same alert, because nobody has read the new words', () => {
+    const louder = { ...photo, title: 'x (body-2): no picture at all' };
+    assert.deepEqual(newAlerts(doc(photo), doc(louder)), [louder]);
+  });
+
+  test('the first run has no previous file, so everything is new', () => {
+    // Not theoretical: this file was gitignored once and eight organiser
+    // photos went unannounced.
+    assert.deepEqual(newAlerts('', doc(renamed, photo)), [renamed, photo]);
+    assert.deepEqual(newAlerts('not json at all', doc(renamed)), [renamed]);
+  });
+
+  test('an emptied file raises nothing rather than throwing', () => {
+    assert.deepEqual(newAlerts(doc(renamed), JSON.stringify({})), []);
   });
 });

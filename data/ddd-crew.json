@@ -37,7 +37,7 @@
       "repo": "free-ddd-learning-resources",
       "name": "Free DDD learning resources",
       "link": "https://github.com/ddd-crew/free-ddd-learning-resources",
-      "republished": false,
+      "republished": true,
       "category": "Getting started",
       "order": 4,
       "note": "The comprehensive free list, which is exactly why we should not build our own. We curate a path; this is the library at the end of it."
@@ -46,7 +46,7 @@
       "repo": "ai-ddd-prompts-and-rules",
       "name": "AI DDD prompts & rules",
       "link": "https://github.com/ddd-crew/ai-ddd-prompts-and-rules",
-      "republished": false,
+      "republished": true,
       "category": "Getting started",
       "order": 5,
       "note": "DDD prompts and rules for a coding assistant. Not licensed for republishing, so we link out."
@@ -82,19 +82,10 @@
       "repo": "context-mapping-quiz",
       "name": "Context Mapping quiz",
       "link": "https://github.com/ddd-crew/context-mapping-quiz",
-      "republished": false,
+      "republished": true,
       "category": "Strategic design",
       "order": 4,
       "note": "Interactive, and a faster way to find out you have misunderstood a pattern than reading about it again."
-    },
-    {
-      "repo": "strategic-architecture-building-blocks",
-      "name": "Strategic architecture building blocks",
-      "link": "https://github.com/ddd-crew/strategic-architecture-building-blocks",
-      "republished": false,
-      "category": "Strategic design",
-      "order": 5,
-      "note": "An earlier exploration, kept for reference. Say so when linking it: it is an archived direction, not current advice."
     },
     {
       "repo": "bounded-context-canvas",
@@ -127,7 +118,7 @@
       "repo": "debiasing-decisions-toolkit",
       "name": "Debiasing decisions toolkit",
       "link": "https://github.com/ddd-crew/debiasing-decisions-toolkit",
-      "republished": false,
+      "republished": true,
       "category": "Modelling canvases",
       "order": 4,
       "note": "Structured interventions for better group decisions. Closest of all of these to what this community is actually about."

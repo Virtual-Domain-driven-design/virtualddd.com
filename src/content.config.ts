@@ -153,6 +153,12 @@ const sessionGuests = defineCollection({
     z.object({
       name: z.string(),
       bio: z.string().optional(),
+      // Every `z.url()` here is also a promise the sync keeps: Notion's URL
+      // property is a text box, so `scripts/lib/usable-url.ts` is what stops a
+      // scheme-less typo reaching this schema. It reached it twice, and both
+      // times `astro check` — the deploy's first step — stopped the whole site
+      // shipping over one guest's Website. Changing these to something stricter
+      // than `new URL()` means changing that file in the same breath.
       website: z.url().optional(),
       linkedin: z.url().optional(),
       // A handle, not a URL: `@sebrose@mastodon.scot`, `@name.bsky.social`.
@@ -221,6 +227,45 @@ const dddCrew = defineCollection({
     }),
 });
 
+// The stages of the learning journey, rendered in `order` inside /learn/. Like
+// the reading list there is no page per entry, so the slug is an anchor.
+const learningJourney = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/learning-journey' }),
+  schema: z.object({
+    title: z.string(),
+    status: z.enum(['Idea', 'Drafting', 'Published']),
+    order: z.number().default(0),
+    // Optional so a half-written stage does not fail the build, but a stage
+    // without `why` and `doneWhen` is a heading with nothing under it, and the
+    // page says so rather than rendering an empty step.
+    time: z.string().optional(),
+    why: z.string().optional(),
+    doneWhen: z.string().optional(),
+    // What the stage deliberately leaves out, and why. "No book at this step,
+    // on purpose" is a curation decision worth showing, not an omission.
+    notHere: z.string().optional(),
+    // Videos carry their whole record, because there is no video collection to
+    // look one up in: they link out to YouTube. Books and tools carry a slug
+    // into `readingList` and `dddCrew`, which already hold the title and the
+    // recommendation, so nothing is written down twice.
+    //
+    // The sync has already put these in the order the page should show them:
+    // videos shortest first, books free first. A page that re-sorted them would
+    // be a second opinion about editorial intent.
+    videos: z.array(z.object({
+      title: z.string(),
+      /** Speaker and where it was recorded, composed by the sync. */
+      who: z.string().optional(),
+      url: z.string().optional(),
+      minutes: z.number().optional(),
+      why: z.string().optional(),
+    })).default([]),
+    books: z.array(z.string()).default([]),
+    tools: z.array(z.string()).default([]),
+    ...seo,
+  }),
+});
+
 // Books, papers and free PDFs we recommend. Unlike every other collection here
 // there is NO page per entry: they all render inside /reading-list/, so the slug
 // is an anchor rather than a URL. The only text on an entry that is ours is
@@ -253,4 +298,4 @@ const readingList = defineCollection({
     }),
 });
 
-export const collections = { sessions, openSpaces, stories, heuristics, organisers, sessionGuests, conferences, dddCrew, readingList };
+export const collections = { sessions, openSpaces, stories, heuristics, organisers, sessionGuests, conferences, dddCrew, readingList, learningJourney };

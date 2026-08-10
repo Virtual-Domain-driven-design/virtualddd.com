@@ -4,9 +4,7 @@ description: "If you're new to DDD and not sure where to start, this process wil
 repo: "https://github.com/ddd-crew/ddd-starter-modelling-process"
 canonical: "https://ddd-crew.github.io/ddd-starter-modelling-process/"
 license: "CC-BY-SA-4.0"
-category: "Getting started"
-order: 2
-stars: 5958
+stars: 5967
 heroImage: "./_assets/ddd-starter-modelling-process/ddd-crew-modeling-process--cirlces-feed-each-other.svg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
@@ -27,12 +25,12 @@ contributors:
   - { name: "oroumand", url: "https://github.com/oroumand" }
   - { name: "sandeepAtSteerwise", url: "https://github.com/sandeepAtSteerwise" }
   - { name: "trondhjort", url: "https://github.com/trondhjort" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
   - { name: "Guchman", url: "https://github.com/Guchman" }
   - { name: "martinotten", url: "https://github.com/martinotten" }
   - { name: "armyost", url: "https://github.com/armyost" }
   - { name: "fdamico-codurance", url: "https://github.com/fdamico-codurance" }
   - { name: "sustainablepace", url: "https://github.com/sustainablepace" }
-  - { name: "cremich", url: "https://github.com/cremich" }
 ---
 This process gives you a step-by-step guide for learning and practically applying each aspect of Domain-Driven Design (DDD) - from orienting around an organisation's business model to coding a domain model.
 
@@ -412,7 +410,7 @@ The Domain-Driven Design Starter Modelling Process is freely available for you t
 
 If you have questions you can ping us or open an [Issue](https://github.com/ddd-crew/ddd-starter-modelling-process/issues/new/choose).
 
-Feel free to also send us pull requests with your [case studies](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/master/case-studies).
+Feel free to also send us pull requests with your [case studies](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/case-studies).
 
 [![CC BY 4.0][cc-by-shield]][cc-by]
 

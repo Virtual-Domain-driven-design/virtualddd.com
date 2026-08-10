@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["julie-lerman", "indu-alagarsamy", "michael-plod", "nick-tune"]
 seoTitle: "Lost in Bounded Context Translation"
 seoMetadescription: "Julie Lerman, Indu Alagarsamy, Michael Plöd and Nick Tune on the cost of many ubiquitous languages: everything that gets lost translating between them."
-featuredImage: "./_assets/lost-in-bounded-context-translations-with-julie-indu-michael-and-nick-featured.jpeg"
+featuredImage: "./_assets/lost-in-bounded-context-translations-with-julie-indu-michael-and-nick-featured.jpg"
 ---
 
 Language is a big topic in the Domain-Driven Design community. We want to have small bounded contexts, each with there own ubiquitous language. Having many ubiquitous languages means having a lot of translation between the bounded context. And having many translations means we can get lost. So what is the nuance between internal and external bounded context or services translation?

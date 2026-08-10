@@ -4,9 +4,7 @@ description: "Design & visualise the flow of commands, events, and queries betwe
 repo: "https://github.com/ddd-crew/domain-message-flow-modelling"
 canonical: "https://ddd-crew.github.io/domain-message-flow-modelling/"
 license: "CC-BY-SA-4.0"
-category: "Strategic design"
-order: 3
-stars: 406
+stars: 407
 heroImage: "./_assets/domain-message-flow-modelling/just-messages-no-contents.jpg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
@@ -47,7 +45,7 @@ This format is good when you want to focus on the contents of each message from 
 
 ### Downloads
 
-- [Domain Message Flow Modelling (miro board backup)](https://github.com/ddd-crew/domain-message-flow-modelling/blob/master/resources/Domain-Message-Flow-Modelling-en-v1.rtb)
+- [Domain Message Flow Modelling (miro board backup)](https://github.com/ddd-crew/domain-message-flow-modelling/blob/main/resources/Domain-Message-Flow-Modelling-en-v1.rtb)
 
 ## How to Use
 

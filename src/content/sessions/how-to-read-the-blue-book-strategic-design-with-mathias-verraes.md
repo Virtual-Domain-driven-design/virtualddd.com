@@ -13,7 +13,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["mathias-verraes"]
 seoTitle: "How to Read the Blue Book: Strategic Design"
 seoMetadescription: "Mathias Verraes on reading Eric Evans's Domain-Driven Design fifteen years on — which parts of the blue book still repay the effort, and how to approach them."
-featuredImage: "./_assets/how-to-read-the-blue-book-strategic-design-with-mathias-verraes-featured.jpeg"
+featuredImage: "./_assets/how-to-read-the-blue-book-strategic-design-with-mathias-verraes-featured.jpg"
 ---
 
 Over more than 15 years ago, Eric Evans published the book Domain-Driven Design. The blue book, as it is called today, has a vast amount of knowledge on software architecture. As Paul Rayner once stated 'Every new idea on software architecture; you can already find somewhere in the blue book'. Because the knowledge is so fast to take in at one go, a lot of people who bought the book never finished the book, mostly stopped reading before Part IV, strategic design. Therefore in this #VDDD special 'How to read the blue book,' Mathias Verraes will discuss with the strategic parts.

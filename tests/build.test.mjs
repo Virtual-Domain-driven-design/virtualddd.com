@@ -15,6 +15,10 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { pages, meta, attr, text, markup, countHook, published, DIST } from './helpers.mjs';
+import { readFileSync as readEntry, readdirSync as readEntries } from 'node:fs';
+// The site's own rule for when a session is over, imported rather than restated:
+// see the comment in 'sessions in their two states'.
+import { hasFinished } from '../src/lib/upcoming.ts';
 
 let all;
 before(() => {
@@ -347,13 +351,28 @@ describe('the conferences row', () => {
 describe('sessions in their two states', () => {
   // One template renders both. Getting this wrong means either advertising an
   // event that has been, or hiding the joining details for one that has not.
+  //
+  // "Past" is `hasFinished` from src/lib/upcoming.ts, the same rule the pages
+  // are built with, imported rather than restated. This test used to say
+  // `start > Date.now()`, with no grace at all, while the site keeps a session
+  // live for three hours after it starts so somebody arriving late still gets
+  // the join link. For those three hours the two disagreed by design, and any
+  // content change in that window failed the deploy: it did on 2026-08-05 at
+  // 05:59 and again at 06:25, both inside the window after a session that
+  // started at 06:00 UTC.
+  //
+  // A residual race is unavoidable and much smaller: the pages were built a
+  // couple of minutes before this runs, so a session crossing the three-hour
+  // line in between still trips it. Three hours of certainty became two
+  // minutes of chance.
   const sessionPages = () => all.filter((p) => /^\/sessions\/[^/]+\/$/.test(p.path));
   const startOf = (p) => +new Date(attr(p.html, /<time[^>]*data-iso="([^"]+)"/));
+  const finished = (p) => hasFinished(startOf(p), Date.now());
 
   test('a past session offers no RSVP, no join link and no calendar file', () => {
     const bad = [];
     for (const p of sessionPages()) {
-      if (startOf(p) > Date.now()) continue;
+      if (!finished(p)) continue;
       if (p.html.includes('data-test="add-to-calendar"')) bad.push(`${p.path}: offers a calendar file`);
       if (/class="[^"]*\bjs-live\b/.test(p.html)) bad.push(`${p.path}: still shows joining links`);
       if (/>RSVP/.test(p.html)) bad.push(`${p.path}: still asks for an RSVP`);
@@ -362,7 +381,7 @@ describe('sessions in their two states', () => {
   });
 
   test('an upcoming session offers a way in', () => {
-    const upcoming = sessionPages().filter((p) => startOf(p) > Date.now());
+    const upcoming = sessionPages().filter((p) => !finished(p));
     for (const p of upcoming) {
       assert.ok(
         p.html.includes('data-test="add-to-calendar"') || /RSVP/.test(p.html),
@@ -458,6 +477,64 @@ describe('error pages', () => {
     const ht = readFileSync(`${DIST}/.htaccess`, 'utf8');
     assert.match(ht, /^ErrorDocument 404 \/404\.html$/m);
     assert.match(ht, /^ErrorDocument 410 \/410\/$/m);
+  });
+});
+
+describe('where to listen', () => {
+  // The card that sends someone to the show in their own podcast app, and to
+  // this episode on Apple. Both halves fail silently: a wrong link still
+  // renders, and a missing episode link looks exactly like an episode Apple
+  // does not have.
+  const withPlayer = (prefix) =>
+    all.filter((p) => new RegExp(`^${prefix}[^/]+/$`).test(p.path) && p.html.includes('player.captivate.fm/episode/'));
+
+  test('every page with a player says where else to hear it', () => {
+    const bad = [];
+    for (const prefix of ['/sessions/', '/facilitating-archdes/']) {
+      for (const p of withPlayer(prefix)) {
+        if (!p.html.includes('data-test="listen-on"')) bad.push(p.path);
+      }
+    }
+    assert.deepEqual(bad, [], `has an episode embedded but no way to follow the show:\n${bad.join('\n')}`);
+  });
+
+  test('an episode link points at the show it belongs to', () => {
+    // Two shows, two Apple IDs. Rendering a story's episode under the sessions
+    // ID would 404 quietly, and only for the people who click.
+    const ids = { '/sessions/': '1478089740', '/facilitating-archdes/': '1837176113' };
+    let checked = 0;
+    for (const [prefix, id] of Object.entries(ids)) {
+      for (const p of withPlayer(prefix)) {
+        const tag = attr(p.html, /(<a[^>]*data-test="listen-episode"[^>]*>)/);
+        if (!tag) continue;
+        checked++;
+        const href = attr(tag, /href="([^"]+)"/);
+        assert.ok(
+          href?.startsWith(`https://podcasts.apple.com/podcast/id${id}?i=`),
+          `${p.path}: episode link is not an episode of show ${id} — ${href}`,
+        );
+      }
+    }
+    assert.ok(checked > 0, 'no page offered an episode link, so this proved nothing');
+  });
+
+  test('the join to Apple still holds for nearly every session', () => {
+    // A threshold, not a count, and it is a real bug this catches rather than a
+    // hypothetical one. What Notion stores is Captivate's *media* ID; what
+    // Apple answers with is the RSS `<guid>`. Those are the same string only
+    // for the episodes recorded natively on Captivate, so the obvious join
+    // silently resolved 8 of 59 and looked like it worked. The feed is what
+    // relates the two — see scripts/sync-podcast-episodes.ts.
+    //
+    // Deliberately not "all of them": an episode ageing out of the feed window
+    // is Captivate's business, not a broken build, and must not stop a deploy.
+    const sessions = withPlayer('/sessions/');
+    const linked = sessions.filter((p) => p.html.includes('data-test="listen-episode"'));
+    assert.ok(sessions.length > 40, `only ${sessions.length} sessions have a player`);
+    assert.ok(
+      linked.length >= sessions.length * 0.9,
+      `only ${linked.length} of ${sessions.length} sessions resolved to an Apple episode`,
+    );
   });
 });
 
@@ -590,5 +667,53 @@ describe('the documentation', () => {
       }
     }
     assert.deepEqual(bad, [], `broken documentation links:\n${bad.join('\n')}`);
+  });
+});
+
+describe('the learning journey board', () => {
+  // /learn/ draws its board from the stages and from relations the sync
+  // resolved into their front matter. A relation that quietly resolves to
+  // nothing produces a page that is *valid* and simply says less, which is
+  // indistinguishable from a stage nobody curated yet. That is exactly how two
+  // fields vanished from every person on this site in one week with the deploy
+  // green throughout, so it gets a relationship assertion rather than trust.
+  const board = () => all.find((p) => p.path === '/learn/');
+  const DIR = 'src/content/learning-journey';
+  const stageFiles = () => readEntries(DIR).filter((f) => f.endsWith('.md'));
+
+  test('every published stage is a step on the board', () => {
+    const stages = published('learning-journey');
+    assert.ok(stages > 0, 'the sync produced no learning-journey stages');
+    assert.equal(countHook(board().html, 'journey-step'), stages);
+  });
+
+  test('every resource a stage carries reaches the board', () => {
+    // Equality, not "at least one". The first draft of this test asked whether
+    // a stage that declares resources renders any, and both stages still had
+    // their videos when the book and tool lookups were sabotaged, so it passed
+    // while the board had quietly lost half its stickies.
+    //
+    // Deliberately not a count of *which* resources: that is editorial and
+    // belongs in tests/content/. The two collections sync in the same run, so
+    // what the front matter lists is what the page owes the reader.
+    const declared = (md) =>
+      (md.match(/^ {2}- title:/gm) ?? []).length
+      + ['books', 'tools'].reduce((n, key) => {
+        const m = md.match(new RegExp(`^${key}: \\[(.*)\\]$`, 'm'));
+        return n + (m ? (m[1].match(/"/g) ?? []).length / 2 : 0);
+      }, 0);
+
+    const owed = stageFiles().reduce((n, f) => n + declared(readEntry(`${DIR}/${f}`, 'utf8')), 0);
+    assert.ok(owed > 0, 'no stage declares any resource, so this proves nothing');
+    assert.equal(
+      countHook(board().html, 'journey-resource'), owed,
+      'the stages carry more resources than the board renders, so a lookup is dropping them',
+    );
+  });
+
+  test('the board says where it runs out', () => {
+    // The open end is what invites people to fill it in. Losing it would take
+    // the only call to action on the page with it.
+    assert.equal(countHook(board().html, 'journey-open'), 1);
   });
 });

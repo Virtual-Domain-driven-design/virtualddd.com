@@ -1,12 +1,10 @@
 ---
-title: "EventStorming Glossary & Cheat sheet"
+title: "EventStorming Glossary Cheat Sheet"
 description: "EventStorming is the smartest approach to collaborate beyond silo boundaries. The power of EventStorming comes from a diverse multi-disciplined group…"
 repo: "https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet"
 canonical: "https://ddd-crew.github.io/eventstorming-glossary-cheat-sheet/"
 license: "CC-BY-SA-4.0"
-category: "EventStorming & remote"
-order: 1
-stars: 974
+stars: 976
 heroImage: "./_assets/eventstorming-glossary-cheat-sheet/core-concepts.jpg"
 contributors:
   - { name: "Baasie", url: "https://github.com/Baasie" }
@@ -17,6 +15,7 @@ contributors:
   - { name: "hibri", url: "https://github.com/hibri" }
   - { name: "MarcelMichau", url: "https://github.com/MarcelMichau" }
   - { name: "mploed", url: "https://github.com/mploed" }
+  - { name: "poulainpi", url: "https://github.com/poulainpi" }
 ---
 EventStorming is the smartest approach to collaborate beyond silo boundaries. The power of EventStorming comes from a diverse multi-disciplined group of people who, together, have a lot of wisdom and knowledge. While it originally was invented for a workshop to model domain-driven design aggregates, it now has a broader spectrum. From gaining a big-picture problem space of the whole domain to gaining insight into the entire software delivery flow and creating a long term planning. Every one of these workshops has the same basic requirements and needs. 
 
@@ -202,8 +201,12 @@ Remember, Alberto calls EventStorming like a pizza. The paper roll and domain ev
 
 * [EventStorming.com](https://EventStorming.com)
 * [Leanpub: Introducing EventStorming](https://leanpub.com/introducing_eventstorming)
-* [Leanpub: DDD First 15 years](https://leanpub.com/ddd_first_15_years) – Discovering Bounded Contexts with EventStorming — Alberto Brandolini  
-* [Alberto Brandolini](https://twitter.com/ziobrando)  
+* [Leanpub: DDD First 15 years](https://leanpub.com/ddd_first_15_years) – Discovering Bounded Contexts with EventStorming — Alberto Brandolini
+* [Alberto Brandolini](https://twitter.com/ziobrando)
+
+## Remote Event Storming
+
+* [DDD Toolbox - Event Storming](https://dddtoolbox.com/event-storming) - Open-source collection of modern web-based tools including Event Storming ([Source Code](https://github.com/poulainpi/ddd-toolbox))
 
 ## Contributors
 

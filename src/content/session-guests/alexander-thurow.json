@@ -1,6 +1,9 @@
 {
   "name": "Alexander Thurow",
   "bio": "Alex is a freelance software developer, consultant and speaker based in Überlingen, Germany, with over 20 years in the industry. His main areas of interest are clean code, refactoring, technical debt and knowledge transfer.",
+  "website": "https://onmoderndev.de/en/services/",
   "linkedin": "https://www.linkedin.com/in/alexthurow/",
-  "alsoAnOrganiser": false
+  "mastodon": "@alexthurow@mstdn.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/alexander-thurow-photo.png"
 }

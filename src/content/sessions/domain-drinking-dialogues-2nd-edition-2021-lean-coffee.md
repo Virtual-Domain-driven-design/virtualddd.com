@@ -11,7 +11,7 @@ podcastPlayer: "https://player.captivate.fm/episode/5572b14f-596e-4a09-a643-aa08
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "Closing 2021 with a lean coffee: the community sets the agenda and we work through whatever the room brings, drink in hand."
-featuredImage: "./_assets/domain-drinking-dialogues-2nd-edition-2021-lean-coffee-featured.jpeg"
+featuredImage: "./_assets/domain-drinking-dialogues-2nd-edition-2021-lean-coffee-featured.jpg"
 ---
 
 In the last week of this year, we are closing another full year of virtual Domain-driven design meetups with the last meetup. So grab your drinks (tea, lemonade or anything you want!) and come join with your DDD questions to this lean coffee! We all post topics we want to discuss and together we will get into dialogues, so bring us your knowledge and DDD questions and see you then! 

@@ -12,7 +12,7 @@ coOrganisers: ["Krisztina Hirth"]
 guests: ["thomas-pierrain", "bruno-boucard"]
 seoTitle: "Beyond Hexagonal Architecture: The Functional Core"
 seoMetadescription: "After years of promoting hexagonal architecture, an alternative: the Functional Core, and what it changes about protecting your domain from the technical stack."
-featuredImage: "./_assets/beyond-the-hexagonal-architecture-functional-core-featured.jpeg"
+featuredImage: "./_assets/beyond-the-hexagonal-architecture-functional-core-featured.jpg"
 ---
 
 There are a few ways to split and protect your domain code from the intrusion of the technical stacks and other IT fads.

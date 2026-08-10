@@ -47,6 +47,33 @@ export function yamlList(items: string[]): string {
   return '[' + items.map(yamlStr).join(', ') + ']';
 }
 
+/** A list of small records as block YAML.
+ *
+ * `yamlList` covers a list of strings, which is all any collection needed until
+ * the learning journey. A stage's videos have to carry their own title, who
+ * made them and why they are worth it, because unlike books and ddd-crew tools
+ * there is no video collection on the site to look any of that up in.
+ *
+ * A field that is undefined or empty is left out rather than written as null:
+ * every one of them is optional in the schema, and to Zod an absent key and a
+ * null are not the same thing.
+ */
+export function yamlRecords(
+  key: string,
+  rows: Record<string, string | number | undefined>[],
+): string {
+  const lines = [`${key}:`];
+  for (const row of rows) {
+    const fields = Object.entries(row).filter(([, v]) => v !== undefined && v !== '');
+    if (!fields.length) continue;
+    fields.forEach(([k, v], i) => {
+      const rendered = typeof v === 'number' ? String(v) : yamlStr(String(v));
+      lines.push(`${i === 0 ? '  - ' : '    '}${k}: ${rendered}`);
+    });
+  }
+  return lines.join('\n');
+}
+
 export function fileUrl(f: any): string {
   return f?.type === 'external' ? f.external?.url : f?.file?.url ?? '';
 }
@@ -85,6 +112,40 @@ export interface AssetCtx { dir: string; slug: string; count: number }
 export function assetRefs(entry: string): string[] {
   return [...entry.matchAll(/_assets\/([^)"'\s]+)/g)]
     .map((m) => { try { return decodeURIComponent(m[1]); } catch { return m[1]; } });
+}
+
+/** What the bytes actually are, whatever the URL and the headers claimed.
+ *
+ * This used to trust the URL's extension, falling back to the content-type and
+ * then to png. A Photo property that *links to* a file in Google Drive rather
+ * than holding an upload answers with Drive's viewer page: 74 KB of HTML, 200
+ * OK, at an address ending `.png`. So the extension said png, `shrinkImage`
+ * swallowed sharp's objection in its `catch { return raw }`, and the sync
+ * committed an HTML document as somebody's photograph. The build then failed
+ * on `NoImageMetadata` in a different workflow, twenty minutes later, naming a
+ * file rather than the row that produced it.
+ *
+ * The bytes are the one thing that cannot lie, so they decide both whether
+ * this is an image at all and what to call it.
+ */
+export function imageExt(buf: Buffer): string | null {
+  if (buf.length < 12) return null;
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'jpg';
+  if (buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
+  if (buf.subarray(0, 4).toString('latin1') === 'GIF8') return 'gif';
+  if (buf.subarray(0, 4).toString('latin1') === 'RIFF'
+    && buf.subarray(8, 12).toString('latin1') === 'WEBP') return 'webp';
+  // AVIF carries its brand at bytes 8..12 of an ISO base media container.
+  if (buf.subarray(4, 8).toString('latin1') === 'ftyp') {
+    const brand = buf.subarray(8, 12).toString('latin1');
+    if (brand === 'avif' || brand === 'avis') return 'avif';
+  }
+  // SVG is text and has no magic number, so the test is that the document
+  // *opens* as one. A web page with a logo inside it is not an image.
+  const head = buf.subarray(0, 512).toString('utf8').replace(/^﻿/, '').trimStart();
+  if (head.startsWith('<svg')) return 'svg';
+  if (head.startsWith('<?xml') && /<svg[\s>]/.test(head)) return 'svg';
+  return null;
 }
 
 /** Is this file the asset a previous sync stored for `slug` and `label`?
@@ -208,18 +269,18 @@ export function createBlocksToMd(deps: MdDeps) {
  * pointing at a page that is not in the database at all is a real dangling
  * reference. Only the second should fail a build.
  */
-export type RelationOutcome =
-  | { kind: 'resolved'; slug: string }
+export type RelationOutcome<T = string> =
+  | { kind: 'resolved'; value: T }
   | { kind: 'pending'; title: string; status: string }
   | { kind: 'dangling' };
 
-export function resolveRelation(
+export function resolveRelation<T>(
   id: string,
-  published: Map<string, string>,
+  published: Map<string, T>,
   unpublished: Map<string, { title: string; status: string }>,
-): RelationOutcome {
-  const slug = published.get(id);
-  if (slug) return { kind: 'resolved', slug };
+): RelationOutcome<T> {
+  const value = published.get(id);
+  if (value !== undefined) return { kind: 'resolved', value };
   const p = unpublished.get(id);
   if (p) return { kind: 'pending', title: p.title, status: p.status };
   return { kind: 'dangling' };

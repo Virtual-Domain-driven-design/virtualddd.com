@@ -1,4 +1,10 @@
 {
   "name": "Laila Bougria",
-  "alsoAnOrganiser": false
+  "bio": "I'm a Solutions Architect with nearly 20 years of experience in the software industry. I'm passionate about software, focusing on distributed systems with messaging 📩. I'm a keynote speaker 🎙️ and frequently share my knowledge and insights at conferences worldwide. I’m a Microsoft MVP in Azure and Developer Technologies 🏆. Currently, I'm busy building NServiceBus at Particular Software, solving distributed riddles.",
+  "website": "https://github.com/lailabougria",
+  "linkedin": "https://www.linkedin.com/in/lailabougria/",
+  "mastodon": "@noctovis@hachyderm.io",
+  "bluesky": "@noctovis.bsky.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/laila-bougria-photo.jpg"
 }

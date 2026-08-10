@@ -32,9 +32,17 @@ Notion ──────────────┤  n8n dispatch   ├──�
 
   It is also what makes the pipeline self-healing, and the reason nothing else
   needs to be. The hourly run holds no state, cares nothing for why the last
-  run did not happen, and re-reads everything. So a missed event, a failed
-  deploy or an afternoon with n8n switched off all cost latency and nothing
-  else.
+  run did not happen, and re-reads everything. So a missed event, or an
+  afternoon with n8n switched off, cost latency and nothing else.
+
+  **A failed deploy is the exception, and the clock does not heal it.** By the
+  time a deploy fails its content is already committed, so every later sync
+  correctly finds no diff and publishes nothing: the stale site is not waiting
+  on the next hour, it is waiting on the next *edit*, which may be days away.
+  That is why the deploy announces its own failures to Discord rather than
+  trusting the clock, and why `retry-blocked-deploy.yml` exists for the one
+  cause that a second attempt genuinely fixes. Twice on 2026-08-10 a blocked
+  deploy left committed content unpublished until a person re-ran it by hand.
 - **The clock is n8n's, not GitHub's.** It was GitHub's until an edited guest
   bio sat unpublished for an afternoon. `sync.yml` asks for `25 * * * *`, and
   across the day around that edit the scheduled runs actually landed at 00:53,
@@ -181,8 +189,8 @@ file is the promise, not a record of what happens to be built.
 
 ## Things only an editor can decide
 
-`data/sync-alerts.json` collects what the sync can see but must not act on. Two
-kinds, both *published in Notion, not true on the site*:
+`data/sync-alerts.json` collects what the sync can see but must not act on.
+Three kinds, all *published in Notion, not true on the site*:
 
 - **`person-renamed`**: an organiser's row was renamed in Notion. Their slug
   comes from their name, so the page moved; the 301 is recorded in
@@ -196,8 +204,8 @@ kinds, both *published in Notion, not true on the site*:
   build. Skipping it *silently* is not: the editor believes it is on the site,
   and only they can give it a slug.
 
-Neither is worth failing a run over, and both are invisible if they only reach
-a CI log, which is the whole reason the file exists. It is keyed by section and
+None of them is worth failing a run over, and all are invisible if they only
+reach a CI log, which is the whole reason the file exists. It is keyed by section and
 rewritten on every run, so resolving the last one empties the list rather than
 leaving a stale alert behind, and one collection cannot erase another's.
 
@@ -213,15 +221,58 @@ took the "already raised" branch and reached nobody, including eight organiser
 photos on launch day. The step now fails outright if the file is ignored,
 because that failure is silent and looks exactly like having nothing to say.
 
-Two more kinds join the two above:
+Three more kinds join them:
 
 - **`image-source-gone`**: the picture in Notion points somewhere that stopped
   answering. The sync keeps the copy it downloaded last time rather than
   dropping the image, so the page is still right; only an editor can re-upload
   the original. See "Images", earlier in this document.
+- **`unusable-url`**: a URL property holds something that is not an address.
+  Notion's URL property is a text box and takes anything; the schemas in
+  `src/content.config.ts` say `z.url()` and take rather less. The field is left
+  out so the rest of the site can ship, which means a link an editor believes is
+  on the page is not there, and only they know what it should have said.
+
+  A *missing scheme* is not this. `trainitek.com` means `https://trainitek.com`,
+  the sync says so in the run log and publishes it, and nobody is interrupted:
+  the published link is already what the editor meant.
+
+  It exists because the alternative was found twice, both times from the wrong
+  end. On 2026-08-03 a guest's Website was typed without a scheme and twelve
+  consecutive deploys failed overnight; on 2026-08-08 another was, and the site
+  went two days without a release. `astro check` is the first step of the
+  deploy, so one editorial typo stopped everything else from shipping — which is
+  exactly the bargain `Content report` refuses to make in the other direction.
+  `scripts/lib/usable-url.ts` decides it now, and its promise is that whatever
+  the sync publishes satisfies the schema that reads it.
 - **`dates-passed`**: a conference edition that has been and gone. The card
   looks after itself, dropping to the end of the row and saying no new dates
   are announced, so nothing on the page is wrong. But it will keep saying that
   until somebody goes and finds the next edition, and this is the one alert
   that fires without anyone having touched Notion at all: a date going by is
   not an edit. See [content-model.md](content-model.md), "Conferences".
+
+And one that is not an editorial decision at all:
+
+- **`notion-schema-drift`**: a property the sync reads was renamed, deleted or
+  retyped. Every other kind here says a person has to choose something; this one
+  says the pipeline has stopped being able to read something, and that generated
+  content is *already* wrong. It is the only kind that means go and look at the
+  files.
+
+  It exists because a rename fails nothing. The read returns nothing, every
+  field is optional, so the run writes the record without it and deploys green;
+  in the first week of August 2026 that happened four times and each was found
+  days later by a person. `scripts/lib/schema-drift.ts` watches instead. Every
+  typed reader passes the property name and the type it expects through one
+  function, and a Notion page property arrives carrying its own `type`, so the
+  comparison is free and needs no second list of expected properties to keep in
+  step.
+
+  A property counts as gone only when *no* row in the database had it, because
+  one empty row is ordinary. A checkbox is never reported missing: Notion does
+  not send one that has never been ticked, so absence there says nothing. Both
+  rules are in `tests/unit/schema-drift.test.mjs`, each case a real incident.
+
+  It detects rather than prevents. The order still matters: change the code
+  first, then the Notion property.

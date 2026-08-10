@@ -756,6 +756,18 @@
       "hash": "fca31442d7bb7c14"
     }
   },
+  "learning-journey": {
+    "3ada485afafc818ebdc3de0ee6c1e75d": {
+      "slug": "is-this-your-problem",
+      "edited": "2026-07-30T12:22:00.000Z",
+      "hash": "49655ad063bc0a34"
+    },
+    "3ada485afafc81a19eb0c4fa65f1cfe8": {
+      "slug": "the-four-words",
+      "edited": "2026-08-04T11:32:00.000Z",
+      "hash": "b8be94ddfbe3c8cf"
+    }
+  },
   "open-spaces": {
     "11383b55d7bf43718bcfb3e89e6ad27d": {
       "slug": "improving-your-software-design-by-nourishing-diversity",
@@ -1108,6 +1120,11 @@
       "edited": "2026-07-29T05:55:00.000Z",
       "hash": "36c0e20e070fd5d8"
     },
+    "389a485afafc80829a75f874f0e893ee": {
+      "slug": "diagnosing-organisational-dysfunctions-open-systems-theory",
+      "edited": "2026-08-05T05:49:00.000Z",
+      "hash": "b4d3475c1bc52fb6"
+    },
     "390a1c4546f24485b8504e690c6ad933": {
       "slug": "case-study-context-mapping-with-michael-plod",
       "edited": "2026-07-26T09:52:00.000Z",
@@ -1115,13 +1132,18 @@
     },
     "395a485afafc8007a86dca201f1a4423": {
       "slug": "surviving-a-national-blackout-with-offline-first-architecture-emilio-carrion",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-08-06T06:49:00.000Z",
       "hash": "00e2c162520bcfc0"
     },
     "39962125e448463db129c1f65655f141": {
       "slug": "ddddd-20-panel-experimentation-in-design-with-rebecca-woody-paul-and-julie",
       "edited": "2026-07-29T05:55:00.000Z",
       "hash": "c202c1da3a681dd6"
+    },
+    "3b2a485afafc803b8cafd2608089b2e8": {
+      "slug": "collaborative-data-modeling-linguistic-cues",
+      "edited": "2026-08-10T02:24:00.000Z",
+      "hash": "b0a33ed10aa12b0c"
     },
     "3c1d3fbdf5e34203994723e4cee15a14": {
       "slug": "ddddd-20-functional-domain-modelling-in-practice",
@@ -1330,7 +1352,7 @@
     },
     "9de1c316cff6448eb970ba7f728e9984": {
       "slug": "ddddd-20-extreme-context-mapping",
-      "edited": "2026-07-28T16:19:00.000Z",
+      "edited": "2026-08-07T04:00:00.000Z",
       "hash": "61233f747e367c9c"
     },
     "9f9c7bcef041497c86e4b8a4eee16ae3": {
@@ -1609,6 +1631,11 @@
       "slug": "impact-mapping-before-architecture",
       "edited": "2026-07-29T14:07:00.000Z",
       "hash": "dd9a5499fe6a8f41"
+    },
+    "320a485afafc8065921acc23684daf0c": {
+      "slug": "social-decision-records-team-ownership",
+      "edited": "2026-08-04T06:16:00.000Z",
+      "hash": "51f91ce4d97dc05f"
     },
     "350a485afafc80ffbaebfcfefdfda010": {
       "slug": "the-reluctant-architect",

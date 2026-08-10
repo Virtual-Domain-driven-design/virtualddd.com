@@ -139,6 +139,12 @@ for:
   because the config is what says which READMEs to go and get. `--strict` fails
   on a dangling relation. `--full` ignores `data/sync-state.json` and re-fetches
   every body.
+- **`npm run sync:podcasts`** is the one step that is never fatal. It asks Apple
+  which episode is which so the pages can link to one, and `sync.yml` swallows a
+  failure into a warning on purpose: `data/podcast-episodes.json` is committed,
+  so a build never needs Apple and a bad afternoon at Apple must not block a
+  content commit. Run by hand it still exits non-zero, because a person asking
+  for a refresh wants to know it did not happen.
 - **`npm run redirects`** must be re-run after adding or renaming content. A
   test fails if the committed `.htaccess` is not what the generator would write
   today.
@@ -153,7 +159,8 @@ The pipeline tells you rather than waiting to be asked. What lands where:
 |---|---|
 | A page is published in Notion but not on the site | The **sync** run in GitHub Actions. A page with no slug, or one still quarantined, is reported there and posted to Discord |
 | Something in Notion needs a person to decide | **Discord**, from `data/sync-alerts.json`: an unpublished page whose address is still live, a page with no slug, an image whose source has gone, a conference whose dates have been and gone |
-| A deploy failed on `Cannot reach the host` | The host's brute-force protection blocked the runner. Re-run the deploy; a different runner has a different IP. Kualo calls it cPHulk |
+| A field is quietly missing from every generated file | The `notion-schema-drift` alert, in the same place. A property the sync reads was renamed, deleted or retyped in Notion, so the read returns nothing and the run commits without it. Change the code first, then the Notion property |
+| A deploy failed on `Cannot reach the host` | The host's brute-force protection blocked the runner's IP, which is shared with the rest of Azure. Kualo calls it cPHulk. `retry-blocked-deploy.yml` runs it again on another runner, once, and that has always been enough so far. A run still red after its second attempt means the block is wider than one address, and no further retry will help |
 | CI is red on `main` after a content commit | The sync commits and deploys as separate jobs. Check which one failed before assuming the content is wrong |
 | The site is stale but the runs are green | Check the deploy built the commit you expect. The `What is being built?` step prints it |
 | Nothing has synced for hours, and no run was even started | The **VirtualDDD hourly sync** workflow in n8n. It keeps the hourly clock, because GitHub's own cron drops and delays scheduled runs on a quiet repository; that cron is only the backstop and *is* expected to run late |

@@ -130,7 +130,7 @@ Organisers only, since these need a Notion token or a deployed host:
 
 | Command | What it does |
 |---|---|
-| `npm run sync` | The whole content pipeline: Notion, then the ddd-crew repositories |
+| `npm run sync` | The whole content pipeline: Notion, then the ddd-crew repositories, then the podcast episode links |
 | `npm run sync:<name>` | One collection, for a targeted run |
 | `node scripts/verify-live.mjs <url> --all` | Ask a deployed host about every address, about 20 minutes |
 

@@ -11,7 +11,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "« It's traverse »: Functional Programming Patterns"
 seoMetadescription: "The `traverse` function is so pervasive in functional programming it became a joke. A session on why it answers so many questions."
-featuredImage: "./_assets/ddddd-20-its-traverse-featured.jpeg"
+featuredImage: "./_assets/ddddd-20-its-traverse-featured.jpg"
 ---
 
 The `traverse` function is so pervasive in functional programming that it became a joke:

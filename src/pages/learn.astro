@@ -1,7 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import DiscordCard from '../components/DiscordCard.astro';
+import JourneyBoard from '../components/JourneyBoard.astro';
+import NotationKey from '../components/NotationKey.astro';
+import { getCollection } from 'astro:content';
 import { collectionPage, topTrail, pageTitle } from '../lib/seo';
+
+// The guided path, when there is one. Only stages that pass the publish gate
+// produce files, so an unfinished journey simply does not render and this page
+// stays the hub it already is. `JourneyBoard` renders nothing at all when the
+// list is empty, which is why there is no guard around it here.
+const stages = (await getCollection('learningJourney'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
 /**
  * The Learn DDD hub.
@@ -16,6 +25,8 @@ import { collectionPage, topTrail, pageTitle } from '../lib/seo';
  * heuristics have none, so three cards would be inconsistent. Text cards say the
  * same thing without inventing artwork.
  */
+const DISCORD = 'https://discord.gg/tRJkcsFDKN';
+
 const sections = [
   {
     href: '/reading-list/',
@@ -54,24 +65,52 @@ const jsonLd = collectionPage(Astro.site, {
 ---
 
 <BaseLayout title={pageTitle('Learn DDD', { brand: true })} description={description} jsonLd={jsonLd}>
-  <section class="hero hero-band hero-band--padded">
-    <div class="page-wash" aria-hidden="true"></div>
-    <div class="wrap hero-inner">
-      <p class="eyebrow eyebrow--cyan">Learn DDD</p>
+  {/* No hero band. /reading-list/ opens the same way and for the same reason:
+      the h1 lives in the cyan panel, which fills the half of the screen a band
+      leaves empty and closes without a rule between the promise and the page.
+
+      The panel leads, in the source and on the screen, so the h1 is never
+      preceded by an h2 and a narrow screen stacks them in the order they are
+      meant to be read. */}
+  <section class="wrap learn-intro">
+    <div class="li-about panel-cyan">
       <h1>Learn Domain-Driven Design</h1>
-      <p class="lead">
-        All of it free, and none of it behind a signup. Three ways in, depending on
-        whether you want something to read, something to run in a session, or what
-        people decided when they tried.
+      <p>
+        All of it free, and none of it behind a signup.
       </p>
-      <p class="hero-note">
-        A guided path for someone completely new to this is being written. Until it is
-        here, start wherever your problem is.
+      <p>
+        The path below is where we would start somebody who has just been told to go
+        and look at Domain-Driven Design. It is what we would say to them in person.
       </p>
+      <p>
+        Tell us what is missing from it, or which step you got stuck on.
+      </p>
+      <a class="btn btn--ink" href={DISCORD}>Join our Discord &rarr;</a>
     </div>
+
+    {stages.length > 0
+      ? <NotationKey />
+      : (
+        <p class="hero-note">
+          A guided path for someone completely new to this is being written. Until it is
+          here, start wherever your problem is.
+        </p>
+      )}
   </section>
 
+  <JourneyBoard stages={stages} />
+
   <section class="wrap" data-pagefind-body>
+    <div class="section-head">
+      <h2>The whole library</h2>
+      {/* His words, moved rather than rewritten: "three ways in" was written for
+          these three cards, and above a single path it read as a promise the
+          page did not keep. */}
+      <p class="library-note">
+        Three ways in, depending on whether you want something to read, something to run
+        in a session, or what people decided when they tried.
+      </p>
+    </div>
     <ul class="learn-grid">
       {sections.map((s) => (
         <li>
@@ -85,14 +124,20 @@ const jsonLd = collectionPage(Astro.site, {
         </li>
       ))}
     </ul>
-
-    <DiscordCard
-      text="Ask the awkward question, or tell us what is missing from any of these."
-    />
   </section>
 </BaseLayout>
 
 <style>
+  /* Same two-column opening as /reading-list/: source order puts the panel
+     first so the h1 leads, the grid puts it on the right on a wide screen. */
+  .learn-intro { display: grid; gap: var(--space-8); margin-bottom: var(--space-16); }
+  @media (min-width: 900px) {
+    .learn-intro { grid-template-columns: 1fr 1fr; align-items: start; }
+  }
+  .li-about h1 { margin: 0 0 var(--space-4); font-size: var(--text-3xl); }
+  .li-about p { margin: 0 0 var(--space-4); }
+  .library-note { color: var(--color-text-muted); font-size: var(--text-sm); margin: 0; max-width: 60ch; }
+
   .learn-grid { list-style: none; margin: 0 0 var(--space-16); padding: 0; display: grid; gap: var(--space-6); }
   @media (min-width: 48rem) { .learn-grid { grid-template-columns: repeat(3, 1fr); } }
 

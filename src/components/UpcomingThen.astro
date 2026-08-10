@@ -1,0 +1,176 @@
+---
+/**
+ * The upcoming sessions that are *not* the one leading the page.
+ *
+ * Two pages lead with a session and both had the same hole underneath. The home
+ * page rendered the rest nowhere at all, so somebody who could not make the next
+ * one never learned a second was announced. `/sessions/` rendered them into a
+ * four-column card grid, and with one left over that is one card and three
+ * columns of black.
+ *
+ * So: rows, not cards. A row is full width, which means the empty column cannot
+ * exist at any count — the layout does not depend on a grid happening to fill
+ * up, which is what produced the hole in the first place. Growing from one
+ * upcoming session to five changes the length of this list and nothing else.
+ *
+ * What a row gives up is the session's artwork. That is a real loss and it was
+ * argued: the picture only earns its space when it is big enough to read, and at
+ * card size beside a hero it was mostly a dark rectangle. The hero above still
+ * carries one.
+ *
+ * ## Why every session ships, including the one above
+ *
+ * The same reason the heroes all ship: which session is "next" is decided in the
+ * browser, not at build time, so the page stays right for weeks without a
+ * rebuild. Every upcoming session is rendered here as a `js-next-item`, and the
+ * sweep in `src/scripts/session-timing.ts` hides whichever one is currently the
+ * hero along with any that have been. `data-next-count` is filled in by the same
+ * sweep, so the count cannot disagree with the rows underneath it.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { iso, shortDate } from '../lib/dates';
+
+interface Props {
+  sessions: CollectionEntry<'sessions'>[];
+}
+const { sessions } = Astro.props;
+
+/** Weekday on its own line above the date: a schedule is read by the day as
+ *  often as by the number, and "Wed 9 Sept" wraps badly in a narrow column. */
+const weekday = (value: Date) =>
+  new Date(value).toLocaleDateString('en-GB', { weekday: 'short' });
+
+/** First letter up, and nothing else touched. Not CSS `capitalize`, which
+ *  treats the hyphen as a word break and renders "Hands-On". */
+const sentence = (v?: string) => (v ? v.charAt(0).toUpperCase() + v.slice(1) : undefined);
+---
+
+{sessions.length > 0 && (
+  <section class="then" data-next-then aria-label="Later sessions">
+    <div class="then-head">
+      <h2>Then</h2>
+      {/* Written at build time and corrected by the sweep, the same bargain the
+          dates make: right for a visitor with no JavaScript, and right for
+          everybody else after the first session has been and the count drops by
+          one. Empty here would leave a no-JS reader with a heading and no
+          number, which is worse than a number a fortnight out of date. */}
+      <span class="then-count" data-next-count data-test="upcoming-count">
+        {sessions.length > 1 ? `${sessions.length - 1} more announced` : 'Nothing else announced'}
+      </span>
+    </div>
+
+    <ul class="then-list">
+      {sessions.map((s, i) => {
+        const d = s.data;
+        const sIso = iso(d.datetime);
+        return (
+          /* Hidden at build time only for the soonest one, because that is the
+             one leading the page above. The sweep takes over from there and
+             will hide a different index once this one has been. */
+          <li class="then-row js-next-item" data-iso={sIso} data-test="upcoming-row" hidden={i === 0}>
+            {/* "In 29d" rather than a date, because that is the unit people
+                answer "can I make it?" in. Written by the same script that runs
+                the hero countdown, so it cannot drift from the clock. */}
+            <span class="then-days js-days" data-iso={sIso}></span>
+            <span class="then-when">
+              <span class="then-weekday">{weekday(d.datetime)}</span>
+              {/* `shortdate`, not `date`: the two must name the same format
+                  that `shortDate` above writes, or the server renders "9 Sept
+                  2026" and the browser replaces it a tick later with
+                  "September 9, 2026", which is both a visible flicker and two
+                  lines in a column sized for one. */}
+              <time class="js-local" data-format="shortdate" datetime={sIso} data-iso={sIso}>{shortDate(d.datetime)}</time>
+            </span>
+            <span class="then-what">
+              <a class="then-title" href={`/sessions/${s.id}/`}>{d.title}</a>
+              <span class="then-sub">
+                {/* Notion holds the type lower-cased ("hands-on") because every
+                    other place it appears is a chip, and `.chip--label` upper-
+                    cases it in CSS. This is the one place it is running text. */}
+                {[sentence(d.typeOfSession), d.level?.join(', '), d.organiser && `Hosted by ${d.organiser}`]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            </span>
+            <span class="then-cta">
+              {d.humanitix
+                ? <a class="btn btn--ghost btn--sm" href={d.humanitix}>RSVP</a>
+                : <a class="btn btn--ghost btn--sm" href={`/sessions/${s.id}/`}>Details →</a>}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+)}
+
+<style>
+  .then { margin-top: var(--space-8); }
+
+  .then-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-2);
+  }
+  .then-head h2 {
+    font-size: var(--text-lg); margin: 0;
+    text-transform: uppercase; letter-spacing: 0.09em;
+  }
+  .then-count {
+    font-family: var(--font-heading); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    font-size: var(--text-sm); color: var(--color-primary);
+  }
+
+  .then-list { list-style: none; margin: 0; padding: 0; }
+
+  /* One row. The four-column track only appears once there is room for it;
+     below that everything stacks, which is why the date carries its own
+     weekday rather than relying on the column to explain it. */
+  .then-row {
+    display: grid; grid-template-columns: 1fr; gap: var(--space-1);
+    padding: var(--space-4) var(--space-1);
+    border-bottom: 1px solid var(--color-border);
+    align-items: center;
+  }
+  .then-row[hidden] { display: none; }
+
+  .then-days {
+    font-family: var(--font-heading); font-weight: 700;
+    font-size: var(--text-sm); letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--on-brand); background: var(--color-primary);
+    padding: var(--space-1) var(--space-2);
+    justify-self: start; font-variant-numeric: tabular-nums;
+  }
+  /* Nothing to say until the script has said it, and an empty cyan block is a
+     smear of colour rather than a label. */
+  .then-days:empty { display: none; }
+
+  .then-when {
+    font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg);
+    font-variant-numeric: tabular-nums; line-height: 1.15;
+  }
+  .then-weekday {
+    display: block; font-size: var(--text-sm); font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-primary);
+  }
+
+  /* Undecorated until hover, the way a card title is. A row is a link the whole
+     way across, so an underline on every title turns the list into a wall of
+     rules. */
+  .then-title {
+    font-family: var(--font-heading); font-weight: 700; font-size: var(--text-lg);
+    line-height: 1.2; color: var(--color-text); display: block;
+    text-decoration: none;
+  }
+  .then-title:hover { color: var(--color-primary-dark); text-decoration: underline; }
+  .then-sub { color: var(--color-text-muted); font-size: var(--text-sm); display: block; margin-top: var(--space-1); }
+
+  .then-cta { justify-self: start; }
+
+  @media (min-width: 800px) {
+    .then-row { grid-template-columns: 5.5rem 7.5rem 1fr auto; gap: var(--space-5); }
+    .then-cta { justify-self: end; }
+  }
+</style>

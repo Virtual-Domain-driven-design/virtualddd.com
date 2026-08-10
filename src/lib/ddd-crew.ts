@@ -39,6 +39,29 @@ export interface CrewConfig {
 
 export const CREW_CONFIG_FILE = 'data/ddd-crew.json';
 
+/** How a repository's licence should read, by SPDX id.
+ *
+ * The section printed "CC BY-SA 4.0" on every page, which was true while every
+ * repo it carried was ShareAlike. It stopped being true on 2026-08-02, when the
+ * ddd-crew merged licences onto the last unlicensed repos and
+ * `context-mapping-quiz` turned out to be **CC BY 4.0**: our page told the world
+ * that somebody's work carried a ShareAlike obligation its authors never asked
+ * for. So the licence now travels with the entry, read from the repository
+ * itself, and this only turns an SPDX id into words. */
+const LICENCES: Record<string, { name: string; url: string }> = {
+  'CC-BY-SA-4.0': { name: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' },
+  'CC-BY-4.0': { name: 'CC BY 4.0', url: 'https://creativecommons.org/licenses/by/4.0/' },
+  'CC0-1.0': { name: 'CC0 1.0', url: 'https://creativecommons.org/publicdomain/zero/1.0/' },
+  'MIT': { name: 'MIT', url: 'https://opensource.org/licenses/MIT' },
+  'Apache-2.0': { name: 'Apache 2.0', url: 'https://www.apache.org/licenses/LICENSE-2.0' },
+};
+
+/** The licence as it should read, or null for one we hold no name for.
+ *
+ * A page with no name still says the SPDX id and links to the repository, which
+ * is honest. Guessing a licence URL is the one thing this must never do. */
+export const licenceOf = (spdx: string | undefined) => (spdx && LICENCES[spdx]) || null;
+
 /** Where a category sits on the page. One that Notion no longer lists sorts
  *  last rather than vanishing: the gallery is grouped with this too, so a
  *  category the config has not caught up with still shows its tools. */

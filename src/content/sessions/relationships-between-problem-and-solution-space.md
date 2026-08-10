@@ -11,7 +11,7 @@ podcastPlayer: "https://player.captivate.fm/episode/95294e03-bd80-486a-93fe-5315
 organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoMetadescription: "Problem space and solution space is one of the more confusing ideas in DDD, and the subject of a long debate in the community. An attempt to settle it."
-featuredImage: "./_assets/relationships-between-problem-and-solution-space-featured.jpeg"
+featuredImage: "./_assets/relationships-between-problem-and-solution-space-featured.jpg"
 ---
 
 One of the more confusing concepts in Domain-Driven Desing is that of problem and solution space. There has been a long debate on Twitter and the ddd-crew github: [https://github.com/ddd-crew/strategic-architecture-building-blocks/pulls?q=is%3Apr+is%3Aclosed](https://github.com/ddd-crew/strategic-architecture-building-blocks/pulls?q=is%3Apr%20is%3Aclosed) 

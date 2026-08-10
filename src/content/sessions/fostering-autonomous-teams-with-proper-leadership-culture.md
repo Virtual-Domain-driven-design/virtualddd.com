@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 guests: ["marc-burgauer", "trond-hjorteland"]
 seoMetadescription: "Collaborative modelling needs autonomous teams, and autonomous teams need a particular kind of leadership. On the culture that makes the modelling work."
-featuredImage: "./_assets/fostering-autonomous-teams-with-proper-leadership-culture-featured.jpeg"
+featuredImage: "./_assets/fostering-autonomous-teams-with-proper-leadership-culture-featured.jpg"
 ---
 
 Domain-Driven Design is a lot about collaborative modelling, understanding the user's needs collaboratively to design and implement the best fitting model. We want the teams to do this as autonomous as possible, getting fast feedback and new insights into improving that model. At the same time, they need to stay aligned with the company goals and strategy and other teams. To ensure this alignment, companies hire managers and architects for that task. But what decisions should be made centralized, and what decentralized? What part of managing should be autocratic, and what should be participatory?

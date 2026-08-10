@@ -18,10 +18,14 @@ import { normaliseTags } from '../src/lib/tags';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import {
-  createBlocksToMd, assetRefs, fileUrl, isAssetFor, kebab, movedSlugs, plainTitle,
-  resolveRelation, statusOf, yamlList, yamlStr,
+  createBlocksToMd, assetRefs, fileUrl, imageExt, isAssetFor, kebab, movedSlugs, plainTitle,
+  resolveRelation, statusOf, yamlList, yamlRecords, yamlStr,
   type AssetCtx, type StatusKind,
 } from './lib/notion-md';
+// Whether Notion is still shaped the way the readers below assume. Every typed
+// reader goes through `watch.note`, so the run knows what it depended on.
+import { schemaWatch, driftAlerts, driftLines, type Reader } from './lib/schema-drift';
+import { usableUrl } from './lib/usable-url';
 import { byGallery, CREW_CONFIG_FILE, type CrewConfig, type CrewTool } from '../src/lib/ddd-crew';
 // The same rule the cards use, so the sync cannot decide a conference is over
 // on a different day from the page that renders it.
@@ -96,6 +100,9 @@ const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (sp
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
 const CONFERENCES_DS = 'c5b9e231-6766-4589-a179-c70d20db3e34'; // DDD conferences and camps, on the home page
 const DDD_CREW_DS = '9503b575-65e8-49c5-a4c0-e80099ec2c2c'; // which ddd-crew repos /ddd-crew/ shows
+const BOOKS_DS = '253adb92-df69-4664-838a-a28ea0798bf0'; // the reading list
+const VIDEOS_DS = 'f929a0ef-2224-4ae1-8057-4a03805c59e7'; // curated talks; no page of their own yet
+const JOURNEY_DS = 'c5208a17-2a05-4eea-902b-496eff4b45d8'; // the stages of /learn/
 
 // --- what the last sync saw -------------------------------------------------
 //
@@ -181,9 +188,17 @@ interface Alert {
    *  organiser's slug comes from their name, so their page has moved. The
    *  redirect is already recorded; this says so out loud, because a person is
    *  a row rather than a page and has no `Retire URL` checkbox to tick, so
-   *  nobody decided this and nobody would otherwise know it happened. */
+   *  nobody decided this and nobody would otherwise know it happened.
+   *  `notion-schema-drift` — a property this sync reads was renamed, deleted or
+   *  retyped in Notion. Every other kind here is an editorial decision; this one
+   *  is the pipeline saying it has stopped being able to read something. It is
+   *  the only kind that means generated content is already wrong.
+   *  `unusable-url` — a URL property holds something that is not an address at
+   *  all. Notion's URL property is a text box and takes anything; the schema
+   *  that reads it does not. The field is left out so the deploy survives, and
+   *  the link the editor believes is on the site is not there. */
   kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed'
-    | 'person-renamed';
+    | 'person-renamed' | 'notion-schema-drift' | 'unusable-url';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -277,6 +292,66 @@ function readExisting(path: string): { featured?: string; body: string } | null 
 }
 
 /** id -> value maps for relation resolution (page IDs are stored dashless-agnostic). */
+/** What a stage's Videos relation resolves to. No collection holds these, so
+ *  the record itself travels into the entry. */
+interface VideoRef { title: string; who: string; url: string; minutes?: number; why: string }
+/** Books and tools resolve to a slug: /reading-list/ and /ddd-crew/ hold the
+ *  rest, and copying a recommendation would be a second copy to keep true. */
+interface BookRef { slug: string; free: boolean; title: string }
+interface ToolRef { repo: string; name: string }
+
+/** A published-only lookup, and what was left out of it.
+ *
+ * Two very different things hide behind "this relation does not resolve", and
+ * they must not be reported the same way: a row that exists but is still being
+ * curated resolves itself the day somebody publishes it, while a relation
+ * pointing at a page that is not in the database at all (deleted, archived, or
+ * the wrong database) is a fault nobody will otherwise notice.
+ *
+ * `ok` is false when the database could not be read at all — usually because it
+ * has not been shared with the integration. Nothing is dangling in that case:
+ * there was nothing for it to dangle against, and reporting every relation as
+ * broken would bury the one line that says why. */
+interface Gate<T> {
+  published: Map<string, T>;
+  unpublished: Map<string, { title: string; status: string }>;
+  ok: boolean;
+}
+
+const emptyGate = <T>(): Gate<T> => ({ published: new Map<string, T>(), unpublished: new Map(), ok: false });
+
+/** A row's Slug property, which several databases carry and none call anything else. */
+const rowSlug = (p: any): string =>
+  (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
+
+async function buildGate<T>(
+  dataSourceId: string,
+  label: string,
+  kind: StatusKind,
+  titleProp: string,
+  valueOf: (page: any) => T | null,
+): Promise<Gate<T>> {
+  const published = new Map<string, T>();
+  const unpublished = new Map<string, { title: string; status: string }>();
+  let ok = false;
+  try {
+    for (const p of await queryAll(dataSourceId)) {
+      const id = (p.id as string).replace(/-/g, '');
+      const status = statusOf(p, kind);
+      // Published *and* renderable. A row published with no slug has nothing to
+      // link to, so it belongs with the unpublished ones and is reported the
+      // same way rather than silently producing a broken address.
+      const value = status === 'Published' ? valueOf(p) : null;
+      if (value) published.set(id, value);
+      else unpublished.set(id, { title: plainTitle(p, titleProp) || rowSlug(p) || id, status: status || 'no status' });
+    }
+    ok = true;
+  } catch (e: any) {
+    console.warn(`  ! ${label} not readable (${e.code ?? e.message}); those relations are left unresolved. Share that database with the integration to fix.`);
+  }
+  return { published, unpublished, ok };
+}
+
 async function buildLookup<T>(dataSourceId: string, label: string, valueOf: (page: any) => T) {
   const map = new Map<string, T>();
   try {
@@ -289,15 +364,6 @@ async function buildLookup<T>(dataSourceId: string, label: string, valueOf: (pag
   return map;
 }
 
-const EXT_BY_CT: Record<string, string> = {
-  'image/jpeg': 'jpg', 'image/png': 'png', 'image/gif': 'gif',
-  'image/webp': 'webp', 'image/svg+xml': 'svg', 'image/avif': 'avif',
-};
-function extFromUrl(url: string): string | null {
-  const path = url.split('?')[0];
-  const m = path.match(/\.([a-z0-9]{2,4})$/i);
-  return m ? m[1].toLowerCase() : null;
-}
 
 const IMG_MAX = 1600;
 /** Cap dimensions and recompress so committed source images stay small. */
@@ -351,23 +417,75 @@ function pruneAssets(outDir: string, label = 'asset'): void {
  *  there. The naming rule is `isAssetFor` in scripts/lib/notion-md.ts. */
 function existingAsset(dir: string, slug: string, label: string): string | null {
   try {
-    return readdirSync(dir).find((f) => isAssetFor(f, slug, label)) ?? null;
+    const found = readdirSync(dir).find((f) => isAssetFor(f, slug, label)) ?? null;
+    if (!found) return null;
+    // A copy is only worth keeping if it is a picture. The first bad download
+    // of this kind was committed before the check above existed, and without
+    // this the fallback would find that file, decide the site still had
+    // something to show, and hand the build the same broken bytes on every run
+    // for ever. Nothing would ever repair itself.
+    if (!imageExt(readFileSync(`${dir}/${found}`))) {
+      console.warn(`    ! ${found} is not a picture either; dropping it`);
+      unlinkSync(`${dir}/${found}`);
+      return null;
+    }
+    return found;
   } catch { return null; } // no _assets directory yet: nothing to keep
 }
 
 /** Images kept from an earlier sync because their source stopped answering.
  *  Flushed into the alert file by whichever collection is being synced, so a
  *  person is told to re-upload rather than finding out from the page. */
-const strandedImages: { slug: string; label: string; url: string }[] = [];
+const strandedImages: { slug: string; label: string; url: string; kept: boolean }[] = [];
 
-/** What this run had to keep, as alerts for the section being synced. */
+/** What this run could not download, as alerts for the section being synced.
+ *
+ * `kept` is the difference between an inconvenience and a hole in the page,
+ * and the message says which: a row that already had a picture still shows one,
+ * a row that never did shows nothing at all until somebody fixes the link. */
 const strandedAlerts = (section: string): Alert[] =>
   strandedImages.map((s) => ({
     kind: 'image-source-gone' as const,
     section,
-    title: `${s.slug} (${s.label})`,
+    title: s.kept
+      ? `${s.slug} (${s.label}): showing the last copy we downloaded`
+      : `${s.slug} (${s.label}): no picture at all until this is fixed`,
     url: s.url,
   }));
+
+/** URL properties this run found something unpublishable in, for the same flush
+ *  as the stranded images above. */
+const unusableUrls: { row: string; prop: string; raw: string; page: string }[] = [];
+
+const unusableUrlAlerts = (section: string): Alert[] =>
+  unusableUrls.map((u) => ({
+    kind: 'unusable-url' as const,
+    section,
+    title: `${u.row}: ${u.prop} is "${u.raw}", which is not an address, so the link is missing`,
+    url: u.page,
+  }));
+
+/** Read a URL property, and never hand the build a value it will refuse.
+ *
+ * The one place every URL the sync publishes goes through, so `usableUrl`'s
+ * promise — whatever comes out of here satisfies `z.url()` — is a promise about
+ * the generated content and not just about one function. See
+ * scripts/lib/usable-url.ts for why the deploy was the wrong place to find this
+ * out, twice.
+ *
+ * A repair is said out loud in the run log and no further: the published link is
+ * what the editor meant, so there is nothing for anybody to decide. Something
+ * that is not an address at all is an alert, because the site is now missing a
+ * link they think is on it. */
+function readUrl(prop: string, raw: string | undefined, row: string, page: string) {
+  const r = usableUrl(raw);
+  if (r.problem === 'repaired') console.log(`  ~ ${row}: ${prop} is "${r.raw}", published as ${r.url}`);
+  if (r.problem === 'unusable') {
+    console.log(`  ! ${row}: ${prop} is "${r.raw}", which is not an address; leaving it out`);
+    unusableUrls.push({ row, prop, raw: r.raw!, page });
+  }
+  return r.url;
+}
 
 /** Download an image next to the entry; return the `./` relative path or null.
  *
@@ -386,7 +504,15 @@ async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = Buffer.from(await res.arrayBuffer());
-    const ext = extFromUrl(url) ?? EXT_BY_CT[res.headers.get('content-type') ?? ''] ?? 'png';
+    const ext = imageExt(raw);
+    if (!ext) {
+      const ct = res.headers.get('content-type') ?? 'no content-type';
+      throw new Error(
+        `what came back is not an image (${ct}, ${raw.length} bytes). ` +
+        'A Photo that links to Google Drive returns the viewer page rather ' +
+        'than the file; upload the picture into Notion instead.',
+      );
+    }
     const buf = await shrinkImage(raw, ext);
     const name = `${ctx.slug}-${label}.${ext}`;
     mkdirSync(ctx.dir, { recursive: true });
@@ -394,12 +520,16 @@ async function downloadImage(url: string, ctx: AssetCtx, label: string): Promise
     return `./_assets/${name}`;
   } catch (e: any) {
     const kept = existingAsset(ctx.dir, ctx.slug, label);
+    // Either way an editor has to go and fix the row, so either way it is an
+    // alert. Only the kept case used to raise one, so a *new* row with an
+    // unusable picture failed into a log nobody reads, and the first anyone
+    // knew of it was a red build in another workflow naming a filename.
+    strandedImages.push({ slug: ctx.slug, label, url, kept: Boolean(kept) });
     if (kept) {
       console.warn(`    ! image source gone (${label}): ${e.message} — keeping ${kept}`);
-      strandedImages.push({ slug: ctx.slug, label, url });
       return `./_assets/${kept}`;
     }
-    console.warn(`    ! image download failed (${label}): ${e.message}`);
+    console.warn(`    ! no usable image (${label}): ${e.message}`);
     return null;
   }
 }
@@ -434,7 +564,18 @@ interface Helpers {
   /** A checkbox, false when the property is absent — Notion does not send one
    *  that has never been ticked. */
   checkbox: (n: string) => boolean;
+  /** The published rows a relation points at.
+   *
+   *  One reader for every relation the sync follows. What differs per database
+   *  is only the gate: which rows count as published, and what a resolved one
+   *  carries. A row that exists but is not published yet, and a relation
+   *  pointing at no row at all, are reported separately by the caller, because
+   *  the first is expected and the second is a fault. */
+  refs: <T>(n: string, gate: Gate<T>) => T[];
   heur: (n: string) => string[];
+  videos: (n: string) => VideoRef[];
+  books: (n: string) => BookRef[];
+  tools: (n: string) => ToolRef[];
   person: (n: string) => string[];
   guest: (n: string) => string[];
   img: (n: string, label: string) => Promise<string | null>;
@@ -456,6 +597,10 @@ interface ContentSpec {
   featuredImageProp?: string; // omit to skip featured-image download
   needsPeople?: boolean;
   needsGuests?: boolean;
+  /** Read the Videos, Books and ddd-crew databases too. Only the learning
+   *  journey points at them, and three extra queries on every other collection
+   *  would be three queries for nothing. */
+  needsJourneyRefs?: boolean;
   extra: (h: Helpers) => Promise<string[]>;
 }
 
@@ -547,11 +692,64 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
       const authors = h.multi('Authors'); if (authors.length) l.push(`authors: ${yamlList(authors)}`);
       const submitter = h.select('Submitter'); if (submitter) l.push(`submitter: ${yamlStr(submitter)}`);
       const tags = normaliseTags(h.multi('Tags')); if (tags.length) l.push(`tags: ${yamlList(tags)}`);
-      for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites '], ['specializes', 'Specializes']] as const) {
+      // `Prerequisites` carried a trailing space in Notion until 2026-08-06, and
+      // this read carried one to match. Both are clean now. Nothing here defends
+      // against it coming back: that is what the drift check is for, and a
+      // second guard on one property is the sort of thing nobody dares delete.
+      for (const [k, p] of [['competesWith', 'Competes With'], ['complements', 'Complements'], ['enables', 'Enables'], ['prerequisites', 'Prerequisites'], ['specializes', 'Specializes']] as const) {
         const v = h.heur(p); if (v.length) l.push(`${k}: ${yamlList(v)}`);
       }
       const md = h.text('Meta Description'); if (md) l.push(`metaDescription: ${yamlStr(md)}`);
       const st = h.text('SEO Title'); if (st) l.push(`seoTitle: ${yamlStr(st)}`);
+      return l;
+    },
+  },
+  // The stages of the learning journey on /learn/. No `section` for the same
+  // reason as the reading list: they render inside one page, so the slug is an
+  // anchor rather than a URL.
+  //
+  // The stage body in Notion holds working notes to ourselves ("three books is
+  // one too many for this stage"), so the page renders the properties only and
+  // never the body.
+  'learning-journey': {
+    dataSourceId: JOURNEY_DS,
+    titleProp: 'Name', slugProp: 'Slug', statusKind: 'select',
+    liveStatuses: ['Published'],
+    needsJourneyRefs: true,
+    extra: async (h) => {
+      const l: string[] = [];
+      const order = h.num('Order'); if (order != null) l.push(`order: ${order}`);
+      const time = h.text('Time'); if (time) l.push(`time: ${yamlStr(time)}`);
+      const why = h.text('Why'); if (why) l.push(`why: ${yamlStr(why)}`);
+      const done = h.text('Done when'); if (done) l.push(`doneWhen: ${yamlStr(done)}`);
+      // What the stage deliberately leaves out, which is some of the best
+      // curation on the page: "no book at this step, on purpose". It used to
+      // live in the Notion body, which this collection never renders.
+      const notHere = h.text('Not here, on purpose'); if (notHere) l.push(`notHere: ${yamlStr(notHere)}`);
+
+      // Shortest first. Stage 1's own note says the five-minute talk is listed
+      // first on purpose, so a sceptic gets an exit before the twenty-minute
+      // commitment, and a Notion relation has no order worth trusting. Length
+      // reproduces that intent as a rule, which keeps working when somebody
+      // adds a third video without having read the note. A video with no
+      // Minutes yet sorts last rather than first, so an unfilled field cannot
+      // quietly become the thing a newcomer is sent to first.
+      const videos = h.videos('Videos')
+        .sort((a, b) => (a.minutes ?? Infinity) - (b.minutes ?? Infinity));
+      if (videos.length) {
+        l.push(yamlRecords('videos', videos.map((v) => ({
+          title: v.title, who: v.who, url: v.url, minutes: v.minutes, why: v.why,
+        }))));
+      }
+
+      // Free first, the same rule /reading-list/ already sorts by, so the two
+      // pages cannot disagree about which book to read first.
+      const books = h.books('Books')
+        .sort((a, b) => (a.free === b.free ? a.title.localeCompare(b.title) : a.free ? -1 : 1));
+      if (books.length) l.push(`books: ${yamlList(books.map((b) => b.slug))}`);
+
+      const tools = h.tools('ddd-crew').sort((a, b) => a.name.localeCompare(b.name));
+      if (tools.length) l.push(`tools: ${yamlList(tools.map((t) => t.repo))}`);
       return l;
     },
   },
@@ -561,7 +759,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
   // /videos/ section retired. They all render inside /reading-list/, and the
   // slug is the anchor there rather than a URL.
   'reading-list': {
-    dataSourceId: '253adb92-df69-4664-838a-a28ea0798bf0',
+    dataSourceId: BOOKS_DS,
     titleProp: 'Title', slugProp: 'Slug', statusKind: 'select',
     liveStatuses: ['Published'], featuredImageProp: 'Cover',
     extra: async (h) => {
@@ -602,20 +800,51 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   // (expected — it gets published when the curation is done), versus a
   // relation pointing at a page that is not in the database at all (deleted,
   // archived, or the wrong database — a real dangling reference).
-  const heurSlug = new Map<string, string>();
-  const heurPending = new Map<string, { title: string; status: string }>();
-  let heurLookupOk = false;
-  try {
-    for (const p of await queryAll(HEURISTICS_DS)) {
-      const id = (p.id as string).replace(/-/g, '');
-      const slug = (p.properties?.Slug?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim();
-      if (statusOf(p, 'status') === 'Published' && slug) heurSlug.set(id, slug);
-      else heurPending.set(id, { title: plainTitle(p, 'Title') || slug || id, status: statusOf(p, 'status') ?? 'no status' });
-    }
-    heurLookupOk = true;
-  } catch (e: any) {
-    console.warn(`  ! heuristics not readable (${e.code ?? e.message}); heuristic relations left unresolved.`);
-  }
+  const heuristics = await buildGate(HEURISTICS_DS, 'heuristics', 'status', 'Title',
+    (p) => rowSlug(p) || null);
+
+  // The learning journey is the only collection that points at these three, so
+  // nothing else pays for reading them. Videos carry their whole record because
+  // there is no video collection on the site to look one up in; books and tools
+  // carry a slug, because /reading-list/ and /ddd-crew/ already hold the rest
+  // and a second copy of somebody's recommendation would be a second copy to
+  // keep true.
+  const journey = spec.needsJourneyRefs;
+  const videos = journey
+    ? await buildGate<VideoRef>(VIDEOS_DS, 'videos', 'select', 'Title', (p) => {
+        const title = plainTitle(p, 'Title');
+        if (!title) return null;
+        const t = (n: string) => (p.properties?.[n]?.rich_text ?? []).map((x: any) => x.plain_text).join('').trim();
+        const num = (n: string) => (typeof p.properties?.[n]?.number === 'number' ? p.properties[n].number : undefined);
+        const youtube = t('YouTube ID');
+        const source = t('Source');
+        const year = num('Year');
+        return {
+          title,
+          // One line for the page to print, composed here so the rule lives in
+          // one place: who made it, and where it was recorded.
+          who: [t('Speaker'), [source, year].filter(Boolean).join(' ')].filter(Boolean).join(' · '),
+          // Built from the id, never stored twice: that is what the property
+          // description in Notion says, and a video with neither an id nor a
+          // link is a title nobody can act on.
+          url: youtube ? `https://www.youtube.com/watch?v=${youtube}` : (p.properties?.Link?.url ?? ''),
+          minutes: num('Minutes'),
+          why: t('Why it is worth it'),
+        };
+      })
+    : emptyGate<VideoRef>();
+  const books = journey
+    ? await buildGate<BookRef>(BOOKS_DS, 'books', 'select', 'Title', (p) => {
+        const slug = rowSlug(p);
+        return slug ? { slug, free: p.properties?.Free?.checkbox === true, title: plainTitle(p, 'Title') } : null;
+      })
+    : emptyGate<BookRef>();
+  const tools = journey
+    ? await buildGate<ToolRef>(DDD_CREW_DS, 'ddd-crew tools', 'select', 'Name', (p) => {
+        const repo = (p.properties?.Repo?.rich_text ?? []).map((x: any) => x.plain_text).join('').trim();
+        return repo ? { repo, name: plainTitle(p, 'Name') } : null;
+      })
+    : emptyGate<ToolRef>();
 
   /** Relations to heuristics that exist but are not published yet. Expected. */
   const pending: { slug: string; prop: string; ref: string }[] = [];
@@ -653,6 +882,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   const edited: string[] = [];
   let reused = 0;
 
+  const watch = schemaWatch();
   const allRows = await queryAll(spec.dataSourceId);
   const pages = allRows.filter((p) => spec.liveStatuses.includes(statusOf(p, spec.statusKind)));
   /** Rows that are no longer published, by page id, so pruning can ask *why*. */
@@ -681,25 +911,41 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       continue;
     }
     const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
-    const rel = (n: string) => (get(n)?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
+    // The same read, remembered. Every typed reader below goes through `got`,
+    // so the run ends knowing exactly which properties it depended on and what
+    // Notion answered with.
+    //
+    // Two reads stay outside it. `h.get` is the raw escape hatch, which no spec
+    // currently uses, and the slug above, which needs none: a renamed Slug
+    // property makes every page in the database look slugless, and
+    // `published-without-a-slug` already says that far more loudly than this
+    // would.
+    const got = (n: string, want: Reader) => { watch.note(n, want, P[n]); return P[n]; };
+    const rel = (n: string) => (got(n, 'relation')?.relation ?? []).map((r: any) => r.id.replace(/-/g, ''));
 
     const h: Helpers = {
       get,
-      text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
-      url: (n) => get(n)?.url ?? undefined,
-      date: (n) => get(n)?.date?.start ?? undefined,
-      num: (n) => (typeof get(n)?.number === 'number' ? get(n).number : undefined),
-      select: (n) => get(n)?.select?.name ?? undefined,
-      checkbox: (n) => get(n)?.checkbox === true,
-      heur: (n) => rel(n).flatMap((id: string) => {
-        const r = resolveRelation(id, heurSlug, heurPending);
-        if (r.kind === 'resolved') return [r.slug];
+      text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
+      url: (n) => readUrl(n, got(n, 'url')?.url, title, page.url),
+      date: (n) => got(n, 'date')?.date?.start ?? undefined,
+      num: (n) => { const v = got(n, 'number')?.number; return typeof v === 'number' ? v : undefined; },
+      select: (n) => got(n, 'select')?.select?.name ?? undefined,
+      checkbox: (n) => got(n, 'checkbox')?.checkbox === true,
+      refs: <T>(n: string, gate: Gate<T>) => rel(n).flatMap((id: string) => {
+        const r = resolveRelation(id, gate.published, gate.unpublished);
+        if (r.kind === 'resolved') return [r.value];
         if (r.kind === 'pending') pending.push({ slug, prop: n, ref: `${r.title} (${r.status})` });
         // If the lookup itself failed there is nothing to be dangling against.
-        else if (heurLookupOk) dropped.push({ slug, prop: n, ref: `unknown page ${id.slice(0, 8)}…` });
+        else if (gate.ok) dropped.push({ slug, prop: n, ref: `unknown page ${id.slice(0, 8)}…` });
         return [];
       }),
+      // The name every other spec already calls, kept so this stays one
+      // mechanism rather than a reader per database.
+      heur: (n) => h.refs(n, heuristics),
+      videos: (n) => h.refs(n, videos),
+      books: (n) => h.refs(n, books),
+      tools: (n) => h.refs(n, tools),
       person: (n) => rel(n).map((id: string) => personName.get(id)).filter(Boolean) as string[],
       guest: (n) => rel(n).flatMap((id: string) => {
         const name = guests.get(id);
@@ -708,7 +954,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
         return [];
       }),
       img: async (n, label) => {
-        const u = fileUrl((get(n)?.files ?? [])[0]);
+        const u = fileUrl((got(n, 'files')?.files ?? [])[0]);
         return u ? await downloadImage(u, ctx, label) : null;
       },
     };
@@ -845,6 +1091,12 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
     console.log('    Nothing will render them until somebody fills the slug in.');
   }
 
+  // Said out loud on a preview run too, because this is the one alert a
+  // developer wants *before* pushing. A --limit run has seen a handful of rows,
+  // where "no row had it" is an accident of the slice rather than a fact.
+  const drift = !limit && targets.length ? watch.drift() : [];
+  for (const line of driftLines(drift)) console.log(line);
+
   // Unconditional, so that resolving the last one empties the list rather than
   // leaving a stale alert for the pipeline to keep raising. A preview run is
   // not allowed to touch it, and a --limit run has not seen the whole database.
@@ -860,6 +1112,8 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: alertKey, title: q.title, url: q.url })),
       ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: alertKey, title: u.title, url: u.url })),
       ...strandedAlerts(alertKey),
+      ...unusableUrlAlerts(alertKey),
+      ...driftAlerts(alertKey, targets[0]?.url ?? '', drift),
     ]);
   }
 
@@ -989,14 +1243,20 @@ const ROW_SPECS: Record<string, RowSpec> = {
       name,
       bio: h.text('Bio') || undefined,
       website: h.url('Website'),
-      linkedin: h.url('LinkedIn'),
+      // Guests name these three for what they hold: `LinkedIn Url`,
+      // `Mastodon Tag`, `Bluesky Tag`. Organisers still say `LinkedIn`,
+      // `Mastodon`, `Bluesky`, so the two specs read different names on
+      // purpose. Renaming a property is invisible to the sync, because every
+      // field here is optional: it writes the file without the field, commits
+      // as the bot and deploys green.
+      linkedin: h.url('LinkedIn Url'),
       // Text, not URL, on both people databases: these two hold a handle
       // (`@sebrose@mastodon.scot`) so the n8n social flows can put them in a
       // post, which is the only place a handle is wanted. `h.url` reads
       // Notion's `url` field and returns undefined for a text property, so
       // reading these the old way drops every handle without an error.
-      mastodon: h.text('Mastodon') || undefined,
-      bluesky: h.text('Bluesky') || undefined,
+      mastodon: h.text('Mastodon Tag') || undefined,
+      bluesky: h.text('Bluesky Tag') || undefined,
       alsoAnOrganiser: h.checkbox('Also an organiser'),
     }),
   },
@@ -1040,6 +1300,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
   const spec = ROW_SPECS[key];
   if (!spec) { console.error(`unknown row collection: ${key}`); process.exit(1); }
 
+  const watch = schemaWatch();
   const pages = await queryAll(spec.dataSourceId);
   const assetDir = `${outDir}/_assets`;
   mkdirSync(outDir, { recursive: true });
@@ -1054,20 +1315,27 @@ async function runRows(key: string, outDir: string, write: boolean) {
   const now: Record<string, EntryState> = {};
   for (const page of pages) {
     const P = page.properties;
-    const get = (n: string) => P[n];
-    const h: RowHelpers = {
-      text: (n) => (get(n)?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      url: (n) => get(n)?.url ?? undefined,
-      select: (n) => get(n)?.select?.name ?? undefined,
-      multi: (n) => (get(n)?.multi_select ?? []).map((o: any) => o.name),
-      checkbox: (n) => get(n)?.checkbox ?? false,
-      date: (n) => get(n)?.date?.start ?? undefined,
-      dateEnd: (n) => get(n)?.date?.end ?? undefined,
-      file: (n) => fileUrl((get(n)?.files ?? [])[0]),
-    };
+    // See `schemaWatch`. This is the database the 4 August rename landed in, so
+    // it is the one that most wants watching.
+    const got = (n: string, want: Reader) => { watch.note(n, want, P[n]); return P[n]; };
+    // The name is read before the helpers rather than after, because a row is
+    // how a person recognises one of these: a guest has no slug and no page, so
+    // "Vadzim Prudnikau: Website is not an address" is the only way to say which
+    // row an alert is about.
     const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
     const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
     if (!name) { console.log(`  ! a ${spec.label} row has no name, skipping`); continue; }
+
+    const h: RowHelpers = {
+      text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+      url: (n) => readUrl(n, got(n, 'url')?.url, name, page.url),
+      select: (n) => got(n, 'select')?.select?.name ?? undefined,
+      multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
+      checkbox: (n) => got(n, 'checkbox')?.checkbox ?? false,
+      date: (n) => got(n, 'date')?.date?.start ?? undefined,
+      dateEnd: (n) => got(n, 'date')?.date?.end ?? undefined,
+      file: (n) => fileUrl((got(n, 'files')?.files ?? [])[0]),
+    };
 
     const slug = spec.slugOf(name, h);
     if (spec.section) now[page.id.replace(/-/g, '')] = { slug };
@@ -1125,11 +1393,16 @@ async function runRows(key: string, outDir: string, write: boolean) {
     saveState(state);
   }
 
+  const drift = pages.length ? watch.drift() : [];
+  for (const line of driftLines(drift)) console.log(line);
+
   // Unconditional, like the content sync's: re-uploading the last picture in
   // Notion has to be able to empty this list, not just stop adding to it.
   if (write) writeAlert(spec.label, [
     ...strandedAlerts(spec.label),
+    ...unusableUrlAlerts(spec.label),
     ...(spec.alerts?.(rows) ?? []),
+    ...driftAlerts(spec.label, pages[0]?.url ?? '', drift),
     ...moved.map((m) => ({
       kind: 'person-renamed' as const,
       section: spec.section!,

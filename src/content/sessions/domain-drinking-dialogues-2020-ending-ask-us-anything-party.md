@@ -12,7 +12,7 @@ organiser: "Kenny Schwegler"
 coOrganisers: ["Krisztina Hirth"]
 seoTitle: "Domain-Drinking Dialogues: Ask Us Anything"
 seoMetadescription: "Our end-of-2020 meetup: bring a drink and ask the community anything about Domain-Driven Design, modelling or the year we all just had."
-featuredImage: "./_assets/domain-drinking-dialogues-2020-ending-ask-us-anything-party-featured.jpeg"
+featuredImage: "./_assets/domain-drinking-dialogues-2020-ending-ask-us-anything-party-featured.jpg"
 ---
 
 Just before all the holidays start we are closing this year virtual Domain-driven design meetups with the last meetup. So grab your drinks (tea, lemonade or anything you want!) and come join with your DDD questions to this Ask us anything party! We have invited several people from the community who will join an online fishbowl in a zoom webinar. You post your questions and we will discuss them. 
