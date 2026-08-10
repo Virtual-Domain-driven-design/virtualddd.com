@@ -153,6 +153,12 @@ const sessionGuests = defineCollection({
     z.object({
       name: z.string(),
       bio: z.string().optional(),
+      // Every `z.url()` here is also a promise the sync keeps: Notion's URL
+      // property is a text box, so `scripts/lib/usable-url.ts` is what stops a
+      // scheme-less typo reaching this schema. It reached it twice, and both
+      // times `astro check` — the deploy's first step — stopped the whole site
+      // shipping over one guest's Website. Changing these to something stricter
+      // than `new URL()` means changing that file in the same breath.
       website: z.url().optional(),
       linkedin: z.url().optional(),
       // A handle, not a URL: `@sebrose@mastodon.scot`, `@name.bsky.social`.

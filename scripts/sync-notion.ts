@@ -25,6 +25,7 @@ import {
 // Whether Notion is still shaped the way the readers below assume. Every typed
 // reader goes through `watch.note`, so the run knows what it depended on.
 import { schemaWatch, driftAlerts, driftLines, type Reader } from './lib/schema-drift';
+import { usableUrl } from './lib/usable-url';
 import { byGallery, CREW_CONFIG_FILE, type CrewConfig, type CrewTool } from '../src/lib/ddd-crew';
 // The same rule the cards use, so the sync cannot decide a conference is over
 // on a different day from the page that renders it.
@@ -191,9 +192,13 @@ interface Alert {
    *  `notion-schema-drift` — a property this sync reads was renamed, deleted or
    *  retyped in Notion. Every other kind here is an editorial decision; this one
    *  is the pipeline saying it has stopped being able to read something. It is
-   *  the only kind that means generated content is already wrong. */
+   *  the only kind that means generated content is already wrong.
+   *  `unusable-url` — a URL property holds something that is not an address at
+   *  all. Notion's URL property is a text box and takes anything; the schema
+   *  that reads it does not. The field is left out so the deploy survives, and
+   *  the link the editor believes is on the site is not there. */
   kind: 'unpublished-but-live' | 'published-without-a-slug' | 'image-source-gone' | 'dates-passed'
-    | 'person-renamed' | 'notion-schema-drift';
+    | 'person-renamed' | 'notion-schema-drift' | 'unusable-url';
   section: string;
   title: string;
   /** The public address for the first kind; the Notion page for the second,
@@ -447,6 +452,40 @@ const strandedAlerts = (section: string): Alert[] =>
       : `${s.slug} (${s.label}): no picture at all until this is fixed`,
     url: s.url,
   }));
+
+/** URL properties this run found something unpublishable in, for the same flush
+ *  as the stranded images above. */
+const unusableUrls: { row: string; prop: string; raw: string; page: string }[] = [];
+
+const unusableUrlAlerts = (section: string): Alert[] =>
+  unusableUrls.map((u) => ({
+    kind: 'unusable-url' as const,
+    section,
+    title: `${u.row}: ${u.prop} is "${u.raw}", which is not an address, so the link is missing`,
+    url: u.page,
+  }));
+
+/** Read a URL property, and never hand the build a value it will refuse.
+ *
+ * The one place every URL the sync publishes goes through, so `usableUrl`'s
+ * promise — whatever comes out of here satisfies `z.url()` — is a promise about
+ * the generated content and not just about one function. See
+ * scripts/lib/usable-url.ts for why the deploy was the wrong place to find this
+ * out, twice.
+ *
+ * A repair is said out loud in the run log and no further: the published link is
+ * what the editor meant, so there is nothing for anybody to decide. Something
+ * that is not an address at all is an alert, because the site is now missing a
+ * link they think is on it. */
+function readUrl(prop: string, raw: string | undefined, row: string, page: string) {
+  const r = usableUrl(raw);
+  if (r.problem === 'repaired') console.log(`  ~ ${row}: ${prop} is "${r.raw}", published as ${r.url}`);
+  if (r.problem === 'unusable') {
+    console.log(`  ! ${row}: ${prop} is "${r.raw}", which is not an address; leaving it out`);
+    unusableUrls.push({ row, prop, raw: r.raw!, page });
+  }
+  return r.url;
+}
 
 /** Download an image next to the entry; return the `./` relative path or null.
  *
@@ -888,7 +927,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       get,
       text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
       multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
-      url: (n) => got(n, 'url')?.url ?? undefined,
+      url: (n) => readUrl(n, got(n, 'url')?.url, title, page.url),
       date: (n) => got(n, 'date')?.date?.start ?? undefined,
       num: (n) => { const v = got(n, 'number')?.number; return typeof v === 'number' ? v : undefined; },
       select: (n) => got(n, 'select')?.select?.name ?? undefined,
@@ -1073,6 +1112,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
       ...quarantined.map((q) => ({ kind: 'unpublished-but-live' as const, section: alertKey, title: q.title, url: q.url })),
       ...unrenderable.map((u) => ({ kind: 'published-without-a-slug' as const, section: alertKey, title: u.title, url: u.url })),
       ...strandedAlerts(alertKey),
+      ...unusableUrlAlerts(alertKey),
       ...driftAlerts(alertKey, targets[0]?.url ?? '', drift),
     ]);
   }
@@ -1278,9 +1318,17 @@ async function runRows(key: string, outDir: string, write: boolean) {
     // See `schemaWatch`. This is the database the 4 August rename landed in, so
     // it is the one that most wants watching.
     const got = (n: string, want: Reader) => { watch.note(n, want, P[n]); return P[n]; };
+    // The name is read before the helpers rather than after, because a row is
+    // how a person recognises one of these: a guest has no slug and no page, so
+    // "Vadzim Prudnikau: Website is not an address" is the only way to say which
+    // row an alert is about.
+    const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
+    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
+    if (!name) { console.log(`  ! a ${spec.label} row has no name, skipping`); continue; }
+
     const h: RowHelpers = {
       text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      url: (n) => got(n, 'url')?.url ?? undefined,
+      url: (n) => readUrl(n, got(n, 'url')?.url, name, page.url),
       select: (n) => got(n, 'select')?.select?.name ?? undefined,
       multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
       checkbox: (n) => got(n, 'checkbox')?.checkbox ?? false,
@@ -1288,9 +1336,6 @@ async function runRows(key: string, outDir: string, write: boolean) {
       dateEnd: (n) => got(n, 'date')?.date?.end ?? undefined,
       file: (n) => fileUrl((got(n, 'files')?.files ?? [])[0]),
     };
-    const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
-    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
-    if (!name) { console.log(`  ! a ${spec.label} row has no name, skipping`); continue; }
 
     const slug = spec.slugOf(name, h);
     if (spec.section) now[page.id.replace(/-/g, '')] = { slug };
@@ -1355,6 +1400,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
   // Notion has to be able to empty this list, not just stop adding to it.
   if (write) writeAlert(spec.label, [
     ...strandedAlerts(spec.label),
+    ...unusableUrlAlerts(spec.label),
     ...(spec.alerts?.(rows) ?? []),
     ...driftAlerts(spec.label, pages[0]?.url ?? '', drift),
     ...moved.map((m) => ({

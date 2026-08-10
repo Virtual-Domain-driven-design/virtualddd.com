@@ -213,12 +213,30 @@ took the "already raised" branch and reached nobody, including eight organiser
 photos on launch day. The step now fails outright if the file is ignored,
 because that failure is silent and looks exactly like having nothing to say.
 
-Two more kinds join those three:
+Three more kinds join them:
 
 - **`image-source-gone`**: the picture in Notion points somewhere that stopped
   answering. The sync keeps the copy it downloaded last time rather than
   dropping the image, so the page is still right; only an editor can re-upload
   the original. See "Images", earlier in this document.
+- **`unusable-url`**: a URL property holds something that is not an address.
+  Notion's URL property is a text box and takes anything; the schemas in
+  `src/content.config.ts` say `z.url()` and take rather less. The field is left
+  out so the rest of the site can ship, which means a link an editor believes is
+  on the page is not there, and only they know what it should have said.
+
+  A *missing scheme* is not this. `trainitek.com` means `https://trainitek.com`,
+  the sync says so in the run log and publishes it, and nobody is interrupted:
+  the published link is already what the editor meant.
+
+  It exists because the alternative was found twice, both times from the wrong
+  end. On 2026-08-03 a guest's Website was typed without a scheme and twelve
+  consecutive deploys failed overnight; on 2026-08-08 another was, and the site
+  went two days without a release. `astro check` is the first step of the
+  deploy, so one editorial typo stopped everything else from shipping — which is
+  exactly the bargain `Content report` refuses to make in the other direction.
+  `scripts/lib/usable-url.ts` decides it now, and its promise is that whatever
+  the sync publishes satisfies the schema that reads it.
 - **`dates-passed`**: a conference edition that has been and gone. The card
   looks after itself, dropping to the end of the row and saying no new dates
   are announced, so nothing on the page is wrong. But it will keep saying that
