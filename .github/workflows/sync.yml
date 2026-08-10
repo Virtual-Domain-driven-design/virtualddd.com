@@ -71,7 +71,35 @@ jobs:
 
       - run: npm ci
 
+      # Every other secret in this repository degrades to "skip and say so" —
+      # deploy.yml guards on `[ -z "$HOST" ]`. This one did not: an empty or
+      # rotated `NOTION_TOKEN` makes the sync script exit 1, on a schedule,
+      # hourly, with nothing actually wrong. A red run that means "not
+      # configured" is indistinguishable from a red run that means "broken",
+      # and teaches everyone to ignore both.
+      #
+      # Skipping the *job* rather than the step, because everything after this
+      # point — the diff, the commit, the deploy it triggers — only means
+      # anything if something was fetched.
+      - name: Is there anything to sync from?
+        id: token
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: |
+          if [ -z "$NOTION_TOKEN" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Skipped"
+              echo
+              echo "No \`NOTION_TOKEN\` secret is set, so there is nothing to sync from."
+              echo "Add it at **Settings → Secrets and variables → Actions**, then re-run."
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Pull Notion and ddd-crew
+        if: steps.token.outputs.ready == 'true'
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           # Raises GitHub's 60/hour unauthenticated limit, which CI runners
@@ -113,6 +141,9 @@ jobs:
 
       - name: What changed?
         id: diff
+        # Guarded too, or a skipped sync reports "nothing changed in Notion",
+        # which is a different claim from \"we never looked\".
+        if: steps.token.outputs.ready == 'true'
         run: |
           # Stage first, and ask the index rather than the working tree.
           # `git diff` cannot see a file git has never heard of, and that is
