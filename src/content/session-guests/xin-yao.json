@@ -1,4 +1,9 @@
 {
   "name": "Xin Yao",
-  "alsoAnOrganiser": false
+  "bio": "After years leading architecture work at scale at Capgemini and Danske Bank, I now offer strategic consulting to help companies expand the full potential of their software - and the people behind it.\n\nI work at the intersection of Domain-Driven Design (DDD), product strategy, sociotechnical architecture, organizational development, and change leadership.\n\nI help organizations navigate the twin challenges of shifting complex systems and evolving human dynamics.",
+  "linkedin": "https://www.linkedin.com/in/xinxin/",
+  "mastodon": "@xinyao@mathstodon.xyz",
+  "bluesky": "@settling-mud.bsky.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/xin-yao-photo.jpg"
 }

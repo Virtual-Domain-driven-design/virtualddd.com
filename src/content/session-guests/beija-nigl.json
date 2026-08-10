@@ -1,4 +1,7 @@
 {
   "name": "Beija Nigl",
-  "alsoAnOrganiser": false
+  "bio": "I enjoy the challenge of understanding products and their requirements holistically and translating them iteratively into software and code. I always love to explore new topics, methods and technologies and take responsibility for them. As a senior software engineer, I am not only interested in the pure technology, but also in the effective collaboration between departments and teams, and I believe in close cross-team communication.",
+  "linkedin": "https://www.linkedin.com/in/beija-nigl/",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/beija-nigl-photo.jpg"
 }
