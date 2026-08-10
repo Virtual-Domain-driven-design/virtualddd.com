@@ -4,7 +4,7 @@ description: "Design & visualise the flow of commands, events, and queries betwe
 repo: "https://github.com/ddd-crew/domain-message-flow-modelling"
 canonical: "https://ddd-crew.github.io/domain-message-flow-modelling/"
 license: "CC-BY-SA-4.0"
-stars: 406
+stars: 407
 heroImage: "./_assets/domain-message-flow-modelling/just-messages-no-contents.jpg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
