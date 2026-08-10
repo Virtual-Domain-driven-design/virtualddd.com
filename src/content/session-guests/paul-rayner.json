@@ -1,4 +1,9 @@
 {
   "name": "Paul Rayner",
-  "alsoAnOrganiser": false
+  "bio": "Paul Rayner is a software design consultant, EventStorming facilitator, and trainer with over 35 years of hands-on experience helping organizations tackle complex software challenges. As founder of Virtual Genius (virtualgenius.com), he specializes in collaborative modeling and Domain-Driven Design, working with teams worldwide from startups to Fortune 500 companies.\n\nPaul authored The EventStorming Handbook, providing practitioners with concise, actionable techniques for facilitating collaborative domain exploration workshops.\n\nVirtual Genius is the official North American partner for Domain Language (Eric Evans' company) and Avanscoperta (Alberto Brandolini's company), delivering all their training and consulting engagements in North America.",
+  "website": "https://virtualgenius.com/",
+  "linkedin": "https://www.linkedin.com/in/thepaulrayner/",
+  "bluesky": "@paulrayner.bsky.social",
+  "alsoAnOrganiser": false,
+  "photo": "./_assets/paul-rayner-photo.jpg"
 }
