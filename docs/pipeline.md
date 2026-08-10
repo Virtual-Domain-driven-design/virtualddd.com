@@ -32,9 +32,17 @@ Notion ──────────────┤  n8n dispatch   ├──�
 
   It is also what makes the pipeline self-healing, and the reason nothing else
   needs to be. The hourly run holds no state, cares nothing for why the last
-  run did not happen, and re-reads everything. So a missed event, a failed
-  deploy or an afternoon with n8n switched off all cost latency and nothing
-  else.
+  run did not happen, and re-reads everything. So a missed event, or an
+  afternoon with n8n switched off, cost latency and nothing else.
+
+  **A failed deploy is the exception, and the clock does not heal it.** By the
+  time a deploy fails its content is already committed, so every later sync
+  correctly finds no diff and publishes nothing: the stale site is not waiting
+  on the next hour, it is waiting on the next *edit*, which may be days away.
+  That is why the deploy announces its own failures to Discord rather than
+  trusting the clock, and why `retry-blocked-deploy.yml` exists for the one
+  cause that a second attempt genuinely fixes. Twice on 2026-08-10 a blocked
+  deploy left committed content unpublished until a person re-ran it by hand.
 - **The clock is n8n's, not GitHub's.** It was GitHub's until an edited guest
   bio sat unpublished for an afternoon. `sync.yml` asks for `25 * * * *`, and
   across the day around that edit the scheduled runs actually landed at 00:53,
