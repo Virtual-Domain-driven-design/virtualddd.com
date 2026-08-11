@@ -56,7 +56,10 @@ const TEAM = {
   'kenny-baas-schwegler': 'kenny-schwegler',
   'krisztina-hirth': 'krisztina-hirth',
   'marco-heimeshoff': 'marco-heimeshoff',
-  'maxime-sanglan-charlier': 'maxime',
+  // Renamed in Notion on 2026-08-11, from `Maxime` to his full name, so the
+  // right-hand side moved and the two sides now happen to agree. They are still
+  // two things: the left is the WordPress slug and cannot change.
+  'maxime-sanglan-charlier': 'maxime-sanglan-charlier',
   'zsofia-herendi': 'zsofia-herendi',
 };
 

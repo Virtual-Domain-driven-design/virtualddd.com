@@ -93,7 +93,7 @@ RewriteRule ^dipl-team-member/diana-montalion/?$ /organisers/diana-montalion/ [R
 RewriteRule ^dipl-team-member/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
 RewriteRule ^dipl-team-member/krisztina-hirth/?$ /organisers/krisztina-hirth/ [R=301,L]
 RewriteRule ^dipl-team-member/marco-heimeshoff/?$ /organisers/marco-heimeshoff/ [R=301,L]
-RewriteRule ^dipl-team-member/maxime-sanglan-charlier/?$ /organisers/maxime/ [R=301,L]
+RewriteRule ^dipl-team-member/maxime-sanglan-charlier/?$ /organisers/maxime-sanglan-charlier/ [R=301,L]
 RewriteRule ^dipl-team-member/zsofia-herendi/?$ /organisers/zsofia-herendi/ [R=301,L]
 RewriteRule ^dipl-team-member/?$ /organisers/ [R=301,L]
 

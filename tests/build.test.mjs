@@ -225,16 +225,23 @@ describe('structured data', () => {
     }
   });
 
-  // The section is gated on a bio, so a rendered guest row must carry one —
-  // otherwise the gate has drifted from what it lets through.
+  // The section is gated on a role *or* a bio, so a rendered guest row must
+  // carry one of the two — otherwise the gate has drifted from what it lets
+  // through. It was a bio alone until 2026-08-11; `Role` moved onto the people
+  // database that day precisely so a block could open on the cheaper of the
+  // two, because 72 of 119 people have no bio and a role is one line.
+  //
+  // Asserted against the structured data rather than the markup, so this reads
+  // what a machine is told about the person, not how the page happens to lay
+  // them out.
   test('a rendered guest row introduces the person', () => {
     for (const p of all.filter((x) => /^\/sessions\/[^/]+\/$/.test(x.path))) {
       if (!p.html.includes('data-test="guest"')) continue;
       const raw = attr(p.html, /application\/ld\+json[^>]*>([\s\S]*?)<\/script>/);
       const event = JSON.parse(raw)['@graph'].find((n) => n['@type'] === 'Event');
       const performers = [].concat(event.performer ?? []);
-      assert.ok(performers.some((x) => x.description),
-        `${p.path} renders a Guests section but nobody in it has a bio`);
+      assert.ok(performers.some((x) => x.description || x.jobTitle),
+        `${p.path} renders a Guests section but nobody in it has a role or a bio`);
     }
   });
 });
