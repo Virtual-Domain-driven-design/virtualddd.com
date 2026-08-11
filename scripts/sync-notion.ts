@@ -1184,7 +1184,7 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   if (guestless.length) {
     console.log(`\n  ! ${guestless.length} guest relation(s) resolved to nothing and were left out:`);
     list(guestless.map((g) => ({ slug: g.slug, prop: 'Guests', ref: g.ref })));
-    console.log('    The row is missing from the Session Guests database, or has an empty Name.');
+    console.log('    The row is missing from the People database, or has an empty Name.');
   }
 
   if (dropped.length) {
