@@ -95,8 +95,12 @@ async function queryAll(dataSourceId: string): Promise<any[]> {
 
 import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
 
-const PEOPLE_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
-const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // Sessions Guests (speakers, panellists)
+const ORGANISERS_DS = 'cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6'; // Sessions Organiser/Co-Organisers
+// `People` in Notion since 2026-08-11, and who someone is for guests and
+// organisers alike. Still `GUESTS_DS` here, and still the `session-guests`
+// collection, because renaming those renames files under src/content/ and the
+// addresses that point at them; the title was free to change, those are not.
+const GUESTS_DS = 'd82910e0-cac0-46f8-8a20-cb3a3376d5eb'; // People (speakers, panellists, organisers)
 const HEURISTICS_DS = 'e7743290-3850-404e-ae98-23a4caf0488e';
 const CONFERENCES_DS = 'c5b9e231-6766-4589-a179-c70d20db3e34'; // DDD conferences and camps, on the home page
 const DDD_CREW_DS = '9503b575-65e8-49c5-a4c0-e80099ec2c2c'; // which ddd-crew repos /ddd-crew/ shows
@@ -609,7 +613,7 @@ interface ContentSpec {
    *  scheduled yet, which is an editorial state and belongs in Discord. */
   requires?: string[];
   featuredImageProp?: string; // omit to skip featured-image download
-  needsPeople?: boolean;
+  needsOrganisers?: boolean;
   needsGuests?: boolean;
   /** Read the Videos, Books and ddd-crew databases too. Only the learning
    *  journey points at them, and three extra queries on every other collection
@@ -624,7 +628,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     section: '/sessions/',
     titleProp: 'Name', slugProp: 'slug', statusKind: 'select',
     liveStatuses: ['Done', 'Published'], requires: ['datetime'], featuredImageProp: 'Featured image',
-    needsPeople: true, needsGuests: true,
+    needsOrganisers: true, needsGuests: true,
     extra: async (h) => {
       const l: string[] = [];
       if (h.date('Datetime')) l.push(`datetime: ${h.date('Datetime')}`);
@@ -672,7 +676,7 @@ const CONTENT_SPECS: Record<string, ContentSpec> = {
     section: '/facilitating-archdes/',
     titleProp: 'Title', slugProp: 'slug', statusKind: 'status',
     liveStatuses: ['Published'], featuredImageProp: 'Featured image',
-    needsPeople: true, needsGuests: true,
+    needsOrganisers: true, needsGuests: true,
     extra: async (h) => {
       const l: string[] = [];
       const ep = h.num('Episode'); if (ep != null) l.push(`episode: ${ep}`);
@@ -864,8 +868,8 @@ async function runContent(key: string, limit: number, outDir: string, write: boo
   const pending: { slug: string; prop: string; ref: string }[] = [];
   /** Relations that pointed at nothing renderable, per entry. */
   const dropped: { slug: string; prop: string; ref: string }[] = [];
-  const personName = spec.needsPeople
-    ? await buildLookup(PEOPLE_DS, 'people (organisers)', (p) => {
+  const personName = spec.needsOrganisers
+    ? await buildLookup(ORGANISERS_DS, 'organisers', (p) => {
         const tp: any = Object.values(p.properties ?? {}).find((x: any) => x.type === 'title');
         return (tp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
       })
@@ -1283,7 +1287,7 @@ interface RowHelpers {
 
 const ROW_SPECS: Record<string, RowSpec> = {
   organisers: {
-    dataSourceId: PEOPLE_DS,
+    dataSourceId: ORGANISERS_DS,
     label: 'organisers',
     // An organiser has a page, so this slug *is* a URL: changing a name
     // changes an address and needs a redirect. `section` is what says so;
@@ -1331,18 +1335,20 @@ const ROW_SPECS: Record<string, RowSpec> = {
       // one. An organiser reads theirs from here too.
       role: h.text('Role') || undefined,
       website: h.url('Website'),
-      // Guests name these three for what they hold: `LinkedIn Url`,
-      // `Mastodon Tag`, `Bluesky Tag`. Organisers still say `LinkedIn`,
-      // `Mastodon`, `Bluesky`, so the two specs read different names on
-      // purpose. Renaming a property is invisible to the sync, because every
-      // field here is optional: it writes the file without the field, commits
-      // as the bot and deploys green.
+      // These three are named for what they hold: `LinkedIn Url`,
+      // `Mastodon Tag`, `Bluesky Tag`. The organisers database used to carry a
+      // second copy under the older names `LinkedIn`, `Mastodon` and `Bluesky`,
+      // and the two specs read different names on purpose; those columns were
+      // deleted on 2026-08-11, so this is now the only spelling of any of them.
+      // Renaming a property is invisible to the sync, because every field here
+      // is optional: it writes the file without the field, commits as the bot
+      // and deploys green.
       linkedin: h.url('LinkedIn Url'),
-      // Text, not URL, on both people databases: these two hold a handle
-      // (`@sebrose@mastodon.scot`) so the n8n social flows can put them in a
-      // post, which is the only place a handle is wanted. `h.url` reads
-      // Notion's `url` field and returns undefined for a text property, so
-      // reading these the old way drops every handle without an error.
+      // Text, not URL: these two hold a handle (`@sebrose@mastodon.scot`) so
+      // the n8n social flows can put them in a post, which is the only place a
+      // handle is wanted. `h.url` reads Notion's `url` field and returns
+      // undefined for a text property, so reading these the old way drops every
+      // handle without an error.
       mastodon: h.text('Mastodon Tag') || undefined,
       bluesky: h.text('Bluesky Tag') || undefined,
     }),
