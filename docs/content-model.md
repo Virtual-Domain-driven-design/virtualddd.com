@@ -22,7 +22,7 @@ purpose: content history in git, offline builds, and diffs you can review.
 | stories | `25aa485a-fafc-8047-94b7-000b3bbb228c` |
 | heuristics | `e7743290-3850-404e-ae98-23a4caf0488e` |
 | organisers | `cbf1c508-e24f-4dd9-8c0d-b27b69bf64d6` |
-| session guests | `d82910e0-cac0-46f8-8a20-cb3a3376d5eb` |
+| session guests (**People** in Notion) | `d82910e0-cac0-46f8-8a20-cb3a3376d5eb` |
 | conferences | `c5b9e231-6766-4589-a179-c70d20db3e34` |
 | ddd-crew (which tools, not their text) | `9503b575-65e8-49c5-a4c0-e80099ec2c2c` |
 
@@ -35,23 +35,41 @@ They split on **what kind of fact each holds**, not on what kind of person is in
 it. The question that decides where a field goes is: *would this still be true
 if Virtual DDD did not exist?*
 
-- **Guests** is who someone is. Name, `Bio`, `Role`, `Website`, `LinkedIn Url`,
+- **People** is who someone is. Name, `Bio`, `Role`, `Website`, `LinkedIn Url`,
   `Mastodon Tag`, `Bluesky Tag`, `Email`, `Photo`. **Everything the site shows
   about a person is here**, for guests and organisers alike, and the links
-  become `sameAs` on their `Person` node.
+  become `sameAs` on their `Person` node. It was called `Guests` until
+  2026-08-11; the sync and the n8n flows address it by id, so the title was free
+  to change and the collection it generates is still `session-guests`.
 - **Organisers** is what we need in order to run the community with them:
   `Area`, `Organises`, `Show on team`, `Accounts setup`, the `Gmail account`
   n8n uses for the Meet and Calendar invites, and the `♟️ Email accounts`
   relation. It drives `/organisers/` and is the target of a session's
   `Organiser` and `Co-Organisers`, both of them two-way.
 
-**An organiser holds no copy of their own identity.** The sync reads it through
-their `Guest row` relation and writes it onto the organiser entry, so every page
-sees one flat shape and no page does the joining. Before that, the two rows each
-held half of somebody and quietly disagreed: Diana's organiser page published
-one profile link out of the four we hold for her, Krisztina's LinkedIn was on
-one row and her Mastodon on the other, and Kim Kao's page was an empty shell
-beside a guest row with a bio and a portrait.
+**An organiser holds no copy of their own identity, and now cannot.** The sync
+reads it through their `Guest row` relation and writes it onto the organiser
+entry, so every page sees one flat shape and no page does the joining. Before
+that, the two rows each held half of somebody and quietly disagreed: Diana's
+organiser page published one profile link out of the four we hold for her,
+Krisztina's LinkedIn was on one row and her Mastodon on the other, and Kim Kao's
+page was an empty shell beside a guest row with a bio and a portrait.
+
+`URL`, `LinkedIn`, `Mastodon`, `Bluesky`, `Photo`, `Role` and `Email` were
+**deleted from the Organisers database on 2026-08-11**, once the sync and every
+n8n flow had stopped reading them. Until then the rule was a habit that the
+schema still invited you to break, and it had been broken twice over without
+anyone noticing: Krisztina's and Marco's handles were filled in on their people
+row and blank on their organiser row, so the story social flow wrote their names
+where an `@`-mention belonged. Deleting the columns is what makes the rule a
+constraint. Nothing was lost — every value was a duplicate of the people row or
+staler than it, and organiser `Email` was character-for-character the same
+address as people `Email` on all six rows that had one.
+
+*How we know: **the schema, now.** The columns are gone, so there is nowhere to
+type a second copy and nothing for a check to catch. No test enforces this and
+none needs to: what a rule was asking people to remember, the database now makes
+impossible.*
 
 An organiser with no `Guest row` therefore has a name and nothing else, and the
 sync says so on the run rather than leaving you to notice.
@@ -61,7 +79,7 @@ stops being written. Nothing checks that an organiser has been linked, which is
 why the sync prints it.*
 
 **Stories use both, and the names are not decoration.** A story's `Guests`
-points at the same guests database as a session, and its `Hosts` at the
+points at the same people database as a session, and its `Hosts` at the
 organisers, so someone who has told a story and spoken at a session is one row
 with one bio. **Order is the meaning**: the first guest is the one whose story
 it is, and two episodes in the archive are the same pair the other way round.
@@ -85,7 +103,7 @@ and nothing stands in for it: a story with neither a guest nor a host is
 credited to nobody, and `npm run test:content` fails the build rather than
 publishing it uncredited.
 
-**The four profile links live on the guests database only**: `Website`,
+**The four profile links live on the people database only**: `Website`,
 `LinkedIn Url`, `Mastodon Tag` and `Bluesky Tag`. `profileLinks` in
 `src/lib/people.ts` is the one list that orders them, and everything that shows
 a person's links reads it — the organiser page, the organiser card's icons, a
@@ -116,8 +134,9 @@ exist.*
 The cost is that an organiser has a row in each. That is deliberate; the
 alternative, one people table with a flag, was rejected because it would put
 100+ external speakers into the database the community is actually run from.
-All ten organisers have both rows, and they have to: the guests row is where
-their name, bio, role, links and portrait live.
+All ten organisers have both rows, and they have to: the people row is where
+their name, bio, role, links and portrait live, and since 2026-08-11 it is the
+only place they can.
 
 **`Organiser row` on a guest is what joins the pair.** A relation to the
 organisers database, which the sync resolves to that organiser's entry id and
@@ -180,7 +199,7 @@ copied a matched organiser's links onto the guest row so n8n, which reads Notion
 directly and cannot do the join, would find a handle. Two things had rotted
 under it: the guest rows are now the *richer* of the two, so it was copying the
 staler row over the better one, and it still wrote to `LinkedIn`, `Mastodon` and
-`Bluesky` after the Guests database renamed those to `LinkedIn Url`,
+`Bluesky` after the people database renamed those to `LinkedIn Url`,
 `Mastodon Tag` and `Bluesky Tag`, so a `--write` run would have failed on most
 rows. A script that writes into the source of truth and is run once a year is a
 script nobody maintains. `git log -- scripts/backfill-guests.ts` has it if the

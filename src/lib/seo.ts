@@ -86,10 +86,10 @@ export const topTrail = (name: string, path: string): [string, string][] =>
  *
  * `sameAs` is the point of it — it is how a search or answer engine works out
  * that the Nick Tune on this page is the one with that LinkedIn profile, which
- * is why the guests database holds the links at all (see
- * docs/content-model.md). Most
- * guests still have nothing but a name, and a Person with only a name is still
- * worth emitting: it names the speaker of the event. */
+ * is why the people database holds the links at all (see
+ * docs/content-model.md). Most guests still have nothing but a name, and a
+ * Person with only a name is still worth emitting: it names the speaker of the
+ * event. */
 export interface PersonInput {
   name: string;
   /** How they would introduce themselves — `jobTitle`. */
