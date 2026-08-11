@@ -1,12 +1,6 @@
 {
   "items": [
     {
-      "kind": "image-source-gone",
-      "section": "session guests",
-      "title": "karol-skrzymowski (photo): no picture at all until this is fixed",
-      "url": "https://drive.google.com/file/d/1KKJJ5AEDJRu7cLdQtL7xUKyAJi2wswS9/view?usp=sharing"
-    },
-    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",

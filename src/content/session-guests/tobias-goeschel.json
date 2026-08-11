@@ -1,4 +1,9 @@
 {
   "name": "Tobias Goeschel",
-  "organiser": "tobias-goeschel"
+  "bio": "Tobias started his career as a freelance web developer in the late 90s and has since worked on hundreds of projects of varying sizes and lengths – from a single person to multiple teams, from a few days to several years – and in many different roles: Consultant, crafter, coach, and… well, architect. He is a strong advocate of diversity and inclusion in the tech industry, and an active member of the European Software Crafters and Domain Driven Design communities.",
+  "role": "Senior Solutions Architect",
+  "linkedin": "https://www.linkedin.com/in/w3ltraumpirat/",
+  "mastodon": "@weltraumpirat@mastodon.social",
+  "organiser": "tobias-goeschel",
+  "photo": "./_assets/tobias-goeschel-photo.jpg"
 }
