@@ -144,14 +144,22 @@ const organisers = defineCollection({
     z.object({
       name: z.string(),
       slug: z.string(),
+      // Everything from here to `photo` is *read through* the organiser's
+      // `Guest row` relation by the sync, not typed on the organiser row. The
+      // two databases split on what kind of fact each holds: who someone is
+      // lives in the people database, what we need to run the community with
+      // them lives here. The entry keeps one flat shape so no page has to know
+      // that — see the `link` note in scripts/sync-notion.ts.
       role: z.string().optional(),
+      bio: z.string().optional(),
       website: z.url().optional(),
       linkedin: z.url().optional(),
-      // A handle, not a URL, the same as guests below. Both people databases
-      // hold these as plain text so the n8n social flows can drop them into a
-      // post; `socialUrl` in src/lib/people.ts turns them into links.
+      // A handle, not a URL, the same as guests below. Held as plain text so
+      // the n8n social flows can drop them into a post; `socialUrl` in
+      // src/lib/people.ts turns them into links.
       mastodon: z.string().optional(),
       bluesky: z.string().optional(),
+      // Operational, and the only fields actually typed on an organiser row.
       area: z.string().optional(),
       organises: z.array(z.string()).default([]),
       showOnTeam: z.boolean().default(false),
@@ -173,6 +181,11 @@ const sessionGuests = defineCollection({
     z.object({
       name: z.string(),
       bio: z.string().optional(),
+      // How they would introduce themselves — `jobTitle` in the structured
+      // data, and a small line under the name on the page. Most people here
+      // have no bio, and a role is far easier to write than one, so this is
+      // what a name-only credit turns into first.
+      role: z.string().optional(),
       // Every `z.url()` here is also a promise the sync keeps: Notion's URL
       // property is a text box, so `scripts/lib/usable-url.ts` is what stops a
       // scheme-less typo reaching this schema. It reached it twice, and both

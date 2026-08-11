@@ -1223,30 +1223,41 @@ interface RowSpec {
    *  From the name alone, so `link` below can work out a target row's slug
    *  without reading that row's other properties. */
   slugOf: (name: string) => string;
-  fields: (name: string, h: RowHelpers) => Record<string, unknown>;
-  /** A relation to another row collection, written as that row's slug.
+  /** `pair` is the linked row's readers, when `link` is set and resolved. */
+  fields: (name: string, h: RowHelpers, pair?: RowHelpers) => Record<string, unknown>;
+  /** The row in another collection that this row is the same person as.
    *
-   *  The one cross-database link in this table, and the third attempt at it.
-   *  A name match cannot see that the organiser called "Maxime" is the guest
-   *  called "Maxime Sanglan-Charlier"; an `Also an organiser` checkbox was
-   *  read by the sync, written to every file, read by nothing, and ticked on
-   *  none of the 119 rows. A relation is the only one of the three Notion
-   *  itself keeps true — and unlike a checkbox, which Notion omits when it has
-   *  never been ticked and `schemaWatch` therefore has to exempt, a rename of
-   *  a relation is reported as drift. */
+   *  Two databases, split by what kind of fact each holds rather than by what
+   *  kind of person: **people** carry who someone is, and **organisers** carry
+   *  what is needed to run the community with them. Every field the site shows
+   *  about a person therefore lives on the people row, and an organiser reads
+   *  it *through* this link rather than keeping a second copy that drifts.
+   *
+   *  A relation and not a name. The organiser row read `Maxime` while the
+   *  people row read `Maxime Sanglan-Charlier`, and no name match can safely
+   *  join those. It replaced an `Also an organiser` checkbox that the sync
+   *  read, wrote into every file, and no page ever read — ticked, in the end,
+   *  on none of the 119 rows. A relation is also the only one of the three
+   *  whose rename `schemaWatch` can report, because Notion omits an unticked
+   *  checkbox entirely and a drift check has to exempt it.
+   */
   link?: {
     /** The relation property on this database. */
     prop: string;
     /** The `ROW_SPECS` key it points at. */
     to: string;
-    /** The JSON field the target row's slug is written to. */
-    key: string;
+    /** The JSON field to write the linked row's slug to. Omit when the link is
+     *  only read through, as organisers read people. */
+    key?: string;
+    /** Say so in the log when a row has no link. For organisers, where the
+     *  link is the whole of their public identity rather than an extra. */
+    required?: boolean;
   };
   /** Where the row's one picture comes from. Organisers and guests upload a
    *  file to Notion; a conference logo is a link to the conference's own asset,
    *  because it is their artwork and their server already serves it. */
   image: {
-    of: (h: RowHelpers) => string | undefined;
+    of: (h: RowHelpers, pair?: RowHelpers) => string | undefined;
     /** Names the file on disk (`<slug>-<label>.png`) and the log line. */
     label: string;
     /** The JSON field the relative path is written to. */
@@ -1279,20 +1290,30 @@ const ROW_SPECS: Record<string, RowSpec> = {
     // guests and conferences have none, because renaming those costs nothing.
     section: '/organisers/',
     slugOf: (name) => kebab(name),
-    image: { of: (h) => h.file('Photo'), label: 'photo', key: 'photo' },
-    fields: (name, h) => ({
+    // Even the portrait comes off the people row. It is downloaded again here
+    // rather than referenced across collections, because an Astro `image()`
+    // resolves relative to its own entry; two copies of a 20 KB JPEG is the
+    // cheaper of the two problems.
+    image: { of: (_h, p) => p?.file('Photo'), label: 'photo', key: 'photo' },
+    // Everything a visitor sees about the person comes from `pair`, their row
+    // in the people database. What stays here is what only makes sense because
+    // Virtual DDD exists: where they organise from, what they run, and whether
+    // they are on the team page. `Gmail account` and `Email accounts` are read
+    // by n8n rather than by this sync, and are deliberately not published.
+    fields: (name, h, p) => ({
       name,
       slug: kebab(name),
-      role: h.text('Role') || undefined,
-      website: h.url('URL'),
-      linkedin: h.url('LinkedIn'),
-      // Handles, the same as guests: see the note on the guests spec below.
-      mastodon: h.text('Mastodon') || undefined,
-      bluesky: h.text('Bluesky') || undefined,
+      role: p?.text('Role') || undefined,
+      bio: p?.text('Bio') || undefined,
+      website: p?.url('Website'),
+      linkedin: p?.url('LinkedIn Url'),
+      mastodon: p?.text('Mastodon Tag') || undefined,
+      bluesky: p?.text('Bluesky Tag') || undefined,
       area: h.select('Area'),
       organises: h.multi('Organises'),
       showOnTeam: h.checkbox('Show on team'),
     }),
+    link: { prop: 'Guest row', to: 'guests', required: true },
   },
   guests: {
     dataSourceId: GUESTS_DS,
@@ -1304,6 +1325,11 @@ const ROW_SPECS: Record<string, RowSpec> = {
     fields: (name, h) => ({
       name,
       bio: h.text('Bio') || undefined,
+      // How they would introduce themselves, in a few words. Shown small under
+      // the name wherever a person appears, which is worth more than it sounds:
+      // most people here have no bio, and a role is far easier to write than
+      // one. An organiser reads theirs from here too.
+      role: h.text('Role') || undefined,
       website: h.url('Website'),
       // Guests name these three for what they hold: `LinkedIn Url`,
       // `Mastodon Tag`, `Bluesky Tag`. Organisers still say `LinkedIn`,
@@ -1363,18 +1389,54 @@ const ROW_SPECS: Record<string, RowSpec> = {
   },
 };
 
-/** Every row of a collection as page id -> slug, for resolving a `link`.
+/** The title of a Notion row, however its title property is named. */
+const rowName = (props: Record<string, any>): string => {
+  const t: any = Object.values(props).find((x: any) => x.type === 'title');
+  return (t?.title ?? []).map((x: any) => x.plain_text).join('').trim();
+};
+
+/** The typed readers for one row.
+ *
+ * `note` is how a read reaches `schemaWatch`. It is a parameter rather than a
+ * closure because these helpers are built twice: once for the row being
+ * written, whose reads are watched, and once for a row reached through a
+ * `link`, whose reads are watched by *that* collection's own run and would
+ * otherwise be reported twice and under the wrong section.
+ */
+function rowHelpers(
+  props: Record<string, any>,
+  name: string,
+  pageUrl: string,
+  note: (n: string, want: Reader) => void = () => {},
+): RowHelpers {
+  const got = (n: string, want: Reader) => { note(n, want); return props[n]; };
+  return {
+    text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
+    url: (n) => readUrl(n, got(n, 'url')?.url, name, pageUrl),
+    select: (n) => got(n, 'select')?.select?.name ?? undefined,
+    multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
+    checkbox: (n) => got(n, 'checkbox')?.checkbox ?? false,
+    date: (n) => got(n, 'date')?.date?.start ?? undefined,
+    dateEnd: (n) => got(n, 'date')?.date?.end ?? undefined,
+    file: (n) => fileUrl((got(n, 'files')?.files ?? [])[0]),
+  };
+}
+
+/** Every row of a collection, by page id, for resolving a `link`.
  *
  * Queried rather than read from the generated files or from
  * `data/sync-state.json`, so a `link` does not quietly depend on the order the
  * npm scripts happen to run the collections in — today `sync:guests` runs
- * before `sync:organisers`, and the link points the other way. */
-async function slugsByPageId(spec: RowSpec): Promise<Map<string, string>> {
-  const out = new Map<string, string>();
+ * before `sync:organisers`, and organisers read *through* the link. */
+async function linkedRows(spec: RowSpec): Promise<Map<string, { slug: string; h: RowHelpers }>> {
+  const out = new Map<string, { slug: string; h: RowHelpers }>();
   for (const page of await queryAll(spec.dataSourceId)) {
-    const titleProp: any = Object.values(page.properties).find((x: any) => x.type === 'title');
-    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
-    if (name) out.set(page.id.replace(/-/g, ''), spec.slugOf(name));
+    const name = rowName(page.properties);
+    if (!name) continue;
+    out.set(page.id.replace(/-/g, ''), {
+      slug: spec.slugOf(name),
+      h: rowHelpers(page.properties, name, page.url),
+    });
   }
   return out;
 }
@@ -1385,7 +1447,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
 
   const watch = schemaWatch();
   const pages = await queryAll(spec.dataSourceId);
-  const linkSlugs = spec.link ? await slugsByPageId(ROW_SPECS[spec.link.to]) : undefined;
+  const linked = spec.link ? await linkedRows(ROW_SPECS[spec.link.to]) : undefined;
   const assetDir = `${outDir}/_assets`;
   mkdirSync(outDir, { recursive: true });
   console.log(`${spec.label}: ${pages.length} -> ${outDir}\n`);
@@ -1406,20 +1468,29 @@ async function runRows(key: string, outDir: string, write: boolean) {
     // how a person recognises one of these: a guest has no slug and no page, so
     // "Vadzim Prudnikau: Website is not an address" is the only way to say which
     // row an alert is about.
-    const titleProp: any = Object.values(P).find((x: any) => x.type === 'title');
-    const name = (titleProp?.title ?? []).map((t: any) => t.plain_text).join('').trim();
+    const name = rowName(P);
     if (!name) { console.log(`  ! a ${spec.label} row has no name, skipping`); continue; }
 
-    const h: RowHelpers = {
-      text: (n) => (got(n, 'rich_text')?.rich_text ?? []).map((t: any) => t.plain_text).join('').trim(),
-      url: (n) => readUrl(n, got(n, 'url')?.url, name, page.url),
-      select: (n) => got(n, 'select')?.select?.name ?? undefined,
-      multi: (n) => (got(n, 'multi_select')?.multi_select ?? []).map((o: any) => o.name),
-      checkbox: (n) => got(n, 'checkbox')?.checkbox ?? false,
-      date: (n) => got(n, 'date')?.date?.start ?? undefined,
-      dateEnd: (n) => got(n, 'date')?.date?.end ?? undefined,
-      file: (n) => fileUrl((got(n, 'files')?.files ?? [])[0]),
-    };
+    const h = rowHelpers(P, name, page.url, (n, want) => watch.note(n, want, P[n]));
+
+    // The row this one is paired with in another collection, when there is a
+    // `link`. Organisers read their whole public identity through it, so this
+    // is not a nicety: without it an organiser has a name and nothing else.
+    let pair: RowHelpers | undefined;
+    let pairSlug: string | undefined;
+    if (spec.link && linked) {
+      const ids: string[] = (got(spec.link.prop, 'relation')?.relation ?? [])
+        .map((r: any) => r.id.replace(/-/g, ''));
+      const hit = ids.map((id) => linked.get(id)).find(Boolean);
+      if (ids.length && !hit) {
+        console.log(`  ! ${name}: ${spec.link.prop} points at a ${spec.link.to} row that is not in that database; treating them as unlinked`);
+      }
+      pair = hit?.h;
+      pairSlug = hit?.slug;
+      if (spec.link.required && !pair) {
+        console.log(`  ! ${name}: no ${spec.link.prop}, so there is nothing to show for them beyond a name. Link their ${spec.link.to} row in Notion.`);
+      }
+    }
 
     const slug = spec.slugOf(name);
     if (spec.section) now[page.id.replace(/-/g, '')] = { slug };
@@ -1429,21 +1500,8 @@ async function runRows(key: string, outDir: string, write: boolean) {
       continue;
     }
 
-    const data: Record<string, unknown> = { ...spec.fields(name, h) };
-    if (spec.link && linkSlugs) {
-      // Read through `got` like every other property, so a rename of the
-      // relation is reported as drift rather than silently unlinking everybody.
-      const ids: string[] = (got(spec.link.prop, 'relation')?.relation ?? [])
-        .map((r: any) => r.id.replace(/-/g, ''));
-      const slugs = ids.map((id) => linkSlugs.get(id)).filter(Boolean) as string[];
-      // A relation pointing at a row that is no longer in the target database.
-      // Say so: the entry falls back to the name match, which is exactly the
-      // guess the relation was added to stop making.
-      if (ids.length && !slugs.length) {
-        console.log(`  ! ${name}: ${spec.link.prop} points at a ${spec.link.to} row that is not in that database; leaving it unlinked`);
-      }
-      data[spec.link.key] = slugs[0];
-    }
+    const data: Record<string, unknown> = { ...spec.fields(name, h, pair) };
+    if (spec.link?.key) data[spec.link.key] = pairSlug;
     // A publish gate, like every other collection's, but spelled as a field so
     // the table stays a table. Taking a conference off the site is a tick, not
     // a deletion, so the row and its dates survive to be put back.
@@ -1451,7 +1509,7 @@ async function runRows(key: string, outDir: string, write: boolean) {
     delete data.showOnSite;
 
     const ctx: AssetCtx = { dir: assetDir, slug, count: 0 };
-    const imgUrl = spec.image.of(h);
+    const imgUrl = spec.image.of(h, pair);
     const img = imgUrl ? await downloadImage(imgUrl, ctx, spec.image.label) : null;
     data[spec.image.key] = img ?? undefined;
 

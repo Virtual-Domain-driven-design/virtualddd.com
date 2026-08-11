@@ -9,7 +9,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   samePerson, anySamePerson, guestsToName, profileLinks, socialUrl, storyByline,
-  pairedWith, organiserFor, guestFor, mergeProfiles, paragraphs,
+  organiserFor, paragraphs,
 } from '../../src/lib/people.ts';
 
 /** The two rows a person who both organises and speaks has, as the pages see
@@ -104,39 +104,6 @@ describe('pairing a guest row with an organiser row', () => {
     assert.equal(organiserFor(guest('Nick Tune'), organisers), undefined);
   });
 
-  test('both directions answer the same question the same way', () => {
-    // A session page asks "is this guest an organiser?" and an organiser page
-    // asks "is this organiser a guest?". If those disagreed, one page would
-    // link the pair and the other would not.
-    const guests = [guest('Maxime Sanglan-Charlier', 'maxime'), guest('Kenny Baas-Schwegler')];
-    for (const o of organisers) {
-      const g = guestFor(o, guests);
-      if (g) assert.ok(pairedWith(g, o), `${o.id} paired one way but not the other`);
-    }
-    assert.equal(guestFor(org('maxime', 'Maxime'), guests)?.data.name, 'Maxime Sanglan-Charlier');
-    assert.equal(guestFor(org('andrea-magnorsky', 'Andrea Magnorsky'), guests), undefined);
-  });
-});
-
-describe('merging the profiles on two rows for one person', () => {
-  test('takes a field from whichever row has it', () => {
-    // Krisztina: LinkedIn on the organiser row, Mastodon on the guest row. A
-    // whole-list fallback published one and hid the other.
-    assert.deepEqual(
-      mergeProfiles({ linkedin: 'https://linkedin.com/in/k' }, { mastodon: '@k@mastodon.social' }),
-      { website: undefined, linkedin: 'https://linkedin.com/in/k', mastodon: '@k@mastodon.social', bluesky: undefined },
-    );
-  });
-
-  test('the page whose person it is wins a field both rows hold', () => {
-    assert.equal(mergeProfiles({ website: 'https://mine.example' }, { website: 'https://theirs.example' }).website,
-      'https://mine.example');
-  });
-
-  test('an unpaired person merges with nothing and is unchanged', () => {
-    assert.deepEqual(profileLinks(mergeProfiles({ website: 'https://example.com' }, {})),
-      [{ label: 'Website', href: 'https://example.com' }]);
-  });
 });
 
 describe('a bio as paragraphs', () => {

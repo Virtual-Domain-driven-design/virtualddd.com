@@ -31,13 +31,34 @@ Which repos it fetches comes from Notion — see [ddd-crew content](#ddd-crew-co
 
 ## Two people databases, deliberately
 
-- **Organisers** drive `/organisers/` and are the target of a session's
-  `Organiser` / `Co-Organisers`. This is an *operational* database: Discord
-  accounts, community email, who runs what.
-- **Session Guests** are the speakers and panellists. None of those operational
-  fields apply to an external speaker, so they do not live in the organisers
-  database. The fields here exist to produce good `Person` structured data, and
-  the links become `sameAs`.
+They split on **what kind of fact each holds**, not on what kind of person is in
+it. The question that decides where a field goes is: *would this still be true
+if Virtual DDD did not exist?*
+
+- **Guests** is who someone is. Name, `Bio`, `Role`, `Website`, `LinkedIn Url`,
+  `Mastodon Tag`, `Bluesky Tag`, `Email`, `Photo`. **Everything the site shows
+  about a person is here**, for guests and organisers alike, and the links
+  become `sameAs` on their `Person` node.
+- **Organisers** is what we need in order to run the community with them:
+  `Area`, `Organises`, `Show on team`, `Accounts setup`, the `Gmail account`
+  n8n uses for the Meet and Calendar invites, and the `♟️ Email accounts`
+  relation. It drives `/organisers/` and is the target of a session's
+  `Organiser` and `Co-Organisers`, both of them two-way.
+
+**An organiser holds no copy of their own identity.** The sync reads it through
+their `Guest row` relation and writes it onto the organiser entry, so every page
+sees one flat shape and no page does the joining. Before that, the two rows each
+held half of somebody and quietly disagreed: Diana's organiser page published
+one profile link out of the four we hold for her, Krisztina's LinkedIn was on
+one row and her Mastodon on the other, and Kim Kao's page was an empty shell
+beside a guest row with a bio and a portrait.
+
+An organiser with no `Guest row` therefore has a name and nothing else, and the
+sync says so on the run rather than leaving you to notice.
+
+*How we know: **machine, partly.** `astro check` fails if a field the pages read
+stops being written. Nothing checks that an organiser has been linked, which is
+why the sync prints it.*
 
 **Stories use both, and the names are not decoration.** A story's `Guests`
 points at the same guests database as a session, and its `Hosts` at the
@@ -64,19 +85,19 @@ and nothing stands in for it: a story with neither a guest nor a host is
 credited to nobody, and `npm run test:content` fails the build rather than
 publishing it uncredited.
 
-**Both databases carry the same four profile links**: `URL` (`Website` on
-guests), `LinkedIn`, `Mastodon` and `Bluesky`. `profileLinks` in
+**The four profile links live on the guests database only**: `Website`,
+`LinkedIn Url`, `Mastodon Tag` and `Bluesky Tag`. `profileLinks` in
 `src/lib/people.ts` is the one list that orders them, and everything that shows
 a person's links reads it — the organiser page, the organiser card's icons, a
 session's guest block, and the `sameAs` on every `Person` node. Adding a fifth
 network is that list plus an icon, not a change in four places.
 
-**Store the handle, not the URL.** On both databases `Mastodon` and `Bluesky`
-are plain **text** and hold `@sebrose@mastodon.scot` or
+**Store the handle, not the URL.** `Mastodon Tag` and `Bluesky Tag` are plain
+**text** and hold `@sebrose@mastodon.scot` or
 `@vanessaformicola.bsky.social`. They were URL properties until 2026-08-01 and
 were changed because the n8n social flows put a handle straight into a post: a
 URL is not what you write in a toot, and deriving one from the other is only
-possible in this direction. `Website`, `URL` and `LinkedIn` stay URLs, because
+possible in this direction. `Website` and `LinkedIn Url` stay URLs, because
 neither has a handle anyone writes down.
 
 `socialUrl` in `src/lib/people.ts` goes back the other way for the site. It
@@ -92,15 +113,19 @@ handle, the URL and the unresolvable one. Nothing checks that a handle in Notion
 is spelled correctly, so a typo publishes a link to a profile that does not
 exist.*
 
-The cost is that someone who both organises and speaks has a row in each. That
-is deliberate; the alternative, one people table with a flag, was rejected
-because it would put 60+ external speakers into the database the community is
-actually run from. Eight people have both rows today.
+The cost is that an organiser has a row in each. That is deliberate; the
+alternative, one people table with a flag, was rejected because it would put
+100+ external speakers into the database the community is actually run from.
+All ten organisers have both rows, and they have to: the guests row is where
+their name, bio, role, links and portrait live.
 
 **`Organiser row` on a guest is what joins the pair.** A relation to the
 organisers database, which the sync resolves to that organiser's entry id and
-writes as `organiser` on the guest entry. `pairedWith` in `src/lib/people.ts`
-reads it, and believes it *instead of* the name rather than alongside it: a
+writes as `organiser` on the guest entry, so a session or story page can link a
+speaker to their organiser page. `Guest row`, its two-way other half, is what
+the organisers sync reads identity through. `organiserFor` in
+`src/lib/people.ts` reads the first, and believes it *instead of* the name
+rather than alongside it: a
 relation pointing somewhere is an editor saying who this is, and a name match
 overruling them would be the guess the relation exists to replace. A pair
 nobody has linked yet still falls back to `samePerson`.
@@ -113,40 +138,35 @@ close the gap on its own either: the organiser row reads `Maxime` and the guest
 row `Maxime Sanglan-Charlier`, and `samePerson` rejects that pair on purpose,
 because a bare first name names nobody in particular.
 
-**Both rows fill each other in, in both directions.** Neither is complete: the
-operational row has who runs what, and the guest row is the one written to make
-a good `Person`, so it is where bios and profile links got filled in. So a
-session or story page leads with the guest row and falls back to the organiser
-row, an organiser page leads with the organiser row and falls back to the guest
-row, and both use `mergeProfiles` — **field by field, not list-or-list**.
-Whole-list fallback was a real bug: Krisztina's LinkedIn is on one row and her
-Mastodon on the other, and Diana's organiser page published one profile out of
-the four we hold for her.
-
 *How we know: **machine.** `tests/unit/people.test.mjs` covers the relation
-beating the name, the fallback when there is no relation, a relation pointing
-at a deleted row, and that both directions agree. Nothing checks that an
-editor filled the relation in, so an unlinked pair is silently a name match.*
+beating the name, the fallback when there is no relation, and a relation
+pointing at a deleted row. Nothing checks that an editor filled the relation in,
+so an unlinked pair is silently a name match.*
 
-**A guest has no slug, no page and no role field.** The entry file is named
-`kebab(name)` purely so a session's `guests` relation resolves; it is never a
-URL, so renaming a guest in Notion is free. What someone does belongs in their
-bio ("Matthew is the co-author of Team Topologies") rather than in a field
-beside it:
-one field is one thing for an editor to fill in, and it reads as a sentence
-rather than a job title.
+**A guest has no slug and no page.** The entry file is named `kebab(name)`
+purely so a session's `guests` relation resolves; it is never a URL, so renaming
+a guest in Notion is free.
 
 Guests render at two levels:
 
 - **Every** session with guests names them under the title, `Guests: A, B`,
   which is the question a reader arrives with.
-- A guest with a **`Bio`** (and a portrait, if there is one) gets a block below
-  the description. No bio, no block; write one in Notion and it appears on the
-  next sync. `npm run test:content` reports guests on *upcoming* sessions who
-  have none.
+- A guest with a **`Role` or a `Bio`** (and a portrait, if there is one) gets a
+  block below the description. Neither, and there is no block; write one in
+  Notion and it appears on the next sync. `npm run test:content` reports guests
+  on *upcoming* sessions with no bio.
+
+**`Role` is the cheap half of that, and it is why it exists.** A role is a line
+where a bio is a paragraph — "Co-author of Team Topologies" against four
+paragraphs — and 72 of 119 people have no bio at all. It is shown small under
+the name, becomes `jobTitle` in the structured data, and it moved off the
+organisers database on 2026-08-11 so a guest could have one too. The ten values
+that came with it were written for the team grid and read as personas ("Flow
+addict PM"); a guest's reads more like a credential. Same field, two registers,
+and worth keeping an eye on.
 
 Either way they are `performer` on the session's `Event`, so the structured data
-never depends on how much bio anyone got round to writing.
+never depends on how much anyone got round to writing.
 
 Bios are written **in Notion**. The first 19 were harvested from session
 descriptions and pushed in bulk from a committed CSV; that CSV and its script

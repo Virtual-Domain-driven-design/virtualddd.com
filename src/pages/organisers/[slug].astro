@@ -14,7 +14,7 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { iso, shortDate } from '../../lib/dates';
 import { byDateDesc, creditsFor, guestsById } from '../../lib/collections';
-import { anySamePerson, guestFor, mergeProfiles, paragraphs, profileLinks, samePerson } from '../../lib/people';
+import { anySamePerson, paragraphs, profileLinks, samePerson } from '../../lib/people';
 
 export async function getStaticPaths() {
   const organisers = await getCollection('organisers');
@@ -46,33 +46,23 @@ const SHOW_LIST = 10;
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 
-// This organiser's other row, when they have also been a guest. The two rows
-// hold the same kinds of thing and neither is complete: the operational row
-// carries who runs what, and the guest row is the one written to make a good
-// `Person`, so it is where a bio and the profiles that became `sameAs` were
-// filled in. Reading only this one published Diana's LinkedIn and hid her
-// website, Mastodon and Bluesky on the single page of ours that is about her.
+// `role`, `bio`, the links and the portrait are all read off this organiser's
+// row in the people database by the sync, through their `Guest row` relation,
+// so there is nothing to join here and no second copy to disagree with. See
+// the `link` note in scripts/sync-notion.ts.
 //
-// The mirror of what a session page does with a guest who organises, from the
-// same pair of helpers, so the two pages cannot disagree about who is who.
-// Here the organiser row leads, because this is their organiser page.
-const alsoGuest = guestFor(organiser, [...storyGuestIndex.values()]);
-const profile = mergeProfiles(d, alsoGuest?.data ?? {});
-const bio = alsoGuest?.data.bio;
-const portrait = d.photo ?? alsoGuest?.data.photo;
-
 // Built once and used twice, below and in `sameAs`: a person's profiles are one
 // fact, and a page that lists a Mastodon account the structured data omits is
 // two answers to the same question.
-const links = profileLinks(profile);
+const links = profileLinks(d);
 // The same Person shape a session's guests get, so the two descriptions of a
 // person who does both cannot drift apart.
 const org = organization(Astro.site);
 const jsonLd = graph(org, person({
   name: d.name,
   role: d.role,
-  bio,
-  url: profile.website,
+  bio: d.bio,
+  url: d.website,
   sameAs: links.map((l) => l.href),
   page: `${site}/organisers/${organiser.id}/`,
   memberOf: org['@id'],
@@ -99,7 +89,7 @@ const description = d.role
 
     <aside class="detail-side">
       <div class="side-card">
-        {portrait && <Image class="portrait" src={portrait} alt={d.name} width={480} />}
+        {d.photo && <Image class="portrait" src={d.photo} alt={d.name} width={480} />}
         {links.length > 0 && (
           <div class="side-links">
             {links.map((l) => (
@@ -117,9 +107,9 @@ const description = d.role
     </aside>
 
     <div class="detail-body">
-      {bio && (
+      {d.bio && (
         <div class="prose-body org-bio" data-test="organiser-bio">
-          {paragraphs(bio).map((p) => <p>{p}</p>)}
+          {paragraphs(d.bio).map((p) => <p>{p}</p>)}
         </div>
       )}
 
