@@ -7,7 +7,15 @@
  */
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { samePerson, anySamePerson, guestsToName, profileLinks, socialUrl, storyByline } from '../../src/lib/people.ts';
+import {
+  samePerson, anySamePerson, guestsToName, profileLinks, socialUrl, storyByline,
+  pairedWith, organiserFor, guestFor, mergeProfiles, paragraphs,
+} from '../../src/lib/people.ts';
+
+/** The two rows a person who both organises and speaks has, as the pages see
+ *  them. `organiser` on a guest is the organiser entry's id. */
+const guest = (name, organiser, rest = {}) => ({ data: { name, organiser, ...rest } });
+const org = (id, name, rest = {}) => ({ id, data: { name, ...rest } });
 
 describe('samePerson', () => {
   test('matches the same name written the same way', () => {
@@ -56,6 +64,89 @@ describe('samePerson', () => {
     assert.ok(anySamePerson(['Andrea Magnorsky', 'Kenny Schwegler'], 'Kenny Baas-Schwegler'));
     assert.ok(!anySamePerson(['Andrea Magnorsky'], 'Kenny Baas-Schwegler'));
     assert.ok(!anySamePerson(undefined, 'Kenny Baas-Schwegler'), 'a missing list is not a match');
+  });
+});
+
+describe('pairing a guest row with an organiser row', () => {
+  const organisers = [
+    org('maxime', 'Maxime'),
+    org('kenny-schwegler', 'Kenny Schwegler'),
+    org('andrea-magnorsky', 'Andrea Magnorsky'),
+  ];
+
+  test('the relation carries the pair the names cannot', () => {
+    // The whole reason the relation replaced a name match and a checkbox: this
+    // pair is one person, and `samePerson` rejects it on purpose.
+    const maxime = guest('Maxime Sanglan-Charlier', 'maxime');
+    assert.ok(!samePerson('Maxime Sanglan-Charlier', 'Maxime'));
+    assert.equal(organiserFor(maxime, organisers)?.id, 'maxime');
+  });
+
+  test('a pair nobody has linked yet still falls back to the name', () => {
+    // Every pair, until an editor fills the relation in.
+    assert.equal(organiserFor(guest('Kenny Baas-Schwegler'), organisers)?.id, 'kenny-schwegler');
+  });
+
+  test('the relation wins over a name that matches somebody else', () => {
+    // An editor who linked this row said who it is. Quietly preferring a name
+    // match would overrule them, which is the failure mode of guessing.
+    const linked = guest('Kenny Schwegler', 'andrea-magnorsky');
+    assert.equal(organiserFor(linked, organisers)?.id, 'andrea-magnorsky');
+  });
+
+  test('a relation pointing nowhere pairs with nobody rather than guessing', () => {
+    // The organiser row was deleted. Falling back to the name here would
+    // reinstate exactly the guess the relation exists to replace.
+    assert.equal(organiserFor(guest('Kenny Schwegler', 'gone'), organisers), undefined);
+  });
+
+  test('an unmatched guest is nobody', () => {
+    assert.equal(organiserFor(guest('Nick Tune'), organisers), undefined);
+  });
+
+  test('both directions answer the same question the same way', () => {
+    // A session page asks "is this guest an organiser?" and an organiser page
+    // asks "is this organiser a guest?". If those disagreed, one page would
+    // link the pair and the other would not.
+    const guests = [guest('Maxime Sanglan-Charlier', 'maxime'), guest('Kenny Baas-Schwegler')];
+    for (const o of organisers) {
+      const g = guestFor(o, guests);
+      if (g) assert.ok(pairedWith(g, o), `${o.id} paired one way but not the other`);
+    }
+    assert.equal(guestFor(org('maxime', 'Maxime'), guests)?.data.name, 'Maxime Sanglan-Charlier');
+    assert.equal(guestFor(org('andrea-magnorsky', 'Andrea Magnorsky'), guests), undefined);
+  });
+});
+
+describe('merging the profiles on two rows for one person', () => {
+  test('takes a field from whichever row has it', () => {
+    // Krisztina: LinkedIn on the organiser row, Mastodon on the guest row. A
+    // whole-list fallback published one and hid the other.
+    assert.deepEqual(
+      mergeProfiles({ linkedin: 'https://linkedin.com/in/k' }, { mastodon: '@k@mastodon.social' }),
+      { website: undefined, linkedin: 'https://linkedin.com/in/k', mastodon: '@k@mastodon.social', bluesky: undefined },
+    );
+  });
+
+  test('the page whose person it is wins a field both rows hold', () => {
+    assert.equal(mergeProfiles({ website: 'https://mine.example' }, { website: 'https://theirs.example' }).website,
+      'https://mine.example');
+  });
+
+  test('an unpaired person merges with nothing and is unchanged', () => {
+    assert.deepEqual(profileLinks(mergeProfiles({ website: 'https://example.com' }, {})),
+      [{ label: 'Website', href: 'https://example.com' }]);
+  });
+});
+
+describe('a bio as paragraphs', () => {
+  test('splits on blank lines and drops the empties', () => {
+    assert.deepEqual(paragraphs('One.\n\n  Two.  \n'), ['One.', 'Two.']);
+  });
+
+  test('no bio is no paragraphs, not one empty one', () => {
+    assert.deepEqual(paragraphs(undefined), []);
+    assert.deepEqual(paragraphs('   '), []);
   });
 });
 

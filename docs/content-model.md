@@ -93,12 +93,40 @@ is spelled correctly, so a typo publishes a link to a profile that does not
 exist.*
 
 The cost is that someone who both organises and speaks has a row in each. That
-is deliberate, and `Also an organiser` marks it. The alternative, one people
-table with a flag, was rejected because it would put 60+ external speakers into
-the database the community is actually run from. On the site the two rows are
-rejoined by name (`samePerson` in `src/lib/people.ts`): a guest who matches an
-organiser links to that organiser page and borrows its portrait, so nothing is
-typed twice.
+is deliberate; the alternative, one people table with a flag, was rejected
+because it would put 60+ external speakers into the database the community is
+actually run from. Eight people have both rows today.
+
+**`Organiser row` on a guest is what joins the pair.** A relation to the
+organisers database, which the sync resolves to that organiser's entry id and
+writes as `organiser` on the guest entry. `pairedWith` in `src/lib/people.ts`
+reads it, and believes it *instead of* the name rather than alongside it: a
+relation pointing somewhere is an editor saying who this is, and a name match
+overruling them would be the guess the relation exists to replace. A pair
+nobody has linked yet still falls back to `samePerson`.
+
+It replaced a checkbox called `Also an organiser`, and the reason is worth
+keeping. That checkbox was read by the sync, written into all 119 guest files,
+read by **nothing**, and ticked on **no row at all** — so the docs claimed a
+duplicate was "findable" while nothing could find one. A name match cannot
+close the gap on its own either: the organiser row reads `Maxime` and the guest
+row `Maxime Sanglan-Charlier`, and `samePerson` rejects that pair on purpose,
+because a bare first name names nobody in particular.
+
+**Both rows fill each other in, in both directions.** Neither is complete: the
+operational row has who runs what, and the guest row is the one written to make
+a good `Person`, so it is where bios and profile links got filled in. So a
+session or story page leads with the guest row and falls back to the organiser
+row, an organiser page leads with the organiser row and falls back to the guest
+row, and both use `mergeProfiles` — **field by field, not list-or-list**.
+Whole-list fallback was a real bug: Krisztina's LinkedIn is on one row and her
+Mastodon on the other, and Diana's organiser page published one profile out of
+the four we hold for her.
+
+*How we know: **machine.** `tests/unit/people.test.mjs` covers the relation
+beating the name, the fallback when there is no relation, a relation pointing
+at a deleted row, and that both directions agree. Nothing checks that an
+editor filled the relation in, so an unlinked pair is silently a name match.*
 
 **A guest has no slug, no page and no role field.** The entry file is named
 `kebab(name)` purely so a session's `guests` relation resolves; it is never a
@@ -126,6 +154,18 @@ are gone, because a snapshot that pushes into the source of truth is wrong the
 moment somebody improves the copy there, and nothing in the tool can tell. If
 another bulk pass is ever wanted, `git log -- data/guest-profiles.csv` has the
 workings.
+
+`scripts/backfill-guests.ts` went the same way, and for a sharper reason. It
+copied a matched organiser's links onto the guest row so n8n, which reads Notion
+directly and cannot do the join, would find a handle. Two things had rotted
+under it: the guest rows are now the *richer* of the two, so it was copying the
+staler row over the better one, and it still wrote to `LinkedIn`, `Mastodon` and
+`Bluesky` after the Guests database renamed those to `LinkedIn Url`,
+`Mastodon Tag` and `Bluesky Tag`, so a `--write` run would have failed on most
+rows. A script that writes into the source of truth and is run once a year is a
+script nobody maintains. `git log -- scripts/backfill-guests.ts` has it if the
+n8n side ever needs solving again — but `Organiser row` is now a relation those
+flows can follow themselves.
 
 ## Conferences
 

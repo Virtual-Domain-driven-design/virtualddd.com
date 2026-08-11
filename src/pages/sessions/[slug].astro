@@ -12,7 +12,7 @@ import { excerpt } from '../../lib/excerpt';
 import { sessionJsonLd, pageTitle, trail, type PersonInput } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import { iso as toIso, longDate } from '../../lib/dates';
-import { profileLinks, samePerson } from '../../lib/people';
+import { mergeProfiles, organiserFor, profileLinks, samePerson } from '../../lib/people';
 import {
   byDateAsc, guestsById, heuristicsById, isUpcoming as sessionIsUpcoming,
   resolveRefs, sessionTeasers, siblings,
@@ -36,19 +36,18 @@ const host = d.organiser ? orgByName.get(d.organiser.trim().toLowerCase()) : und
 
 // Guests — the speakers and panellists. Someone who both organises and speaks
 // has a row in each database on purpose (see docs/content-model.md), so link a
-// guest to
-// their organiser page and fall back to the portrait and role already held
-// there rather than asking for the same thing twice.
+// guest to their organiser page and fill in from what is already held there
+// rather than asking for the same thing twice. The guest row leads here: this
+// is the page they are on as a speaker.
 const guests = resolveRefs(d.guests, await guestsById())
   .map((g) => {
-    const also = organisers.find((o) => samePerson(o.data.name, g.data.name));
-    const links = profileLinks(g.data);
+    const also = organiserFor(g, organisers);
     return {
       name: g.data.name,
       bio: g.data.bio,
       photo: g.data.photo ?? also?.data.photo,
       href: also ? `/organisers/${also.id}/` : undefined,
-      links: links.length ? links : profileLinks(also?.data ?? {}),
+      links: profileLinks(mergeProfiles(g.data, also?.data ?? {})),
     };
   })
   // The host is already introduced below; a guest row for the same person

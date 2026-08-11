@@ -14,7 +14,7 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { iso, shortDate } from '../../lib/dates';
 import { byDateDesc, creditsFor, guestsById } from '../../lib/collections';
-import { anySamePerson, profileLinks, samePerson } from '../../lib/people';
+import { anySamePerson, guestFor, mergeProfiles, paragraphs, profileLinks, samePerson } from '../../lib/people';
 
 export async function getStaticPaths() {
   const organisers = await getCollection('organisers');
@@ -45,17 +45,34 @@ const SHOW = 6;
 const SHOW_LIST = 10;
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+
+// This organiser's other row, when they have also been a guest. The two rows
+// hold the same kinds of thing and neither is complete: the operational row
+// carries who runs what, and the guest row is the one written to make a good
+// `Person`, so it is where a bio and the profiles that became `sameAs` were
+// filled in. Reading only this one published Diana's LinkedIn and hid her
+// website, Mastodon and Bluesky on the single page of ours that is about her.
+//
+// The mirror of what a session page does with a guest who organises, from the
+// same pair of helpers, so the two pages cannot disagree about who is who.
+// Here the organiser row leads, because this is their organiser page.
+const alsoGuest = guestFor(organiser, [...storyGuestIndex.values()]);
+const profile = mergeProfiles(d, alsoGuest?.data ?? {});
+const bio = alsoGuest?.data.bio;
+const portrait = d.photo ?? alsoGuest?.data.photo;
+
 // Built once and used twice, below and in `sameAs`: a person's profiles are one
 // fact, and a page that lists a Mastodon account the structured data omits is
 // two answers to the same question.
-const links = profileLinks(d);
+const links = profileLinks(profile);
 // The same Person shape a session's guests get, so the two descriptions of a
 // person who does both cannot drift apart.
 const org = organization(Astro.site);
 const jsonLd = graph(org, person({
   name: d.name,
   role: d.role,
-  url: d.website,
+  bio,
+  url: profile.website,
   sameAs: links.map((l) => l.href),
   page: `${site}/organisers/${organiser.id}/`,
   memberOf: org['@id'],
@@ -82,7 +99,7 @@ const description = d.role
 
     <aside class="detail-side">
       <div class="side-card">
-        {d.photo && <Image class="portrait" src={d.photo} alt={d.name} width={480} />}
+        {portrait && <Image class="portrait" src={portrait} alt={d.name} width={480} />}
         {links.length > 0 && (
           <div class="side-links">
             {links.map((l) => (
@@ -100,6 +117,12 @@ const description = d.role
     </aside>
 
     <div class="detail-body">
+      {bio && (
+        <div class="prose-body org-bio" data-test="organiser-bio">
+          {paragraphs(bio).map((p) => <p>{p}</p>)}
+        </div>
+      )}
+
       {sessions.length === 0 && coHosted.length === 0 && stories.length === 0 && heuristics.length === 0 && (
         <p class="empty">
           {d.name} helps run Virtual DDD. Nothing is credited to them in the archive yet —
@@ -193,6 +216,11 @@ const description = d.role
   .side-links { display: flex; flex-direction: column; gap: var(--space-3); }
   .side-block { margin-top: var(--space-6); }
   .side-block .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+  /* The bio from the guest row. `.prose-body` in patterns.css is the measure
+     and the paragraph rhythm, the same one a session body gets; only the gap
+     to the archive underneath is this page's. */
+  .org-bio { margin-bottom: var(--space-10); }
 
   .block { margin-bottom: var(--space-12); }
   .block h2 { margin-top: 0; display: flex; align-items: baseline; gap: var(--space-3); }

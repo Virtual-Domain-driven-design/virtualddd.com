@@ -7,16 +7,16 @@
  * portrait, and the row has to look deliberate either way.
  */
 import { Image } from 'astro:assets';
+import { paragraphs as split } from '../lib/people';
 
 interface Props {
   name: string;
   role?: string;
   bio?: string;
   /** Stack the bio under the name at full width, rather than beside the
-   *  portrait. For guests: none of them has a photo (a guest portrait is
-   *  borrowed from an organiser row, and no current guest has one), so the
-   *  circle is a monogram rather than a picture, and a 45–850 character bio
-   *  reading around it gains nothing from the indent. */
+   *  portrait. For guests: most have no photo, so the circle is a monogram
+   *  rather than a picture, and a 45–850 character bio reading around it gains
+   *  nothing from the indent. */
   stacked?: boolean;
   photo?: ImageMetadata;
   /** A page on this site for this person, e.g. their organiser page. */
@@ -25,9 +25,10 @@ interface Props {
 }
 const { name, role, bio, photo, href, links = [], stacked = false } = Astro.props;
 
-// Notion keeps a long bio as several paragraphs; joined into one they read as
-// a wall, which is what a 4-paragraph bio looked like on the session page.
-const paragraphs = (bio ?? '').split(/\n+/).map((p) => p.trim()).filter(Boolean);
+// Shared with the organiser page, which shows the same bio off the same guest
+// row: one rule, so a bio does not paragraph one way under a session and
+// another way under a name.
+const paragraphs = split(bio);
 
 /** Initials stand in for a missing portrait, so a list of people keeps its
  *  rhythm instead of collapsing to ragged text. */
