@@ -12,7 +12,7 @@ import { excerpt } from '../../lib/excerpt';
 import { storyJsonLd, pageTitle, trail, type PersonInput } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import { iso as toIso, longDate, shortDate } from '../../lib/dates';
-import { mergeProfiles, organiserFor, profileLinks, samePerson, storyByline } from '../../lib/people';
+import { organiserFor, profileLinks, samePerson, storyByline } from '../../lib/people';
 import { guestsById, heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
 
 export async function getStaticPaths() {
@@ -36,10 +36,11 @@ const guests = resolveRefs(d.guests, await guestsById()).map((g) => {
   const also = organiserFor(g, organisers);
   return {
     name: g.data.name,
+    role: g.data.role,
     bio: g.data.bio,
-    photo: g.data.photo ?? also?.data.photo,
+    photo: g.data.photo,
     href: also ? `/organisers/${also.id}/` : undefined,
-    links: profileLinks(mergeProfiles(g.data, also?.data ?? {})),
+    links: profileLinks(g.data),
   };
 });
 const hosts = d.hosts.map((name) => {
@@ -176,7 +177,7 @@ const jsonLd = storyJsonLd(Astro.site, story, {
           <ul class="people">
             {guests.map((g) => (
               <li data-test="guest">
-                <PersonRow name={g.name} bio={g.bio} photo={g.photo} href={g.href} links={g.links} stacked />
+                <PersonRow name={g.name} role={g.role} bio={g.bio} photo={g.photo} href={g.href} links={g.links} stacked />
               </li>
             ))}
           </ul>

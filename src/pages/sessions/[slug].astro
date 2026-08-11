@@ -12,7 +12,7 @@ import { excerpt } from '../../lib/excerpt';
 import { sessionJsonLd, pageTitle, trail, type PersonInput } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import { iso as toIso, longDate } from '../../lib/dates';
-import { mergeProfiles, organiserFor, profileLinks, samePerson } from '../../lib/people';
+import { organiserFor, profileLinks, samePerson } from '../../lib/people';
 import {
   byDateAsc, guestsById, heuristicsById, isUpcoming as sessionIsUpcoming,
   resolveRefs, sessionTeasers, siblings,
@@ -44,10 +44,11 @@ const guests = resolveRefs(d.guests, await guestsById())
     const also = organiserFor(g, organisers);
     return {
       name: g.data.name,
+      role: g.data.role,
       bio: g.data.bio,
-      photo: g.data.photo ?? also?.data.photo,
+      photo: g.data.photo,
       href: also ? `/organisers/${also.id}/` : undefined,
-      links: profileLinks(mergeProfiles(g.data, also?.data ?? {})),
+      links: profileLinks(g.data),
     };
   })
   // The host is already introduced below; a guest row for the same person
@@ -58,17 +59,22 @@ const guests = resolveRefs(d.guests, await guestsById())
 // the title — one line, where a reader looks for who is on it. A guest with a
 // bio (and a portrait, when there is one) is worth a block below the
 // description, where someone who has just read the abstract is ready to be
-// told who is giving it. Write a Bio in Notion and the block appears on the
-// next sync; until then nothing is lost, because the credit names them and the
+// told who is giving it. Write one in Notion and the block appears on the next
+// sync; until then nothing is lost, because the credit names them and the
 // structured data still says who performed.
-const guestsIntroduced = guests.some((g) => g.bio);
+//
+// A **role** opens the block too, and not only a bio. Most people here have
+// neither, and a role is a line rather than a paragraph, so it is the thing
+// somebody will actually write: "Co-author of Team Topologies" introduces a
+// speaker where a bare name does not.
+const guestsIntroduced = guests.some((g) => g.bio || g.role);
 
 const hostLinks = profileLinks(host?.data ?? {});
 // One Person node per human on the session, guests first: they are what the
 // page is about, and the organiser hosts.
 const performers: PersonInput[] = [
   ...guests.map((g) => ({
-    name: g.name, bio: g.bio,
+    name: g.name, role: g.role, bio: g.bio,
     url: g.links.find((l) => l.label === 'Website')?.href,
     sameAs: g.links.map((l) => l.href),
     page: g.href ? new URL(g.href, Astro.site).toString() : undefined,
@@ -202,7 +208,7 @@ const jsonLd = sessionJsonLd(Astro.site, session, {
           <ul class="people">
             {guests.map((g) => (
               <li data-test="guest">
-                <PersonRow name={g.name} bio={g.bio} photo={g.photo} href={g.href} links={g.links} stacked />
+                <PersonRow name={g.name} role={g.role} bio={g.bio} photo={g.photo} href={g.href} links={g.links} stacked />
               </li>
             ))}
           </ul>

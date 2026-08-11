@@ -54,23 +54,20 @@ export const anySamePerson = (names: string[] | undefined, person: string) =>
 interface GuestRow { data: { name: string; organiser?: string } }
 interface OrganiserRow { id: string; data: { name: string } }
 
-export const pairedWith = (guest: GuestRow, organiser: OrganiserRow): boolean =>
+const pairedWith = (guest: GuestRow, organiser: OrganiserRow): boolean =>
   guest.data.organiser
     ? guest.data.organiser === organiser.id
     : samePerson(guest.data.name, organiser.data.name);
 
-/** The organiser row this guest is also, if there is one. */
+/** The organiser row this guest is also, if there is one.
+ *
+ * The only direction anyone asks any more: a session or story page needs the
+ * href to that person's organiser page. The reverse used to exist so an
+ * organiser page could borrow the guest row's links and bio, and is gone
+ * because the sync now reads those through the relation and writes them onto
+ * the organiser entry itself. */
 export const organiserFor = <O extends OrganiserRow>(guest: GuestRow, organisers: O[]) =>
   organisers.find((o) => pairedWith(guest, o));
-
-/** The guest row this organiser is also, if there is one.
- *
- * The other direction of the same predicate rather than a second rule, because
- * a session page asking "is this guest an organiser?" and an organiser page
- * asking "is this organiser a guest?" that disagreed would put a link on one
- * page and not the other. */
-export const guestFor = <G extends GuestRow>(organiser: OrganiserRow, guests: G[]) =>
-  guests.find((g) => pairedWith(g, organiser));
 
 /** The profiles a person may have off this site.
  *
@@ -116,27 +113,6 @@ export const socialUrl = (
     ? `https://${m[2]}/@${m[1]}`
     : `https://bsky.app/profile/${m[1]}`;
 };
-
-/** Two rows for one person, as one set of profiles. Field by field.
- *
- * Whole-list fallback was the bug: a page took the guest row's links, or the
- * organiser row's, whichever was non-empty, so the *other* row's links were
- * hidden rather than merged. Krisztina's LinkedIn is on the organiser row and
- * her Mastodon on the guest row, and either way round one of the two was
- * dropped. Diana's organiser row holds a LinkedIn and her guest row a website,
- * a Mastodon and a Bluesky, so her organiser page — the one with an address and
- * the `sameAs` on it — claimed one profile out of four.
- *
- * `primary` wins a field both rows hold. Which row that is depends on whose
- * page it is: the organiser row leads on an organiser page, the guest row on a
- * session or a story.
- */
-export const mergeProfiles = (primary: Profiles, secondary: Profiles): Profiles => ({
-  website: primary.website ?? secondary.website,
-  linkedin: primary.linkedin ?? secondary.linkedin,
-  mastodon: primary.mastodon ?? secondary.mastodon,
-  bluesky: primary.bluesky ?? secondary.bluesky,
-});
 
 /** A bio as the paragraphs it was written in.
  *
