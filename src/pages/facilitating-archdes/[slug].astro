@@ -12,7 +12,7 @@ import { excerpt } from '../../lib/excerpt';
 import { storyJsonLd, pageTitle, trail, type PersonInput } from '../../lib/seo';
 import { socialCard } from '../../lib/social-card';
 import { iso as toIso, longDate, shortDate } from '../../lib/dates';
-import { profileLinks, samePerson, storyByline } from '../../lib/people';
+import { mergeProfiles, organiserFor, profileLinks, samePerson, storyByline } from '../../lib/people';
 import { guestsById, heuristicsById, resolveRefs, siblings, type Teaser } from '../../lib/collections';
 
 export async function getStaticPaths() {
@@ -33,14 +33,13 @@ const videoEmbed = youtubeEmbed(d.youtube);
 // the link to their page, exactly as a session matches its organiser.
 const organisers = await getCollection('organisers');
 const guests = resolveRefs(d.guests, await guestsById()).map((g) => {
-  const also = organisers.find((o) => samePerson(o.data.name, g.data.name));
-  const links = profileLinks(g.data);
+  const also = organiserFor(g, organisers);
   return {
     name: g.data.name,
     bio: g.data.bio,
     photo: g.data.photo ?? also?.data.photo,
     href: also ? `/organisers/${also.id}/` : undefined,
-    links: links.length ? links : profileLinks(also?.data ?? {}),
+    links: profileLinks(mergeProfiles(g.data, also?.data ?? {})),
   };
 });
 const hosts = d.hosts.map((name) => {

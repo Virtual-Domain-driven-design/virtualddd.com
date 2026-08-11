@@ -33,6 +33,45 @@ export function samePerson(a: string, b: string): boolean {
 export const anySamePerson = (names: string[] | undefined, person: string) =>
   (names ?? []).some((n) => samePerson(n, person));
 
+/** One person, two rows.
+ *
+ * Someone who both organises and speaks has a row in each people database, on
+ * purpose (docs/content-model.md). `organiser` on the guest row is Notion's
+ * `Organiser row` relation, resolved by the sync to the organiser entry's id.
+ *
+ * The relation is believed **instead of** the name, never alongside it: a
+ * relation pointing at somebody else is an editor saying so, and quietly
+ * matching a different organiser by name would overrule them. The name match
+ * is only for a pair nobody has linked yet, which is every pair until somebody
+ * ticks the relation.
+ *
+ * The name match alone is not enough, and that is why the relation exists. The
+ * organiser row reads `Maxime` and the guest row `Maxime Sanglan-Charlier`, and
+ * `samePerson` rejects that pair deliberately — a bare first name names nobody
+ * in particular. It replaces an `Also an organiser` checkbox that nothing read
+ * and nobody ticked.
+ */
+interface GuestRow { data: { name: string; organiser?: string } }
+interface OrganiserRow { id: string; data: { name: string } }
+
+export const pairedWith = (guest: GuestRow, organiser: OrganiserRow): boolean =>
+  guest.data.organiser
+    ? guest.data.organiser === organiser.id
+    : samePerson(guest.data.name, organiser.data.name);
+
+/** The organiser row this guest is also, if there is one. */
+export const organiserFor = <O extends OrganiserRow>(guest: GuestRow, organisers: O[]) =>
+  organisers.find((o) => pairedWith(guest, o));
+
+/** The guest row this organiser is also, if there is one.
+ *
+ * The other direction of the same predicate rather than a second rule, because
+ * a session page asking "is this guest an organiser?" and an organiser page
+ * asking "is this organiser a guest?" that disagreed would put a link on one
+ * page and not the other. */
+export const guestFor = <G extends GuestRow>(organiser: OrganiserRow, guests: G[]) =>
+  guests.find((g) => pairedWith(g, organiser));
+
 /** The profiles a person may have off this site.
  *
  * `mastodon` and `bluesky` are a handle; see `socialUrl` below, which also
@@ -77,6 +116,35 @@ export const socialUrl = (
     ? `https://${m[2]}/@${m[1]}`
     : `https://bsky.app/profile/${m[1]}`;
 };
+
+/** Two rows for one person, as one set of profiles. Field by field.
+ *
+ * Whole-list fallback was the bug: a page took the guest row's links, or the
+ * organiser row's, whichever was non-empty, so the *other* row's links were
+ * hidden rather than merged. Krisztina's LinkedIn is on the organiser row and
+ * her Mastodon on the guest row, and either way round one of the two was
+ * dropped. Diana's organiser row holds a LinkedIn and her guest row a website,
+ * a Mastodon and a Bluesky, so her organiser page — the one with an address and
+ * the `sameAs` on it — claimed one profile out of four.
+ *
+ * `primary` wins a field both rows hold. Which row that is depends on whose
+ * page it is: the organiser row leads on an organiser page, the guest row on a
+ * session or a story.
+ */
+export const mergeProfiles = (primary: Profiles, secondary: Profiles): Profiles => ({
+  website: primary.website ?? secondary.website,
+  linkedin: primary.linkedin ?? secondary.linkedin,
+  mastodon: primary.mastodon ?? secondary.mastodon,
+  bluesky: primary.bluesky ?? secondary.bluesky,
+});
+
+/** A bio as the paragraphs it was written in.
+ *
+ * Notion keeps a long bio as several lines; joined into one they read as a
+ * wall. Shared by `PersonRow` and the organiser page so a bio does not
+ * paragraph one way under a session and another way under a name. */
+export const paragraphs = (text?: string): string[] =>
+  (text ?? '').split(/\n+/).map((p) => p.trim()).filter(Boolean);
 
 /** A person's outbound links, labelled and in one fixed order.
  *

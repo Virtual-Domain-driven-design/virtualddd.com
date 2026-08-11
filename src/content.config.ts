@@ -190,9 +190,14 @@ const sessionGuests = defineCollection({
       // keeps working.
       mastodon: z.string().optional(),
       bluesky: z.string().optional(),
-      // Ticked when this person also has a row in the organisers database, so
-      // the deliberate duplicate is findable.
-      alsoAnOrganiser: z.boolean().default(false),
+      // The organiser entry this person is also, when they both organise and
+      // speak. The id of the entry, from Notion's `Organiser row` relation:
+      // a relation and not a name, because the organiser row reading `Maxime`
+      // and the guest row `Maxime Sanglan-Charlier` are the same person and no
+      // name match can safely say so. `pairedWith` in src/lib/people.ts is what
+      // reads it. Optional: most guests never organise, and a pair nobody has
+      // linked yet still falls back to the name match.
+      organiser: z.string().optional(),
       photo: image().optional(),
     }),
 });
