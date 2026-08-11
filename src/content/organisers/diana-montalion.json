@@ -3,10 +3,12 @@
   "slug": "diana-montalion",
   "role": "Nonlinear thinker",
   "linkedin": "https://www.linkedin.com/in/dianamontalion/",
+  "mastodon": "@diana@hachyderm.io",
+  "bluesky": "@dianamontalion.com",
   "area": "America",
   "organises": [
     "Discord"
   ],
   "showOnTeam": true,
-  "photo": "./_assets/diana-montalion-photo.jpg"
+  "photo": "./_assets/diana-montalion-photo.png"
 }

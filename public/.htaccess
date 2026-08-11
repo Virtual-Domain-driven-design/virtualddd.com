@@ -230,6 +230,7 @@ RewriteRule ^submit-community/?$ - [G,L]
 # recorded when a slug changed or a page was retired in Notion.
 RewriteRule ^heuristics/eventstorming-split-and-merge-above-7-people-on-process-and-design-level/?$ /heuristics/eventstorming-split-and-merge-above-7-people/ [R=301,L]
 RewriteRule ^organisers/kenny-baas-schwegler/?$ /organisers/kenny-schwegler/ [R=301,L]
+RewriteRule ^organisers/maxime/?$ /organisers/maxime-sanglan-charlier/ [R=301,L]
 
 # --- 12. Reading list ----------------------------------------------
 # /reading-list/ shipped, so these stop being Gone and point at it.

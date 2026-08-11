@@ -1,8 +1,10 @@
 {
   "name": "Kenny Schwegler",
+  "bio": "I believe in collaborative software design where ‘every voice shapes the software’. Leveraging a domain-driven design approach with Team Topologies, I facilitate clearer communication between stakeholders and software creators by collaborative modelling and deep democracy, decoding complexities, resolving conflicts and ensuring software remains agile to business demands.\n\nAs Lead Software Architect Enabler at DHL eCommerce and independent trainer and facilitator specialising in technical leadership, software architecture, and sociotechnical system design, I work with organisations and teams to design sustainable and resilient software architecture. I also co-authored Collaborative Software Design: How to Facilitate Domain Modeling Decisions and organise the Virtual Domain-Driven Design community to share these ideas more widely.",
   "website": "https://weave-it.org/",
   "linkedin": "https://www.linkedin.com/in/kenny-baas/",
   "mastodon": "@kenny_baas@mastodon.social",
   "bluesky": "@kenny.weave-it.org",
-  "organiser": "kenny-schwegler"
+  "organiser": "kenny-schwegler",
+  "photo": "./_assets/kenny-schwegler-photo.png"
 }

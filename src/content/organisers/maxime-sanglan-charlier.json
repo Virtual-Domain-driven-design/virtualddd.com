@@ -1,11 +1,13 @@
 {
-  "name": "Maxime",
-  "slug": "maxime",
+  "name": "Maxime Sanglan-Charlier",
+  "slug": "maxime-sanglan-charlier",
   "role": "Connecting people circa 97",
   "website": "https://blog.onehundredacorns.com/",
   "linkedin": "https://www.linkedin.com/company/ncrafts/",
+  "mastodon": "@maxs@mastodon.social",
+  "bluesky": "@maxsc.bsky.social",
   "area": "Europe",
   "organises": [],
   "showOnTeam": true,
-  "photo": "./_assets/maxime-photo.jpg"
+  "photo": "./_assets/maxime-sanglan-charlier-photo.jpg"
 }
