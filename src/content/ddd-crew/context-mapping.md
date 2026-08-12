@@ -4,7 +4,7 @@ description: "Context Maps describe the contact between bounded contexts and tea
 repo: "https://github.com/ddd-crew/context-mapping"
 canonical: "https://ddd-crew.github.io/context-mapping/"
 license: "CC-BY-SA-4.0"
-stars: 1835
+stars: 1838
 heroImage: "./_assets/context-mapping/context-map-cheat-sheet.png"
 contributors:
   - { name: "mploed", url: "https://github.com/mploed" }
