@@ -4,7 +4,7 @@ description: "Definitions of DDD and fundamental concepts to reduce the learning
 repo: "https://github.com/ddd-crew/welcome-to-ddd"
 canonical: "https://ddd-crew.github.io/welcome-to-ddd/"
 license: "CC-BY-SA-4.0"
-stars: 1538
+stars: 1539
 heroImage: "./_assets/welcome-to-ddd/ddd_on_a_page1.png"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
