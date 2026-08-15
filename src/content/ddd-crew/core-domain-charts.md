@@ -4,7 +4,7 @@ description: "A tool for collaboratively finding your core domains - strategic b
 repo: "https://github.com/ddd-crew/core-domain-charts"
 canonical: "https://ddd-crew.github.io/core-domain-charts/"
 license: "CC-BY-SA-4.0"
-stars: 616
+stars: 617
 heroImage: "./_assets/core-domain-charts/core-domain-chart-template.jpg"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
