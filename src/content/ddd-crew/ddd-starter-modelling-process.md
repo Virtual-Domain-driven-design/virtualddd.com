@@ -4,7 +4,7 @@ description: "If you're new to DDD and not sure where to start, this process wil
 repo: "https://github.com/ddd-crew/ddd-starter-modelling-process"
 canonical: "https://ddd-crew.github.io/ddd-starter-modelling-process/"
 license: "CC-BY-SA-4.0"
-stars: 5977
+stars: 5978
 heroImage: "./_assets/ddd-starter-modelling-process/ddd-crew-modeling-process--cirlces-feed-each-other.svg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
