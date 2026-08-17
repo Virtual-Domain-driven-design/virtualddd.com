@@ -1,6 +1,24 @@
 {
   "items": [
     {
+      "kind": "image-source-gone",
+      "section": "/reading-list/",
+      "title": "strategic-monoliths-and-microservices (featured): showing the last copy we downloaded",
+      "url": "https://covers.openlibrary.org/b/id/12435194-L.jpg"
+    },
+    {
+      "kind": "image-source-gone",
+      "section": "/facilitating-archdes/",
+      "title": "stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it (body-2): no picture at all until this is fixed",
+      "url": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXcFf2GWGPweGoak1Dbf8082vqkkRvQJ0-_Lm6FbyWevFh-F8eUNsKF6O3wj42_MCCzqjcM5MtjzfD2LwuQxRQS499holOQpnB2Uw1Nxh_6TjlGHnybGLjT_SiOzgcO4lFO_qM-3iQ?key=IUR0EIM1wdcR3QDCesuIyg"
+    },
+    {
+      "kind": "image-source-gone",
+      "section": "/facilitating-archdes/",
+      "title": "stories-on-facilitating-software-architecture-design-because-the-old-ways-arent-cutting-it (body-1): no picture at all until this is fixed",
+      "url": "https://lh7-rt.googleusercontent.com/docsz/AD_4nXfGziAaZt_4fX1Id6v-SwIJxgGpyIHrm519lvinlXqE62GzA5sHih7vT7fXmWK2xQkV_9o1JpjAGD_QNcHewpu2U80n_pX9X9kCE2fC9Lf-d_J1f4Qly9DzX7Vbf9qR9GwMEHed?key=IUR0EIM1wdcR3QDCesuIyg"
+    },
+    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
