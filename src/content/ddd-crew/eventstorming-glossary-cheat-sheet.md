@@ -4,7 +4,7 @@ description: "EventStorming is the smartest approach to collaborate beyond silo 
 repo: "https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet"
 canonical: "https://ddd-crew.github.io/eventstorming-glossary-cheat-sheet/"
 license: "CC-BY-SA-4.0"
-stars: 976
+stars: 977
 heroImage: "./_assets/eventstorming-glossary-cheat-sheet/core-concepts.jpg"
 contributors:
   - { name: "Baasie", url: "https://github.com/Baasie" }
