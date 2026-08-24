@@ -4,7 +4,7 @@ description: "If you're new to DDD and not sure where to start, this process wil
 repo: "https://github.com/ddd-crew/ddd-starter-modelling-process"
 canonical: "https://ddd-crew.github.io/ddd-starter-modelling-process/"
 license: "CC-BY-SA-4.0"
-stars: 5987
+stars: 5990
 heroImage: "./_assets/ddd-starter-modelling-process/ddd-crew-modeling-process--cirlces-feed-each-other.svg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
@@ -15,17 +15,17 @@ contributors:
   - { name: "javujavichi", url: "https://github.com/javujavichi" }
   - { name: "geovanneb", url: "https://github.com/geovanneb" }
   - { name: "emgsilva", url: "https://github.com/emgsilva" }
-  - { name: "skleanthous", url: "https://github.com/skleanthous" }
-  - { name: "Barvoj", url: "https://github.com/Barvoj" }
-  - { name: "doggy8088", url: "https://github.com/doggy8088" }
-  - { name: "arnolanglade", url: "https://github.com/arnolanglade" }
-  - { name: "biwkf", url: "https://github.com/biwkf" }
-  - { name: "holysi", url: "https://github.com/holysi" }
-  - { name: "neolytian", url: "https://github.com/neolytian" }
-  - { name: "oroumand", url: "https://github.com/oroumand" }
-  - { name: "sandeepAtSteerwise", url: "https://github.com/sandeepAtSteerwise" }
-  - { name: "trondhjort", url: "https://github.com/trondhjort" }
   - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
+  - { name: "skleanthous", url: "https://github.com/skleanthous" }
+  - { name: "trondhjort", url: "https://github.com/trondhjort" }
+  - { name: "sandeepAtSteerwise", url: "https://github.com/sandeepAtSteerwise" }
+  - { name: "oroumand", url: "https://github.com/oroumand" }
+  - { name: "neolytian", url: "https://github.com/neolytian" }
+  - { name: "holysi", url: "https://github.com/holysi" }
+  - { name: "biwkf", url: "https://github.com/biwkf" }
+  - { name: "arnolanglade", url: "https://github.com/arnolanglade" }
+  - { name: "doggy8088", url: "https://github.com/doggy8088" }
+  - { name: "Barvoj", url: "https://github.com/Barvoj" }
   - { name: "Guchman", url: "https://github.com/Guchman" }
   - { name: "martinotten", url: "https://github.com/martinotten" }
   - { name: "armyost", url: "https://github.com/armyost" }
@@ -86,6 +86,7 @@ __Navigation:__
       - [Tools](#tools-6)
       - [Who to Involve](#who-to-involve-7)
     - [How the DDD Starter Modelling Process relates to the Whirlpool Process](#how-the-ddd-starter-modelling-process-relates-to-the-whirlpool-process)
+  - [Translations](#translations)
   - [Contributors](#contributors)
   - [Contributions and Feedback](#contributions-and-feedback)
 
@@ -394,15 +395,25 @@ The picture below shows a possible overlap between the two processes.
 
 Needless to say that Eric Evan's Whirlpool process remains totally relevant today and gives people highly valuable insights and guidance on how to explore models.
 
+## Translations
+
+- [Spanish visual resources](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/translations/es/resources)
+- [French visual resources](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/translations/fr/resources)
+- [Italian visual resources](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/translations/it/resources)
+- [Korean visual resources](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/translations/kr/resources)
+- [Brazilian Portuguese (pt-BR) documentation](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/translations/pt-br/README.md)
+- [Taiwanese (zh-TW) documentation](https://github.com/ddd-crew/ddd-starter-modelling-process/blob/main/translations/zh-tw/README.md)
+
 ## Contributors
 
 Thanks to all [existing and future contributors](https://github.com/ddd-crew/ddd-starter-modelling-process/graphs/contributors) and to the following individuals who have all contributed to the DDD Starter Modelling Process:
 
 - [Ciaran McNulty](https://github.com/ciaranmcnulty)
 - [Eduardo da Silva](https://github.com/emgsilva)
-- [Gien Verschatse](https://twitter.com/selketjah)
-- [James Morcom](https://twitter.com/morcs)
-- [Maxime Sanglan-Charlier](https://twitter.com/__MaxS__)
+- [Gien Verschatse](https://github.com/selketjah)
+- [James Morcom](https://github.com/morcs)
+- [Maxime Sanglan-Charlier](https://github.com/Max-Git)
+- [Javiera Javichi](https://github.com/javujavichi)
 
 ## Contributions and Feedback
 

@@ -4,7 +4,7 @@ description: "Context Maps describe the contact between bounded contexts and tea
 repo: "https://github.com/ddd-crew/context-mapping"
 canonical: "https://ddd-crew.github.io/context-mapping/"
 license: "CC-BY-SA-4.0"
-stars: 1842
+stars: 1843
 heroImage: "./_assets/context-mapping/context-map-cheat-sheet.png"
 contributors:
   - { name: "mploed", url: "https://github.com/mploed" }
@@ -13,6 +13,7 @@ contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
   - { name: "henriquemotaesteves", url: "https://github.com/henriquemotaesteves" }
   - { name: "rlippolis", url: "https://github.com/rlippolis" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
   - { name: "stefan-ka", url: "https://github.com/stefan-ka" }
   - { name: "tpraxl", url: "https://github.com/tpraxl" }
   - { name: "szepeviktor", url: "https://github.com/szepeviktor" }
@@ -20,6 +21,10 @@ contributors:
 Context Maps describe the contact between bounded contexts and teams with a collection of patterns. There are nine context map patterns and three different team relationships. The context map patterns describe a variety of perspectives like service provisioning, model propagation or governance aspects. This diversity of perspectives enables you to get a holistic overview of team and bounded context relationships.
 
 Context Maps can be used to analyze existing systems or application landscapes, but they are also suitable for upfront design considerations. However, we have realized that many folks struggle to get started with the context mapping patterns based on the definitions in the existing DDD books. This GitHub repository aims to give you some help with context maps with a cheat sheet and a starter kit for Miro.
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/context-mapping/blob/main/translations/pt-br/README.md)
 
 ## Overview of the context map team relationships and patterns
 

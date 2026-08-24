@@ -4,13 +4,14 @@ description: "A structured approach to designing and documenting Aggregates"
 repo: "https://github.com/ddd-crew/aggregate-design-canvas"
 canonical: "https://ddd-crew.github.io/aggregate-design-canvas/"
 license: "CC-BY-SA-4.0"
-stars: 818
+stars: 819
 heroImage: "./_assets/aggregate-design-canvas/aggregate-design-canvas-v1.1.png"
 contributors:
   - { name: "cakper", url: "https://github.com/cakper" }
   - { name: "meinjens", url: "https://github.com/meinjens" }
-  - { name: "gabrielanhaia", url: "https://github.com/gabrielanhaia" }
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
+  - { name: "gabrielanhaia", url: "https://github.com/gabrielanhaia" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
   - { name: "ryandanthony", url: "https://github.com/ryandanthony" }
   - { name: "craigtp", url: "https://github.com/craigtp" }
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
@@ -22,6 +23,10 @@ An aggregate is a lifecycle pattern originally described by Eric Evans. By aggre
 The canvas has a suggested order of working through it, that helps to iteratively discuss different aspects of the aggregate design.
 
 ![Aggregate Design Canvas](./_assets/aggregate-design-canvas/aggregate-design-canvas-v1.1.png "Aggregate Design Canvas")
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/aggregate-design-canvas/blob/main/translations/pt-br/README.md)
 
 ### Downloads
 

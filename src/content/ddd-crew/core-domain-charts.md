@@ -4,7 +4,7 @@ description: "A tool for collaboratively finding your core domains - strategic b
 repo: "https://github.com/ddd-crew/core-domain-charts"
 canonical: "https://ddd-crew.github.io/core-domain-charts/"
 license: "CC-BY-SA-4.0"
-stars: 618
+stars: 619
 heroImage: "./_assets/core-domain-charts/core-domain-chart-template.jpg"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
@@ -12,6 +12,7 @@ contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
   - { name: "Max-Git", url: "https://github.com/Max-Git" }
   - { name: "cakper", url: "https://github.com/cakper" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
 ---
 Core Domain Charts help you to visualise the strategic importance of each (sub)domain or business capability in your architecture allowing you to make business model-aligned architectural decisions.
 
@@ -20,6 +21,10 @@ Core Domain Charts help you to visualise the strategic importance of each (sub)d
 The true power of this technique is the conversations that it triggers, especially cross-discipline. Complexity is something that engineers can gauge whereas business differentiation is provided by product managers or business stakeholders.
 
 ![alt text](./_assets/core-domain-charts/core-domain-chart-template.jpg "Core Domain Chart")
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/core-domain-charts/blob/main/translations/pt-br/README.md)
 
 ## How to Use
 

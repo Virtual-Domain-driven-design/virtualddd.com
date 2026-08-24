@@ -10,12 +10,17 @@ contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
   - { name: "AlexZeitler", url: "https://github.com/AlexZeitler" }
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
 ---
 Designing loosely-coupled systems requires more than carefully designed boundaries. Carefully defined interactions between bounded contexts is equally important.
 
 A [bounded context](https://martinfowler.com/bliki/BoundedContext.html) is a sub-system in a software architecture aligned to a part of the domain. It can be implemented as a microservice or a module within a monolith.
 
 A Domain Message Flow Diagram is a simple visualisation showing the flow of messages (commands, events, queries) between actors, bounded contexts, and systems, for a single scenario.
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/domain-message-flow-modelling/blob/main/translations/pt-br/README.md)
 
 ## Formats
 

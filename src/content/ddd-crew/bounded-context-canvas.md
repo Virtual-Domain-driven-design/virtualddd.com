@@ -4,7 +4,7 @@ description: "A structured approach to designing and documenting each of your bo
 repo: "https://github.com/ddd-crew/bounded-context-canvas"
 canonical: "https://ddd-crew.github.io/bounded-context-canvas/"
 license: "CC-BY-SA-4.0"
-stars: 2045
+stars: 2046
 heroImage: "./_assets/bounded-context-canvas/bounded-context-canvas-v5.jpg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
@@ -15,18 +15,19 @@ contributors:
   - { name: "chris2k2", url: "https://github.com/chris2k2" }
   - { name: "b-dantas", url: "https://github.com/b-dantas" }
   - { name: "AlexZeitler", url: "https://github.com/AlexZeitler" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
   - { name: "sskroeder", url: "https://github.com/sskroeder" }
-  - { name: "smartcaveman", url: "https://github.com/smartcaveman" }
-  - { name: "nousagilons", url: "https://github.com/nousagilons" }
-  - { name: "poulainpi", url: "https://github.com/poulainpi" }
-  - { name: "OLibutzki", url: "https://github.com/OLibutzki" }
-  - { name: "cakper", url: "https://github.com/cakper" }
-  - { name: "jhult", url: "https://github.com/jhult" }
-  - { name: "johanneswseitz", url: "https://github.com/johanneswseitz" }
-  - { name: "martinsson", url: "https://github.com/martinsson" }
-  - { name: "hadiljr", url: "https://github.com/hadiljr" }
-  - { name: "chelin-twilio", url: "https://github.com/chelin-twilio" }
   - { name: "anupshah", url: "https://github.com/anupshah" }
+  - { name: "chelin-twilio", url: "https://github.com/chelin-twilio" }
+  - { name: "hadiljr", url: "https://github.com/hadiljr" }
+  - { name: "martinsson", url: "https://github.com/martinsson" }
+  - { name: "johanneswseitz", url: "https://github.com/johanneswseitz" }
+  - { name: "jhult", url: "https://github.com/jhult" }
+  - { name: "cakper", url: "https://github.com/cakper" }
+  - { name: "OLibutzki", url: "https://github.com/OLibutzki" }
+  - { name: "poulainpi", url: "https://github.com/poulainpi" }
+  - { name: "nousagilons", url: "https://github.com/nousagilons" }
+  - { name: "smartcaveman", url: "https://github.com/smartcaveman" }
 ---
 The Bounded Context Canvas is a collaborative tool for designing and documenting the design of a single bounded context.
 
@@ -217,7 +218,9 @@ The public interface of a bounded context is its contract with the rest of the s
 
 ## Translations
 
-All resources are available [in French](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/fr/resources) and in [Portuguese](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/pt/resources).
+- [French resources](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/fr/resources)
+- [Portuguese visual resources](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/pt/resources)
+- [Brazilian Portuguese (pt-BR) documentation](https://github.com/ddd-crew/bounded-context-canvas/blob/main/translations/pt-br/README.md)
 
 ## Contributors
 
