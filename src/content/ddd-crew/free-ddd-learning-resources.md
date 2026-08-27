@@ -4,7 +4,7 @@ description: "A collection of resources for learning DDD. All are free to access
 repo: "https://github.com/ddd-crew/free-ddd-learning-resources"
 canonical: "https://ddd-crew.github.io/free-ddd-learning-resources/"
 license: "CC-BY-SA-4.0"
-stars: 845
+stars: 846
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
   - { name: "Baasie", url: "https://github.com/Baasie" }
