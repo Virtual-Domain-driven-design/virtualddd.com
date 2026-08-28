@@ -7,6 +7,7 @@ typeOfSession: "hands-on"
 level: ["Intermediate"]
 tags: ["collaborative modelling"]
 video: "https://youtube.com/live/iHa6u4t-kOA"
+miro: "https://miro.com/app/board/uXjVHtDikFA=/?share_link_id=44871807136"
 meet: "https://meet.google.com/sii-hbfj-iyp"
 humanitix: "https://events.humanitix.com/collaborative-data-modelling-discovering-domain-types"
 organiser: "Andrea Magnorsky"
