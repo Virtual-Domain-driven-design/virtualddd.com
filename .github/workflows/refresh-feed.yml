@@ -58,7 +58,17 @@ jobs:
           # No answer is not a reason to rebuild. Bluesky being unreachable from
           # this runner says nothing about the site, and rebuilding on it would
           # bake in whatever the build's own fetch got — possibly nothing.
-          newest=$(printf '%s' "$feed" | jq -r '.feed[0].post.uri // empty' | awk -F/ '{print $NF}')
+          #
+          # The `|| true` is the same guard as the count below, one check
+          # earlier. curl's own failure is already handled, so an empty `$feed`
+          # leaves jq quiet and this branch is taken. A body that is not JSON at
+          # all is the gap: a proxy's 502 page, a challenge, anything Bluesky
+          # did not write. jq exits 2 on it, `pipefail` carries that out of the
+          # pipe, and `set -e` kills the step one line above the warning written
+          # for exactly this case. The parse error still reaches stderr, where
+          # it is diagnosable; what changes is that the check lives long enough
+          # to take its own false branch.
+          newest=$(printf '%s' "$feed" | jq -r '.feed[0].post.uri // empty' | awk -F/ '{print $NF}' || true)
           if [ -z "$newest" ]; then
             echo "::warning::Bluesky did not answer, or has no posts. Nothing to compare, so nothing to do."
             echo "rebuild=false" >> "$GITHUB_OUTPUT"
