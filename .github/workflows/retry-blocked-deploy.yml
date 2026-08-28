@@ -86,6 +86,13 @@ jobs:
           # would have retried every deterministic misconfiguration there is.
           # This endpoint returns only what was actually raised.
           #
+          # Which puts the whole judgement in `deploy.yml`, where it belongs:
+          # that step is the only thing that ever sees ssh's message, and it
+          # now classifies its own failures rather than letting one exit
+          # anonymously. Nothing here needs to learn a second sentence. If a
+          # blocked deploy is ever left red again, the fix is a case arm in
+          # that step's `network_failure`, not a log grep here.
+          #
           # Annotations are written as the job finishes and this trigger can be
           # quicker than they are, so ask a few times. Not finding one is the
           # safe answer and costs only what today already costs: no retry, the
@@ -101,7 +108,8 @@ jobs:
           case "$msg" in
             *"Cannot reach the host on port"*) ;;
             *)
-              echo "The Deploy step failed, but not on the reachability probe:"
+              echo "The Deploy step failed, but not in a way that says the host refused"
+              echo "this runner:"
               echo "  ${msg:-no annotation could be read}"
               echo "Another runner would fail the same way, so it is left alone."
               exit 0

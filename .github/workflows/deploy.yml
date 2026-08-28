@@ -275,20 +275,79 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+
           # Say why, when it does not work. Swallowing ssh-keyscan's stderr
           # once cost an afternoon: the deploy failed in six silent seconds
           # because there was no host key to verify against, and the log said
           # nothing at all.
-          if ! timeout 20 bash -c "</dev/tcp/$HOST/$PORT" 2>/dev/null; then
+          #
+          # This is the sentence `retry-blocked-deploy.yml` looks for. It reads
+          # annotations and never logs, on purpose, so a failure that raises no
+          # annotation is a failure nobody retries. Four deploys between 27 and
+          # 28 August died with nothing but "exit code 255" for exactly that
+          # reason: the reachability probe that used to live here had already
+          # passed, so this never printed, and the retry stood down on all four
+          # while the site went eight commits stale.
+          blocked() {
             echo "::error::Cannot reach the host on port $PORT from this runner."
             echo "The host is up (it serves the site), so this is usually the host's"
             echo "brute-force protection blocking a GitHub runner IP. Kualo: cPHulk."
+          }
+
+          # Is a failure about this runner's IP, or about the deploy itself?
+          #
+          # ssh exits 255 for everything it dislikes, from a refused connection
+          # to a rejected key, so the code alone cannot tell the two apart: a
+          # July failure was an auth error carrying the same 255, and retrying
+          # that on a new runner would have looped until somebody noticed. The
+          # message can tell them apart, and this step is the only place that
+          # still has it — by the time the retry workflow looks, there is an
+          # annotation or there is nothing.
+          network_failure() {
+            case "$1" in
+              *"Connection timed out"*|*"Connection refused"*|*"No route to host"*|\
+              *"Network is unreachable"*|*"Connection reset by peer"*|*"Operation timed out"*)
+                return 0 ;;
+            esac
+            return 1
+          }
+
+          # Every ssh and rsync goes through here, so none of them can fail
+          # anonymously. stderr is captured rather than streamed so it can be
+          # classified after the fact, and printed either way so the log still
+          # reads as it did.
+          run() {
+            local rc=0
+            "$@" 2>/tmp/ssh.err || rc=$?
+            if [ -s /tmp/ssh.err ]; then cat /tmp/ssh.err >&2; fi
+            if [ "$rc" -eq 0 ]; then return 0; fi
+            if network_failure "$(cat /tmp/ssh.err)"; then
+              blocked
+            else
+              echo "::error::The deploy failed talking to the host (exit $rc), and not"
+              echo "because the host refused this runner. Another runner would fail the"
+              echo "same way, so nothing will retry it. See the log above."
+            fi
+            exit "$rc"
+          }
+
+          # ssh-keyscan *is* the reachability check. It opens a real SSH
+          # connection and completes the transport handshake, which the bare
+          # `</dev/tcp/$HOST/$PORT` probe that used to stand here never did:
+          # that one proved only that something accepted a socket, waved all
+          # four August lockouts through, and cost a third connection to a host
+          # that blocks on connection count.
+          run ssh-keyscan -T 15 -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts
+          # Reachable, and yet no key. keyscan is quiet about a connection that
+          # opens and then goes nowhere, and can report success having written
+          # nothing at all, so this is the lockout more often than it is a host
+          # that genuinely offered no key.
+          if ! grep -q . ~/.ssh/known_hosts; then
+            echo "ssh-keyscan connected but returned no host key."
+            cat /tmp/ssh.err
+            blocked
             exit 1
           fi
-          if ! ssh-keyscan -T 15 -p "$PORT" -H "$HOST" >> ~/.ssh/known_hosts 2>/tmp/keyscan.err; then
-            echo "::error::ssh-keyscan failed:"; cat /tmp/keyscan.err; exit 1
-          fi
-          grep -q . ~/.ssh/known_hosts || { echo "::error::ssh-keyscan returned no host key."; cat /tmp/keyscan.err; exit 1; }
           SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o StrictHostKeyChecking=yes -o ConnectTimeout=20"
           # The commit that was *built*, which is not github.sha when the sync
           # called this workflow — a release directory named after anything
@@ -310,7 +369,7 @@ jobs:
           # a symlink it may be a live site put there by someone else, and CI
           # is not the place to find out. Switching it over is a deliberate,
           # one-time human step; see docs/operations.md.
-          $SSH "$SSH_USER@$HOST" "
+          run $SSH "$SSH_USER@$HOST" "
             set -e
             if [ -e '$DOCROOT' ] && [ ! -L '$DOCROOT' ]; then
               echo '$DOCROOT exists and is a real directory, not a symlink.'
@@ -328,11 +387,11 @@ jobs:
             mkdir -p '$RELEASE'
           "
 
-          rsync --archive --compress --delete --human-readable \
+          run rsync --archive --compress --delete --human-readable \
             -e "$SSH" dist/ "$SSH_USER@$HOST:$RELEASE/"
 
           # The swap, and tidy up old releases.
-          $SSH "$SSH_USER@$HOST" "
+          run $SSH "$SSH_USER@$HOST" "
             set -e
             ln -sfn \"\$HOME/$RELEASE\" '$DOCROOT'
             ls -1dt \"\$HOME\"/releases/*/ | tail -n +\$(( $KEEP + 1 )) | xargs -r rm -rf
