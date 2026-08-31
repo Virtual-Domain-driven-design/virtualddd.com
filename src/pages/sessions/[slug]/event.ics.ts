@@ -43,6 +43,14 @@ export function GET({ props, params, site }: APIContext) {
     d.organiser ? `Hosted by ${d.organiser}.` : '',
     `Details: ${url}`,
     d.humanitix ? `RSVP: ${d.humanitix}` : '',
+    // The board people work on during the session, when there is one. It is
+    // usually filled in late, and this file cannot chase a copy somebody has
+    // already imported: iCalendar has no way to push into a calendar from a
+    // static file. So a board added before the session goes live reaches
+    // everyone who adds it, and one added afterwards reaches only the
+    // downloads that follow. The Google invite in n8n is the half that can be
+    // pushed, and is where a late board is announced.
+    d.miro ? `Miro board: ${d.miro}` : '',
   ].filter(Boolean).join('\n');
 
   const body = [
