@@ -234,6 +234,7 @@ jobs:
           # in n8n, which is where the alert kinds are generated anyway. One
           # message per line, because Discord refuses anything over 2000
           # characters and a sync that renames eight organisers exceeds it.
+          printf '%s' "$items" | RUN="$RUN" node scripts/alerts-to-discord.mjs > messages.ndjson
           failed=0
           while IFS= read -r payload; do
             [ -n "$payload" ] || continue
@@ -248,9 +249,8 @@ jobs:
             # seconds. A sync rarely produces more than three messages, but a
             # first run against a full board can.
             sleep 1
-          done <<EOF
-          $(printf '%s' "$items" | RUN="$RUN" node scripts/alerts-to-discord.mjs)
-          EOF
+          done < messages.ndjson
+          rm -f messages.ndjson
 
           # Never fails the run. These alerts are editorial, and publishing must
           # not be held hostage to a chat webhook — but an alert that silently
