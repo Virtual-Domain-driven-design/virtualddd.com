@@ -39,7 +39,6 @@ jobs:
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
         run: |
-          : > detail.txt   # so the notification step always has something to read
           [ -n "$SITE_URL" ] || { echo "No SITE_URL secret, so there is nothing to check."; exit 0; }
           if node scripts/verify-live.mjs "$SITE_URL" --all > urls.log 2>&1; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
@@ -48,14 +47,6 @@ jobs:
           fi
           cat urls.log
           cat urls.log >> "$GITHUB_STEP_SUMMARY"
-          # The counts and the first problems — enough to tell one dead page
-          # from the whole map gone. A file rather than a step output, because
-          # this is many lines of somebody else's text and it has no business
-          # being interpolated into a shell command.
-          {
-            grep -E '^\s+(200|301|410|problems|www)' urls.log || true
-            grep -A 12 '^problems:' urls.log | head -12 || true
-          } > detail.txt
 
       - name: How long has the certificate got?
         id: cert
@@ -71,38 +62,14 @@ jobs:
           echo "days=$days" >> "$GITHUB_OUTPUT"
           echo "expires=$end" >> "$GITHUB_OUTPUT"
 
-      # CI sends facts; n8n decides the wording. Nothing is posted when all is
-      # well — a weekly "still fine" is a message people learn to skip, and the
-      # run itself is the record.
-      - name: Say so, if anything is wrong
-        if: always()
-        env:
-          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
-          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
-        run: |
-          [ -n "$HOOK" ] || { echo "No webhook configured, so nobody was told."; exit 0; }
-          code=$(jq -n \
-            --arg site "${{ secrets.SITE_URL }}" \
-            --argjson urlsOk ${{ steps.urls.outputs.ok || 'true' }} \
-            --rawfile detail detail.txt \
-            --argjson certDays ${{ steps.cert.outputs.days || 0 }} \
-            --arg certExpires "${{ steps.cert.outputs.expires }}" \
-            --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            '{event:"site-check", site:$site, urlsOk:$urlsOk, detail:$detail, certDays:$certDays, certExpires:$certExpires, run:$run}' \
-            | curl -sS -o /dev/null -w '%{http_code}' -X POST \
-                -H 'Content-Type: application/json' \
-                -H "X-VirtualDDD-Token: $TOKEN" \
-                -d @- "$HOOK")
-          case "$code" in
-            2*) echo "Told n8n ($code)." ;;
-            *)  echo "::warning::n8n answered $code; if anything was wrong, nobody has been told." ;;
-          esac
-
-      # Red, not just a message. A failed scheduled run emails the account that
-      # last changed this workflow, straight from GitHub — which is the point:
-      # the Discord line above travels through n8n and a webhook, the same kind
-      # of chain it is watching, and an alert that quietly went nowhere is the
-      # failure this repository keeps finding.
+      # Red, and only red. A failed scheduled run emails the account that last
+      # changed this workflow, straight from GitHub — which is the point: the
+      # Discord line that used to be here travelled through n8n and a webhook,
+      # the same kind of chain it was watching, and an alert that quietly went
+      # nowhere is the failure this repository keeps finding.
+      #
+      # Nothing is said when all is well. A weekly "still fine" is a message
+      # people learn to skip, and the run itself is the record.
       - name: Fail the run if the site is not keeping its promises
         if: always()
         run: |
@@ -112,10 +79,12 @@ jobs:
             bad=1
           fi
           days=${{ steps.cert.outputs.days || 0 }}
-          # AutoSSL renews with about a month to go. Two weeks out it has not
+          # AutoSSL renews with about a month to go. Three weeks out it has not
           # renewed, and that is a conversation with the host rather than
-          # something to keep watching.
-          if [ "$days" -gt 0 ] && [ "$days" -lt 14 ]; then
+          # something to keep watching. This was fourteen days while a separate
+          # Discord notice fired at twenty-one; with that notice gone the run
+          # itself has to be the thing that speaks up in time.
+          if [ "$days" -gt 0 ] && [ "$days" -lt 21 ]; then
             echo "::error::The certificate expires in $days days and has not been renewed."
             bad=1
           fi

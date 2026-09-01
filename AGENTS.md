@@ -166,9 +166,11 @@ The pipeline tells you rather than waiting to be asked. What lands where:
 | Nothing has synced for hours, and no run was even started | The **VirtualDDD hourly sync** workflow in n8n. It keeps the hourly clock, because GitHub's own cron drops and delays scheduled runs on a quiet repository; that cron is only the backstop and *is* expected to run late |
 | Nobody knows | Ask on [Discord](https://discord.gg/tRJkcsFDKN). The organisers read it |
 
-Deploy and sync notifications reach Discord through n8n. If a message never
-arrives, the run is still the record: the workflow summary says what happened,
-whether or not anyone was told.
+Deploy and sync notifications go straight to Discord from the workflow, on
+`DISCORD_WEBHOOK`. If a message never arrives, the run is still the record: the
+workflow summary says what happened, whether or not anyone was told. A deploy
+that *failed* says nothing in Discord at all — GitHub emails whoever last
+touched the workflow, and that is the whole signal.
 
 ## The counts
 

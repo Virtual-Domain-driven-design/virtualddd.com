@@ -201,8 +201,7 @@ jobs:
       - name: Anything only a person can decide?
         if: steps.diff.outputs.changed == 'true'
         env:
-          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
-          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
+          HOOK: ${{ secrets.DISCORD_WEBHOOK }}
           RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           [ -n "$HOOK" ] || { echo "No webhook configured, so nobody was told."; exit 0; }
@@ -230,20 +229,38 @@ jobs:
           items=$(git show HEAD:data/sync-alerts.json 2>/dev/null \
             | node scripts/new-alerts.mjs data/sync-alerts.json)
           [ "$items" = "[]" ] && { echo "The file changed, but nothing in it is new."; exit 0; }
-          code=$(jq -n --argjson items "$items" --arg run "$RUN" \
-            '{event:"sync-alerts", items:$items, run:$run}' \
-            | curl -sS -o /dev/null -w '%{http_code}' -X POST \
-                -H 'Content-Type: application/json' \
-                -H "X-VirtualDDD-Token: $TOKEN" \
-                -d @- "$HOOK")
+
+          # The wording lives in the repository now rather than in a code node
+          # in n8n, which is where the alert kinds are generated anyway. One
+          # message per line, because Discord refuses anything over 2000
+          # characters and a sync that renames eight organisers exceeds it.
+          failed=0
+          while IFS= read -r payload; do
+            [ -n "$payload" ] || continue
+            code=$(printf '%s' "$payload" \
+              | curl -sS -o /dev/null -w '%{http_code}' -X POST \
+                  -H 'Content-Type: application/json' -d @- "$HOOK")
+            case "$code" in
+              2*) ;;
+              *)  failed=1; echo "::warning::Discord answered $code for one alert message." ;;
+            esac
+            # Discord rate-limits webhooks at roughly five posts per two
+            # seconds. A sync rarely produces more than three messages, but a
+            # first run against a full board can.
+            sleep 1
+          done <<EOF
+          $(printf '%s' "$items" | RUN="$RUN" node scripts/alerts-to-discord.mjs)
+          EOF
+
           # Never fails the run. These alerts are editorial, and publishing must
           # not be held hostage to a chat webhook — but an alert that silently
           # went nowhere is worse than no alert, so it is said out loud.
-          case "$code" in
-            2*) echo "Raised with the organisers ($code)." ;;
-            403) echo "::warning::n8n rejected the alert (403). Is N8N_WEBHOOK_TOKEN set, and does it match the Header Auth credential in n8n?" ;;
-            *)   echo "::warning::n8n answered $code; these alerts reached nobody:"; echo "$items" | jq -r '.[] | "  " + .kind + ": " + .title' ;;
-          esac
+          if [ "$failed" = 1 ]; then
+            echo "::warning::Some alerts reached nobody:"
+            echo "$items" | jq -r '.[] | "  " + .kind + ": " + .title'
+          else
+            echo "Raised with the organisers."
+          fi
 
       - name: Commit
         id: commit

@@ -362,109 +362,47 @@ jobs:
         run: npm run verify:live "${{ secrets.SITE_URL }}"
 
       # Only after the site is actually live, so a post never links to a page
-      # that has not shipped. And a warning rather than a failure for the same
-      # reason: by this point the site is deployed and verified, so a message
-      # nobody received is not grounds for calling a good deploy bad.
-      - name: Tell n8n what shipped
+      # that has not shipped. A warning rather than a failure: by this point the
+      # site is deployed and verified, so a message nobody received is not
+      # grounds for calling a good deploy bad.
+      #
+      # Two shapes on purpose. A run called by sync.yml carries a content
+      # summary in `changes`; a push to main carries none, and that is a code
+      # release. Saying which is which costs one branch and saves the reader
+      # from opening the commit to find out.
+      - name: Tell Discord what shipped
         if: success() && steps.target.outputs.ready == 'true'
         env:
-          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
-          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
+          HOOK: ${{ secrets.DISCORD_WEBHOOK }}
           CHANGES: ${{ inputs.changes }}
           SERVER: ${{ github.server_url }}
           REPO: ${{ github.repository }}
           RUN_ID: ${{ github.run_id }}
         run: |
-          [ -n "$HOOK" ] || { echo "no deploy webhook configured, skipping"; exit 0; }
+          [ -n "$HOOK" ] || { echo "no Discord webhook configured, skipping"; exit 0; }
           # What was built, not what triggered the run — see the `ref` input.
-          # A Discord post linking to the commit before the one it published
-          # is how this defect stayed invisible.
+          # A Discord post linking to the commit before the one it published is
+          # how that defect stayed invisible.
           built=$(git rev-parse HEAD)
-          code=$(jq -n \
-            --arg commit "$built" \
-            --arg url "$SERVER/$REPO/commit/$built" \
-            --arg changes "$CHANGES" \
-            --arg run "$SERVER/$REPO/actions/runs/$RUN_ID" \
-            '{event:"deployed", site:"https://virtualddd.com", commit:$commit, commitUrl:$url, changes:$changes, run:$run}' \
+          subject=$(git log -1 --format='%s')
+
+          if [ -n "$CHANGES" ]; then
+            body="**New content on virtualddd.com.**
+          $CHANGES"
+          else
+            body="**A new release shipped to virtualddd.com.**
+          $subject"
+          fi
+          body="$body
+          https://virtualddd.com
+          commit $SERVER/$REPO/commit/$built
+          run $SERVER/$REPO/actions/runs/$RUN_ID"
+
+          code=$(jq -n --arg content "$body" '{content:$content}' \
             | curl -sS -o /dev/null -w '%{http_code}' -X POST \
                 -H 'Content-Type: application/json' \
-                -H "X-VirtualDDD-Token: $TOKEN" \
                 -d @- "$HOOK")
           case "$code" in
-            2*) echo "n8n was told ($code)." ;;
-            403) echo "::warning::n8n rejected the notice (403). Is N8N_WEBHOOK_TOKEN set, and does it match the Header Auth credential in n8n?" ;;
-            *)   echo "::warning::n8n answered $code; nothing was posted to Discord. The deploy itself is fine." ;;
-          esac
-
-      # The other half of the pair, and the reason it exists: for eleven months
-      # the only event this pipeline could send was `deployed`, gated on
-      # `success()`. On 2026-08-03 one guest's Website property was typed
-      # without a scheme, `astro check` rejected it, and twelve consecutive
-      # deploys failed overnight without a single message. The site was twelve
-      # hours stale before a person noticed by accident.
-      #
-      # `if: failure()` rather than `always()`: a cancelled run is somebody
-      # pressing cancel, and it does not need announcing.
-      #
-      # Which step broke is read from the ids above rather than from the API,
-      # so this needs no extra token scope and cannot itself fail on a rate
-      # limit. Only one of them can be `failure`, because the job stops there.
-      #
-      # n8n decides whether anyone is told: it holds the last known state and
-      # posts the *first* failure and the recovery, not all twelve. Repeating
-      # an alert hourly is how people learn to scroll past the channel.
-      - name: Tell n8n it broke
-        if: failure()
-        env:
-          HOOK: ${{ secrets.N8N_DEPLOY_WEBHOOK }}
-          TOKEN: ${{ secrets.N8N_WEBHOOK_TOKEN }}
-          SERVER: ${{ github.server_url }}
-          REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.run_id }}
-          EVENT: ${{ github.event_name }}
-          GUARD: ${{ steps.guard.outcome }}
-          TYPES: ${{ steps.types.outcome }}
-          BUILD: ${{ steps.build.outcome }}
-          TESTS: ${{ steps.tests.outcome }}
-          RELEASE: ${{ steps.release.outcome }}
-          VERIFY: ${{ steps.verify.outcome }}
-        run: |
-          [ -n "$HOOK" ] || { echo "no deploy webhook configured, skipping"; exit 0; }
-          built=$(git rev-parse HEAD)
-
-          step="an earlier step"
-          [ "$GUARD"   = failure ] && step="Did anyone hand-edit the generated content?"
-          [ "$TYPES"   = failure ] && step="Types"
-          [ "$BUILD"   = failure ] && step="Build"
-          [ "$TESTS"   = failure ] && step="Contracts, redirects and browser behaviour"
-          [ "$RELEASE" = failure ] && step="Deploy"
-          [ "$VERIFY"  = failure ] && step="Verify the deployed host"
-
-          # Only the three tee'd steps leave a log, and each truncates it as it
-          # starts, so the file belongs to the step that failed or does not
-          # exist. Anything else sends the step name alone rather than the tail
-          # of a step that passed.
-          detail=""
-          case "$step" in
-            Types|Build|Contracts*)
-              [ -f /tmp/step-output.log ] && detail=$(tail -n 12 /tmp/step-output.log) ;;
-          esac
-
-          code=$(jq -n \
-            --arg commit "$built" \
-            --arg url "$SERVER/$REPO/commit/$built" \
-            --arg step "$step" \
-            --arg detail "$detail" \
-            --arg trigger "$EVENT" \
-            --arg run "$SERVER/$REPO/actions/runs/$RUN_ID" \
-            '{event:"deploy-failed", site:"https://virtualddd.com", commit:$commit, commitUrl:$url, step:$step, detail:$detail, trigger:$trigger, run:$run}' \
-            | curl -sS -o /dev/null -w '%{http_code}' -X POST \
-                -H 'Content-Type: application/json' \
-                -H "X-VirtualDDD-Token: $TOKEN" \
-                -d @- "$HOOK")
-          # Never turns a red run a different colour, and never makes a red run
-          # pass. The deploy has already failed; this is only the telling.
-          case "$code" in
-            2*) echo "n8n was told the deploy failed at: $step" ;;
-            *)  echo "::warning::n8n answered $code, so nobody was told the deploy failed. The failure above is the real one." ;;
+            2*) echo "Discord was told ($code)." ;;
+            *)  echo "::warning::Discord answered $code; nothing was posted. The deploy itself is fine." ;;
           esac

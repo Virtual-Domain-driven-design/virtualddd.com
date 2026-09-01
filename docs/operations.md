@@ -71,12 +71,14 @@ than daily because a request for every address is a real load on a shared
 host, and neither
 failure is one you would fix within the hour.
 
-Two thresholds, doing different jobs. A certificate with **under 21 days** gets
-a Discord line: it should have renewed by now, worth an eye. **Under 14 days**,
-or any broken address, fails the run. A red scheduled run emails the account
-that last changed the workflow, from GitHub, rather than through n8n and a
-webhook. The louder signal deliberately does not travel the same kind of chain
-it is watching.
+One threshold, doing one job. A certificate with **under 21 days**, or any
+broken address, fails the run. A red scheduled run emails the account that last
+changed the workflow, from GitHub, and that is now the only signal: the Discord
+line that used to fire at 21 days travelled through n8n and a webhook, the same
+kind of chain this workflow is watching, so it went when the webhooks did. The
+failing threshold moved from 14 days to 21 to cover the window that line held.
+Expect a few consecutive red Mondays when a renewal really does stall. That is
+the intent.
 
 ## Keeping the packages current
 

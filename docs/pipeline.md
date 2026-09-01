@@ -18,8 +18,8 @@ to a script and a commit, never an outage. Keep it that way.
 
 ```
                      ┌── n8n, hourly ──┐
-Notion ──────────────┤  n8n dispatch   ├──► sync.yml ──► deploy.yml ──► n8n
-        (a session   └── GitHub cron ──┘     (~20s)      build, test,   Discord
+Notion ──────────────┤  n8n dispatch   ├──► sync.yml ──► deploy.yml ──► Discord
+        (a session   └── GitHub cron ──┘     (~20s)      build, test,
          going live)     (backstop)                      rsync
 ```
 
@@ -228,8 +228,8 @@ leaving a stale alert behind, and one collection cannot erase another's.
 
 It carries no timestamp on purpose: a `generated` field would change on every
 run, and *nothing deploys unless the sync produced a diff* would quietly become
-false. `sync.yml` posts it to n8n only when the file itself changed, which is
-what stops the same alert being raised every hour for weeks.
+false. `sync.yml` posts it to Discord only when the file itself changed, which
+is what stops the same alert being raised every hour for weeks.
 
 **It must be committed, and `.gitignore` must never claim it.** The "has this
 changed?" test is `git status --porcelain` on that one file, and for an ignored
