@@ -4,7 +4,7 @@ description: "A structured approach to designing and documenting each of your bo
 repo: "https://github.com/ddd-crew/bounded-context-canvas"
 canonical: "https://ddd-crew.github.io/bounded-context-canvas/"
 license: "CC-BY-SA-4.0"
-stars: 2049
+stars: 2050
 heroImage: "./_assets/bounded-context-canvas/bounded-context-canvas-v5.jpg"
 contributors:
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
