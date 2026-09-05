@@ -1,12 +1,6 @@
 {
   "items": [
     {
-      "kind": "image-source-gone",
-      "section": "session guests",
-      "title": "marco-schneider (photo): showing the last copy we downloaded",
-      "url": "https://cdn.sessionize.com/image/69db-400o400o2-JU526M8cHcq9s48LqDXEdx.png"
-    },
-    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
