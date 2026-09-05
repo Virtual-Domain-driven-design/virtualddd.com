@@ -4,7 +4,7 @@ description: "A structured approach to designing and documenting Aggregates"
 repo: "https://github.com/ddd-crew/aggregate-design-canvas"
 canonical: "https://ddd-crew.github.io/aggregate-design-canvas/"
 license: "CC-BY-SA-4.0"
-stars: 819
+stars: 820
 heroImage: "./_assets/aggregate-design-canvas/aggregate-design-canvas-v1.1.png"
 contributors:
   - { name: "cakper", url: "https://github.com/cakper" }
