@@ -1,12 +1,6 @@
 {
   "items": [
     {
-      "kind": "image-source-gone",
-      "section": "conferences",
-      "title": "kandddinsky (logo): showing the last copy we downloaded",
-      "url": "https://kandddinsky.de/img/design/logo_dark.svg"
-    },
-    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
