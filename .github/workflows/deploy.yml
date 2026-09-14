@@ -332,10 +332,25 @@ jobs:
             -e "$SSH" dist/ "$SSH_USER@$HOST:$RELEASE/"
 
           # The swap, and tidy up old releases.
+          #
+          # The prune only ever deletes directories named like a commit
+          # sha, and that filter is load-bearing rather than tidy-minded.
+          # `~/releases` is shared with collaborative-software-design.com,
+          # which keeps its releases in `~/releases/<its domain>/<sha>`.
+          # That namespace directory matched the bare `*/` glob this line
+          # used to use, so it competed with our own releases for a place
+          # in the newest five, and on 9 September 2026 it lost: the whole
+          # directory went, including the release that site was serving,
+          # and it answered 404 on every address until it was redeployed.
+          # Counting after the filter rather than before is part of the
+          # fix: a neighbour's directory must not use up one of our slots
+          # either.
           $SSH "$SSH_USER@$HOST" "
             set -e
             ln -sfn \"\$HOME/$RELEASE\" '$DOCROOT'
-            ls -1dt \"\$HOME\"/releases/*/ | tail -n +\$(( $KEEP + 1 )) | xargs -r rm -rf
+            ls -1dt \"\$HOME\"/releases/*/ \
+              | grep -E '/[0-9a-f]{40}/\$' \
+              | tail -n +\$(( $KEEP + 1 )) | xargs -r rm -rf
             echo \"live: \$(readlink '$DOCROOT')\"
           "
           rm -f ~/.ssh/deploy_key
