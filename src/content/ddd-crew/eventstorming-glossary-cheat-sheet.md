@@ -16,10 +16,15 @@ contributors:
   - { name: "MarcelMichau", url: "https://github.com/MarcelMichau" }
   - { name: "mploed", url: "https://github.com/mploed" }
   - { name: "poulainpi", url: "https://github.com/poulainpi" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
 ---
 EventStorming is the smartest approach to collaborate beyond silo boundaries. The power of EventStorming comes from a diverse multi-disciplined group of people who, together, have a lot of wisdom and knowledge. While it originally was invented for a workshop to model domain-driven design aggregates, it now has a broader spectrum. From gaining a big-picture problem space of the whole domain to gaining insight into the entire software delivery flow and creating a long term planning. Every one of these workshops has the same basic requirements and needs. 
 
 Here you will find a combination of a glossary of terms on EventStorming core concepts written down in a consistent and comprehensive glossary. Just be sure to try and avoid jargon as much as possible, as it sets up the unnecessary insider-outsider distinction. And a Cheat sheet that you can use facilitating your own EventStorming.
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet/blob/main/translations/pt-br/README.md)
 
 ## Glossary
 
