@@ -1,6 +1,12 @@
 {
   "items": [
     {
+      "kind": "dates-passed",
+      "section": "conferences",
+      "title": "Explore DDD last ran 2026-09-25, so its card now says no new dates are announced",
+      "url": "https://exploreddd.com/"
+    },
+    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
