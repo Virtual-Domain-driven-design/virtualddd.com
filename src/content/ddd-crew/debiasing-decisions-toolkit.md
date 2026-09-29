@@ -4,7 +4,7 @@ description: "Structured behavioural interventions for better decisions in softw
 repo: "https://github.com/ddd-crew/debiasing-decisions-toolkit"
 canonical: "https://ddd-crew.github.io/debiasing-decisions-toolkit/"
 license: "CC-BY-SA-4.0"
-stars: 30
+stars: 42
 contributors:
   - { name: "Baasie", url: "https://github.com/Baasie" }
 ---
