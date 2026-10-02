@@ -4,7 +4,7 @@ description: "The “Collaborative Modeling Workshop Preparation Canvas” is a 
 repo: "https://github.com/ddd-crew/como-prep-canvas"
 canonical: "https://ddd-crew.github.io/como-prep-canvas/"
 license: "CC-BY-SA-4.0"
-stars: 33
+stars: 35
 heroImage: "./_assets/como-prep-canvas/como-prep-canvas-v2.jpg"
 contributors:
   - { name: "beija", url: "https://github.com/beija" }
