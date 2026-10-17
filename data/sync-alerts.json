@@ -7,6 +7,12 @@
       "url": "https://exploreddd.com/"
     },
     {
+      "kind": "dates-passed",
+      "section": "conferences",
+      "title": "KanDDDinsky last ran 2026-10-16, so its card now says no new dates are announced",
+      "url": "https://kandddinsky.de/"
+    },
+    {
       "kind": "notion-schema-drift",
       "section": "/sessions/",
       "title": "Humantix is read by the sync, but the database has no such property",
