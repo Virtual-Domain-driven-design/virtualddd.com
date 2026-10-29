@@ -397,11 +397,32 @@ describe('sessions in their two states', () => {
     }
   });
 
-  test('the calendar file states the session\'s real start time', () => {
+  test('the calendar file states the session\'s real start time', (t) => {
     // A timezone slip here is invisible on the site and puts the event in
     // someone's calendar at the wrong hour.
     const offering = all.filter((p) => p.html.includes('data-test="add-to-calendar"'));
-    assert.ok(offering.length > 0, 'no session offers a calendar file');
+
+    // A calendar file is offered for an upcoming session and no other, so
+    // "none at all" is the ordinary state of a site between sessions. It is a
+    // state the site is built for: `NoSessionsYet` is the page that says so.
+    // This used to assert `offering.length > 0` outright, which turned an
+    // empty calendar into a failed deploy. It blocked every deploy for six
+    // days after the session on 2026-09-09, the last one scheduled, with
+    // nothing whatever wrong with the code. What blocks a deploy must be about
+    // code being wrong, never about what is or is not in Notion; see AGENTS.md.
+    //
+    // Skipped rather than quietly passed, because a green tick for "there was
+    // nothing to check" is indistinguishable from one for "everything passed".
+    // The vacuum this guard was protecting against is still covered: if a
+    // session *is* upcoming it must offer a way in, which the test above
+    // checks, so a generator that stopped emitting calendar files cannot hide
+    // behind this skip.
+    const upcoming = sessionPages().filter((p) => !finished(p));
+    if (!upcoming.length) {
+      t.skip('no session is upcoming, so none offers a calendar file');
+      return;
+    }
+    assert.ok(offering.length > 0, 'sessions are upcoming but none offers a calendar file');
     for (const p of offering) {
       const ics = readFileSync(`${DIST}${p.path}event.ics`, 'utf8');
       const stamp = ics.match(/DTSTART:(\d{8}T\d{6})Z/)[1];

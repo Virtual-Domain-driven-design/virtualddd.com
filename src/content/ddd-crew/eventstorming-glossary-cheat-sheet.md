@@ -4,22 +4,32 @@ description: "EventStorming is the smartest approach to collaborate beyond silo 
 repo: "https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet"
 canonical: "https://ddd-crew.github.io/eventstorming-glossary-cheat-sheet/"
 license: "CC-BY-SA-4.0"
-stars: 979
+stars: 993
 heroImage: "./_assets/eventstorming-glossary-cheat-sheet/core-concepts.jpg"
 contributors:
   - { name: "Baasie", url: "https://github.com/Baasie" }
-  - { name: "NTCoding", url: "https://github.com/NTCoding" }
   - { name: "yellowbrickc", url: "https://github.com/yellowbrickc" }
+  - { name: "NTCoding", url: "https://github.com/NTCoding" }
+  - { name: "mrueg", url: "https://github.com/mrueg" }
   - { name: "kdmsnr", url: "https://github.com/kdmsnr" }
   - { name: "pimsmeets", url: "https://github.com/pimsmeets" }
   - { name: "hibri", url: "https://github.com/hibri" }
   - { name: "MarcelMichau", url: "https://github.com/MarcelMichau" }
   - { name: "mploed", url: "https://github.com/mploed" }
   - { name: "poulainpi", url: "https://github.com/poulainpi" }
+  - { name: "rodri-oliveira-dev", url: "https://github.com/rodri-oliveira-dev" }
 ---
 EventStorming is the smartest approach to collaborate beyond silo boundaries. The power of EventStorming comes from a diverse multi-disciplined group of people who, together, have a lot of wisdom and knowledge. While it originally was invented for a workshop to model domain-driven design aggregates, it now has a broader spectrum. From gaining a big-picture problem space of the whole domain to gaining insight into the entire software delivery flow and creating a long term planning. Every one of these workshops has the same basic requirements and needs. 
 
 Here you will find a combination of a glossary of terms on EventStorming core concepts written down in a consistent and comprehensive glossary. Just be sure to try and avoid jargon as much as possible, as it sets up the unnecessary insider-outsider distinction. And a Cheat sheet that you can use facilitating your own EventStorming.
+
+## Printable Cheat Sheet
+
+A one-page DIN A4 cheat sheet to hand out to workshop participants is available as [PDF](https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet/blob/main/cheatsheet/eventstorming-cheatsheet.pdf) (source: [cheatsheet.html](https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet/blob/main/cheatsheet/cheatsheet.html), rendered with `google-chrome --headless --no-pdf-header-footer --print-to-pdf=eventstorming-cheatsheet.pdf cheatsheet.html`).
+
+## Translations
+
+- [Brazilian Portuguese (pt-BR)](https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet/blob/main/translations/pt-br/README.md)
 
 ## Glossary
 
@@ -37,14 +47,14 @@ EventStorming is a powerful tool when we have a story to tell, when we have a ti
 ![Core Concepts](./_assets/eventstorming-glossary-cheat-sheet/core-concepts.jpg)
 
 **Chaotic Exploration**  
-Chaotic exploration can be used at the start of EventStorming. Each person writes Domain Events by themselves that they can think off. They will put these Domain Events in order they think they happen on the paper roll.
+Chaotic exploration can be used at the start of EventStorming. Each person writes Domain Events by themselves that they can think of. They will put these Domain Events in order they think they happen on the paper roll.
 
 **Enforce the Timeline**  
 A phase happening after chaotic exploration, meaning we try to make the timeline consistent and remove duplicate stickies.
 
 ### Big Picture EventStorming
 
-The goal of Big Picture EventStorming is to assess the health of an existing line of business or explore the viability of a new startup business model. It helps the group create a shared state of mind of the vision of that domain of the company. We can use the output as input for Conway’s law alignment, organising business flow around teams and software with emergent bounded contexts. You can do these workshop with 10-30+ people on one paper roll.
+The goal of Big Picture EventStorming is to assess the health of an existing line of business or explore the viability of a new startup business model. It helps the group create a shared state of mind of the vision of that domain of the company. We can use the output as input for Conway’s law alignment, organising business flow around teams and software with emergent bounded contexts. You can do these workshops with 10-30+ people on one paper roll.
 
 ![Example big picture](./_assets/eventstorming-glossary-cheat-sheet/big-picture.jpg)
 
@@ -90,10 +100,10 @@ The goal of process modelling EventStorming is to assess the health of a current
 *Source: https://leanpub.com/introducing_eventstorming*
 
 **Policy**  
-A policy is a reaction that says “whenever X happens, we do Y”, eventually ending up with in the flow between a Domain Event and a Command/action. We use a big lilac post-it for these. A policy can be an automated process or manual. A policy can also be named a reactor, eventual business constraint or rule or a lie detector because there is always more to policies than you first think.
+A policy is a reaction that says “whenever X happens, we do Y”, eventually ending up in the flow between a Domain Event and a Command/action. We use a big lilac post-it for these. A policy can be an automated process or manual. A policy can also be named a reactor, eventual business constraint or rule or a lie detector because there is always more to policies than you first think.
 
 **Command/Action**  
-Represents decisions, actions or intent. They can be initiated by an actor or from an automated process. During process EventStorming usually, the word "Action" usually fits better with stakeholders than command because it is easier to grasp. We officially use a blue coloured post-it for it.
+Represents decisions, actions or intent. They can be initiated by an actor or from an automated process. During process EventStorming, the word "Action" usually fits better with stakeholders than command because it is easier to grasp. We officially use a blue coloured post-it for it.
 
 **Query Model/Information**  
 To make decisions an actor might need information, we capture these in a Query Model. For process EventStorming information might be more recognised by stakeholders. We officially use a green post-it to represent a query model.
@@ -110,7 +120,7 @@ Enforcing the colour coding is playing EventStorming by the rules. Often used af
 The outcome of a design level EventStorming is to design clean and maintainable Event-Driven software, to support rapidly evolving businesses. Together with business stakeholders, we design a shared language and represent that in a shared model that brings value in solving a problem within a bounded context.
 
 **Constraint**  
-A constraint is a restriction we have or need to design from our problem space when we want to perform a command/action, another word could be consistent business constraint or rule. The official color to use is a big yellow post-it. It was called an aggregate before which is now officially a legacy word in EventStorming, since we prefer not to use the word aggregate with business stakeholders.
+A constraint is a restriction we have or need to design from our problem space when we want to perform a command/action, another word could be consistent business constraint or rule. The official color to use is a big pale yellow post-it. It was called an aggregate before which is now officially a legacy word in EventStorming, since we prefer not to use the word aggregate with business stakeholders.
 
 ![Software picture](./_assets/eventstorming-glossary-cheat-sheet/software-picture.jpg)
 ![Software design tools](./_assets/eventstorming-glossary-cheat-sheet/software-design.jpg)
@@ -129,7 +139,7 @@ There is nothing so annoying as not having the right material, so you want to ma
 
 #### Room setup
 
-The best picture still is the one from the book EventStorming on leanpub. The idea is to have a modelling surface around 6-8 meters, a table for putting the materials on and a visible legend for people to see. We want to have no seats in sight. Also, you want a room preferable where the windows can open so you can have fresh oxygen in the room and have some food or candies lying around.
+The best picture still is the one from the book EventStorming on leanpub. The idea is to have a modelling surface around 6-8 meters, a table for putting the materials on and a visible legend for people to see. We want to have no seats in sight. Also, you preferably want a room where the windows can open so you can have fresh oxygen in the room and have some food or candies lying around.
 
 ![Room setup](./_assets/eventstorming-glossary-cheat-sheet/room-setup.png)
 *Source: https://leanpub.com/introducing_eventstorming*
@@ -141,7 +151,7 @@ For an effective EventStorming workshop, you want to have a dedicated facilitato
 As a facilitator:
 
 * You want to have a neutral role so that you can cut long discussions short and visualise them with hotspots.
-* You need to find to balance to when you will intervene and when you will let the discussion flow.
+* You need to find the balance between when you will intervene and when you will let the discussion flow.
 * You are always the first in the room and the last to leave, so you can set up the room correctly and talk with people afterwards.
 * It is your job to facilitate the group and give them feedback and insights about the group interaction so that they can decide what to do. For instance, when you see multiple people looking on their phone, you can tell “I see that part of the group is distracted from the activity by looking on their phones”.
 * You have to observe and let the group figure out what their needs are, however sometimes you need to decide for them when the group can’t.
@@ -164,7 +174,7 @@ After you can discuss with the attendees if they themselves have rules they want
 
 ##### EventStorming
 
-Now it is time to give an intro on EventStorming. I usually tell a microstory to the people explaining why classic forms of collaboration don’t work for me, and why EventStorming is different. These are personal and I advice you to figure out such a story for yourself. Explain the basics of what a domain event is on the legend.
+Now it is time to give an intro on EventStorming. I usually tell a microstory to the people explaining why classic forms of collaboration don’t work for me, and why EventStorming is different. These are personal and I advise you to figure out such a story for yourself. Explain the basics of what a domain event is on the legend.
 
 ![Domain Event](./_assets/eventstorming-glossary-cheat-sheet/domain-event.png)
 *Source: https://leanpub.com/introducing_eventstorming*
@@ -184,7 +194,7 @@ After you are sure everyone is done with putting their domain events on the pape
 * Adding structure with tape when needed, but be careful adding structure too soon. You can lose valuable insights from doing so.
 
 **Step 3: Hotspots**
-During Step 2 we will get a lot of conflicts between several perceptions, which is good. Out of conflict we grow and gain new insights. However, to be able to manage these conflict we add a pinkish sticky where there are conflicts. We call these hotspots. Hotspots can also mean pain points or questions that are unanswered. As a facilitator, you at this phase add the hotspots.
+During Step 2 we will get a lot of conflicts between several perceptions, which is good. Out of conflict we grow and gain new insights. However, to be able to manage these conflicts we add a pinkish sticky where there are conflicts. We call these hotspots. Hotspots can also mean pain points or questions that are unanswered. As a facilitator, you at this phase add the hotspots.
 
 **Step 4: Add concepts when needed**
 Whenever another EventStorming concept pop-up, we add them to the legend and introduce these to the group. The picture that explains “almost” everything are the concepts you can add:

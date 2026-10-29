@@ -506,14 +506,26 @@ describe('time', () => {
     const ctx = await browser.newContext({ timezoneId: tz });
     const page = await ctx.newPage();
 
+    // A session's own page, and `data-format="datetime"` specifically.
+    //
+    // Only that format renders an hour (see src/scripts/local-time.ts), and an
+    // hour is the whole point: it is what makes a timezone swap unambiguous.
+    // This used to take the first `.js-local` on /sessions/, which is the
+    // featured *upcoming* session's hero. Between sessions there is no hero,
+    // the first match is a `shortdate` card with no hour in it, and the test
+    // failed because nobody had scheduled a meetup. A session page always
+    // states its own start time, upcoming or long past.
+    const [session] = sample('sessions', '/sessions/', 1);
+    const when = '.js-local[data-format="datetime"]';
+
     // What ships in the HTML, before any script runs.
-    await page.goto(`${base}/sessions/`, { waitUntil: 'domcontentloaded' });
-    const fallback = await page.$eval('.js-local', (el) => el.textContent.trim());
+    await page.goto(`${base}${session}`, { waitUntil: 'domcontentloaded' });
+    const fallback = await page.$eval(when, (el) => el.textContent.trim());
     assert.ok(fallback.length > 0, 'no server-rendered date to fall back to');
 
     await page.waitForTimeout(400);
-    const swapped = await page.$eval('.js-local', (el) => el.textContent.trim());
-    const iso = await page.$eval('.js-local', (el) => el.dataset.iso);
+    const swapped = await page.$eval(when, (el) => el.textContent.trim());
+    const iso = await page.$eval(when, (el) => el.dataset.iso);
     const expected = new Date(iso).toLocaleString('en-NZ', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
     const hour = expected.match(/\d{1,2}/)[0];
     assert.match(swapped, new RegExp(`\\b${hour}`), `${swapped} is not the ${tz} time of ${iso}`);

@@ -1169,7 +1169,7 @@
     },
     "4aee90a109b34072aa726e5f9fcbf98f": {
       "slug": "introducing-ddd-to-your-company-with-barry-o-sullivan",
-      "edited": "2026-07-26T11:17:00.000Z",
+      "edited": "2026-10-02T04:00:00.000Z",
       "hash": "fa37fe76bb62d977"
     },
     "50ed16cc746d45028959f66d78ed85b3": {
@@ -1184,7 +1184,7 @@
     },
     "588ccf99a34e4a8a8684ecb9e74563ab": {
       "slug": "domain-driven-frontend-with-francesco-strazzullo",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-09-18T04:00:00.000Z",
       "hash": "1a78d91cb5c49013"
     },
     "5e38bcfb59a847689f53e711e942d46d": {
@@ -1229,7 +1229,7 @@
     },
     "6c87cec4484a4526a21637428ef51b4c": {
       "slug": "transforming-business-models-in-the-pandemic-with-zsofia-herendi",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-10-23T04:00:00.000Z",
       "hash": "9daa58dba3d50921"
     },
     "6ca8744be64842ae97a31b3e6aa50eeb": {
@@ -1244,7 +1244,7 @@
     },
     "7283a44e1c4a41448a1db0b7b0fede43": {
       "slug": "remote-facilitation-with-kirsten-clacey-jay-allen-morris-and-jo-perold",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-09-11T04:00:00.000Z",
       "hash": "d15600d7543e5fe8"
     },
     "7334a0a3304540a89d690fff5b3a1da4": {
@@ -1329,7 +1329,7 @@
     },
     "949c2fe8c51047f8adacb83c8512d4f9": {
       "slug": "what-can-we-learn-from-open-source-with-matteo-collina",
-      "edited": "2026-07-29T05:55:00.000Z",
+      "edited": "2026-10-16T04:00:00.000Z",
       "hash": "8e79b41a5fdb0446"
     },
     "97612c5f9d7e49e1aa2d051b59507e90": {
@@ -1389,7 +1389,7 @@
     },
     "b211fc7414ac4ebd800ebeb57790a35b": {
       "slug": "long-term-impact-of-architectural-design-decision",
-      "edited": "2026-07-28T16:41:00.000Z",
+      "edited": "2026-10-09T04:00:00.000Z",
       "hash": "96fca1a1c11206ae"
     },
     "b296fbe291c143949dabd6876e6aaec5": {
@@ -1589,6 +1589,11 @@
       "edited": "2026-07-29T14:08:00.000Z",
       "hash": "69e49505227668ed"
     },
+    "28fa485afafc8002a7d1cd487b59f558": {
+      "slug": "architecture-standards-adoption",
+      "edited": "2026-09-29T06:16:00.000Z",
+      "hash": "5aec592f49e4ccab"
+    },
     "28fa485afafc8057967dfba5f1da6c57": {
       "slug": "true-cost-simplest-thing-to-do",
       "edited": "2026-07-29T14:08:00.000Z",
@@ -1624,6 +1629,11 @@
       "edited": "2026-07-29T14:08:00.000Z",
       "hash": "92310947d4e6ce7b"
     },
+    "30da485afafc802f9dd5c23da73cf87d": {
+      "slug": "team-self-selection-in-silence",
+      "edited": "2026-10-13T11:03:00.000Z",
+      "hash": "2a9212c6571fb3e1"
+    },
     "314a485afafc800ba59fd51a57cf8aa9": {
       "slug": "impact-mapping-before-architecture",
       "edited": "2026-07-29T14:07:00.000Z",
@@ -1658,6 +1668,11 @@
       "slug": "getting-data-out-export-architecture",
       "edited": "2026-09-01T06:16:00.000Z",
       "hash": "1090693d63516e3c"
+    },
+    "39ca485afafc80f5b7b4fb6a1d84835c": {
+      "slug": "building-community-of-practice-nobody-asked-for",
+      "edited": "2026-09-15T06:16:00.000Z",
+      "hash": "9a33e5d969a78229"
     }
   }
 }

@@ -58,7 +58,17 @@ jobs:
           # No answer is not a reason to rebuild. Bluesky being unreachable from
           # this runner says nothing about the site, and rebuilding on it would
           # bake in whatever the build's own fetch got — possibly nothing.
-          newest=$(printf '%s' "$feed" | jq -r '.feed[0].post.uri // empty' | awk -F/ '{print $NF}')
+          #
+          # The `|| true` is the same guard as the count below, one check
+          # earlier. curl's own failure is already handled, so an empty `$feed`
+          # leaves jq quiet and this branch is taken. A body that is not JSON at
+          # all is the gap: a proxy's 502 page, a challenge, anything Bluesky
+          # did not write. jq exits 2 on it, `pipefail` carries that out of the
+          # pipe, and `set -e` kills the step one line above the warning written
+          # for exactly this case. The parse error still reaches stderr, where
+          # it is diagnosable; what changes is that the check lives long enough
+          # to take its own false branch.
+          newest=$(printf '%s' "$feed" | jq -r '.feed[0].post.uri // empty' | awk -F/ '{print $NF}' || true)
           if [ -z "$newest" ]; then
             echo "::warning::Bluesky did not answer, or has no posts. Nothing to compare, so nothing to do."
             echo "rebuild=false" >> "$GITHUB_OUTPUT"
@@ -68,15 +78,38 @@ jobs:
           # -L because the apex may redirect, and a redirect body contains no
           # posts. Counting what was found makes a wrong answer diagnosable
           # instead of just wrong: zero posts means the page was not fetched.
+          #
+          # The `|| true` is what makes that count reachable at all. `grep` exits
+          # 1 when it matches nothing, `pipefail` carries that out of the pipe,
+          # `set -e` reads a failed assignment and kills the step three lines
+          # above the warning written for exactly this case. So the one run that
+          # most needed to say why it was unhappy was the one run that could not:
+          # 2026-08-21 and 2026-08-26 both ended with no output at all and exit
+          # 1, each after a host hiccup served something small instead of the
+          # home page. `grep -c` is not the fix; it counts matching lines, and
+          # the feed panel's markup puts more than one post on a line.
           page=$(curl -sSL --max-time 25 "$SITE/")
-          found=$(printf '%s' "$page" | grep -oE '/post/[a-z0-9]+' | wc -l)
+          found=$(printf '%s' "$page" | { grep -oE '/post/[a-z0-9]+' || true; } | wc -l)
           echo "Newest on Bluesky: \`$newest\`. Posts on the home page: $found." >> "$GITHUB_STEP_SUMMARY"
 
           if [ "$found" -eq 0 ]; then
             echo "::warning::Fetched $SITE/ and found no posts at all — the feed panel is missing, or the page did not load."
           fi
 
-          if printf '%s' "$page" | grep -q "$newest"; then
+          # A here-string rather than a pipe, and this is not a style choice.
+          # `grep -q` stops at the first match, and `$newest` sits about 42KB
+          # into a 135KB page, so `printf` was still writing when the pipe shut:
+          # SIGPIPE, status 141, and `pipefail` handed that to the `if` as a
+          # failure. Which read as "the page is not showing it" on every run
+          # where it *was* showing it, so `rebuild=false` had never once been
+          # taken and deploy.yml was dispatched at 07:0x daily. That is the
+          # unconditional daily rebuild the top of this file exists to avoid,
+          # spending the host's five-release rollback history every five days.
+          # The trailing-slash fix above was aimed at the same symptom and could
+          # not have cured it: the cause was never in the URL.
+          #
+          # -F because an rkey is a literal, not a pattern.
+          if grep -qF "$newest" <<<"$page"; then
             echo "rebuild=false" >> "$GITHUB_OUTPUT"
             echo "The home page is already showing it." >> "$GITHUB_STEP_SUMMARY"
           else

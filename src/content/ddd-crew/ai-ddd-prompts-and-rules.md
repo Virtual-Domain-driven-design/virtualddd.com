@@ -4,7 +4,7 @@ description: "DDD-related prompts and rules to use with your favourite coding as
 repo: "https://github.com/ddd-crew/ai-ddd-prompts-and-rules"
 canonical: "https://ddd-crew.github.io/ai-ddd-prompts-and-rules/"
 license: "CC-BY-SA-4.0"
-stars: 37
+stars: 38
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
   - { name: "Baasie", url: "https://github.com/Baasie" }

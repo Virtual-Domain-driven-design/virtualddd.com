@@ -4,7 +4,7 @@ description: "Learn context mapping by trying this quiz"
 repo: "https://github.com/ddd-crew/context-mapping-quiz"
 canonical: "https://ddd-crew.github.io/context-mapping-quiz/"
 license: "CC-BY-4.0"
-stars: 33
+stars: 34
 heroImage: "./_assets/context-mapping-quiz/quiz_sample.png"
 contributors:
   - { name: "NTCoding", url: "https://github.com/NTCoding" }
