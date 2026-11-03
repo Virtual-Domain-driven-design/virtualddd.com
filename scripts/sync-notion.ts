@@ -13,7 +13,12 @@
  * See docs/content-model.md.
  */
 import dotenv from 'dotenv';
-import { Client } from '@notionhq/client';
+// The default import, not `{ Client }`. The package is CommonJS, so Node finds
+// its named exports by reading index.js, and from 5.30.0 `Client` is written
+// in a shape that reading cannot follow: the named import fails before a line
+// of this script runs. The default import is the whole `exports` object and
+// does not depend on what Node can work out.
+import notionClient from '@notionhq/client';
 import { normaliseTags } from '../src/lib/tags';
 import { createHash } from 'node:crypto';
 import sharp from 'sharp';
@@ -38,7 +43,7 @@ if (!token) {
   console.error('NOTION_TOKEN missing (expected in local.env).');
   process.exit(1);
 }
-const notion = new Client({ auth: token });
+const notion = new notionClient.Client({ auth: token });
 
 // --- API pacing -------------------------------------------------------------
 // Notion allows roughly three requests per second and answers 429 above that.
