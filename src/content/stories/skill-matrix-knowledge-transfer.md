@@ -99,8 +99,6 @@ She moved on to a different department after a while, then a third. She kept hea
 
 - **Organisational incentives did work the facilitator couldn't.** Team goals rather than individual goals meant learning time was legitimate. Cosima's reflection that she might not have had the same leverage otherwise is worth sitting with — some facilitation problems are actually incentive problems.
 
-##
-
 The part that stays with me is the second axis. Cosima came in with a tool designed to answer "who knows what," and the team said that question wasn't quite right — you also need to know who *wants* to know what. That's not a refinement, it's a different tool. And she got it for free, because she showed up with something unfinished and asked what was missing.
 
 Which raises an uncomfortable question about how most of us introduce practices. If you arrive with something complete and well-argued, the best you can hope for is compliance. What would you have to leave deliberately unfinished to find out what your team actually knows about their own situation?
@@ -109,11 +107,11 @@ Which raises an uncomfortable question about how most of us introduce practices.
 
 **Worth exploring**
 
-- *Team Topologies* by Matthew Skelton and Manuel Pais — the platform-team-enabling-other-teams setup Cosima describes is exactly the territory this book maps, including the cognitive load problem behind "too much on my plate."
-
-- *Facilitating Software Architecture* by Andrew Harmel-Law — on decentralising architectural decisions and building practices teams can keep running without the person who introduced them.
-
 - *The Skills Matrix* as popularised in *Management 3.0* by Jurgen Appelo — a practical treatment of competency mapping as a team-owned artefact rather than a management instrument.
+
+- *The Skills Matrix  *Miro template created by Cosima Laube:  [https://miro.com/templates/skill-matrix-for-tech-teams/](https://miro.com/templates/skill-matrix-for-tech-teams/)
+
+- *Team Topologies* by Matthew Skelton and Manuel Pais — the platform-team-enabling-other-teams setup Cosima describes is exactly the territory this book maps, including the cognitive load problem behind "too much on my plate."
 
 - *Turn the Ship Around!* by L. David Marquet — on the mechanics of moving authority to where the information is, and why permission has to be made explicit before people will use it.
 
