@@ -1152,6 +1152,11 @@
       "edited": "2026-07-29T05:55:00.000Z",
       "hash": "120156c15744c0ff"
     },
+    "415a485afafc80b1bb83fdf435d6485f": {
+      "slug": "modelling-domain-boundaries-contexts-and-services",
+      "edited": "2026-11-16T05:00:00.000Z",
+      "hash": "09f00ac2cd98b3d6"
+    },
     "41a4d64137ad4157954dd913420e5f05": {
       "slug": "splitting-systems-towards-bounded-contexts-and-microservices",
       "edited": "2026-07-29T05:55:00.000Z",
