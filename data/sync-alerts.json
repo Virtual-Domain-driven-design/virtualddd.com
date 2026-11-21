@@ -3,6 +3,12 @@
     {
       "kind": "dates-passed",
       "section": "conferences",
+      "title": "ADAConf last ran 2026-11-20, so its card now says no new dates are announced",
+      "url": "https://adaconf.org"
+    },
+    {
+      "kind": "dates-passed",
+      "section": "conferences",
       "title": "Explore DDD last ran 2026-09-25, so its card now says no new dates are announced",
       "url": "https://exploreddd.com/"
     },
