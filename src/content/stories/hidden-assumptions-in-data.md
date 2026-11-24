@@ -2,7 +2,7 @@
 title: "I Reused the Logic That Worked and the Numbers Doubled"
 slug: "hidden-assumptions-in-data"
 status: "Published"
-episode: 33
+episode: 32
 publishedDate: 2026-11-24
 guests: ["michelle-delves"]
 hosts: ["Andrea Magnorsky"]

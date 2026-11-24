@@ -2,7 +2,7 @@
 title: "Nobody Could Go On Holiday Without Something Breaking"
 slug: "skill-matrix-knowledge-transfer"
 status: "Published"
-episode: 32
+episode: 31
 publishedDate: 2026-11-10
 guests: ["cosima-laube"]
 hosts: ["Andrew Harmel-Law", "Kenny Schwegler"]
